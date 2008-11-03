@@ -41,7 +41,7 @@ end
 
 # Ensure that the belongs_to relationship exists.
 #
-#   it { Model.should belong_to(:parent, :parent) }
+#   it { Post.should belong_to(:user) }
 #
 def belong_to(*associations)
   BelongTo.new(*associations)

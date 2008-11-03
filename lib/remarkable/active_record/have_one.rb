@@ -74,7 +74,7 @@ end
 # * <tt>:dependent</tt> - tests that the association makes use of the dependent option.
 #
 # Example:
-#   should_have_one :god # unless hindu
+#   it { User.should have_one(:address) }
 #
 def have_one(*associations)
   HaveOne.new(*associations)
