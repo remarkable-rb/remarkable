@@ -7,7 +7,6 @@ class BelongTo
   def matches?(klass)
     @klass = klass
     @associations.each do |association|
-      @association = association
       reflection = klass.reflect_on_association(association)
 
       unless reflection && reflection.macro == :belongs_to
@@ -32,11 +31,11 @@ class BelongTo
   end
 
   def failure_message
-    @message || "expected #{@klass.inspect} to belong_to #{@association.inspect}, but it didn't"
+    @message || "expected #{@klass} to belong to #{@associations.to_sentence}, but it didn't"
   end
 
   def negative_failure_message
-    "#{@klass} belong to #{@associations.to_sentence}"
+    "expected #{@klass} not to belong to #{@associations.to_sentence}, but it did"
   end
 end
 

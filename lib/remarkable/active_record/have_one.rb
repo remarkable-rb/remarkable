@@ -1,57 +1,68 @@
 class HaveOne
   include Remarkable::Private
-  
+
   def initialize(*associations)
     @associations = associations
   end
 
   def matches?(klass)
     @klass = klass
-
-    dependent = get_options!(@associations, :dependent)
-    # klass = model_class
+    @dependent = get_options!(@associations, :dependent)
+    @associations.extract_options!
+    
     @associations.each do |association|
-      name = "have one #{association}"
-      name += " dependent => #{dependent}" if dependent
-      
-      describe klass do
-        it name do
-          reflection = klass.reflect_on_association(association)
-          reflection.should_not be_nil
-          # assert reflection, "#{klass.name} does not have any relationship to #{association}"
-          assert_equal :has_one, reflection.macro
+      reflection = klass.reflect_on_association(association)
 
-          associated_klass = (reflection.options[:class_name] || association.to_s.camelize).constantize
+      unless reflection && reflection.macro == :has_one
+        @message = "#{klass.name} does not have any relationship to #{association}"
+        return false
+      end
 
-          if reflection.options[:foreign_key]
-            fk = reflection.options[:foreign_key]
-          elsif reflection.options[:as]
-            fk = reflection.options[:as].to_s.foreign_key
-            fk_type = fk.gsub(/_id$/, '_type')
-            assert associated_klass.column_names.include?(fk_type),
-            "#{associated_klass.name} does not have a #{fk_type} column."
-          else
-            fk = klass.name.foreign_key
-          end
-          assert associated_klass.column_names.include?(fk.to_s),
-          "#{associated_klass.name} does not have a #{fk} foreign key."
+      associated_klass = (reflection.options[:class_name] || association.to_s.camelize).constantize
 
-          if dependent
-            assert_equal dependent.to_s,
-            reflection.options[:dependent].to_s,
-            "#{association} should have #{dependent} dependency"
-          end 
+      if reflection.options[:foreign_key]
+        fk = reflection.options[:foreign_key]
+      elsif reflection.options[:as]
+        fk = reflection.options[:as].to_s.foreign_key
+        fk_type = fk.gsub(/_id$/, '_type')
+
+        unless associated_klass.column_names.include?(fk_type)
+          @message = "#{associated_klass.name} does not have a #{fk_type} column."
+          return false
+        end
+      else
+        fk = klass.name.foreign_key
+      end
+
+      unless associated_klass.column_names.include?(fk.to_s)
+        @message = "#{associated_klass.name} does not have a #{fk} foreign key."
+        return false
+      end
+
+      if @dependent
+        unless @dependent.to_s == reflection.options[:dependent].to_s
+          @message = "#{association} should have #{@dependent} dependency"
+          return false
         end
       end
     end
   end
 
+  def description
+    name = "have one #{@associations.to_sentence}"
+    name += " dependent => #{@dependent}" if @dependent
+    name
+  end
+
   def failure_message
-    "expected #{@klass.inspect} to have_one #{@associations.inspect}, but it didn't"
+    @message || "expected #{@klass} to have one #{@associations.to_sentence}, but it didn't"
   end
 
   def negative_failure_message
-    "expected #{@klass.inspect} not to have_one #{@associations.inspect}, but it did"
+    name = "expected #{@klass} not to have one #{@associations.to_sentence}"
+    name += " dependent => #{@dependent}" if @dependent
+    name += ", but it did"
+    name
   end
 end
 
