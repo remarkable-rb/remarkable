@@ -39,7 +39,7 @@ end
 
 # Ensure that the given columns are defined on the models backing SQL table.
 #
-#   should_have_db_columns :id, :email, :name, :created_at
+#   it { User.should have_db_columns(:id, :email, :name, :created_at) }
 #
 def have_db_columns(*columns)
   Remarkable::HaveDbColumns.new(*columns)
