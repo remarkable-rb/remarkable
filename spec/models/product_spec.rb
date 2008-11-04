@@ -1,6 +1,20 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Product do
+  describe "An intangible product" do
+    before(:all) do
+      @product = Product.new(:tangible => false)
+    end
+    
+  end
+  
+  describe "A tangible product" do
+    before(:all) do
+      @product = Product.new(:tangible => true)
+    end
+    
+  end
+
   # context "An intangible product" do
   #   setup do
   #     @product = Product.new(:tangible => false)

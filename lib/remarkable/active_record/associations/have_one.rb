@@ -1,6 +1,4 @@
-class HaveOne
-  include Remarkable::Private
-
+class HaveOne < Remarkable::ActiveRecord
   def initialize(*associations)
     @associations = associations
   end

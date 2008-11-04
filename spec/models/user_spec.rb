@@ -3,18 +3,15 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe User do
   fixtures :all
   
-  # should_have_many :posts
-  # should_have_many :dogs
-  
-  # should_have_many :friendships
-  # should_have_many :friends
+  it { User.should have_many(:posts) }
+  it { User.should have_many(:dogs) }
+  it { User.should have_many(:friendships) }
+  it { User.should have_many(:friends) }
+  it { User.should have_many(:posts, :dogs, :friendships, :friends) }
   
   it { User.should have_one(:address) }
   it { User.should have_one(:address, :dependent => :destroy) }
-  
-  # should_have_one :address
-  # should_have_one :address, :dependent => :destroy
-  
+    
   # should_have_indices :email, :name, [:email, :name]
   # should_have_index :age
   # 

@@ -1,6 +1,6 @@
-class BelongTo
+class BelongTo < Remarkable::ActiveRecord
   def initialize(*associations)
-    associations.extract_options!
+    get_options!(associations)
     @associations = associations
   end
 
