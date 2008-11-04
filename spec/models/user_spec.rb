@@ -34,10 +34,13 @@ describe User do
   # should_protect_attributes :password
   # should_have_class_methods :find, :destroy
   # should_have_instance_methods :email, :age, :email=, :valid?
-  # should_have_db_columns :name, :email, :age
+  
+  it { User.should have_db_columns(:name, :email, :age) }
+  
   # should_have_db_column :id, :type => "integer", :primary => true
   # should_have_db_column :email, :type => "string", :default => nil,   :precision => nil, :limit    => 255,
   #                               :null => true,     :primary => false, :scale     => nil, :sql_type => 'varchar(255)'
+  
   # should_require_acceptance_of :eula
   # should_require_unique_attributes :email, :scoped_to => :name
   # 

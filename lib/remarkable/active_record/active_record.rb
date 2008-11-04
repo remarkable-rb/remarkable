@@ -1,5 +1,3 @@
-require "remarkable/private_helpers"
-
 module Remarkable
   class ActiveRecord
     include Remarkable::Private
@@ -7,3 +5,4 @@ module Remarkable
 end
 
 require "remarkable/active_record/associations/associations"
+require "remarkable/active_record/database/database"
