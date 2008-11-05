@@ -1,5 +1,5 @@
 module Remarkable
-  class HaveDbColumn
+  class HaveDbColumn < Remarkable::Database
     def initialize(name, opts)
       @name = name
       @opts = opts

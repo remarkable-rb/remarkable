@@ -11,10 +11,10 @@ describe User do
   
   it { User.should have_one(:address) }
   it { User.should have_one(:address, :dependent => :destroy) }
-    
-  # should_have_indices :email, :name, [:email, :name]
-  # should_have_index :age
-  # 
+  
+  it { User.should have_indices(:email, :name, [:email, :name]) }
+  it { User.should have_index(:age) }
+  
   # should_have_named_scope :old,       :conditions => "age > 50"
   # should_have_named_scope :eighteen,  :conditions => { :age => 18 }
   # 
