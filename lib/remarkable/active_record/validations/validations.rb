@@ -4,3 +4,4 @@ module Remarkable
 end
 
 require "remarkable/active_record/validations/allow_values_for"
+require "remarkable/active_record/validations/ensure_value_in_range"
