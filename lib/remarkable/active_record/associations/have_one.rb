@@ -1,5 +1,5 @@
 module Remarkable
-  class HaveOne < Remarkable::ActiveRecord
+  class HaveOne < Remarkable::Association
     def initialize(*associations)
       @associations = associations
     end

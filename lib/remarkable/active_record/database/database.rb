@@ -1,6 +1,5 @@
 module Remarkable
-  class Database
-    include Remarkable::Private
+  class Database < Remarkable::ActiveRecord
   end
 end
 

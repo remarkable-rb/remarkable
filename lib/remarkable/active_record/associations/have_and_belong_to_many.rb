@@ -1,5 +1,5 @@
 module Remarkable
-  class HaveAndBelongToMany < Remarkable::ActiveRecord
+  class HaveAndBelongToMany < Remarkable::Association
     def initialize(*associations)
       get_options!(associations)
       @associations = associations

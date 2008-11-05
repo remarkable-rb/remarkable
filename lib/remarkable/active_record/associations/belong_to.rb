@@ -1,5 +1,5 @@
 module Remarkable
-  class BelongTo < Remarkable::ActiveRecord
+  class BelongTo < Remarkable::Association
     def initialize(*associations)
       get_options!(associations)
       @associations = associations

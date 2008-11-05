@@ -1,5 +1,5 @@
 module Remarkable
-  class HaveMany < Remarkable::ActiveRecord
+  class HaveMany < Remarkable::Association
     def initialize(*associations)
       @through, @dependent = get_options!(associations, :through, :dependent)
       @associations = associations

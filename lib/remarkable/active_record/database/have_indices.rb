@@ -25,9 +25,9 @@ module Remarkable
     def negative_failure_message
       "expected not to have index on #{@table} for #{pretty_columns}, but it did"
     end
-    
+
     private
-    
+
     def pretty_columns
       @columns.collect { |col| col.is_a?(Array) ? "[#{col.join(', ')}]" : col }.to_sentence
     end    
@@ -37,9 +37,9 @@ end
 # Ensures that there are DB indices on the given columns or tuples of columns.
 # Also aliased to should_have_index for readability
 #
-#   should_have_indices :email, :name, [:commentable_type, :commentable_id]
-#   should_have_index :age
-#
+#   it { User.should have_indices(:email, :name, [:commentable_type, :commentable_id]) }
+#   it { User.should have_index(:age) }
+# 
 def have_indices(*columns)
   Remarkable::HaveIndices.new(*columns)
 end
