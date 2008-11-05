@@ -14,5 +14,5 @@ describe Post do
   # should_require_unique_attributes :title
   # should_require_attributes :body, :message => /wtf/
   # should_require_attributes :title
-  # should_only_allow_numeric_values_for :user_id
+  it { Post.should only_allow_numeric_values_for(:user_id) }
 end
