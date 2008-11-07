@@ -40,15 +40,15 @@ module Remarkable
     end
 
     def description
-      "not allow #{@attribute} to be less than #{@min} and more than #{@max}"
+      "ensure that the #{@attribute} is in #{@range}"
     end
 
     def failure_message
-      @message || "expected not allow #{@attribute} to be less than #{@min} and more than #{@max}, but it didn't"
+      @message || "expected that the #{@attribute} is in #{@range}, but it didn't"
     end
 
     def negative_failure_message
-      "expected allow #{@attribute} to be less than #{@min} and more than #{@max}, but it did"
+      "expected that the #{@attribute} isn't in #{@range}, but it did"
     end
   end
 end

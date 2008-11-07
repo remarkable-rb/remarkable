@@ -1,8 +1,8 @@
 module Remarkable
   class EnsureLengthAtLeast < Remarkable::Validation
     def initialize(attribute, min_length, opts)
-      @short_message = get_options!([opts], :short_message)
-      @short_message ||= default_error_message(:too_short, :count => min_length)
+      # @short_message = get_options!([opts], :short_message)
+      # @short_message ||= default_error_message(:too_short, :count => min_length)
 
       @attribute  = attribute
       @min_length = min_length
@@ -12,15 +12,15 @@ module Remarkable
     def matches?(klass)
       @klass = klass
 
-      valid_value = "1" * (@min_length)
+      valid_value = "x" * (@min_length)
       unless assert_good_value(klass, @attribute, valid_value, /is too short/)
         @message = "not allow #{@attribute} to be at least #{@min_length} chars long"
         return false
       end
 
       if @min_length > 0
-        min_value = "1" * (@min_length - 1)
-        unless assert_bad_value(klass, @attribute, min_value, @short_message)
+        min_value = "x" * (@min_length - 1)
+        unless assert_bad_value(klass, @attribute, min_value, /is too short/)
           @message = "allow #{@attribute} to be less than #{@min_length} chars long"
           return false
         end
