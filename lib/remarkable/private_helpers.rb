@@ -44,7 +44,7 @@ module Remarkable # :nodoc:
     def assert_good_value(object_or_klass, attribute, value, error_message_to_avoid = //)
       object = get_instance_of(object_or_klass)
       object.send("#{attribute}=", value)
-      object.valid?
+      return true if object.valid?
       assert_does_not_contain(object.errors.on(attribute), error_message_to_avoid)
     end
 

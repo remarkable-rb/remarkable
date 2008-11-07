@@ -4,8 +4,8 @@ describe Tag do
   it { Tag.should have_many(:taggings, :dependent => :destroy) }
   it { Tag.should have_many(:posts) }
   
-  # should_ensure_length_at_least :name, 2
-  # 
+  it { Tag.should ensure_length_at_least(:name, 2) }
+  
   # should_protect_attributes :secret
   # 
   # should_fail do
