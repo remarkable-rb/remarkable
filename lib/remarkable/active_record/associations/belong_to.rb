@@ -7,23 +7,22 @@ module Remarkable
 
     def matches?(klass)
       @klass = klass
-      @associations.each do |association|
-        reflection = klass.reflect_on_association(association)
 
-        unless reflection && reflection.macro == :belongs_to
-          @message = "#{klass.name} does not have any relationship to #{association}"
-          return false
-        end
+      begin
+        @associations.each do |association|
+          reflection = klass.reflect_on_association(association)
+          fail("#{klass.name} does not have any relationship to #{association}") unless reflection && reflection.macro == :belongs_to
 
-        unless reflection.options[:polymorphic]
-          associated_klass = (reflection.options[:class_name] || association.to_s.camelize).constantize
-          fk = reflection.options[:foreign_key] || reflection.primary_key_name
-
-          unless klass.column_names.include?(fk.to_s)
-            @message = "#{klass.name} does not have a #{fk} foreign key."
-            return false
+          unless reflection.options[:polymorphic]
+            associated_klass = (reflection.options[:class_name] || association.to_s.camelize).constantize
+            fk = reflection.options[:foreign_key] || reflection.primary_key_name
+            fail("#{klass.name} does not have a #{fk} foreign key.") unless klass.column_names.include?(fk.to_s)
           end
         end
+        
+        true
+      rescue Exception => e
+        false
       end
     end
 
@@ -32,11 +31,11 @@ module Remarkable
     end
 
     def failure_message
-      @message || "expected #{@klass} to belong to #{@associations.to_sentence}, but it didn't"
+      @failure_message || "expected #{@klass.name} to belong to #{@associations.to_sentence}, but it didn't"
     end
 
     def negative_failure_message
-      "expected #{@klass} not to belong to #{@associations.to_sentence}, but it did"
+      "expected #{@klass.name} not to belong to #{@associations.to_sentence}, but it did"
     end
   end
 end

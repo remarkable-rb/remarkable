@@ -8,18 +8,18 @@ module Remarkable
     def matches?(klass)
       @klass = klass
 
-      @associations.each do |association|
-        reflection = klass.reflect_on_association(association)      
-        unless reflection && reflection.macro == :has_and_belongs_to_many
-          @message = "#{klass.name} does not have any relationship to #{association}"
-          return false
+      begin
+        @associations.each do |association|
+          reflection = klass.reflect_on_association(association)
+          fail("#{klass.name} does not have any relationship to #{association}") unless reflection && reflection.macro == :has_and_belongs_to_many
+
+          table = reflection.options[:join_table]
+          fail("table #{table} doesn't exist") unless ::ActiveRecord::Base.connection.tables.include?(table.to_s)
         end
 
-        table = reflection.options[:join_table]
-        unless ::ActiveRecord::Base.connection.tables.include?(table.to_s)
-          @message = "table #{table} doesn't exist"
-          return false
-        end
+        true
+      rescue Exception => e
+        false
       end
     end
 
@@ -28,11 +28,11 @@ module Remarkable
     end
 
     def failure_message
-      @message || "expected #{@klass} to have and belong to many #{@associations.to_sentence}, but it didn't"
+      @failure_message || "expected #{@klass.name} to have and belong to many #{@associations.to_sentence}, but it didn't"
     end
 
     def negative_failure_message
-      "expected should not to have and belong to many #{@associations.to_sentence}, but it did"
+      "expected #{@klass.name} not to have and belong to many #{@associations.to_sentence}, but it did"
     end
   end
 end

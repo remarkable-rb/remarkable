@@ -8,69 +8,64 @@ module Remarkable
     def matches?(klass)
       @klass = klass
 
-      @associations.each do |association|
-        @association = association
+      begin
+        @associations.each do |association|
+          reflection = klass.reflect_on_association(association)
+          fail("#{klass.name} does not have any relationship to #{association}") unless reflection && reflection.macro == :has_many
 
-        reflection = klass.reflect_on_association(association)
-        unless reflection && reflection.macro == :has_many
-          @message = "#{klass.name} does not have any relationship to #{association}"
-          return false
-        end
+          if @through
+            through_reflection = klass.reflect_on_association(@through)
+            fail("#{klass.name} does not have any relationship to #{@through}") unless through_reflection && @through == reflection.options[:through]
+          end
 
-        if @through
-          through_reflection = klass.reflect_on_association(@through)
-          unless through_reflection && @through == reflection.options[:through]
-            @message = "#{klass.name} does not have any relationship to #{@through}"
-            return false
+          if @dependent
+            fail("#{association} should have #{@dependent} dependency") unless @dependent.to_s == reflection.options[:dependent].to_s
+          end
+
+          # Check for the existence of the foreign key on the other table
+          unless reflection.options[:through]
+            if reflection.options[:foreign_key]
+              fk = reflection.options[:foreign_key]
+            elsif reflection.options[:as]
+              fk = reflection.options[:as].to_s.foreign_key
+            else
+              fk = reflection.primary_key_name
+            end
+
+            associated_klass_name = (reflection.options[:class_name] || association.to_s.classify)
+            associated_klass = associated_klass_name.constantize
+            
+            fail("#{associated_klass.name} does not have a #{fk} foreign key.") unless associated_klass.column_names.include?(fk.to_s)
           end
         end
 
-        if @dependent
-          unless @dependent.to_s == reflection.options[:dependent].to_s
-            @message = "#{association} should have #{@dependent} dependency"
-            return false
-          end
-        end
-
-        # Check for the existence of the foreign key on the other table
-        unless reflection.options[:through]
-          if reflection.options[:foreign_key]
-            fk = reflection.options[:foreign_key]
-          elsif reflection.options[:as]
-            fk = reflection.options[:as].to_s.foreign_key
-          else
-            fk = reflection.primary_key_name
-          end
-
-          associated_klass_name = (reflection.options[:class_name] || association.to_s.classify)
-          associated_klass = associated_klass_name.constantize
-
-          unless associated_klass.column_names.include?(fk.to_s)
-            @message = "#{associated_klass.name} does not have a #{fk} foreign key."
-            return false
-          end
-        end
+        true
+      rescue Exception => e
+        false
       end
-
     end
 
     def description
-      name = "have many #{@associations.to_sentence}"
-      name += " through #{@through}" if @through
-      name += " dependent => #{@dependent}" if @dependent
-      name
+      message = "have many #{@associations.to_sentence}"
+      message += " through #{@through}" if @through
+      message += " dependent => #{@dependent}" if @dependent
+      message
     end
 
     def failure_message
-      @message || "expected #{@klass} to have many #{@associations.to_sentence}, but it didn't"
+      message = "expected #{@klass.name} to have many #{@associations.to_sentence}"
+      message += " through #{@through}" if @through
+      message += " dependent => #{@dependent}" if @dependent
+      message += ", but it didn't"
+      @failure_message || message
     end
 
     def negative_failure_message
-      name = "expected not to have many #{@associations.to_sentence}"
-      name += " through #{@through}" if @through
-      name += " dependent => #{@dependent}" if @dependent
-      name += ", but it did"
-      name
+      message = "expected #{@klass.name} not to have many #{@associations.to_sentence}"
+      message += " through #{@through}" if @through
+      message += " dependent => #{@dependent}" if @dependent
+      message += ", but it did"
+      message
     end
   end
 end
