@@ -1,9 +1,6 @@
 module Remarkable
   class EnsureLengthAtLeast < Remarkable::Validation
     def initialize(attribute, min_length, opts)
-      # @short_message = get_options!([opts], :short_message)
-      # @short_message ||= default_error_message(:too_short, :count => min_length)
-
       @attribute  = attribute
       @min_length = min_length
       @opts       = opts
@@ -12,25 +9,23 @@ module Remarkable
     def matches?(klass)
       @klass = klass
 
-      valid_value = "x" * (@min_length)
-      unless assert_good_value(klass, @attribute, valid_value, /is too short/)
-        @message = "not allow #{@attribute} to be at least #{@min_length} chars long"
-        return false
-      end
+      begin
+        valid_value = "x" * (@min_length)
+        fail("not allow #{@attribute} to be at least #{@min_length} chars long") unless assert_good_value(klass, @attribute, valid_value, /is too short/)
 
-      if @min_length > 0
-        min_value = "x" * (@min_length - 1)
-        unless assert_bad_value(klass, @attribute, min_value, /is too short/)
-          @message = "allow #{@attribute} to be less than #{@min_length} chars long"
-          return false
+        if @min_length > 0
+          min_value = "x" * (@min_length - 1)
+          fail("allow #{@attribute} to be less than #{@min_length} chars long") unless assert_bad_value(klass, @attribute, min_value, /is too short/)
         end
+        
+        true
+      rescue Exception => e
+        false
       end
-
-      true
     end
 
     def description
-      "ensures that the length of the #{@attribute} is at least #{@min_length}"
+      "allow #{@attribute} to be at least #{@min_length} chars long"
     end
 
     def failure_message
@@ -38,7 +33,7 @@ module Remarkable
     end
 
     def negative_failure_message
-      "expected allow #{@attribute} not to be at least #{@min_length} chars long, but it did"
+      "expected not allow #{@attribute} to be at least #{@min_length} chars long, but it did"
     end
   end
 end

@@ -1,10 +1,6 @@
 module Remarkable
   class EnsureLengthInRange < Remarkable::Validation
     def initialize(attribute, range, opts)
-      # @short_message, @long_message = get_options!([opts], :short_message, :long_message)
-      # @short_message ||= default_error_message(:too_short, :count => range.first)
-      # @long_message  ||= default_error_message(:too_long, :count => range.last)
-
       @min_length  = range.first
       @max_length  = range.last
       @same_length = (@min_length == @max_length)
@@ -17,41 +13,33 @@ module Remarkable
     def matches?(klass)
       @klass = klass
 
-      if @min_length > 0
-        min_value = "x" * @min_length
-        unless assert_good_value(klass, @attribute, min_value, /is too short/)
-          @message = "not allow #{@attribute} to be exactly #{@min_length} chars long"
-          return false
+      begin
+        if @min_length > 0
+          min_value = "x" * @min_length
+          fail("not allow #{@attribute} to be exactly #{@min_length} chars long") unless assert_good_value(klass, @attribute, min_value, /is too short/)
         end
-      end
 
-      unless @same_length
-        max_value = "x" * @max_length
-        unless assert_good_value(klass, @attribute, max_value, /is too long/)
-          @message = "not allow #{@attribute} to be exactly #{@max_length} chars long"
-          return false
+        unless @same_length
+          max_value = "x" * @max_length
+          fail("not allow #{@attribute} to be exactly #{@max_length} chars long") unless assert_good_value(klass, @attribute, max_value, /is too long/)
         end
-      end
 
-      if @min_length > 0
-        min_value = "x" * (@min_length - 1)
-        unless assert_bad_value(klass, @attribute, min_value, /is too short/)
-          @message = "allow #{@attribute} to be less than #{@min_length} chars long"
-          return false
+        if @min_length > 0
+          min_value = "x" * (@min_length - 1)
+          fail("allow #{@attribute} to be less than #{@min_length} chars long") unless assert_bad_value(klass, @attribute, min_value, /is too short/)
         end
-      end
 
-      max_value = "x" * (@max_length + 1)
-      unless assert_bad_value(klass, @attribute, max_value, /is too long/)
-        @message = "allow #{@attribute} to be more than #{@max_length} chars long"
-        return false
-      end
+        max_value = "x" * (@max_length + 1)
+        fail("allow #{@attribute} to be more than #{@max_length} chars long") unless assert_bad_value(klass, @attribute, max_value, /is too long/)
 
-      true
+        true
+      rescue Exception => e
+        false
+      end
     end
 
     def description
-      "ensures that the length of the #{@attribute} is in #{@range}"
+      "ensure that the length of the #{@attribute} is in #{@range}"
     end
 
     def failure_message

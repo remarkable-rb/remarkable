@@ -16,27 +16,16 @@ module Remarkable
     def matches?(klass)
       @klass = klass
 
-      unless assert_bad_value(klass, @attribute, @min - 1, @low_message)
-        @message = "allow #{@attribute} to be less than #{@min}"
-        return false
+      begin
+        fail("allow #{@attribute} to be less than #{@min}") unless assert_bad_value(klass, @attribute, @min - 1, @low_message)
+        fail("not allow #{@attribute} to be #{@min}") unless assert_good_value(klass, @attribute, @min, @low_message)
+        fail("allow #{@attribute} to be more than #{@max}") unless assert_bad_value(klass, @attribute, @max + 1, @high_message)
+        fail("not allow #{@attribute} to be #{@max}") unless assert_good_value(klass, @attribute, @max, @high_message)
+        
+        true
+      rescue Exception => e
+        false
       end
-
-      unless assert_good_value(klass, @attribute, @min, @low_message)
-        @message = "not allow #{@attribute} to be #{@min}"
-        return false
-      end
-
-      unless assert_bad_value(klass, @attribute, @max + 1, @high_message)
-        @message = "allow #{@attribute} to be more than #{@max}"
-        return false
-      end
-
-      unless assert_good_value(klass, @attribute, @max, @high_message)
-        @message = "not allow #{@attribute} to be #{@max}"
-        return false
-      end
-
-      true
     end
 
     def description

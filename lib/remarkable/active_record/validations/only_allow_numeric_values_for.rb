@@ -10,9 +10,15 @@ module Remarkable
     def matches?(klass)
       @klass = klass
 
-      @attributes.each do |attribute|
-        attribute = attribute.to_sym
-        return false unless assert_bad_value(klass, attribute, "abcd", @message)
+      begin
+        @attributes.each do |attribute|
+          attribute = attribute.to_sym
+          return false unless assert_bad_value(klass, attribute, "abcd", @message)
+        end
+        
+        true
+      rescue Exception => e
+        false
       end
     end
 
@@ -21,11 +27,11 @@ module Remarkable
     end
 
     def failure_message
-      "expected only allow numeric values for #{@attributes.to_sentence}, but it didn't"
+      "expected only numeric values for #{@attributes.to_sentence}, but it didn't"
     end
 
     def negative_failure_message
-      "expected not to allow numeric values for #{@attributes.to_sentence}, but it did"
+      "expected not only numeric values for #{@attributes.to_sentence}, but it did"
     end
   end
 end

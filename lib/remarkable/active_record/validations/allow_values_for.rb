@@ -1,16 +1,23 @@
 module Remarkable
   class AllowValuesFor < Remarkable::Validation
     def initialize(attribute, *good_values)
-      @attribute = attribute
       get_options!(good_values)
+      
+      @attribute = attribute
       @good_values = good_values
     end
 
     def matches?(klass)
       @klass = klass
 
-      @good_values.each do |v|
-        return false unless assert_good_value(klass, @attribute, v)
+      begin
+        @good_values.each do |v|
+          return false unless assert_good_value(klass, @attribute, v)
+        end
+
+        true
+      rescue Exception => e
+        false
       end
     end
 
