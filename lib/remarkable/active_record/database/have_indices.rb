@@ -19,7 +19,7 @@ module Remarkable
     end
 
     def failure_message
-      "expected have index on #{@table} for #{pretty_columns}, but it didn't"
+      "expected to have index on #{@table} for #{pretty_columns}, but it didn't"
     end
 
     def negative_failure_message

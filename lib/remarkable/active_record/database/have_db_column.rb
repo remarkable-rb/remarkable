@@ -9,38 +9,32 @@ module Remarkable
       @klass = klass
 
       column = klass.columns.detect {|c| c.name == @name.to_s }
-      unless column
-        @message = "#{klass.name} does not have column #{@name}"
-        return false
-      end
+      fail("#{klass.name} does not have column #{@name}") unless column
 
       @opts.each do |k, v|
-        unless column.instance_variable_get("@#{k}").to_s == v.to_s
-          @message = ":#{@name} column on table for #{klass} does not match option :#{k}"
-          return false
-        end
+        fail(":#{@name} column on table for #{klass} does not match option :#{k}") unless column.instance_variable_get("@#{k}").to_s == v.to_s
       end
     end
 
     def description
-      test_name = "have column named :#{@name}"
-      test_name += " with options " + @opts.inspect unless @opts.empty?
-      test_name
+      message = "have column named :#{@name}"
+      message += " with options " + @opts.inspect unless @opts.empty?
+      message
     end
 
     def failure_message
-      test_name = "expected #{@klass} to have column named :#{@name}"
-      test_name += " with options " + @opts.inspect unless @opts.empty?
-      test_name += ", but it didn't"
+      message = "expected #{@klass.name} to have column named :#{@name}"
+      message += " with options " + @opts.inspect unless @opts.empty?
+      message += ", but it didn't"
 
-      @message || test_name
+      @failure_message || message
     end
 
     def negative_failure_message
-      test_name = "expected #{@klass} not to have column named :#{@name}"
-      test_name += " with options " + @opts.inspect unless @opts.empty?
-      test_name += ", but it did"
-      test_name
+      message = "expected #{@klass.name} not to have column named :#{@name}"
+      message += " with options " + @opts.inspect unless @opts.empty?
+      message += ", but it did"
+      message
     end
   end
 end
