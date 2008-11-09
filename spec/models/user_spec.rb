@@ -41,10 +41,10 @@ describe User do
   it { User.should have_db_column(:email, :type => "string",  :default => nil,    :precision => nil,  :limit => 255,
                                           :null => true,      :primary => false,  :scale => nil,      :sql_type => 'varchar(255)') }
   
-  # should_require_acceptance_of :eula
+  it { User.should require_acceptance_of(:eula) }
   # should_require_unique_attributes :email, :scoped_to => :name
   
-  # should_ensure_length_is :ssn, 9, :message => "Social Security Number is not the right length"
+  it { User.should ensure_length_is(:ssn, 9, :message => "Social Security Number is not the right length") }
   it { User.should only_allow_numeric_values_for(:ssn) }
   
   # should_have_readonly_attributes :name

@@ -29,7 +29,7 @@ module Remarkable
     end
 
     def failure_message
-      @message || "expected allow #{@attribute} to be at least #{@min_length} chars long, but it didn't"
+      @failure_message || "expected allow #{@attribute} to be at least #{@min_length} chars long, but it didn't"
     end
 
     def negative_failure_message

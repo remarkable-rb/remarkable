@@ -43,7 +43,7 @@ module Remarkable
     end
 
     def failure_message
-      @message || "expected that the length of the #{@attribute} is in #{@range}, but it didn't"
+      @failure_message || "expected that the length of the #{@attribute} is in #{@range}, but it didn't"
     end
 
     def negative_failure_message

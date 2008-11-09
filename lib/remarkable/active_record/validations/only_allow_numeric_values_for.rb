@@ -47,7 +47,7 @@ end
 #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.not_a_number')</tt>
 #
 # Example:
-#   should_only_allow_numeric_values_for :age
+#   it { User.should only_allow_numeric_values_for(:age) }
 #
 def only_allow_numeric_values_for(*attributes)
   Remarkable::OnlyAllowNumericValuesFor.new(*attributes)
