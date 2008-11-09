@@ -5,7 +5,7 @@ describe Address do
 
   it { Address.should belong_to(:addressable) }
   
-  # should_require_unique_attributes :title, :scoped_to => [:addressable_id, :addressable_type]
+  it { Address.should require_unique_attributes(:title, :scoped_to => [:addressable_id, :addressable_type]) }
   it { Address.should ensure_length_at_least(:zip, 5) }
   it { Address.should only_allow_numeric_values_for(:zip) }
 end

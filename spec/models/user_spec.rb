@@ -42,7 +42,7 @@ describe User do
                                           :null => true,      :primary => false,  :scale => nil,      :sql_type => 'varchar(255)') }
   
   it { User.should require_acceptance_of(:eula) }
-  # should_require_unique_attributes :email, :scoped_to => :name
+  it { User.should require_unique_attributes(:email, :scoped_to => :name) }
   
   it { User.should ensure_length_is(:ssn, 9, :message => "Social Security Number is not the right length") }
   it { User.should only_allow_numeric_values_for(:ssn) }
