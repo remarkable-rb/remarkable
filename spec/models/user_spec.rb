@@ -31,9 +31,9 @@ describe User do
   it { User.should allow_values_for(:email, "a@b.com", "asdf@asdf.com") }
   it { User.should ensure_length_in_range(:email, 1..100) }
   it { User.should ensure_value_in_range(:age, 1..100) }
-  # should_protect_attributes :password
-  # should_have_class_methods :find, :destroy
-  # should_have_instance_methods :email, :age, :email=, :valid?
+  it { User.should protect_attributes(:password) }
+  it { User.should have_class_methods(:find, :destroy) }
+  it { User.should have_instance_methods(:email, :age, :email=, :valid?) }
   
   it { User.should have_db_columns(:name, :email, :age) }
   it { User.should have_db_column(:name) }
@@ -47,9 +47,7 @@ describe User do
   it { User.should ensure_length_is(:ssn, 9, :message => "Social Security Number is not the right length") }
   it { User.should only_allow_numeric_values_for(:ssn) }
   
-  # should_have_readonly_attributes :name
+  it { User.should have_readonly_attributes(:name) }
   
-  # should_fail do
-  #   should_protect_attributes :name, :age
-  # end
+  it { Tag.should_not protect_attributes(:name, :age) }
 end
