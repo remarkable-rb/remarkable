@@ -112,7 +112,7 @@ Any *.rb file under RAILS_ROOT/test/shoulda_macros/ or vendor/(plugins|gems)/gem
 
 = Credits
 
-Remarkable is maintained by {Carlos Brando}[mailto:remarkable@carlosbrando.com]
+Remarkable is maintained by [Carlos Brando](mailto:eduardobrando@gmail.com)
 
 = License
 
