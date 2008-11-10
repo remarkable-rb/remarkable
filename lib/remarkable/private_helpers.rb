@@ -1,5 +1,6 @@
 module Remarkable # :nodoc:
   module Private # :nodoc:
+    
     def fail(message)
       @failure_message = message
       raise Exception.new(message)

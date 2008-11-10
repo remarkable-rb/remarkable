@@ -7,3 +7,4 @@ end
 require "remarkable/active_record/associations/associations"
 require "remarkable/active_record/database/database"
 require "remarkable/active_record/validations/validations"
+# require "remarkable/active_record/macros"
