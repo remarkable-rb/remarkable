@@ -15,17 +15,19 @@ describe User do
   it { User.should have_indices(:email, :name, [:email, :name]) }
   it { User.should have_index(:age) }
   
-  # should_have_named_scope :old,       :conditions => "age > 50"
-  # should_have_named_scope :eighteen,  :conditions => { :age => 18 }
-  # 
-  # should_have_named_scope 'recent(5)',            :limit => 5
-  # should_have_named_scope 'recent(1)',            :limit => 1
-  # should_have_named_scope 'recent_via_method(7)', :limit => 7
-  # 
-  # context "when given an instance variable" do
-  #   setup { @count = 2 }
-  #   should_have_named_scope 'recent(@count)', :limit => 2
-  # end
+  it { User.should have_named_scope(:old, :conditions => "age > 50") }
+  it { User.should have_named_scope(:eighteen, :conditions => { :age => 18 }) }
+
+  it { User.should have_named_scope('recent(5)', :limit => 5) }
+  it { User.should have_named_scope('recent(1)', :limit => 1) }
+  it { User.should have_named_scope('recent_via_method(7)', :limit => 7) }
+
+  describe "when given an instance variable" do
+    before do
+      @count = 2
+    end
+    it { User.should have_named_scope("recent(#{@count})", :limit => 2) }
+  end
   
   it { User.should_not allow_values_for(:email, "blah", "b lah") }
   it { User.should allow_values_for(:email, "a@b.com", "asdf@asdf.com") }
