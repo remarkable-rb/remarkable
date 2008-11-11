@@ -2,11 +2,11 @@ module Spec
   module Example
     module ExampleMethods
       def should(matcher)
-        remarkable_subject.should(matcher)
+        remarkable_subject.should matcher
       end
 
       def should_not(matcher)
-        remarkable_subject.should_not(matcher)
+        remarkable_subject.should_not matcher
       end
 
       def remarkable_subject

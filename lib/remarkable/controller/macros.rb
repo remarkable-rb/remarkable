@@ -1,101 +1,6 @@
 include Remarkable::Controller::Helpers
 
-# Macro that creates a routing test. It tries to use the given HTTP
-# +method+ on the given +path+, and asserts that it routes to the
-# given +options+.
-#
-# +to_param+ is called on the +options+ given.
-#
-# Examples:
-#
-#   should_route :get, "/posts", :controller => :posts, :action => :index
-#   should_route :get, "/posts/new", :controller => :posts, :action => :new
-#   should_route :post, "/posts", :controller => :posts, :action => :create
-#   should_route :get, "/posts/1", :controller => :posts, :action => :show, :id => 1
-#   should_route :edit, "/posts/1", :controller => :posts, :action => :show, :id => 1
-#   should_route :put, "/posts/1", :controller => :posts, :action => :update, :id => 1
-#   should_route :delete, "/posts/1", :controller => :posts, :action => :destroy, :id => 1
-#   should_route :get, "/users/1/posts/1",
-#     :controller => :posts, :action => :show, :id => 1, :user_id => 1
-#
-def should_route(method, path, params)
-  populated_path = path.dup
 
-  params[:controller] = params[:controller].to_s
-  params[:action] = params[:action].to_s
-
-  params.each do |key, value|
-    params[key] = value.to_param if value.respond_to? :to_param
-    populated_path.gsub!(key.inspect, value.to_s)
-  end
-
-  it "should map #{params.inspect} to #{path.inspect}" do
-    route_for(params).should == populated_path
-  end
-
-  it "should generate params #{params.inspect} from #{method.to_s.upcase} to #{path.inspect}" do
-    params_from(method.to_sym, populated_path).should == params
-  end
-end
-
-# Macro that creates a test asserting that the controller rendered with the given layout.
-# Example:
-#
-#   should_render_with_layout 'special'
-#   should_render_with_layout :special
-# 
-def should_render_with_layout(expected_layout = 'application')
-  if expected_layout
-    it "should render with #{expected_layout.inspect} layout" do
-      response_layout = response.layout.blank? ? "" : response.layout.split('/').last
-      response_layout.should == expected_layout.to_s
-    end
-  else
-    it "should render without layout" do
-      response.layout.should be_nil
-    end
-  end
-end
-
-# Macro that creates a test asserting that the controller rendered without a layout.
-# Same as @should_render_with_layout false@
-def should_render_without_layout
-  should_render_with_layout nil
-end
-
-# Macro that creates a test asserting that the controller assigned to
-# each of the named instance variable(s).
-#
-# Options:
-# * <tt>:class</tt> - The expected class of the instance variable being checked.
-# * <tt>:equals</tt> - A string which is evaluated and compared for equality with
-# the instance variable being checked.
-#
-# Example:
-#
-#   should_assign_to :user, :posts
-#   should_assign_to :user, :class => User
-#   should_assign_to :user, :equals => '@user'
-# 
-def should_assign_to(*names)
-  opts = names.extract_options!
-  names.each do |name|
-    test_name = "should assign @#{name}"
-    test_name << " as class #{opts[:class]}" if opts[:class]
-    test_name << " which is equal to #{opts[:equals]}" if opts[:equals]
-    it test_name do
-      assigned_value = assigns(name.to_sym)
-      assigned_value.should_not be_nil
-      assigned_value.should be_a_kind_of(opts[:class]) if opts[:class]
-      if opts[:equals]
-        instantiate_variables_from_assigns do
-          expected_value = eval(opts[:equals], self.send(:binding), __FILE__, __LINE__)
-          assigned_value.should == expected_value
-        end
-      end
-    end
-  end
-end
 
 # Macro that creates a test asserting that the controller did not assign to
 # any of the named instance variable(s).
@@ -116,6 +21,30 @@ end
 def should_render_a_form
   it "should display a form" do
     response.should have_tag("form")
+  end
+end
+
+# Macro that creates a test asserting that the controller responded with a 'response' status code.
+# Example:
+#
+#   should_respond_with :success
+# 
+def should_respond_with(type)
+  it "respond with #{type}" do
+    clean_backtrace do
+      if [ :success, :missing, :redirect, :error ].include?(type) && response.send("#{type}?")
+      elsif type.is_a?(Fixnum) && response.response_code == type
+      elsif type.is_a?(Symbol) && response.response_code == ActionController::StatusCodes::SYMBOL_TO_STATUS_CODE[type]
+      else
+        if response.error?
+          exception = response.template.instance_variable_get(:@exception)
+          exception_message = exception && exception.message
+          Spec::Expectations.fail_with "Expected response to be a #{type}, but was #{response.response_code}\n#{exception_message.to_s}"
+        else
+          Spec::Expectations.fail_with "Expected response to be a #{type}, but was #{response.response_code}"
+        end
+      end
+    end
   end
 end
 

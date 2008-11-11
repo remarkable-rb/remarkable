@@ -4,7 +4,6 @@ describe Post do
   fixtures :all
 
   it { should belong_to(:user) }
-  it { should belong_to(:user) }
   it { should belong_to(:owner) }
   it { should belong_to(:user, :owner) }
   

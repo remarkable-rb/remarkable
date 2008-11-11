@@ -1,2 +1,5 @@
 require "remarkable/controller/helpers"
 require "remarkable/controller/macros"
+require "remarkable/controller/routes/route"
+require "remarkable/controller/renders/renders"
+require "remarkable/controller/assigns/assigns"
