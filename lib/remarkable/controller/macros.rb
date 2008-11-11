@@ -1,53 +1,5 @@
 include Remarkable::Controller::Helpers
 
-
-
-# Macro that creates a test asserting that the controller did not assign to
-# any of the named instance variable(s).
-#
-# Example:
-#
-#   should_not_assign_to :user, :posts
-# 
-def should_not_assign_to(*names)
-  names.each do |name|
-    it "should not assign to @#{name}" do
-      assigns(name.to_sym).should be_nil
-    end
-  end
-end
-
-# Macro that creates a test asserting that the rendered view contains a <form> element.
-def should_render_a_form
-  it "should display a form" do
-    response.should have_tag("form")
-  end
-end
-
-# Macro that creates a test asserting that the controller responded with a 'response' status code.
-# Example:
-#
-#   should_respond_with :success
-# 
-def should_respond_with(type)
-  it "respond with #{type}" do
-    clean_backtrace do
-      if [ :success, :missing, :redirect, :error ].include?(type) && response.send("#{type}?")
-      elsif type.is_a?(Fixnum) && response.response_code == type
-      elsif type.is_a?(Symbol) && response.response_code == ActionController::StatusCodes::SYMBOL_TO_STATUS_CODE[type]
-      else
-        if response.error?
-          exception = response.template.instance_variable_get(:@exception)
-          exception_message = exception && exception.message
-          Spec::Expectations.fail_with "Expected response to be a #{type}, but was #{response.response_code}\n#{exception_message.to_s}"
-        else
-          Spec::Expectations.fail_with "Expected response to be a #{type}, but was #{response.response_code}"
-        end
-      end
-    end
-  end
-end
-
 # Macro that creates a test asserting that the response content type was 'content_type'.
 # Example:
 #

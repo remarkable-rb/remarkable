@@ -39,11 +39,12 @@ describe PostsController do
       should_not_assign_to :foo, :bar
     end
 
-    context "on POST to :create" do
+    describe "on POST to :create" do
       before do
         post :create, :post => { :title => "Title", :body => "Body" }, :user_id => users(:first)
         @post = Post.last
       end
+      should_respond_with :redirect
       should_redirect_to "user_post_url(@post.user, @post)"
       should_set_the_flash_to /created/i
     end
@@ -109,7 +110,7 @@ describe PostsController do
       before do
         get :index, :user_id => users(:first)
       end
-      #      # should_respond_with :success
+      it { should respond_with(200) }
       it { should assign_to(:user, :class => User, :equals => 'users(:first)') }
       it { should_not assign_to(:user, :class => Post) }
       it { should_not assign_to(:user, :equals => 'posts(:first)') }
@@ -117,21 +118,23 @@ describe PostsController do
       it { should_not assign_to(:foo, :bar) }
     end
 
-    context "on POST to :create" do
+    describe "on POST to :create" do
       before do
         post :create, :post => { :title => "Title", :body => "Body" }, :user_id => users(:first)
         @post = Post.last
       end
+      it { should respond_with(:redirect) }
+      it { should_not respond_with(:success) }
       #      should_redirect_to "user_post_url(@post.user, @post)"
       #      should_set_the_flash_to /created/i
     end
-    #    
+
     describe "viewing posts for a user with rss format" do
       before do
         get :index, :user_id => users(:first), :format => 'rss'
         @user = users(:first)
       end
-      #      it { response.should be_success }
+      it { should respond_with(:success) }
       #      should_respond_with_content_type 'application/rss+xml'
       #      should_respond_with_content_type :rss
       #      should_respond_with_content_type /rss/
@@ -140,13 +143,13 @@ describe PostsController do
       it { should assign_to(:user, :posts) }
       it { should_not assign_to(:foo, :bar) }
     end
-    # 
+
     describe "viewing a post on GET to #show" do
       before { get :show, :user_id => users(:first), :id => posts(:first) }
       it { should render_with_layout('wide') }
       it { should render_with_layout(:wide) }
     end
-    # 
+
     describe "on GET to #new" do
       before { get :new, :user_id => users(:first) }
       it { should render_without_layout }
