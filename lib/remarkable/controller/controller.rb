@@ -1,11 +1,15 @@
-require "remarkable/controller/helpers"
-require "remarkable/controller/macros"
+Dir[File.join("lib", "remarkable", "controller", "macros", '*')].each do |file|
+  require file
+end
 
-%w( respond_with
-    respond_with_content_type
-    render_with_layout
-    render_a_form
-    render_template
-    assign_to
-    route
-    redirect_to ).each { |file| require "remarkable/controller/macros/#{file}" }
+module Spec
+  module Rails
+    module Matchers
+      include Remarkable::Controller::Helpers
+      include Remarkable::Private
+    end
+  end
+end
+
+Spec::Rails::Matchers.send(:include, Remarkable::Syntax::RSpec)
+Spec::Example::ExampleGroupMethods.send(:include, Remarkable::Syntax::Shoulda)

@@ -5,3 +5,10 @@ describe UsersController do
 
   should_filter_params :ssn
 end
+
+describe UsersController do
+  fixtures :all
+
+  it { should filter_params(:ssn) }
+  it { should_not filter_params(:email) }
+end

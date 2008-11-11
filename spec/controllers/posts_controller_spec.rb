@@ -118,16 +118,17 @@ describe PostsController do
       it { should assign_to(:posts) }
       it { should_not assign_to(:foo, :bar) }
     end
-
+    
     describe "on POST to :create" do
-      before do
+      before(:each) do
         post :create, :post => { :title => "Title", :body => "Body" }, :user_id => users(:first)
         @post = Post.last
       end
       it { should respond_with(:redirect) }
       it { should_not respond_with(:success) }
-      #      should_redirect_to "user_post_url(@post.user, @post)"
-      #      should_set_the_flash_to /created/i
+      it { should redirect_to(user_post_url(@post.user, @post)) }
+      it { should set_the_flash_to(/created/i) }
+      it { should_not set_the_flash_to(/foo/i) }
     end
 
     describe "viewing posts for a user with rss format" do
@@ -139,8 +140,9 @@ describe PostsController do
       it { should respond_with_content_type('application/rss+xml') }
       it { should respond_with_content_type(:rss) }
       it { should respond_with_content_type(/rss/) }
-      #      should_return_from_session :special, "'$2 off your next purchase'"
-      #      should_return_from_session :special_user_id, '@user.id'
+      it { should return_from_session(:special, "'$2 off your next purchase'") }
+      it { should return_from_session(:special_user_id, '@user.id') }
+      it { should_not return_from_session(:monkey, "'fat'") }
       it { should assign_to(:user, :posts) }
       it { should_not assign_to(:foo, :bar) }
     end
@@ -157,7 +159,7 @@ describe PostsController do
     describe "on GET to #new" do
       before { get :new, :user_id => users(:first) }
       it { should render_without_layout }
-      #      should_not_set_the_flash
+      it { should_not set_the_flash }
     end
   end
 
