@@ -1,50 +1,8 @@
 include Remarkable::Controller::Helpers
 
-# Macro that creates a test asserting that the response content type was 'content_type'.
-# Example:
-#
-#   should_respond_with_content_type 'application/rss+xml'
-#   should_respond_with_content_type :rss
-#   should_respond_with_content_type /rss/
-# 
-def should_respond_with_content_type(content_type)
-  it "should respond with content type of #{content_type}" do
-    content_type = Mime::EXTENSION_LOOKUP[content_type.to_s].to_s if content_type.is_a? Symbol
-    if content_type.is_a? Regexp
-      response.content_type.should match(content_type)
-    else
-      response.content_type.should == content_type
-    end
-  end
-end
 
-# Macro that creates a test asserting that the controller rendered the given template.
-# Example:
-#
-#   should_render_template :new
-# 
-def should_render_template(template)
-  it "should render template #{template.inspect}" do
-    it { response.should render_template(template.to_s) }
-  end
-end
 
-# Macro that creates a test asserting that the controller returned a redirect to the given path.
-# The given string is evaled to produce the resulting redirect path.  All of the instance variables
-# set by the controller are available to the evaled string.
-# Example:
-#
-#   should_redirect_to '"/"'
-#   should_redirect_to "user_url(@user)"
-#   should_redirect_to "users_url"
-# 
-def should_redirect_to(url)
-  it "should redirect to #{url.inspect}" do
-    instantiate_variables_from_assigns do
-      response.should redirect_to(eval(url, self.send(:binding), __FILE__, __LINE__))
-    end
-  end
-end
+
 
 # :section: Test macros
 # Macro that creates a test asserting that the flash contains the given value.

@@ -2,9 +2,8 @@ module Spec
   module Example
     module ExampleMethods
       def should(matcher)
-        # require "ruby-debug"; debugger
         case matcher.class.name
-        when "Remarkable::RespondWith"
+        when "Remarkable::RespondWith", "Spec::Rails::Matchers::RenderTemplate"
           remarkable_response.should matcher
         else
           remarkable_subject.should matcher
@@ -13,7 +12,7 @@ module Spec
 
       def should_not(matcher)
         case matcher.class.name
-        when "Remarkable::RespondWith"
+        when "Remarkable::RespondWith", "Spec::Rails::Matchers::RenderTemplate"
           remarkable_response.should_not matcher
         else
           remarkable_subject.should_not matcher
@@ -28,7 +27,6 @@ module Spec
       def remarkable_response
         @remarkable_response ||= self.response if self.respond_to?(:response)        
       end
-
     end
   end
 end
