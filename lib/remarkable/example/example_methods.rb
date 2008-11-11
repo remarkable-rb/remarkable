@@ -3,7 +3,7 @@ module Spec
     module ExampleMethods
       def should(matcher)
         case matcher.class.name
-        when "Remarkable::RespondWith", "Spec::Rails::Matchers::RenderTemplate", "Spec::Rails::Matchers::RedirectTo"
+        when "Spec::Rails::Matchers::RenderTemplate", "Spec::Rails::Matchers::RedirectTo"
           remarkable_response.should matcher
         else
           remarkable_subject.should matcher
@@ -12,7 +12,7 @@ module Spec
 
       def should_not(matcher)
         case matcher.class.name
-        when "Remarkable::RespondWith", "Spec::Rails::Matchers::RenderTemplate", "Spec::Rails::Matchers::RedirectTo"
+        when "Spec::Rails::Matchers::RenderTemplate", "Spec::Rails::Matchers::RedirectTo"
           remarkable_response.should_not matcher
         else
           remarkable_subject.should_not matcher

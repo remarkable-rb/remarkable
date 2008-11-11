@@ -1,7 +1,7 @@
-module Spec
-  module Rails
-    module Matchers
+module Remarkable
+  module Syntax
 
+    module RSpec
       # Macro that creates a test asserting that the flash contains the given value.
       # val can be a String, a Regex, or nil (indicating that the flash should not be set)
       #
@@ -23,15 +23,9 @@ module Spec
         end
       end
       alias_method :set_the_flash, :set_the_flash_to
-
     end
-  end
-end
 
-module Spec
-  module Example
-    module ExampleGroupMethods
-
+    module Shoulda
       # Macro that creates a test asserting that the flash contains the given value.
       # val can be a String, a Regex, or nil (indicating that the flash should not be set)
       #
@@ -58,7 +52,7 @@ module Spec
       def should_not_set_the_flash
         should_set_the_flash_to nil
       end
-
     end
+
   end
 end

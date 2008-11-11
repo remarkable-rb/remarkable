@@ -1,7 +1,7 @@
-module Spec
+module Remarkable
+  module Syntax
 
-  module Rails
-    module Matchers
+    module RSpec
       # Macro that creates a test asserting that a value returned from the session is correct.
       # The given string is evaled to produce the resulting redirect path.  All of the instance variables
       # set by the controller are available to the evaled string.
@@ -21,10 +21,8 @@ module Spec
         end
       end
     end
-  end
 
-  module Example
-    module ExampleGroupMethods
+    module Shoulda
       # Macro that creates a test asserting that a value returned from the session is correct.
       # The given string is evaled to produce the resulting redirect path.  All of the instance variables
       # set by the controller are available to the evaled string.
@@ -42,6 +40,6 @@ module Spec
         end
       end
     end
-  end
 
+  end
 end

@@ -43,24 +43,6 @@ module Remarkable # :nodoc:
         end
       end
       
-      # # Asserts that the given collection contains item x.  If x is a regular expression, ensure that
-      # # at least one element from the collection matches x.
-      # #
-      # #   assert_contains(['a', '1'], /\d/) => passes
-      # #   assert_contains(['a', '1'], 'a') => passes
-      # #   assert_contains(['a', '1'], /not there/) => fails
-      # # 
-      # def assert_contains(collection, x)
-      #   collection = [collection] unless collection.is_a?(Array)
-      #   case x
-      #   when Regexp
-      #     return false unless collection.detect { |e| e =~ x }
-      #   else
-      #     return false unless collection.include?(x)
-      #   end
-      #   true
-      # end
-      
     end
   end
 end
