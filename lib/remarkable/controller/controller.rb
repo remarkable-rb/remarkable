@@ -1,3 +1,4 @@
+require "remarkable/controller/helpers"
 Dir[File.join("lib", "remarkable", "controller", "macros", '*')].each do |file|
   require file
 end

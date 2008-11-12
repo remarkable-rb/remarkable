@@ -1,10 +1,16 @@
-module Remarkable
-  class ActiveRecord
-    include Remarkable::Private
+%w( database associations validations ).each do |folder|
+  Dir[File.join("lib", "remarkable", "active_record", "macros", folder, '*')].each do |file|
+    require file
   end
 end
 
-require "remarkable/active_record/associations/associations"
-require "remarkable/active_record/database/database"
-require "remarkable/active_record/validations/validations"
-# require "remarkable/active_record/macros"
+module Spec
+  module Rails
+    module Matchers
+      include Remarkable::Private
+    end
+  end
+end
+
+Spec::Rails::Matchers.send(:include, Remarkable::Syntax::RSpec)
+# Spec::Example::ExampleGroupMethods.send(:include, Remarkable::Syntax::Shoulda)
