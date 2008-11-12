@@ -21,13 +21,13 @@ Quick macro tests for your ActiveRecord associations and validations:
   end
 
   describe User do
-    should_have_many :posts
+    it { should have_many(:posts) }
 
-    should_not_allow_values_for :email, "blah", "b lah"
-    should_allow_values_for :email, "a@b.com", "asdf@asdf.com"
-    should_ensure_length_in_range :email, 1..100
-    should_ensure_value_in_range :age, 1..100
-    should_protect_attributes :password
+    it { should not_allow_values_for(:email, "blah", "b lah") }
+    it { should allow_values_for(:email, "a@b.com", "asdf@asdf.com") }
+    it { should ensure_length_in_range(:email, 1..100) }
+    it { should ensure_value_in_range(:age, 1..100) }
+    it { should protect_attributes(:password) }
   end
 
 Makes TDD so much easier.
