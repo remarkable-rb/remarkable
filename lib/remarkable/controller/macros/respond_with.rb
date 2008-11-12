@@ -63,7 +63,7 @@ module Remarkable
       #   should_respond_with :success
       # 
       def should_respond_with(type)
-        it "respond with #{type}" do
+        it "should respond with #{type}" do
           clean_backtrace do
             if [ :success, :missing, :redirect, :error ].include?(type) && response.send("#{type}?")
             elsif type.is_a?(Fixnum) && response.response_code == type
