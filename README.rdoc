@@ -6,7 +6,7 @@ Remarkable makes it easy to write elegant, understandable, and maintainable test
 
 === Install
 
-	./script/plugin install	git://github.com/carlosbrando/remarkable.git
+./script/plugin install git://github.com/carlosbrando/remarkable.git
 
 === ActiveRecord Tests
 
