@@ -4,6 +4,10 @@ Remarkable makes it easy to write elegant, understandable, and maintainable test
 
 = Usage
 
+=== Install
+
+	./script/plugin install	git://github.com/carlosbrando/remarkable.git
+
 === ActiveRecord Tests
 
 Quick macro tests for your ActiveRecord associations and validations:
