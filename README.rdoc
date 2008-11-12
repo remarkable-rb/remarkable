@@ -1,64 +1,48 @@
-= Remarkable - Making tests easy on the fingers and eyes for RSpec
+= remarkable
 
-Remarkable makes it easy to write elegant, understandable, and maintainable tests.  Remarkable consists of test macros, assertions, and helpers added on to the RSpec framework.  It's fully compatible with your existing tests, and requires no retooling to use.
+* http://www.nomedojogo.com
 
-= Usage
+== DESCRIPTION:
 
-=== Install
+FIX (describe your package)
 
-./script/plugin install git://github.com/carlosbrando/remarkable.git
+== FEATURES/PROBLEMS:
 
-=== ActiveRecord Tests
+* FIX (list of features or problems)
 
-Quick macro tests for your ActiveRecord associations and validations:
+== SYNOPSIS:
 
-  describe Post do
-    fixtures :all
+  FIX (code sample of usage)
 
-    should_belong_to :user
-    should_have_many :tags, :through => :taggings
+== REQUIREMENTS:
 
-    should_require_unique_attributes :title
-    should_require_attributes :body, :message => /wtf/
-    should_require_attributes :title
-    should_only_allow_numeric_values_for :user_id
-  end
+* FIX (list of requirements)
 
-  describe User do
-    it { should have_many(:posts) }
+== INSTALL:
 
-    it { should not_allow_values_for(:email, "blah", "b lah") }
-    it { should allow_values_for(:email, "a@b.com", "asdf@asdf.com") }
-    it { should ensure_length_in_range(:email, 1..100) }
-    it { should ensure_value_in_range(:age, 1..100) }
-    it { should protect_attributes(:password) }
-  end
+* FIX (sudo gem install, anything else)
 
-Makes TDD so much easier.
+== LICENSE:
 
-=== Controller Tests
+(The MIT License)
 
-Macros to test the most common controller patterns...
+Copyright (c) 2008 FIXME full name
 
-  describe "on GET to :show for first record" do
-    before(:each) do
-      get :show, :id => 1
-    end
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
 
-    should_assign_to :user
-    should_respond_with :success
-    should_render_template :show
-    should_not_set_the_flash
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
 
-    it "do something else really cool" do
-      assigns(:user).id.should == 1
-    end
-  end
-
-= Credits
-
-Remarkable is maintained by [Carlos Brando](mailto:eduardobrando@gmail.com)
-
-= License
-
-Remarkable is Copyright © 2008 Carlos Brando, released under the MIT license
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

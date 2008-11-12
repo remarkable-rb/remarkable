@@ -1,4 +1,4 @@
-require "remarkable/controller/helpers"
+require 'remarkable/controller/helpers'
 Dir[File.join(File.dirname(__FILE__), "macros", '*')].each do |file|
   require file
 end

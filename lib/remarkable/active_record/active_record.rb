@@ -1,4 +1,4 @@
-require "remarkable/active_record/helpers"
+require 'remarkable/active_record/helpers'
 %w( database associations validations ).each do |folder|
   Dir[File.join(File.dirname(__FILE__), "macros", folder, '*')].each do |file|
     require file
