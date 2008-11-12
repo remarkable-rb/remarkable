@@ -4,3 +4,6 @@ describe Flea do
   it { should have_and_belong_to_many(:dogs) }
 end
 
+describe Flea do
+  should_have_and_belong_to_many :dogs
+end

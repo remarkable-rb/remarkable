@@ -7,7 +7,6 @@ module Spec
   module Rails
     module Matchers
       include Remarkable::Controller::Helpers
-      include Remarkable::Private
     end
   end
 end

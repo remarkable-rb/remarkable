@@ -9,3 +9,13 @@ describe Address do
   it { should ensure_length_at_least(:zip, 5) }
   it { should only_allow_numeric_values_for(:zip) }
 end
+
+describe Address do
+  fixtures :all
+
+  should_belong_to :addressable
+  
+  # it { should require_unique_attributes(:title, :scoped_to => [:addressable_id, :addressable_type]) }
+  # it { should ensure_length_at_least(:zip, 5) }
+  # it { should only_allow_numeric_values_for(:zip) }
+end

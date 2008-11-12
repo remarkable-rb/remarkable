@@ -4,7 +4,7 @@ module Remarkable
     module RSpec
       class BelongTo
         include Remarkable::Private
-        
+
         def initialize(*associations)
           get_options!(associations)
           @associations = associations
@@ -52,9 +52,30 @@ module Remarkable
         Remarkable::Syntax::RSpec::BelongTo.new(*associations)
       end
     end
-    
-    module Shoulda   
+
+    module Shoulda
+      # Ensure that the belongs_to relationship exists.
+      #
+      #   should_belong_to :parent
+      #
+      def should_belong_to(*associations)
+        get_options!(associations)
+        klass = model_class
+        associations.each do |association|
+          it "should belong to #{association}" do
+            reflection = klass.reflect_on_association(association)
+            fail_with("#{klass.name} does not have any relationship to #{association}") unless reflection
+            reflection.macro.should == :belongs_to
+            
+            unless reflection.options[:polymorphic]
+              associated_klass = (reflection.options[:class_name] || association.to_s.camelize).constantize
+              fk = reflection.options[:foreign_key] || reflection.primary_key_name
+              fail_with("#{klass.name} does not have a #{fk} foreign key.") unless klass.column_names.include?(fk.to_s)
+            end
+          end
+        end
+      end
     end
-    
+
   end 
 end

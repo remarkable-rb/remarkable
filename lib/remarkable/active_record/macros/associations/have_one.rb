@@ -81,6 +81,52 @@ module Remarkable
     end
 
     module Shoulda
+      # Ensure that the has_one relationship exists.  Will also test that the
+      # associated table has the required columns.  Works with polymorphic
+      # associations.
+      #
+      # Options:
+      # * <tt>:dependent</tt> - tests that the association makes use of the dependent option.
+      #
+      # Example:
+      #   should_have_one :god # unless hindu
+      #
+      def should_have_one(*associations)
+        dependent = get_options!(associations, :dependent)
+        klass = model_class
+        associations.each do |association|
+          name = "should have one #{association}"
+          name += " dependent => #{dependent}" if dependent
+          it name do
+            reflection = klass.reflect_on_association(association)
+            fail_with("#{klass.name} does not have any relationship to #{association}") unless reflection
+            reflection.macro.should == :has_one
+
+            associated_klass = (reflection.options[:class_name] || association.to_s.camelize).constantize
+
+            if reflection.options[:foreign_key]
+              fk = reflection.options[:foreign_key]
+            elsif reflection.options[:as]
+              fk = reflection.options[:as].to_s.foreign_key
+              fk_type = fk.gsub(/_id$/, '_type')
+              unless associated_klass.column_names.include?(fk_type)
+                fail_with "#{associated_klass.name} does not have a #{fk_type} column."
+              end
+            else
+              fk = klass.name.foreign_key
+            end
+            unless associated_klass.column_names.include?(fk.to_s)
+              fail_with "#{associated_klass.name} does not have a #{fk} foreign key."
+            end
+
+            if dependent
+              unless reflection.options[:dependent].to_s == dependent.to_s
+                fail_with "#{association} should have #{dependent} dependency"
+              end
+            end
+          end
+        end
+      end
     end
 
   end
