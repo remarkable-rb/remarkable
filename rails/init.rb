@@ -1,1 +1,2 @@
-require 'remarkable.rb'
+require "spec"
+require "remarkable.rb"
