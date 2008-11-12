@@ -20,7 +20,13 @@ FIX (describe your package)
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+Run the following if you haven't already:
+
+	gem sources -a http://gems.github.com
+
+Install the gem:
+
+	sudo gem install carlosbrando-remarkable
 
 == LICENSE:
 
