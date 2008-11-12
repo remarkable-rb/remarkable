@@ -33,6 +33,11 @@ In RAILS_ROOT/config/environment.rb:
 
 	config.gem "carlosbrando-remarkable", :lib => "remarkable", :source => "http://gems.github.com"
 
+Then:
+
+	rake gems:install
+	rake gems:unpack
+
 == LICENSE:
 
 (The MIT License)
