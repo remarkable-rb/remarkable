@@ -67,6 +67,50 @@ module Remarkable
     end
 
     module Shoulda
+      # Ensure that the attribute is in the range specified
+      #
+      # If an instance variable has been created in the setup named after the
+      # model being tested, then this method will use that.  Otherwise, it will
+      # create a new instance to test against.
+      #
+      # Options:
+      # * <tt>:low_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.inclusion')</tt>
+      # * <tt>:high_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.inclusion')</tt>
+      #
+      # Example:
+      #   should_ensure_value_in_range :age, (0..100)
+      #
+      def should_ensure_value_in_range(attribute, range, opts = {})
+        low_message, high_message = get_options!([opts], :low_message, :high_message)
+        low_message  ||= default_error_message(:inclusion)
+        high_message ||= default_error_message(:inclusion)
+
+        klass = model_class
+        min   = range.first
+        max   = range.last
+
+        it "should not allow #{attribute} to be less than #{min}" do
+          v = min - 1
+          assert_bad_value(klass, attribute, v, low_message).should be_true
+        end
+
+        it "should allow #{attribute} to be #{min}" do
+          v = min
+          assert_good_value(klass, attribute, v, low_message).should be_true
+        end
+
+        it "should not allow #{attribute} to be more than #{max}" do
+          v = max + 1
+          assert_bad_value(klass, attribute, v, high_message).should be_true
+        end
+
+        it "should allow #{attribute} to be #{max}" do
+          v = max
+          assert_good_value(klass, attribute, v, high_message).should be_true
+        end
+      end
     end
 
   end

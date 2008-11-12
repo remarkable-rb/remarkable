@@ -77,6 +77,57 @@ module Remarkable
     end
 
     module Shoulda
+      # Ensures that the length of the attribute is in the given range
+      #
+      # If an instance variable has been created in the setup named after the
+      # model being tested, then this method will use that.  Otherwise, it will
+      # create a new instance to test against.
+      #
+      # Options:
+      # * <tt>:short_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.too_short') % range.first</tt>
+      # * <tt>:long_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.too_long') % range.last</tt>
+      #
+      # Example:
+      #   should_ensure_length_in_range :password, (6..20)
+      #
+      def should_ensure_length_in_range(attribute, range, opts = {})
+        short_message, long_message = get_options!([opts], :short_message, :long_message)
+        short_message ||= default_error_message(:too_short, :count => range.first)
+        long_message  ||= default_error_message(:too_long, :count => range.last)
+
+        klass = model_class
+        min_length = range.first
+        max_length = range.last
+        same_length = (min_length == max_length)
+
+        if min_length > 0
+          it "should not allow #{attribute} to be less than #{min_length} chars long" do
+            min_value = "x" * (min_length - 1)
+            assert_bad_value(klass, attribute, min_value, short_message).should be_true
+          end
+        end
+
+        if min_length > 0
+          it "should allow #{attribute} to be exactly #{min_length} chars long" do
+            min_value = "x" * min_length
+            assert_good_value(klass, attribute, min_value, short_message).should be_true
+          end
+        end
+
+        it "should not allow #{attribute} to be more than #{max_length} chars long" do
+          max_value = "x" * (max_length + 1)
+          assert_bad_value(klass, attribute, max_value, long_message).should be_true
+        end
+
+        unless same_length
+          it "should allow #{attribute} to be exactly #{max_length} chars long" do
+            max_value = "x" * max_length
+            assert_good_value(klass, attribute, max_value, long_message).should be_true
+          end
+        end
+      end
     end
 
   end

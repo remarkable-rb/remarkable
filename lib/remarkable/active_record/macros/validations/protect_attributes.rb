@@ -58,6 +58,31 @@ module Remarkable
     end
 
     module Shoulda
+      # Ensures that the attribute cannot be set on mass update.
+      #
+      #   should_protect_attributes :password, :admin_flag
+      #
+      def should_protect_attributes(*attributes)
+        get_options!(attributes)
+        klass = model_class
+
+        attributes.each do |attribute|
+          attribute = attribute.to_sym
+          it "should protect #{attribute} from mass updates" do
+            protected = klass.protected_attributes || []
+            accessible = klass.accessible_attributes || []
+
+            unless protected.include?(attribute.to_s) || (!accessible.empty? && !accessible.include?(attribute.to_s))
+              message = if accessible.empty?
+                "#{klass} is protecting #{protected.to_a.to_sentence}, but not #{attribute}."
+              else
+                "#{klass} has made #{attribute} accessible"
+              end
+              fail_with(message)
+            end
+          end
+        end
+      end
     end
 
   end

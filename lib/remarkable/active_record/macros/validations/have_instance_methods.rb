@@ -53,6 +53,21 @@ module Remarkable
     end
 
     module Shoulda
+      # Ensure that the given instance methods are defined on the model.
+      #
+      #   should_have_instance_methods :email, :name, :name=
+      #
+      def should_have_instance_methods(*methods)
+        get_options!(methods)
+        klass = model_class
+        methods.each do |method|
+          it "should respond to instance method ##{method}" do
+            unless klass.new.respond_to?(method)
+              fail_with "#{klass.name} does not have instance method #{method}"
+            end
+          end
+        end
+      end
     end
 
   end

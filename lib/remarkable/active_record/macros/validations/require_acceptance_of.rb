@@ -64,6 +64,30 @@ module Remarkable
     end
 
     module Shoulda
+      # Ensures that the model cannot be saved if one of the attributes listed is not accepted.
+      #
+      # If an instance variable has been created in the setup named after the
+      # model being tested, then this method will use that.  Otherwise, it will
+      # create a new instance to test against.
+      #
+      # Options:
+      # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.accepted')</tt>
+      #
+      # Example:
+      #   should_require_acceptance_of :eula
+      #
+      def should_require_acceptance_of(*attributes)
+        message = get_options!(attributes, :message)
+        message ||= default_error_message(:accepted)
+        klass = model_class
+
+        attributes.each do |attribute|
+          it "should require #{attribute} to be accepted" do
+            assert_bad_value(klass, attribute, false, message).should be_true
+          end
+        end
+      end
     end
 
   end

@@ -51,7 +51,22 @@ module Remarkable
     end
 
     module Shoulda
-
+      # Ensure that the given columns are defined on the models backing SQL table.
+      #
+      #   should_have_db_columns :id, :email, :name, :created_at
+      #
+      def should_have_db_columns(*columns)
+        column_type = get_options!(columns, :type)
+        klass = model_class
+        columns.each do |name|
+          test_name = "should have column #{name}"
+          test_name += " of type #{column_type}" if column_type
+          it test_name do
+            column = klass.columns.detect {|c| c.name == name.to_s }
+            fail_with("#{klass.name} does not have column #{name}") unless column
+          end
+        end
+      end
     end
 
   end

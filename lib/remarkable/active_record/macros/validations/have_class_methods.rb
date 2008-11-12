@@ -53,6 +53,21 @@ module Remarkable
     end
 
     module Shoulda
+      # Ensure that the given class methods are defined on the model.
+      #
+      #   should_have_class_methods :find, :destroy
+      #
+      def should_have_class_methods(*methods)
+        get_options!(methods)
+        klass = model_class
+        methods.each do |method|
+          it "should respond to class method ##{method}" do
+            unless klass.respond_to?(method)
+              fail_with "#{klass.name} does not have class method #{method}"
+            end
+          end
+        end
+      end
     end
 
   end

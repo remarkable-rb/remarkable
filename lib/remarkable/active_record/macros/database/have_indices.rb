@@ -50,7 +50,25 @@ module Remarkable
     end
 
     module Shoulda
+      # Ensures that there are DB indices on the given columns or tuples of columns.
+      # Also aliased to should_have_index for readability
+      #
+      #   should_have_indices :email, :name, [:commentable_type, :commentable_id]
+      #   should_have_index :age
+      #
+      def should_have_indices(*columns)
+        table = model_class.table_name
+        indices = ::ActiveRecord::Base.connection.indexes(table).map(&:columns)
 
+        columns.each do |column|
+          it "should have index on #{table} for #{column.inspect}" do
+            columns = [column].flatten.map(&:to_s)
+            assert_contains(indices, columns).should be_true
+          end
+        end
+      end
+
+      alias_method :should_have_index, :should_have_indices
     end
 
   end
