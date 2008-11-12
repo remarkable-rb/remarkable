@@ -29,6 +29,10 @@ Install the gem:
 
 	sudo gem install carlosbrando-remarkable
 
+In RAILS_ROOT/config/environment.rb:
+
+	config.gem "carlosbrando-remarkable", :lib => "remarkable", :source => "http://gems.github.com"
+
 == LICENSE:
 
 (The MIT License)
