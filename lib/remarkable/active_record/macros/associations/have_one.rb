@@ -73,7 +73,7 @@ module Remarkable
       # * <tt>:dependent</tt> - tests that the association makes use of the dependent option.
       #
       # Example:
-      #   it { User.should have_one(:address) }
+      #   it { should have_one(:god) } # unless hindu
       #
       def have_one(*associations)
         Remarkable::Syntax::RSpec::HaveOne.new(*associations)

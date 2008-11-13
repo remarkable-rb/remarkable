@@ -1,6 +1,6 @@
 = Shoulda for RSpec is Remarkable!
 
-* http://www.nomedojogo.com
+
 
 == DESCRIPTION:
 

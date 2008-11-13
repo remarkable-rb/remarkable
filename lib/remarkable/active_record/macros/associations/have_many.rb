@@ -83,9 +83,9 @@ module Remarkable
       # * <tt>:dependent</tt> - tests that the association makes use of the dependent option.
       #
       # Example:
-      #   it { User.should have_many(:friends) }
-      #   it { User.should have_many(:enemies, :through => :friends) }
-      #   it { User.should have_many(:friends, :dependent => :destroy) }
+      #   it { should have_many(:friends) }
+      #   it { should have_many(:enemies, :through => :friends) }
+      #   it { should have_many(:friends, :dependent => :destroy) }
       #
       def have_many(*associations)
         Remarkable::Syntax::RSpec::HaveMany.new(*associations)

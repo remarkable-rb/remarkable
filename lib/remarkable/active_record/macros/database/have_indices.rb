@@ -39,8 +39,8 @@ module Remarkable
       # Ensures that there are DB indices on the given columns or tuples of columns.
       # Also aliased to should_have_index for readability
       #
-      #   it { User.should have_indices(:email, :name, [:commentable_type, :commentable_id]) }
-      #   it { User.should have_index(:age) }
+      #   it { should have_indices(:email, :name, [:commentable_type, :commentable_id]) }
+      #   it { should have_index(:age) }
       # 
       def have_indices(*columns)
         Remarkable::Syntax::RSpec::HaveIndices.new(*columns)

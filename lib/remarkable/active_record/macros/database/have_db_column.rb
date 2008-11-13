@@ -45,7 +45,7 @@ module Remarkable
       # the instance variables defined on the column definition:  :precision, :limit, :default, :null,
       # :primary, :type, :scale, and :sql_type.
       #
-      #   it { User.should have_db_column(:email, :type => "string",  :default => nil,    :precision => nil,  :limit => 255,
+      #   it { should have_db_column(:email, :type => "string",  :default => nil,    :precision => nil,  :limit => 255,
       #                                           :null => true,      :primary => false,  :scale => nil,      :sql_type => 'varchar(255)') }
       # 
       def have_db_column(name, opts = {})

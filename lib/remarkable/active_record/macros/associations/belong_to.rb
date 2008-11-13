@@ -46,7 +46,7 @@ module Remarkable
 
       # Ensure that the belongs_to relationship exists.
       #
-      #   it { Post.should belong_to(:user) }
+      #   it { should belong_to(:parent) }
       #
       def belong_to(*associations)
         Remarkable::Syntax::RSpec::BelongTo.new(*associations)

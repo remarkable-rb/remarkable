@@ -43,7 +43,7 @@ module Remarkable
 
       # Ensure that the given columns are defined on the models backing SQL table.
       #
-      #   it { User.should have_db_columns(:id, :email, :name, :created_at) }
+      #   it { should have_db_columns(:id, :email, :name, :created_at) }
       #
       def have_db_columns(*columns)
         Remarkable::Syntax::RSpec::HaveDbColumns.new(*columns)

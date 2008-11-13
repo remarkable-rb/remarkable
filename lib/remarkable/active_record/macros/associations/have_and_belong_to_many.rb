@@ -44,7 +44,7 @@ module Remarkable
       # Ensures that the has_and_belongs_to_many relationship exists, and that the join
       # table is in place.
       #
-      #   it { User.should have_and_belong_to_many(:posts, :cars) }
+      #   it { should have_and_belong_to_many(:posts, :cars) }
       #
       def have_and_belong_to_many(*associations)
         Remarkable::Syntax::RSpec::HaveAndBelongToMany.new(*associations)
