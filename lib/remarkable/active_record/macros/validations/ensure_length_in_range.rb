@@ -69,7 +69,7 @@ module Remarkable
       #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.too_long') % range.last</tt>
       #
       # Example:
-      #   it { User.should ensure_length_in_range(:password, 6..20) }
+      #   it { should ensure_length_in_range(:password, 6..20) }
       #
       def ensure_length_in_range(attribute, range, opts = {})
         Remarkable::Syntax::RSpec::EnsureLengthInRange.new(attribute, range, opts)

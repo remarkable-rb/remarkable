@@ -7,9 +7,9 @@ module Remarkable
       #
       # Example:
       #
-      #   should_set_the_flash_to "Thank you for placing this order."
-      #   should_set_the_flash_to /created/i
-      #   should_set_the_flash_to nil
+      #   it { should set_the_flash_to("Thank you for placing this order.") }
+      #   it { should set_the_flash_to(/created/i) }
+      #   it { should_not set_the_flash }
       # 
       def set_the_flash_to(val = nil)
         if val

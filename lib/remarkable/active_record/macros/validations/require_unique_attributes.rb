@@ -76,10 +76,10 @@ module Remarkable
       # * <tt>:scoped_to</tt> - field(s) to scope the uniqueness to.
       #
       # Examples:
-      #   should_require_unique_attributes :keyword, :username
-      #   should_require_unique_attributes :name, :message => "O NOES! SOMEONE STOELED YER NAME!"
-      #   should_require_unique_attributes :email, :scoped_to => :name
-      #   should_require_unique_attributes :address, :scoped_to => [:first_name, :last_name]
+      #   it { should require_unique_attributes(:keyword, :username) }
+      #   it { should require_unique_attributes(:name, :message => "O NOES! SOMEONE STOELED YER NAME!") }
+      #   it { should require_unique_attributes(:email, :scoped_to => :name) }
+      #   it { should require_unique_attributes(:address, :scoped_to => [:first_name, :last_name]) }
       #
       def require_unique_attributes(*attributes)
         Remarkable::Syntax::RSpec::RequireUniqueAttributes.new(*attributes)

@@ -50,7 +50,7 @@ module Remarkable
 
       # Ensures that the attribute cannot be set on mass update.
       #
-      #   it { User.should protect_attributes(:password, :admin_flag) }
+      #   it { should protect_attributes(:password, :admin_flag) }
       #
       def protect_attributes(*attributes)
         Remarkable::Syntax::RSpec::ProtectAttributes.new(*attributes)

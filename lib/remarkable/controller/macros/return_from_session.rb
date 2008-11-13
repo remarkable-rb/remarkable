@@ -7,8 +7,8 @@ module Remarkable
       # set by the controller are available to the evaled string.
       # Example:
       #
-      #   should_return_from_session :user_id, '@user.id'
-      #   should_return_from_session :message, '"Free stuff"'
+      #   it { should return_from_session(:user_id, '@user.id') }
+      #   it { should return_from_session(:message, '"Free stuff"') }
       # 
       def return_from_session(key, expected)
         simple_matcher "return the correct value from the session for key #{key}" do

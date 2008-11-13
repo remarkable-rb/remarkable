@@ -46,8 +46,8 @@ module Remarkable
       # create a new instance to test against.
       #
       # Example:
-      #   it { Book.should allow_values_for(:isbn, "isbn 1 2345 6789 0", "ISBN 1-2345-6789-0") }
-      #   it { Book.should_not allow_values_for(:isbn, "bad 1", "bad 2") }
+      #   it { should allow_values_for(:isbn, "isbn 1 2345 6789 0", "ISBN 1-2345-6789-0") }
+      #   it { should_not allow_values_for(:isbn, "bad 1", "bad 2") }
       #
       def allow_values_for(attribute, *good_values)
         Remarkable::Syntax::RSpec::AllowValuesFor.new(attribute, *good_values)

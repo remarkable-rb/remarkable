@@ -53,7 +53,7 @@ module Remarkable
       #
       # Example:
       # 
-      #   it { User.should have_named_scope(:visible, :conditions => {:visible => true}) }
+      #   it { should have_named_scope(:visible, :conditions => {:visible => true}) }
       #
       # Passes for
       #
@@ -67,8 +67,8 @@ module Remarkable
       #
       # You can test lambdas or methods that return ActiveRecord#scoped calls:
       #
-      #   it { User.should have_named_scope('recent(5)', :limit => 5) }
-      #   it { User.should have_named_scope('recent(1)', :limit => 1) }
+      #   it { should have_named_scope('recent(5)', :limit => 5) }
+      #   it { should have_named_scope('recent(1)', :limit => 1) }
       #
       # Passes for
       #   named_scope :recent, lambda {|c| {:limit => c}}

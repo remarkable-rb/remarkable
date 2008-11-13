@@ -46,7 +46,7 @@ module Remarkable
 
       # Ensures that the attribute cannot be changed once the record has been created.
       #
-      #   it { User.should have_readonly_attributes(:password, :admin_flag) }
+      #   it { should have_readonly_attributes(:password, :admin_flag) }
       #
       def have_readonly_attributes(*attributes)
         Remarkable::Syntax::RSpec::HaveReadonlyAttributes.new(*attributes)

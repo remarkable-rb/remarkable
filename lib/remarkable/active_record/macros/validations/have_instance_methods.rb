@@ -45,7 +45,7 @@ module Remarkable
 
       # Ensure that the given instance methods are defined on the model.
       #
-      #   it { User.should have_instance_methods(:email, :name, :name=) }
+      #   it { should have_instance_methods(:email, :name, :name=) }
       #
       def have_instance_methods(*methods)
         Remarkable::Syntax::RSpec::HaveInstanceMethods.new(*methods)

@@ -59,7 +59,7 @@ module Remarkable
       #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.inclusion')</tt>
       #
       # Example:
-      #   it { User.should ensure_value_in_range(:age, 1..100) }
+      #   it { should ensure_value_in_range(:age, 1..100) }
       #
       def ensure_value_in_range(attribute, range, opts = {})
         Remarkable::Syntax::RSpec::EnsureValueInRange.new(attribute, range, opts)

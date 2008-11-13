@@ -7,7 +7,7 @@ module Remarkable
       #
       # Example:
       #
-      #   should_filter_params :password, :ssn
+      #   it { should filter_params(:password, :ssn) }
       # 
       def filter_params(*keys)
         simple_matcher "filter #{keys.to_sentence}" do

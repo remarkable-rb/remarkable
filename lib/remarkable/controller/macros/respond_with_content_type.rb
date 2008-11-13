@@ -5,9 +5,9 @@ module Remarkable
       # Macro that creates a test asserting that the response content type was 'content_type'.
       # Example:
       #
-      #   should_respond_with_content_type 'application/rss+xml'
-      #   should_respond_with_content_type :rss
-      #   should_respond_with_content_type /rss/
+      #   it { should respond_with_content_type('application/rss+xml') }
+      #   it { should respond_with_content_type(:rss) }
+      #   it { should respond_with_content_type(/rss/) }
       # 
       def respond_with_content_type(content_type)
         simple_matcher "respond with content type of #{content_type}" do

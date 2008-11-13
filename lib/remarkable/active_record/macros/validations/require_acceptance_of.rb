@@ -56,7 +56,7 @@ module Remarkable
       #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.accepted')</tt>
       #
       # Example:
-      #   it { User.should require_acceptance_of(:eula) }
+      #   it { should require_acceptance_of(:eula) }
       #
       def require_acceptance_of(*attributes)
         Remarkable::Syntax::RSpec::RequireAcceptanceOf.new(*attributes)

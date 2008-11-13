@@ -53,7 +53,7 @@ module Remarkable
       #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.too_short') % min_length</tt>
       #
       # Example:
-      #   it { Tag.should ensure_length_at_least(:name, 3) }
+      #   it { should ensure_length_at_least(:name, 3) }
       #
       def ensure_length_at_least(attribute, min_length, opts = {})
         Remarkable::Syntax::RSpec::EnsureLengthAtLeast.new(attribute, min_length, opts)

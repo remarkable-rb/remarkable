@@ -56,7 +56,7 @@ module Remarkable
       #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.blank')</tt>
       #
       # Example:
-      #   it { User.should require_attributes(:name, :phone_number) }
+      #   it { should require_attributes(:name, :phone_number) }
       #
       def require_attributes(*attributes)
         Remarkable::Syntax::RSpec::RequireAttributes.new(*attributes)

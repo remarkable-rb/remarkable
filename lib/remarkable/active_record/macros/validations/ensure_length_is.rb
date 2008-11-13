@@ -58,7 +58,7 @@ module Remarkable
       #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.wrong_length') % length</tt>
       #
       # Example:
-      #   it { User.should ensure_length_is(:ssn, 9) }
+      #   it { should ensure_length_is(:ssn, 9) }
       #
       def ensure_length_is(attribute, length, opts = {})
         Remarkable::Syntax::RSpec::EnsureLengthIs.new(attribute, length, opts)

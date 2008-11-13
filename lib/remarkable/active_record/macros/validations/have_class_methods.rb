@@ -45,7 +45,7 @@ module Remarkable
 
       # Ensure that the given class methods are defined on the model.
       #
-      #   it { User.should have_class_methods(:find, :destroy) }
+      #   it { should have_class_methods(:find, :destroy) }
       #
       def have_class_methods(*methods)
         Remarkable::Syntax::RSpec::HaveClassMethods.new(*methods)
