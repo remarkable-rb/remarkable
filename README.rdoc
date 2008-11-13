@@ -1,19 +1,58 @@
 = Shoulda for RSpec is Remarkable!
 
-
+The Remarkable gem makes it easy to write elegant, understandable, and maintainable Ruby tests. Remarkable consists of test macros, ported of Shoulda to the RSpec framework. It's fully compatible with your existing tests, and requires no retooling to use.
 
 == DESCRIPTION:
 
-Remarkable makes it easy to write elegant, understandable, and maintainable tests. Remarkable consists of test macros, assertions, and helpers added on to the RSpec framework. It’s fully compatible with your existing tests, and requires no retooling to use. 
+Initially, the objective of Remarkable is to port all macros of Shoulda to RSpec, but obviously the plan is far more ambitious than that. I have a lot in mind, this project will be especially useful for those who use RSpec.
 
-== FEATURES/PROBLEMS:
+== FEATURES:
 
-* FIX (list of features or problems)
+* All macros of Shoulda to the RSpec.
+* Two different styles to write tests: Shoulda and RSpec syntaxes.
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+Shoulda Syntax:
 
+	describe Post do
+	  fixtures :all
+
+	  should_belong_to :user
+	  should_belong_to :owner
+	  should_belong_to :user, :owner
+
+	  should_have_many :tags, :through => :taggings
+	  should_have_many :through_tags, :through => :taggings
+	  should_have_many :tags, :through_tags, :through => :taggings
+
+	  should_require_unique_attributes :title
+	  should_require_attributes :body, :message => /wtf/
+	  should_require_attributes :title
+	  should_only_allow_numeric_values_for :user_id
+	end
+	
+RSpec Syntax:
+
+	describe Post do
+	  fixtures :all
+
+	  it { should belong_to(:user) }
+	  it { should belong_to(:owner) }
+	  it { should belong_to(:user, :owner) }
+
+	  it { should have_many(:tags, :through => :taggings) }
+	  it { should have_many(:through_tags, :through => :taggings) }
+	  it { should have_many(:tags, :through_tags, :through => :taggings) }
+
+	  it { should require_unique_attributes(:title) }
+	  it { should require_attributes(:body, :message => /wtf/) }
+	  it { should require_attributes(:title) }
+	  it { should only_allow_numeric_values_for(:user_id) }
+	end
+	
+To see all macros, see the documentation of the project: http://remarkable.nomedojogo.com/
+	
 == REQUIREMENTS:
 
 * rspec >= 1.1.11
