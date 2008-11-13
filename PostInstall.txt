@@ -1,7 +1,2 @@
 
-For more information on remarkable, see http://remarkable.rubyforge.org
-
-NOTE: Change this information in PostInstall.txt 
-You can also delete it if you don't want it.
-
-
+For more information on remarkable, see http://remarkable.nomedojogo.com
