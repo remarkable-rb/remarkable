@@ -6,6 +6,10 @@ The Remarkable gem makes it easy to write elegant, understandable, and maintaina
 
 Initially, the objective of Remarkable is to port all macros of Shoulda to RSpec, but obviously the plan is far more ambitious than that. I have a lot in mind, this project will be especially useful for those who use RSpec.
 
+== FEATURES/PROBLEMS:
+
+http://carlosbrando.lighthouseapp.com/projects/19775-remarkable/overview
+
 == FEATURES:
 
 * All macros of Shoulda to the RSpec.
