@@ -11,4 +11,7 @@ if defined?(RAILS_ROOT)
   Dir[File.join(RAILS_ROOT, "spec", "remarkable_macros", "*.rb")].each do |macro_file_path|
     require macro_file_path
   end
+
+  Spec::Rails::Matchers.send(:include, Remarkable::Syntax::RSpec)
+  Spec::Example::ExampleGroupMethods.send(:include, Remarkable::Syntax::Shoulda)
 end

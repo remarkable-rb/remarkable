@@ -11,5 +11,5 @@ module Spec
   end
 end
 
-Spec::Rails::Matchers.send(:include, Remarkable::Syntax::RSpec)
-Spec::Example::ExampleGroupMethods.send(:include, Remarkable::Syntax::Shoulda)
+Spec::Rails::Matchers.send(:include, Remarkable::Controller::Syntax::RSpec)
+Spec::Example::ExampleGroupMethods.send(:include, Remarkable::Controller::Syntax::Shoulda)
