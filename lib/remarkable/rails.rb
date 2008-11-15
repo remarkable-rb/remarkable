@@ -8,7 +8,7 @@ if defined?(RAILS_ROOT)
   end
 
   # load in the local application specific macros
-  Dir[File.join(RAILS_ROOT, "test", "remarkable_macros", "*.rb")].each do |macro_file_path|
+  Dir[File.join(RAILS_ROOT, "spec", "remarkable_macros", "*.rb")].each do |macro_file_path|
     require macro_file_path
   end
 end
