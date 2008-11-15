@@ -4,6 +4,7 @@ module Remarkable
     module RSpec
       class RequireUniqueAttributes
         include Remarkable::Private
+        include Remarkable::ActiveRecord::Helpers
         
         def initialize(*attributes)
           @message, scope = get_options!(attributes, :message, :scoped_to)

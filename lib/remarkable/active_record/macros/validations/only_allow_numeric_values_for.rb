@@ -4,6 +4,7 @@ module Remarkable
     module RSpec
       class OnlyAllowNumericValuesFor
         include Remarkable::Private
+        include Remarkable::ActiveRecord::Helpers
         
         def initialize(*attributes)
           @message = get_options!(attributes, :message)

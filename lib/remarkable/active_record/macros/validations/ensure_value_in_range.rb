@@ -4,6 +4,7 @@ module Remarkable
     module RSpec
       class EnsureValueInRange
         include Remarkable::Private
+        include Remarkable::ActiveRecord::Helpers
         
         def initialize(attribute, range, opts = {})
           @attribute = attribute
