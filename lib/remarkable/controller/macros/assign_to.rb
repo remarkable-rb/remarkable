@@ -16,6 +16,7 @@ module Remarkable
         #   it { should assign_to(:user, :posts) }
         #   it { should assign_to(:user, :class => User) }
         #   it { should assign_to(:user, :equals => '@user') }
+        #   it { should_not assign_to(:user, :posts) }
         # 
         def assign_to(*names)
           opts = names.extract_options!
