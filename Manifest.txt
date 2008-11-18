@@ -43,7 +43,9 @@ lib/remarkable/controller/macros/route.rb
 lib/remarkable/controller/macros/set_the_flash_to.rb
 lib/remarkable/example/example_methods.rb
 lib/remarkable/private_helpers.rb
+lib/remarkable/rails.rb
 rails/init.rb
+remarkable.gemspec
 script/console
 script/destroy
 script/generate
@@ -65,6 +67,8 @@ spec/models/product_spec.rb
 spec/models/tag_spec.rb
 spec/models/tagging_spec.rb
 spec/models/user_spec.rb
+spec/other/custom_macros_spec.rb
+spec/other/private_helpers_spec.rb
 spec/rails_root/app/controllers/application.rb
 spec/rails_root/app/controllers/posts_controller.rb
 spec/rails_root/app/controllers/users_controller.rb
@@ -117,7 +121,9 @@ spec/rails_root/public/422.html
 spec/rails_root/public/500.html
 spec/rails_root/script/console
 spec/rails_root/script/generate
+spec/rails_root/spec/remarkable_macros/my_macros.rb
 spec/rails_root/vendor/plugins/.keep
+spec/rails_root/vendor/plugins/my_plugin/remarkable_macros/my_macro.rb
 spec/rcov.opts
 spec/spec.opts
 spec/spec_helper.rb
