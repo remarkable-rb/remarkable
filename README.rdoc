@@ -1,23 +1,37 @@
 = Shoulda for RSpec is Remarkable!
 
-The Remarkable gem makes it easy to write elegant, understandable, and maintainable Ruby tests. Remarkable consists of test macros, ported of Shoulda to the RSpec framework. It's fully compatible with your existing tests, and requires no retooling to use.
+For a long time I was evangelizing Shoulda at Surgeworks and used it in my personal projects. The fact is, I didn’t have much success in convincing my co-workers to adopt Shoulda. On the other hand, they managed to convince me to learn and use RSpec.
+
+RSpec is a very interesting Testing Framework. But I start to like it more after I started to use the Cucumber.
+
+The great thing about Shoulda is that it’s simplifies tests for trivial things.
+
+I got to like RSpec more and more, so I decided to adopt it as my official testing framework from now on. But I can no longer live without the resources that Shoulda offers me. So I decided to scratch my itch.
 
 == DESCRIPTION:
 
-Initially, the objective of Remarkable is to port all macros of Shoulda to RSpec, but obviously the plan is far more ambitious than that. I have a lot in mind, this project will be especially useful for those who use RSpec.
+Initially, the main objective of Remarkable is to port all Shoulda macros to RSpec, but of course the plan is more ambitious than that. I have other ideas that will hopefully be especially useful for Rspec users.
 
-== FEATURES/PROBLEMS:
+At this point you may ask: “But aren’t there already plug-ins that do the same thing. Why build something else?”
 
-http://carlosbrando.lighthouseapp.com/projects/19775-remarkable/overview
+First, this isn’t simply “another” plugin with RSpec matchers. It also does a lot of things differently that I feel are better than other approaches.
 
 == FEATURES:
 
-* All macros of Shoulda to the RSpec.
-* Two different styles to write tests: Shoulda and RSpec syntaxes.
+Here are some of the things that make Remarkable special:
+
+* It is not a plug-in; it’s a gem.
+* All currently Shoulda macros are ported to RSpec.
+* It has two different test syntaxes: one for those who like the RSpec style and another for those who are migrating their projects from Shoulda to RSpec.
+* Tests.
+* More tests.
+* And a few more tests.
+
+Unlike other similar projects, Remarkable is the only one that tests itself, and this is a big difference, believe me! How can we trust in a project that has no tests? How can you develop an open-source project with no tests? How do you ensure that the last commit didn’t break anything?
 
 == SYNOPSIS:
 
-Shoulda Syntax:
+All Remarkable macros can be accessed in two different ways. For those who prefer the Shoulda style, let’s look at some model tests:
 
 	describe Post do
 	  fixtures :all
@@ -35,8 +49,10 @@ Shoulda Syntax:
 	  should_require_attributes :title
 	  should_only_allow_numeric_values_for :user_id
 	end
-	
-RSpec Syntax:
+
+Like Shoulda, right? That’s the idea! This syntax is for those who wish to migrate their Shoulda tests to RSpec. You basically just have to change context to describe and wrap your should statements with it {}.
+
+But if you don’t like this syntax, you can also create the same tests as follows.
 
 	describe Post do
 	  fixtures :all
@@ -54,8 +70,15 @@ RSpec Syntax:
 	  it { should require_attributes(:title) }
 	  it { should only_allow_numeric_values_for(:user_id) }
 	end
-	
-To see all macros, see the documentation of the project: http://remarkable.nomedojogo.com/
+
+Now with an RSpec style!
+
+== Macros
+
+Here are all the available macros:
+
+For Shoulda style: http://github.com/carlosbrando/remarkable/wikis/shoulda-macros
+For RSpec style: http://github.com/carlosbrando/remarkable/wikis/rspec-macros
 	
 == REQUIREMENTS:
 
