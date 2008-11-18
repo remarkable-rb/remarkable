@@ -12,6 +12,7 @@ if defined?(RAILS_ROOT)
     require macro_file_path
   end
 
-  Spec::Rails::Matchers.send(:include, Remarkable::Syntax::RSpec)
-  Spec::Example::ExampleGroupMethods.send(:include, Remarkable::Syntax::Shoulda)
+  Spec::Rails::Matchers.send(:include, Remarkable::Syntax::RSpec) if defined?(Remarkable::Syntax::RSpec)
+  Spec::Example::ExampleGroupMethods.send(:include, Remarkable::Syntax::Shoulda) if defined?(Remarkable::Syntax::Shoulda)
+
 end
