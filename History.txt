@@ -1,0 +1,6 @@
+== 1.0.0 2008-11-12
+
+* 1 major enhancement:
+  * Initial release
+  * All macros of Shoulda have been ported to RSpec.
+	* Two syntaxes of macros have been added: Shoulda and RSpec.
