@@ -2,8 +2,7 @@ module Spec
   module Example
     module ExampleMethods
       def should(matcher)
-        case matcher.class.name
-        when "Spec::Rails::Matchers::RenderTemplate", "Spec::Rails::Matchers::RedirectTo"
+        if rspec_matcher?(matcher)
           remarkable_response.should matcher
         else
           remarkable_subject.should matcher
@@ -11,8 +10,7 @@ module Spec
       end
 
       def should_not(matcher)
-        case matcher.class.name
-        when "Spec::Rails::Matchers::RenderTemplate", "Spec::Rails::Matchers::RedirectTo"
+        if rspec_matcher?(matcher)
           remarkable_response.should_not matcher
         else
           remarkable_subject.should_not matcher
@@ -26,6 +24,12 @@ module Spec
 
       def remarkable_response
         @remarkable_response ||= self.response if self.respond_to?(:response)        
+      end
+
+      private
+
+      def rspec_matcher?(matcher)
+        %w( Spec::Rails::Matchers::RenderTemplate Spec::Rails::Matchers::RedirectTo ).include?(matcher.class.name)
       end
     end
   end
