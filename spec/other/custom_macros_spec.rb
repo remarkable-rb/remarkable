@@ -1,10 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe "Custom Macros" do
-
-  it { self.class.should_not respond_to(:should_run_my_custom_macro) }
-  it { self.class.should_not respond_to(:should_run_my_plugin_macro) }
-
   describe "after create custom macros" do
     before(:all) do
       custom_macro = File.join(RAILS_ROOT, "spec", "remarkable_macros", "run_my_custom_macro.rb")
