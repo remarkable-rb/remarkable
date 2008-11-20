@@ -121,9 +121,7 @@ spec/rails_root/public/422.html
 spec/rails_root/public/500.html
 spec/rails_root/script/console
 spec/rails_root/script/generate
-spec/rails_root/spec/remarkable_macros/my_macros.rb
 spec/rails_root/vendor/plugins/.keep
-spec/rails_root/vendor/plugins/my_plugin/remarkable_macros/my_macro.rb
 spec/rcov.opts
 spec/spec.opts
 spec/spec_helper.rb
