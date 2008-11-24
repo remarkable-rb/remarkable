@@ -20,6 +20,7 @@ module Remarkable # :nodoc:
 
         def matches?(subject)
           @subject = subject
+          
           association_exists? && 
           macro_correct? && 
           foreign_key_exists? && 

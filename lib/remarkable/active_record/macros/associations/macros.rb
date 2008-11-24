@@ -1,7 +1,6 @@
 module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Macros
-      include Helpers
       include Matchers
 
       # Ensure that the belongs_to relationship exists.
@@ -80,9 +79,6 @@ module Remarkable # :nodoc:
           end
         end
       end
-
-      private
-      include Remarkable::Private
     end
   end
 end
