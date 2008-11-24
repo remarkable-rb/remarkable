@@ -1,16 +1,22 @@
 module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
-    module Helpers # :nodoc:
-      private # :enddoc:
+    module Helpers
+      def pretty_error_messages(obj) # :nodoc:
+        obj.errors.map do |a, m| 
+          msg = "#{a} #{m}" 
+          msg << " (#{obj.send(a).inspect})" unless a.to_sym == :base
+        end
+      end
 
-      def model_class
-        self.described_type
+      def get_instance_of(object_or_klass) # :nodoc:
+        if object_or_klass.is_a?(Class)
+          klass = object_or_klass
+          instance_variable_get("@#{klass.to_s.underscore}") || klass.new
+        else
+          object_or_klass
+        end
       end
-      
-      def fail_with(message)
-        Spec::Expectations.fail_with(message)
-      end
-      
+
       # Helper method that determines the default error message used by Active
       # Record.  Works for both existing Rails 2.1 and Rails 2.2 with the newly
       # introduced I18n module used for localization.
@@ -25,7 +31,6 @@ module Remarkable # :nodoc:
           ::ActiveRecord::Errors.default_error_messages[key] % values[:count]
         end
       end
-
     end
   end
 end

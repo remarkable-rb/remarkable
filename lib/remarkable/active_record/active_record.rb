@@ -1,21 +1,18 @@
 require 'remarkable/active_record/helpers'
 %w( database associations validations ).each do |folder|
-  Dir[File.join(File.dirname(__FILE__), "macros", folder, '*')].each do |file|
+  Dir[File.join(File.dirname(__FILE__), "macros", folder, '*.rb')].each do |file|
     require file
   end
 end
 
 module Spec
   module Rails
-    module Matchers
-      include Remarkable::Private
-      include Remarkable::ActiveRecord::Helpers
+    module Example
+      class ModelExampleGroup
+        include Remarkable::Assertions
+        include Remarkable::ActiveRecord::Matchers
+        extend Remarkable::ActiveRecord::Macros
+      end
     end
   end
 end
-
-Spec::Rails::Matchers.send(:include, Remarkable::ActiveRecord::Syntax::RSpec)
-
-Spec::Example::ExampleGroupMethods.send(:include, Remarkable::Private)
-Spec::Example::ExampleGroupMethods.send(:include, Remarkable::ActiveRecord::Helpers)
-Spec::Example::ExampleGroupMethods.send(:include, Remarkable::ActiveRecord::Syntax::Shoulda)

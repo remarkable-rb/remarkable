@@ -5,10 +5,14 @@ module Remarkable
   VERSION = '1.1.1'
 end
 
-require "spec"
+require File.expand_path(RAILS_ROOT + "/config/environment") if defined?(RAILS_ROOT)
+require 'spec'
+require 'spec/rails' if defined?(RAILS_ROOT)
 
-require 'remarkable/example/example_methods'
 require 'remarkable/private_helpers'
+require 'remarkable/assertions'
+require 'remarkable/example/example_methods'
+
 require 'remarkable/active_record/active_record' if defined?(ActiveRecord::Base)
 require 'remarkable/controller/controller' if defined?(ActionController::Base)
 require 'remarkable/rails' if defined?(RAILS_ROOT)
