@@ -119,9 +119,6 @@ module Remarkable # :nodoc:
             "#{model_class.name} to have columns #{@columns.to_sentence}"
           end
         end
-
-        private
-        include Remarkable::Private
       end
 
       def have_db_column(column, options = {})

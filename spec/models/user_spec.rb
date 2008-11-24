@@ -11,8 +11,8 @@ describe User do
   it { should have_one(:address) }
   it { should have_one(:address).dependent(:destroy) }
   
-  # it { should have_indices(:email, :name, [:email, :name]) }
-  # it { should have_index(:age) }
+  it { should have_indices(:email, :name, [:email, :name]) }
+  it { should have_index(:age) }
   
   # it { should have_named_scope(:old, :conditions => "age > 50") }
   #   it { should have_named_scope(:eighteen, :conditions => { :age => 18 }) }
@@ -35,7 +35,7 @@ describe User do
   # it { should protect_attributes(:password) }
   # it { should have_class_methods(:find, :destroy) }
   # it { should have_instance_methods(:email, :age, :email=, :valid?) }
-  
+  # it { should_not have_db_columns(:name) }
   it { should have_db_columns(:name, :email, :age) }
   it { should have_db_columns(:name, :email, :type => "string") }
   it { should have_db_columns(:name, :email).type("string") }
