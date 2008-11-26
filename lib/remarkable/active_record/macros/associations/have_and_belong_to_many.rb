@@ -30,7 +30,7 @@ module Remarkable
           end
 
           def description
-            "should have and belong to many #{@associations.to_sentence}"
+            "have and belong to many #{@associations.to_sentence}"
           end
 
           def failure_message
