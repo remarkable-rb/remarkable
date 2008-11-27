@@ -29,6 +29,25 @@ module Remarkable # :nodoc:
           assert_accepts(matcher, klass)
         end
       end
+      
+      # Ensures that there are DB indices on the given columns or tuples of columns.
+      # Also aliased to should_have_index for readability
+      #
+      #   should_have_indices :email, :name, [:commentable_type, :commentable_id]
+      #   should_have_index :age
+      #
+      def should_have_indices(*columns)
+        # require "ruby-debug"; debugger
+        klass = model_class
+        columns.each do |column|
+          matcher = have_index(column)
+          it "have index on #{klass.table_name} for #{column.inspect}" do
+            assert_accepts(matcher, klass)
+          end
+        end
+      end
+
+      alias_method :should_have_index, :should_have_indices
     end
   end
 end

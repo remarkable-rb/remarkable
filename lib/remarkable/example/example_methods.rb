@@ -4,16 +4,20 @@ module Spec
       def should(matcher)
         if rspec_matcher?(matcher)
           remarkable_response.should matcher
-        else
+        elsif remarkable_matcher?(matcher)
           remarkable_subject.should matcher
+        else
+          super
         end
       end
 
       def should_not(matcher)
         if rspec_matcher?(matcher)
           remarkable_response.should_not matcher
-        else
+        elsif remarkable_matcher?(matcher)
           remarkable_subject.should_not matcher
+        else
+          super
         end
       end
 
@@ -30,6 +34,10 @@ module Spec
 
       def rspec_matcher?(matcher)
         %w( Spec::Rails::Matchers::RenderTemplate Spec::Rails::Matchers::RedirectTo ).include?(matcher.class.name)
+      end
+
+      def remarkable_matcher?(matcher)
+        matcher.class.name =~ /^Remarkable::.+::Matchers::.+$/
       end
     end
   end
