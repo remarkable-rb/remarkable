@@ -13,6 +13,7 @@ describe User do
   
   it { should have_indices(:email, :name, [:email, :name]) }
   it { should have_index(:age) }
+  it { should_not have_index(:aged) }
   
   # it { should have_named_scope(:old, :conditions => "age > 50") }
   #   it { should have_named_scope(:eighteen, :conditions => { :age => 18 }) }
@@ -40,6 +41,7 @@ describe User do
   it { should have_db_columns(:name, :email, :type => "string") }
   it { should have_db_columns(:name, :email).type("string") }
   
+  it { should_not have_db_column(:namer) }
   it { should have_db_column(:name) }
   it { should have_db_column(:id).type("integer").primary(true) }
   it { should have_db_column(:id).type("integer").primary }

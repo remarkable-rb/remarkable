@@ -37,7 +37,6 @@ module Remarkable # :nodoc:
       #   should_have_index :age
       #
       def should_have_indices(*columns)
-        # require "ruby-debug"; debugger
         klass = model_class
         columns.each do |column|
           matcher = have_index(column)
