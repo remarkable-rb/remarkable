@@ -10,7 +10,7 @@ module Remarkable # :nodoc:
       def should_have_db_columns(*columns)
         klass = model_class
         matcher = have_db_columns(*columns)
-        it matcher.description do
+        it "should #{matcher.description}" do
           assert_accepts(matcher, klass)
         end
       end
@@ -25,7 +25,7 @@ module Remarkable # :nodoc:
       def should_have_db_column(name, options = {})
         klass = model_class
         matcher = have_db_column(name, options)
-        it matcher.description do
+        it "should #{matcher.description}" do
           assert_accepts(matcher, klass)
         end
       end
@@ -40,7 +40,7 @@ module Remarkable # :nodoc:
         klass = model_class
         columns.each do |column|
           matcher = have_index(column)
-          it "have index on #{klass.table_name} for #{column.inspect}" do
+          it "should have index on #{klass.table_name} for #{column.inspect}" do
             assert_accepts(matcher, klass)
           end
         end
