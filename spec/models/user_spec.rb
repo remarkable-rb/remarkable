@@ -7,9 +7,11 @@ describe User do
   it { should have_many(:dogs) }
   it { should have_many(:friendships) }
   it { should have_many(:friends) }
+  it { should have_many(:posts, :dogs, :friendships, :friends) }
   
   it { should have_one(:address) }
   it { should have_one(:address).dependent(:destroy) }
+  it { should have_one(:address, :dependent => :destroy) }
   
   it { should have_indices(:email, :name, [:email, :name]) }
   it { should have_index(:age) }

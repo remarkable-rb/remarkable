@@ -8,14 +8,8 @@ module Remarkable # :nodoc:
       #   should_belong_to :parent
       #
       def should_belong_to(*associations)
-        get_options!(associations)
-        klass = model_class
-        associations.each do |association|
-          matcher = belong_to(association)
-          it matcher.description do
-            assert_accepts(matcher, klass)
-          end
-        end
+        matcher = belong_to(*associations)
+        should_have_association(matcher)
       end
 
       # Ensures that the has_many relationship exists.  Will also test that the
@@ -32,14 +26,8 @@ module Remarkable # :nodoc:
       #   should_have_many :enemies, :dependent => :destroy
       #
       def should_have_many(*associations)
-        through, dependent = get_options!(associations, :through, :dependent)
-        klass = model_class
-        associations.each do |association|
-          matcher = have_many(association).through(through).dependent(dependent)
-          it matcher.description do
-            assert_accepts(matcher, klass)
-          end
-        end
+        matcher = have_many(*associations)
+        should_have_association(matcher)
       end
 
       # Ensure that the has_one relationship exists.  Will also test that the
@@ -53,14 +41,8 @@ module Remarkable # :nodoc:
       #   should_have_one :god # unless hindu
       #
       def should_have_one(*associations)
-        dependent = get_options!(associations, :dependent)
-        klass = model_class
-        associations.each do |association|
-          matcher = have_one(association).dependent(dependent)
-          it matcher.description do
-            assert_accepts(matcher, klass)
-          end
-        end
+        matcher = have_one(*associations)
+        should_have_association(matcher)
       end
 
       # Ensures that the has_and_belongs_to_many relationship exists, and that the join
@@ -69,16 +51,18 @@ module Remarkable # :nodoc:
       #   should_have_and_belong_to_many :posts, :cars
       #
       def should_have_and_belong_to_many(*associations)
-        get_options!(associations)
-        klass = model_class
-
-        associations.each do |association|
-          matcher = have_and_belong_to_many(association)
-          it matcher.description do
-            assert_accepts(matcher, klass)
-          end
-        end
+        matcher = have_and_belong_to_many(*associations)
+        should_have_association(matcher)
       end
+      
+      private
+      
+      def should_have_association(matcher)
+        klass = model_class
+        it "should #{matcher.description}" do
+          assert_accepts(matcher, klass)
+        end
+      end      
     end
   end
 end

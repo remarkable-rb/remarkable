@@ -5,9 +5,16 @@ describe Post do
 
   it { should belong_to(:user) }
   it { should belong_to(:owner) }
+  it { should belong_to(:user, :owner) }
   
   it { should have_many(:tags).through(:taggings) }
+  it { should have_many(:tags, :through => :taggings) }
+
   it { should have_many(:through_tags).through(:taggings) }
+  it { should have_many(:through_tags, :through => :taggings) }
+
+  it { should have_many(:tags, :through_tags).through(:taggings) }
+  it { should have_many(:tags, :through_tags, :through => :taggings) }
 
   # it { should require_unique_attributes(:title) }
   # it { should require_attributes(:body, :message => /wtf/) }

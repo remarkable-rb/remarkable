@@ -3,30 +3,27 @@ module Remarkable # :nodoc:
     module Matchers # :nodoc:
 
       class AssociationMatcher
-        def initialize(macro, name)
+        def initialize(macro, *associations)
+          @options = associations.extract_options!
           @macro = macro
-          @name  = name
+          @associations = associations
         end
 
         def through(through)
-          @through = through
+          @options[:through] = through
           self
         end
 
         def dependent(dependent)
-          @dependent = dependent
+          @options[:dependent] = dependent
           self
         end
 
         def matches?(subject)
           @subject = subject
-          
-          association_exists? && 
-          macro_correct? && 
-          foreign_key_exists? && 
-          through_association_valid? && 
-          dependent_correct? &&
-          join_table_exists?
+          @associations.each do |association|
+            return false unless association_correct?(association)
+          end
         end
 
         def failure_message
@@ -38,13 +35,24 @@ module Remarkable # :nodoc:
         end
 
         def description
-          description = "#{macro_description} #{@name}"
-          description += " through #{@through}" if @through
-          description += " dependent => #{@dependent}" if @dependent
+          description = "#{macro_description} #{@associations.to_sentence}"
+          description += " through #{@options[:through]}" if @options[:through]
+          description += " dependent => #{@options[:dependent]}" if @options[:dependent]
           description
         end
 
         protected
+
+        def association_correct?(association)
+          @name = association
+          
+          association_exists? && 
+          macro_correct? && 
+          foreign_key_exists? && 
+          through_association_valid? && 
+          dependent_correct? &&
+          join_table_exists?
+        end
 
         def association_exists?
           if reflection.nil?
@@ -79,12 +87,12 @@ module Remarkable # :nodoc:
         end
 
         def through_association_valid?
-          @through.nil? || (through_association_exists? && through_association_correct?)
+          @options[:through].nil? || (through_association_exists? && through_association_correct?)
         end
 
         def through_association_exists?
           if through_reflection.nil?
-            "#{model_class.name} does not have any relationship to #{@through}"
+            @missing = "#{model_class.name} does not have any relationship to #{@options[:through]}"
             false
           else
             true
@@ -92,8 +100,8 @@ module Remarkable # :nodoc:
         end
 
         def through_association_correct?
-          if @through == reflection.options[:through]
-            "Expected #{model_class.name} to have #{@name} through #{@through}, " <<
+          if @options[:through] == reflection.options[:through]
+            @missing = "Expected #{model_class.name} to have #{@name} through #{@options[:through]}, " <<
             " but got it through #{reflection.options[:through]}"
             true
           else
@@ -102,10 +110,10 @@ module Remarkable # :nodoc:
         end
 
         def dependent_correct?
-          if @dependent.nil? || @dependent.to_s == reflection.options[:dependent].to_s
+          if @options[:dependent].nil? || @options[:dependent].to_s == reflection.options[:dependent].to_s
             true
           else
-            @missing = "#{@name} should have #{@dependent} dependency"
+            @missing = "#{@name} should have #{@options[:dependent]} dependency"
             false
           end
         end
@@ -150,11 +158,11 @@ module Remarkable # :nodoc:
         end
 
         def reflection
-          @reflection ||= model_class.reflect_on_association(@name)
+          model_class.reflect_on_association(@name)
         end
 
         def through_reflection
-          @through_reflection ||= model_class.reflect_on_association(@through)
+          model_class.reflect_on_association(@options[:through])
         end
 
         def expectation
@@ -172,20 +180,20 @@ module Remarkable # :nodoc:
         end
       end
 
-      def belong_to(name)
-        AssociationMatcher.new(:belongs_to, name)
+      def belong_to(*associations)
+        AssociationMatcher.new(:belongs_to, *associations)
       end
 
-      def have_many(name)
-        AssociationMatcher.new(:has_many, name)
+      def have_many(*associations)
+        AssociationMatcher.new(:has_many, *associations)
       end
 
-      def have_one(name)
-        AssociationMatcher.new(:has_one, name)
+      def have_one(*associations)
+        AssociationMatcher.new(:has_one, *associations)
       end
 
-      def have_and_belong_to_many(name)
-        AssociationMatcher.new(:has_and_belongs_to_many, name)
+      def have_and_belong_to_many(*associations)
+        AssociationMatcher.new(:has_and_belongs_to_many, *associations)
       end
 
     end
