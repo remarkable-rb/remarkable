@@ -8,10 +8,9 @@ module Remarkable # :nodoc:
       #   should_have_db_columns :id, :email, :name, :created_at
       #
       def should_have_db_columns(*columns)
-        klass = model_class
         matcher = have_db_columns(*columns)
         it "should #{matcher.description}" do
-          assert_accepts(matcher, klass)
+          assert_accepts(matcher, model_class)
         end
       end
 
@@ -23,10 +22,9 @@ module Remarkable # :nodoc:
       #                                 :null => true,     :primary => false, :scale     => nil, :sql_type => 'varchar(255)'
       #
       def should_have_db_column(name, options = {})
-        klass = model_class
         matcher = have_db_column(name, options)
         it "should #{matcher.description}" do
-          assert_accepts(matcher, klass)
+          assert_accepts(matcher, model_class)
         end
       end
       
@@ -37,11 +35,10 @@ module Remarkable # :nodoc:
       #   should_have_index :age
       #
       def should_have_indices(*columns)
-        klass = model_class
         columns.each do |column|
           matcher = have_index(column)
-          it "should have index on #{klass.table_name} for #{column.inspect}" do
-            assert_accepts(matcher, klass)
+          it "should have index on #{self.described_type.table_name} for #{column.inspect}" do
+            assert_accepts(matcher, model_class)
           end
         end
       end

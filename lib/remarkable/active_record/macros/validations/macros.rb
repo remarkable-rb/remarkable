@@ -13,10 +13,9 @@ module Remarkable # :nodoc:
       #   should_allow_values_for :isbn, "isbn 1 2345 6789 0", "ISBN 1-2345-6789-0"
       #
       def should_allow_values_for(attribute, *good_values)
-        klass = model_class
         matcher = allow_values_for(attribute, *good_values)
         it "should #{matcher.description}" do
-          assert_accepts(matcher, klass)
+          assert_accepts(matcher, model_class)
         end
       end
 
@@ -34,10 +33,9 @@ module Remarkable # :nodoc:
       #   should_not_allow_values_for :isbn, "bad 1", "bad 2"
       #
       def should_not_allow_values_for(attribute, *bad_values)
-        klass = model_class
         matcher = allow_values_for(attribute, *bad_values).negative
         it "should not #{matcher.description}" do
-          assert_rejects(matcher, klass)
+          assert_rejects(matcher, model_class)
         end
       end
 

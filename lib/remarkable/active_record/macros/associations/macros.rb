@@ -58,9 +58,8 @@ module Remarkable # :nodoc:
       private
       
       def should_have_association(matcher)
-        klass = model_class
         it "should #{matcher.description}" do
-          assert_accepts(matcher, klass)
+          assert_accepts(matcher, model_class)
         end
       end      
     end
