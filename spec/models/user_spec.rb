@@ -31,8 +31,8 @@ describe User do
   #   it { should have_named_scope("recent(#{@count})", :limit => 2) }
   # end
   
-  # it { should_not allow_values_for(:email, "blah", "b lah") }
-  # it { should allow_values_for(:email, "a@b.com", "asdf@asdf.com") }
+  it { should_not allow_values_for(:email, "blah@teste.com", "b lah") }
+  it { should allow_values_for(:email, "a@b.com", "asdf@asdf.com") }
   # it { should ensure_length_in_range(:email, 1..100) }
   # it { should ensure_value_in_range(:age, 1..100) }
   # it { should protect_attributes(:password) }

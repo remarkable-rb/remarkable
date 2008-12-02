@@ -1,7 +1,7 @@
 require 'remarkable/active_record/helpers'
 module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
-    module Macros      
+    module Macros
       private
       include Remarkable::Private
     end

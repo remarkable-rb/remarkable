@@ -17,6 +17,53 @@ module Remarkable # :nodoc:
         end
       end
 
+      # Asserts that an Active Record model validates with the passed
+      # <tt>value</tt> by making sure the <tt>error_message_to_avoid</tt> is not
+      # contained within the list of errors for that attribute.
+      #
+      #   assert_good_value(User.new, :email, "user@example.com")
+      #   assert_good_value(User.new, :ssn, "123456789", /length/)
+      #
+      # If a class is passed as the first argument, a new object will be
+      # instantiated before the assertion.  If an instance variable exists with
+      # the same name as the class (underscored), that object will be used
+      # instead.
+      #
+      #   assert_good_value(User, :email, "user@example.com")
+      #
+      #   @product = Product.new(:tangible => false)
+      #   assert_good_value(Product, :price, "0")
+      def assert_good_value(object_or_klass, attribute, value, error_message_to_avoid = //)
+        object = get_instance_of(object_or_klass)
+        object.send("#{attribute}=", value)
+        unless object.valid?
+          assert_does_not_contain(object.errors.on(attribute), error_message_to_avoid)
+        end
+      end
+
+      # Asserts that the given collection contains item x.  If x is a regular expression, ensure that
+      # at least one element from the collection matches x.  +extra_msg+ is appended to the error message if the assertion fails.
+      #
+      #   assert_contains(['a', '1'], /\d/) => passes
+      #   assert_contains(['a', '1'], 'a') => passes
+      #   assert_contains(['a', '1'], /not there/) => fails
+      def assert_contains(collection, x)
+        collection = [collection] unless collection.is_a?(Array)
+
+        case x
+        when Regexp
+          collection.detect { |e| e =~ x }
+        else         
+          collection.include?(x)
+        end
+      end
+
+      # Asserts that the given collection does not contain item x.  If x is a regular expression, ensure that
+      # none of the elements from the collection match x.
+      def assert_does_not_contain(collection, x)
+        !assert_contains(collection, x)
+      end
+
       # Helper method that determines the default error message used by Active
       # Record.  Works for both existing Rails 2.1 and Rails 2.2 with the newly
       # introduced I18n module used for localization.
