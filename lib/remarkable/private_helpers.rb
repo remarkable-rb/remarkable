@@ -1,5 +1,5 @@
 module Remarkable # :nodoc:
-  module Private # :nodoc:
+  module Private # :nodoc:    
     # Returns the values for the entries in the args hash who's keys are listed in the wanted array.
     # Will raise if there are keys in the args hash that aren't listed.
     def get_options!(args, *wanted)
@@ -12,7 +12,12 @@ module Remarkable # :nodoc:
 
     # Returns the model class constant, as determined by the test class name.
     def model_class
-      self.described_type
+      variable_name = "@#{self.described_type.to_s.underscore}"
+      if instance_variable_defined?(variable_name)
+        instance_variable_get(variable_name)
+      else
+        self.described_type
+      end
     end
   end
 end
