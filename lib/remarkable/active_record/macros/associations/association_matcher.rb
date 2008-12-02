@@ -2,7 +2,7 @@ module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Matchers # :nodoc:
 
-      class AssociationMatcher
+      class AssociationMatcher < Remarkable::Matcher::Base
         def initialize(macro, *associations)
           @options = associations.extract_options!
           @macro = macro

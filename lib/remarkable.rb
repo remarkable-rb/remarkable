@@ -9,6 +9,7 @@ require File.expand_path(RAILS_ROOT + "/config/environment") if defined?(RAILS_R
 require 'spec'
 require 'spec/rails' if defined?(RAILS_ROOT)
 
+require 'remarkable/matcher_base'
 require 'remarkable/private_helpers'
 require 'remarkable/assertions'
 require 'remarkable/example/example_methods'

@@ -15,7 +15,7 @@ module Spec
         if rspec_matcher?(matcher)
           remarkable_response.should_not matcher
         elsif remarkable_matcher?(matcher)
-          remarkable_subject.should_not matcher
+          remarkable_subject.should_not matcher.negative
         else
           super
         end

@@ -2,7 +2,7 @@ module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Matchers # :nodoc:
 
-      class DBColumnMatcher
+      class DBColumnMatcher < Remarkable::Matcher::Base
         def initialize(*columns)
           @options = columns.extract_options!
           @columns  = columns

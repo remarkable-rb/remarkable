@@ -6,8 +6,8 @@ describe Product do
       @product = Product.new(:tangible => false)
     end
 
-    # it { @product.should_not allow_values_for(:size, "22") }
-    # it { @product.should allow_values_for(:size, "22kb") }
+    it { @product.should_not allow_values_for(:size, "22") }
+    it { @product.should allow_values_for(:size, "22kb") }
     # 
     # it { @product.should require_attributes(:title) }
     # it { @product.should ensure_value_in_range(:price, 0..99) }
@@ -18,8 +18,8 @@ describe Product do
       @product = Product.new(:tangible => true)
     end
 
-    # it { @product.should_not allow_values_for(:size, "22", "10x15") }
-    # it { @product.should allow_values_for(:size, "12x12x1") }
+    it { @product.should_not allow_values_for(:size, "22", "10x15") }
+    it { @product.should allow_values_for(:size, "12x12x1") }
     # 
     # it { @product.should require_attributes(:price) }
     # it { @product.should ensure_value_in_range(:price, 1..9999) }
@@ -34,8 +34,8 @@ describe Product do
       @product = Product.new(:tangible => false)
     end
 
-    # should_not_allow_values_for :size, "22"
-    # should_allow_values_for :size, "22kb"
+    should_not_allow_values_for :size, "22"
+    should_allow_values_for :size, "22kb"
     # 
     # should_require_attributes :title
     # should_ensure_value_in_range :price, 0..99
@@ -46,8 +46,8 @@ describe Product do
       @product = Product.new(:tangible => true)
     end
 
-    # should_not_allow_values_for :size, "22", "10x15"
-    # should_allow_values_for :size, "12x12x1"
+    should_not_allow_values_for :size, "22", "10x15"
+    should_allow_values_for :size, "12x12x1"
     # 
     # should_require_attributes :price
     # should_ensure_value_in_range :price, 1..9999

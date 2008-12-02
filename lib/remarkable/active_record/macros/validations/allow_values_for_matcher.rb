@@ -2,34 +2,62 @@ module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Matchers # :nodoc:
 
-      class AllowValuesFor
+      class AllowValuesFor < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
 
         def initialize(attribute, *good_values)
-          good_values.extract_options!
+          @options = good_values.extract_options!
 
           @attribute = attribute
           @good_values = good_values
         end
 
-        def matches?(klass)
-          @klass = klass
-          @good_values.each do |v|
-            return false unless assert_good_value(klass, @attribute, v)
+        def message(message)
+          @options[:message] = message
+          self
+        end
+
+        def matches?(subject)
+          @subject = subject
+          
+          assert_matcher_for(@good_values) do |value|
+            value_valid?(value)
           end
-          true
         end
 
         def description
-          "allow #{@attribute} to be set to #{@good_values.to_sentence}"
+          expectation
         end
 
         def failure_message
-          "expected allow #{@attribute} to be set to #{@good_values.to_sentence}, but it didn't"
+          "Expected to #{expectation} (#{@missing})"
         end
 
         def negative_failure_message
-          "expected allow #{@attribute} not to be set to #{@good_values.to_sentence}, but it did"
+          "Did not expect to #{expectation}"
+        end
+        
+        private
+        
+        def message
+          @options[:message] ||= default_error_message(:invalid)
+        end
+        
+        def model_class
+          @subject
+        end
+        
+        def value_valid?(value)
+          if assert_good_value(model_class, @attribute, value, message)
+            true
+          else
+            @missing = "#{@attribute} cannot be set to #{value}"
+            false
+          end
+        end
+        
+        def expectation
+          "allow #{@attribute} to be set to #{@good_values.to_sentence}"
         end
       end
 

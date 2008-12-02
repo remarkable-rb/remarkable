@@ -36,9 +36,36 @@ module Remarkable # :nodoc:
       def assert_good_value(object_or_klass, attribute, value, error_message_to_avoid = //)
         object = get_instance_of(object_or_klass)
         object.send("#{attribute}=", value)
+
         unless object.valid?
           assert_does_not_contain(object.errors.on(attribute), error_message_to_avoid)
         end
+      end
+      
+      # Asserts that an Active Record model invalidates the passed
+      # <tt>value</tt> by making sure the <tt>error_message_to_expect</tt> is
+      # contained within the list of errors for that attribute.
+      #
+      #   assert_bad_value(User.new, :email, "invalid")
+      #   assert_bad_value(User.new, :ssn, "123", /length/)
+      #
+      # If a class is passed as the first argument, a new object will be
+      # instantiated before the assertion.  If an instance variable exists with
+      # the same name as the class (underscored), that object will be used
+      # instead.
+      #
+      #   assert_bad_value(User, :email, "invalid")
+      #
+      #   @product = Product.new(:tangible => true)
+      #   assert_bad_value(Product, :price, "0")
+      def assert_bad_value(object_or_klass, attribute, value,
+                           error_message_to_expect = self.class.default_error_message(:invalid))
+        object = get_instance_of(object_or_klass)
+        object.send("#{attribute}=", value)
+        
+        return false if object.valid?
+        return false unless object.errors.on(attribute)
+        assert_contains(object.errors.on(attribute), error_message_to_expect)
       end
 
       # Asserts that the given collection contains item x.  If x is a regular expression, ensure that
