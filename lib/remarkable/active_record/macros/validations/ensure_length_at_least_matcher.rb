@@ -1,7 +1,7 @@
 module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Matchers # :nodoc:
-      class EnsureLengthAtLeast
+      class EnsureLengthAtLeast < Remarkable::Matcher::Base
         include Remarkable::Private
         include Remarkable::ActiveRecord::Helpers
 
@@ -19,7 +19,10 @@ module Remarkable # :nodoc:
 
         def matches?(subject)
           @subject = subject
-          at_least_min_length? && less_than_min_length?
+
+          assert_matcher do
+            at_least_min_length? && less_than_min_length?
+          end
         end
 
         def description

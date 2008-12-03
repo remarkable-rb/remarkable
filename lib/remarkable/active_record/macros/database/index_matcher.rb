@@ -11,11 +11,10 @@ module Remarkable # :nodoc:
         def matches?(subject)
           @subject = subject
           
-          @columns.each do |column|
-            return false unless has_index_for?(column)
+          assert_matcher_for(@columns) do |column|
+            @column = column
+            has_index_for?
           end
-          
-          true
         end
 
         def failure_message
@@ -27,13 +26,13 @@ module Remarkable # :nodoc:
         end
 
         def description
-          expectation
+          "have index on #{table_name} for #{@columns.to_sentence}"
         end
 
         protected
 
-        def has_index_for?(column)
-          columns = [column].flatten.map(&:to_s)
+        def has_index_for?
+          columns = [@column].flatten.map(&:to_s)
           if indices.include?(columns)
             true
           else
@@ -56,11 +55,7 @@ module Remarkable # :nodoc:
         end
 
         def expectation
-          if @columns.size == 1
-            "have index on #{table_name} for #{@columns[0].inspect}"
-          else
-            "have indices on #{table_name} for #{@columns.inspect}"
-          end
+          "have index on #{table_name} for #{@column}"
         end
       end
 
@@ -69,7 +64,6 @@ module Remarkable # :nodoc:
       end
       
       alias_method :have_index, :have_indices
-      
     end
   end
 end

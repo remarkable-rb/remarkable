@@ -13,6 +13,7 @@ describe User do
   it { should have_one(:address).dependent(:destroy) }
   it { should have_one(:address, :dependent => :destroy) }
   
+  it { should_not have_index(:foo, :bar) }
   it { should have_indices(:email, :name, [:email, :name]) }
   it { should have_index(:age) }
   it { should_not have_index(:aged) }
@@ -38,7 +39,8 @@ describe User do
   # it { should protect_attributes(:password) }
   # it { should have_class_methods(:find, :destroy) }
   # it { should have_instance_methods(:email, :age, :email=, :valid?) }
-  # it { should_not have_db_columns(:name) }
+  it { should_not have_db_column(:foo) }
+  it { should_not have_db_columns(:foo, :bar) }
   it { should have_db_columns(:name, :email, :age) }
   it { should have_db_columns(:name, :email, :type => "string") }
   it { should have_db_columns(:name, :email).type("string") }

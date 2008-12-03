@@ -51,11 +51,10 @@ module Remarkable # :nodoc:
         def matches?(subject)
           @subject = subject
           
-          @columns.each do |column|
-            return false unless has_column?(column) && all_options_correct?(column)
+          assert_matcher_for(@columns) do |column|
+            @column = column
+            has_column? && all_options_correct?
           end
-          
-          true
         end
 
         def failure_message
@@ -82,42 +81,35 @@ module Remarkable # :nodoc:
           @subject
         end
 
-        def column_type(column)
-          model_class.columns.detect {|c| c.name == column.to_s }
+        def column_type
+          model_class.columns.detect {|c| c.name == @column.to_s }
         end
 
-        def has_column?(column)
-          if column_type(column)
-            true
-          else
-            @missing = "#{model_class.name} does not have column #{column}"
-            false
-          end
+        def has_column?
+          return true if column_type
+          @missing = "#{model_class.name} does not have column #{@column}"
+          false
         end
 
-        def all_options_correct?(column)
+        def all_options_correct?
           @options.each do |option, value|
-            return false unless option_correct?(column, option, value)
+            return false unless option_correct?(option, value)
           end
         end
 
-        def option_correct?(column, option, expected_value)
-          found_value = column_type(column).instance_variable_get("@#{option.to_s}").to_s
+        def option_correct?(option, expected_value)
+          found_value = column_type.instance_variable_get("@#{option.to_s}").to_s
 
           if found_value == expected_value.to_s
             true
           else
-            @missing = ":#{column} column on table for #{model_class} does not match option :#{option}, found '#{found_value}' but expected '#{expected_value}'"
+            @missing = ":#{@column} column on table for #{model_class} does not match option :#{option}, found '#{found_value}' but expected '#{expected_value}'"
             false
           end
         end
 
         def expectation
-          if @columns.size == 1
-            "#{model_class.name} to have a column named #{@columns[0]}"
-          else
-            "#{model_class.name} to have columns #{@columns.to_sentence}"
-          end
+          "#{model_class.name} to have a column named #{@column}"
         end
       end
 

@@ -19,13 +19,14 @@ module Remarkable # :nodoc:
         def matches?(subject)
           @subject = subject
           
-          assert_matcher_for(@good_values) do |value|
-            value_valid?(value)
+          assert_matcher_for(@good_values) do |good_value|
+            @good_value = good_value
+            value_valid?
           end
         end
 
         def description
-          expectation
+          "allow #{@attribute} to be set to #{@good_values.to_sentence}"
         end
 
         def failure_message
@@ -46,17 +47,14 @@ module Remarkable # :nodoc:
           @subject
         end
         
-        def value_valid?(value)
-          if assert_good_value(model_class, @attribute, value, message)
-            true
-          else
-            @missing = "#{@attribute} cannot be set to #{value}"
-            false
-          end
+        def value_valid?
+          return true if assert_good_value(model_class, @attribute, @good_value, message)
+          @missing = "#{@attribute} cannot be set to #{@good_value}"
+          false
         end
         
         def expectation
-          "allow #{@attribute} to be set to #{@good_values.to_sentence}"
+          "allow #{@attribute} to be set to #{@good_value}"
         end
       end
 

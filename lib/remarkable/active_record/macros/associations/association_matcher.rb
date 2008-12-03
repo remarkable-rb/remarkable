@@ -21,8 +21,9 @@ module Remarkable # :nodoc:
 
         def matches?(subject)
           @subject = subject
-          @associations.each do |association|
-            return false unless association_correct?(association)
+          
+          assert_matcher_for(@associations) do |association|
+            association_correct?(association)
           end
         end
 

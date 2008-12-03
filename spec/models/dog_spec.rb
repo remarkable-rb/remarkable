@@ -4,6 +4,7 @@ describe Dog do
   it { should belong_to(:user) }
   it { should belong_to(:address) }
   it { should belong_to(:user, :address) }
+  it { should_not belong_to(:foo, :bar) }
   
   it { should have_and_belong_to_many(:fleas) }
 end
