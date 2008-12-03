@@ -1,7 +1,6 @@
 module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Matchers # :nodoc:
-
       class AllowValuesFor < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
 

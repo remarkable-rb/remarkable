@@ -37,9 +37,8 @@ module Remarkable # :nodoc:
         object = get_instance_of(object_or_klass)
         object.send("#{attribute}=", value)
 
-        unless object.valid?
-          assert_does_not_contain(object.errors.on(attribute), error_message_to_avoid)
-        end
+        return true if object.valid?
+        assert_does_not_contain(object.errors.on(attribute), error_message_to_avoid)
       end
       
       # Asserts that an Active Record model invalidates the passed

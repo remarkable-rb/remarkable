@@ -39,6 +39,26 @@ module Remarkable # :nodoc:
         end
       end
 
+      # Ensures that the length of the attribute is at least a certain length
+      #
+      # If an instance variable has been created in the setup named after the
+      # model being tested, then this method will use that.  Otherwise, it will
+      # create a new instance to test against.
+      #
+      # Options:
+      # * <tt>:short_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.too_short') % min_length</tt>
+      #
+      # Example:
+      #   should_ensure_length_at_least :name, 3
+      #
+      def should_ensure_length_at_least(attribute, min_length, opts = {})
+        matcher = ensure_length_at_least(attribute, min_length, opts)
+        it "should #{matcher.description}" do
+          assert_accepts(matcher, model_class)
+        end
+      end
+
     end
   end
 end
