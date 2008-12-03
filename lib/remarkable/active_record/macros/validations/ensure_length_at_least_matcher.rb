@@ -2,12 +2,11 @@ module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Matchers # :nodoc:
       class EnsureLengthAtLeast < Remarkable::Matcher::Base
-        include Remarkable::Private
         include Remarkable::ActiveRecord::Helpers
+        include Remarkable::ActiveRecord::EnsureLength::Helpers
 
-        def initialize(attribute, min_length, opts = {})
-          @options = {}
-          @options[:short_message] = get_options!([opts], :short_message)
+        def initialize(attribute, min_length, *options)
+          @options    = options.extract_options!
           @attribute  = attribute
           @min_length = min_length
         end
@@ -21,7 +20,8 @@ module Remarkable # :nodoc:
           @subject = subject
 
           assert_matcher do
-            at_least_min_length? && less_than_min_length?
+            at_least_min_length? &&
+            less_than_min_length?(@attribute, @min_length, short_message)
           end
         end
 
@@ -39,23 +39,8 @@ module Remarkable # :nodoc:
 
         private
 
-        def model_class
-          @subject
-        end
-
         def short_message
-          @options[:short_message] ||= /#{default_error_message(:too_short, :count => @min_length).gsub(/\s?\(.*\)$/, '')}/
-        end
-
-        def less_than_min_length?
-          if @min_length > 0
-            min_value = "x" * (@min_length - 1)
-            return true if assert_bad_value(model_class, @attribute, min_value, short_message)
-            @missing = "allow #{@attribute} to be less than #{@min_length} chars long"
-            false
-          else
-            true
-          end
+          @options[:short_message] ||= remove_parenthesis(default_error_message(:too_short, :count => @min_length))
         end
 
         def at_least_min_length?
@@ -83,8 +68,8 @@ module Remarkable # :nodoc:
       # Example:
       #   it { should ensure_length_at_least(:name, 3) }
       #
-      def ensure_length_at_least(attribute, min_length, opts = {})
-        EnsureLengthAtLeast.new(attribute, min_length, opts)
+      def ensure_length_at_least(attribute, min_length, *options)
+        EnsureLengthAtLeast.new(attribute, min_length, *options)
       end
     end
   end

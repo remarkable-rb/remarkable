@@ -8,6 +8,10 @@ module Remarkable # :nodoc:
 
       private
 
+      def model_class
+        @subject
+      end
+
       def positive?
         @negative ? false : true
       end

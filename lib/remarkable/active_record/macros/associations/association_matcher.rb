@@ -138,10 +138,6 @@ module Remarkable # :nodoc:
           end
         end
 
-        def model_class
-          @subject
-        end
-
         def join_table
           reflection.options[:join_table]
         end

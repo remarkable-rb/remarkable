@@ -41,10 +41,6 @@ module Remarkable # :nodoc:
             false
           end
         end
-
-        def model_class
-          @subject
-        end
         
         def table_name
           model_class.table_name

@@ -24,7 +24,7 @@ describe Product do
     # it { @product.should require_attributes(:price) }
     # it { @product.should ensure_value_in_range(:price, 1..9999) }
     # it { @product.should ensure_value_in_range(:weight, 1..100) }
-    # it { @product.should ensure_length_in_range(:size, 5..20) }
+    it { @product.should ensure_length_in_range(:size, 5..20) }
   end
 end
 
@@ -52,6 +52,6 @@ describe Product do
     # should_require_attributes :price
     # should_ensure_value_in_range :price, 1..9999
     # should_ensure_value_in_range :weight, 1..100
-    # should_ensure_length_in_range :size, 5..20
+    should_ensure_length_in_range :size, 5..20
   end
 end

@@ -34,7 +34,13 @@ describe User do
   
   it { should_not allow_values_for(:email, "blah", "b lah") }
   it { should allow_values_for(:email, "a@b.com", "asdf@asdf.com") }
-  # it { should ensure_length_in_range(:email, 1..100) }
+  
+  it { should ensure_length_in_range(:email, 2..100) }
+  it { should_not ensure_length_in_range(:email, 1..100) }
+  it { should_not ensure_length_in_range(:email, 2..101) }
+  it { should_not ensure_length_in_range(:email, 3..100) }
+  it { should_not ensure_length_in_range(:email, 2..99) }
+  
   # it { should ensure_value_in_range(:age, 1..100) }
   # it { should protect_attributes(:password) }
   # it { should have_class_methods(:find, :destroy) }
@@ -105,7 +111,7 @@ describe User do
 #   
   should_not_allow_values_for :email, "blah", "b lah"
   should_allow_values_for :email, "a@b.com", "asdf@asdf.com"
-#   should_ensure_length_in_range :email, 1..100
+  should_ensure_length_in_range :email, 2..100
 #   should_ensure_value_in_range :age, 1..100
 #   should_protect_attributes :password
 #   should_have_class_methods :find, :destroy

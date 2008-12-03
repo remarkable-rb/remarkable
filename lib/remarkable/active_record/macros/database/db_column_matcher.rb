@@ -77,10 +77,6 @@ module Remarkable # :nodoc:
 
         protected
 
-        def model_class
-          @subject
-        end
-
         def column_type
           model_class.columns.detect {|c| c.name == @column.to_s }
         end

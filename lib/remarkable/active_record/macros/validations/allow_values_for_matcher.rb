@@ -43,10 +43,6 @@ module Remarkable # :nodoc:
           @options[:message] ||= default_error_message(:invalid)
         end
         
-        def model_class
-          @subject
-        end
-        
         def value_valid?
           return true if assert_good_value(model_class, @attribute, @good_value, message)
           @missing = "#{@attribute} cannot be set to #{@good_value}"
