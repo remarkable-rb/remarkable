@@ -100,6 +100,28 @@ module Remarkable # :nodoc:
           assert_accepts(matcher, model_class)
         end
       end
+      
+      # Ensure that the attribute is in the range specified
+      #
+      # If an instance variable has been created in the setup named after the
+      # model being tested, then this method will use that.  Otherwise, it will
+      # create a new instance to test against.
+      #
+      # Options:
+      # * <tt>:low_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.inclusion')</tt>
+      # * <tt>:high_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.inclusion')</tt>
+      #
+      # Example:
+      #   should_ensure_value_in_range :age, (0..100)
+      #
+      def should_ensure_value_in_range(attribute, range, opts = {})
+        matcher = ensure_value_in_range(attribute, range, opts)
+        it "should #{matcher.description}" do
+          assert_accepts(matcher, model_class)
+        end
+      end
     end
   end
 end

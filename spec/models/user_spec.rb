@@ -41,7 +41,12 @@ describe User do
   it { should_not ensure_length_in_range(:email, 3..100) }
   it { should_not ensure_length_in_range(:email, 2..99) }
   
-  # it { should ensure_value_in_range(:age, 1..100) }
+  it { should ensure_value_in_range(:age, 2..100) }
+  it { should_not ensure_value_in_range(:age, 1..100) }
+  it { should_not ensure_value_in_range(:age, 2..101) }
+  it { should_not ensure_value_in_range(:age, 3..100) }
+  it { should_not ensure_value_in_range(:age, 2..99) }
+  
   # it { should protect_attributes(:password) }
   # it { should have_class_methods(:find, :destroy) }
   # it { should have_instance_methods(:email, :age, :email=, :valid?) }
@@ -49,23 +54,34 @@ describe User do
   it { should_not have_db_columns(:foo, :bar) }
   it { should have_db_columns(:name, :email, :age) }
   it { should have_db_columns(:name, :email, :type => "string") }
+  it { should_not have_db_columns(:name, :email, :type => "integer") }
   it { should have_db_columns(:name, :email).type("string") }
+  it { should_not have_db_columns(:foo, :bar).type("string") }
   
-  it { should_not have_db_column(:namer) }
   it { should have_db_column(:name) }
   it { should have_db_column(:id).type("integer").primary(true) }
   it { should have_db_column(:id).type("integer").primary }
   it { should have_db_column(:email).type("string").default(nil).precision(nil).limit(255).null(true).primary(false).scale(nil).sql_type('varchar(255)') }
   it { should have_db_column(:email).type("string") }
+  it { should_not have_db_column(:email).type("integer") }
   it { should have_db_column(:email).default(nil) }
+  it { should_not have_db_column(:email).default('foo') }
   it { should have_db_column(:email).precision(nil) }
+  it { should_not have_db_column(:email).precision(10) }
   it { should have_db_column(:email).limit(255) }
+  it { should_not have_db_column(:email).limit(254) }
   it { should have_db_column(:email).null(true) }
   it { should have_db_column(:email).null }
+  it { should_not have_db_column(:email).null(false) }
   it { should have_db_column(:email).primary(false) }
+  it { should_not have_db_column(:email).primary }
+  it { should_not have_db_column(:email).primary(true) }
   it { should have_db_column(:email).scale(nil) }
+  it { should_not have_db_column(:email).scale(2) }
   it { should have_db_column(:email).sql_type('varchar(255)') }
-  it { should have_db_column(:email, :type => "string").limit(255) }  
+  it { should_not have_db_column(:email).sql_type('varchar(254)') }
+  it { should have_db_column(:email, :type => "string").limit(255) }
+  it { should_not have_db_column(:email, :type => "integer").limit(255) }
   it { should have_db_column(:email,  :type => "string",  :default => nil,    :precision => nil,  :limit => 255,
                                       :null => true,      :primary => false,  :scale => nil,      :sql_type => 'varchar(255)') }
 
@@ -102,11 +118,11 @@ describe User do
   
 #   should_have_named_scope :old, :conditions => "age > 50"
 #   should_have_named_scope :eighteen, :conditions => { :age => 18 }
-#   
+  
 #   should_have_named_scope 'recent(5)', :limit => 5
 #   should_have_named_scope 'recent(1)', :limit => 1
 #   should_have_named_scope 'recent_via_method(7)', :limit => 7
-#   
+  
 #   describe "when given an instance variable" do
 #     before(:each) do
 #       @count = 2
@@ -117,7 +133,7 @@ describe User do
   should_not_allow_values_for :email, "blah", "b lah"
   should_allow_values_for :email, "a@b.com", "asdf@asdf.com"
   should_ensure_length_in_range :email, 2..100
-#   should_ensure_value_in_range :age, 1..100
+  should_ensure_value_in_range :age, 2..100
 #   should_protect_attributes :password
 #   should_have_class_methods :find, :destroy
 #   should_have_instance_methods :email, :age, :email=, :valid?
