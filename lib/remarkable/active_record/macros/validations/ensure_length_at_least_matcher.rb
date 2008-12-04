@@ -3,12 +3,11 @@ module Remarkable # :nodoc:
     module Matchers # :nodoc:
       class EnsureLengthAtLeast < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
-        include Remarkable::ActiveRecord::EnsureLength::Helpers
 
         def initialize(attribute, min_length, *options)
-          @options    = options.extract_options!
           @attribute  = attribute
           @min_length = min_length
+          load_options(options)
         end
 
         def short_message(short_message)
@@ -20,8 +19,7 @@ module Remarkable # :nodoc:
           @subject = subject
 
           assert_matcher do
-            at_least_min_length? &&
-            less_than_min_length?(@attribute, @min_length, short_message)
+            at_least_min_length? && less_than_min_length?
           end
         end
 
@@ -39,13 +37,25 @@ module Remarkable # :nodoc:
 
         private
 
-        def short_message
-          @options[:short_message] ||= remove_parenthesis(default_error_message(:too_short, :count => @min_length))
+        def load_options(options)
+          @options = {
+            :short_message => remove_parenthesis(default_error_message(:too_short, :count => @min_length))
+          }.merge(options.extract_options!)
+        end
+
+        def less_than_min_length?
+          return true unless @min_length > 0
+
+          min_value = "x" * (@min_length - 1)
+          return true if assert_bad_value(model_class, @attribute, min_value, @options[:short_message])
+
+          @missing = "allow #{@attribute} to be less than #{@min_length} chars long"
+          return false          
         end
 
         def at_least_min_length?
           valid_value = "x" * (@min_length)
-          return true if assert_good_value(model_class, @attribute, valid_value, short_message)
+          return true if assert_good_value(model_class, @attribute, valid_value, @options[:short_message])
           @missing = "not allow #{@attribute} to be at least #{@min_length} chars long"
           false
         end

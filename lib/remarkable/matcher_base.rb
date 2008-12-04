@@ -39,6 +39,10 @@ module Remarkable # :nodoc:
         end
         positive?
       end
+      
+      def remove_parenthesis(text)
+        /#{text.gsub(/\s?\(.*\)$/, '')}/
+      end
     end
   end
 end

@@ -5,10 +5,9 @@ module Remarkable # :nodoc:
         include Remarkable::ActiveRecord::Helpers
 
         def initialize(attribute, *good_values)
-          @options = good_values.extract_options!
-
           @attribute = attribute
           @good_values = good_values
+          load_options(good_values)
         end
 
         def message(message)
@@ -39,12 +38,14 @@ module Remarkable # :nodoc:
         
         private
         
-        def message
-          @options[:message] ||= default_error_message(:invalid)
+        def load_options(good_values)
+          @options = {
+            :message => default_error_message(:invalid)
+          }.merge(good_values.extract_options!)
         end
         
         def value_valid?
-          return true if assert_good_value(model_class, @attribute, @good_value, message)
+          return true if assert_good_value(model_class, @attribute, @good_value, @options[:message])
           @missing = "#{@attribute} cannot be set to #{@good_value}"
           false
         end

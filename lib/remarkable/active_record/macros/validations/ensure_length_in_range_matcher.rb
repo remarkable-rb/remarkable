@@ -3,12 +3,11 @@ module Remarkable # :nodoc:
     module Matchers # :nodoc:
       class EnsureLengthInRange < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
-        include Remarkable::ActiveRecord::EnsureLength::Helpers
 
         def initialize(attribute, range, *options)
-          @options   = options.extract_options!
           @attribute = attribute
           @range     = range
+          load_options(options)
         end
 
         def short_message(message)
@@ -25,7 +24,7 @@ module Remarkable # :nodoc:
           @subject = subject
           
           assert_matcher do
-            less_than_min_length?(@attribute, @range.first, short_message) &&
+            less_than_min_length? &&
             exactly_min_length? &&
             more_than_max_length? &&
             exactly_max_length?
@@ -46,11 +45,21 @@ module Remarkable # :nodoc:
         
         private
         
+        def less_than_min_length?
+          return true unless @range.first > 0
+
+          min_value = "x" * (@range.first - 1)
+          return true if assert_bad_value(model_class, @attribute, min_value, @options[:short_message])
+
+          @missing = "allow #{@attribute} to be less than #{@range.first} chars long"
+          return false          
+        end
+        
         def exactly_min_length?
           return true unless @range.first > 0
           
           min_value = "x" * @range.first
-          return true if assert_good_value(model_class, @attribute, min_value, short_message)
+          return true if assert_good_value(model_class, @attribute, min_value, @options[:short_message])
           
           @missing = "not allow #{@attribute} to be exactly #{@range.first} chars long"
           return false
@@ -58,7 +67,7 @@ module Remarkable # :nodoc:
         
         def more_than_max_length?
           max_value = "x" * (@range.last + 1)
-          return true if assert_bad_value(model_class, @attribute, max_value, long_message)
+          return true if assert_bad_value(model_class, @attribute, max_value, @options[:long_message])
 
           @missing = "allow #{@attribute} to be more than #{@range.last} chars long"
           return false
@@ -68,18 +77,17 @@ module Remarkable # :nodoc:
           return true if (@range.first == @range.last)
 
           max_value = "x" * @range.last
-          return true if assert_good_value(model_class, @attribute, max_value, long_message)
+          return true if assert_good_value(model_class, @attribute, max_value, @options[:long_message])
 
           @missing = "not allow #{@attribute} to be exactly #{@range.last} chars long"
           return false
         end
         
-        def short_message
-          @options[:short_message] ||= remove_parenthesis(default_error_message(:too_short, :count => @range.first))
-        end
-        
-        def long_message
-          @options[:long_message] ||= remove_parenthesis(default_error_message(:too_long, :count => @range.last))
+        def load_options(options)
+          @options = {
+            :short_message => remove_parenthesis(default_error_message(:too_short, :count => @range.first)),
+            :long_message  => remove_parenthesis(default_error_message(:too_long,  :count => @range.last))
+          }.merge(options.extract_options!)
         end
         
         def expectation
