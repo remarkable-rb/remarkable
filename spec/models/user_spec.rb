@@ -48,7 +48,12 @@ describe User do
   it { should_not ensure_value_in_range(:age, 2..99) }
   
   # it { should protect_attributes(:password) }
-  # it { should have_class_methods(:find, :destroy) }
+  
+  it { should have_class_methods(:find) }
+  it { should_not have_class_methods(:foo) }
+  it { should have_class_methods(:find, :destroy) }
+  it { should_not have_class_methods(:foo, :bar) }
+  
   # it { should have_instance_methods(:email, :age, :email=, :valid?) }
   it { should_not have_db_column(:foo) }
   it { should_not have_db_columns(:foo, :bar) }
@@ -135,7 +140,7 @@ describe User do
   should_ensure_length_in_range :email, 2..100
   should_ensure_value_in_range :age, 2..100
 #   should_protect_attributes :password
-#   should_have_class_methods :find, :destroy
+  should_have_class_methods :find, :destroy
 #   should_have_instance_methods :email, :age, :email=, :valid?
   
   should_have_db_columns :name, :email, :age

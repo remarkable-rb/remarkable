@@ -122,6 +122,17 @@ module Remarkable # :nodoc:
           assert_accepts(matcher, model_class)
         end
       end
+      
+      # Ensure that the given class methods are defined on the model.
+      #
+      #   should_have_class_methods :find, :destroy
+      #
+      def should_have_class_methods(*methods)
+        matcher = have_class_methods(*methods)
+        it "should #{matcher.description}" do
+          assert_accepts(matcher, model_class)
+        end
+      end
     end
   end
 end
