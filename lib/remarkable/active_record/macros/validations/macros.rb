@@ -133,6 +133,17 @@ module Remarkable # :nodoc:
           assert_accepts(matcher, model_class)
         end
       end
+      
+      # Ensure that the given instance methods are defined on the model.
+      #
+      #   should_have_instance_methods :email, :name, :name=
+      #
+      def should_have_instance_methods(*methods)
+        matcher = have_instance_methods(*methods)
+        it "should #{matcher.description}" do
+          assert_accepts(matcher, model_class)
+        end
+      end
     end
   end
 end

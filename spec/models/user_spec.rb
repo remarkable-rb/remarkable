@@ -18,19 +18,29 @@ describe User do
   it { should have_index(:age) }
   it { should_not have_index(:aged) }
   
-  # it { should have_named_scope(:old, :conditions => "age > 50") }
-  #   it { should have_named_scope(:eighteen, :conditions => { :age => 18 }) }
-  # 
-  #   it { should have_named_scope('recent(5)', :limit => 5) }
-  #   it { should have_named_scope('recent(1)', :limit => 1) }
-  #   it { should have_named_scope('recent_via_method(7)', :limit => 7) }
+  it { should have_named_scope(:old)}
+  # it { should_not have_named_scope(:foo)}
+  it { should have_named_scope(:old, :conditions => "age > 50") }
+  it { should_not have_named_scope(:old, :conditions => "age > 49") }
+  it { should have_named_scope(:eighteen, :conditions => { :age => 18 }) }
+  it { should_not have_named_scope(:eighteen, :conditions => { :age => 17 }) }
   
-  # describe "when given an instance variable" do
-  #   before(:each) do
-  #     @count = 2
-  #   end
-  #   it { should have_named_scope("recent(#{@count})", :limit => 2) }
-  # end
+  it { should have_named_scope('recent(5)') }
+  # it { should have_named_scope('recents(5)') }
+  it { should have_named_scope('recent(5)', :limit => 5) }
+  it { should_not have_named_scope('recent(5)', :limit => 4) }
+  it { should have_named_scope('recent(1)', :limit => 1) }
+  it { should_not have_named_scope('recent(1)', :limit => 2) }
+  it { should have_named_scope('recent_via_method(7)', :limit => 7) }
+  it { should_not have_named_scope('recent_via_method(7)', :limit => 8) }
+  
+  describe "when given an instance variable" do
+    before(:each) do
+      @count = 2
+    end
+    it { should have_named_scope("recent(#{@count})", :limit => 2) }
+    it { should_not have_named_scope("recent(#{@count})", :limit => 1) }
+  end
   
   it { should_not allow_values_for(:email, "blah", "b lah") }
   it { should allow_values_for(:email, "a@b.com", "asdf@asdf.com") }
@@ -54,7 +64,11 @@ describe User do
   it { should have_class_methods(:find, :destroy) }
   it { should_not have_class_methods(:foo, :bar) }
   
-  # it { should have_instance_methods(:email, :age, :email=, :valid?) }
+  it { should have_instance_methods(:email) }
+  it { should_not have_instance_methods(:foo) }
+  it { should have_instance_methods(:email, :age, :email=, :valid?) }
+  it { should_not have_instance_methods(:foo, :bar) }
+  
   it { should_not have_db_column(:foo) }
   it { should_not have_db_columns(:foo, :bar) }
   it { should have_db_columns(:name, :email, :age) }
@@ -141,7 +155,7 @@ describe User do
   should_ensure_value_in_range :age, 2..100
 #   should_protect_attributes :password
   should_have_class_methods :find, :destroy
-#   should_have_instance_methods :email, :age, :email=, :valid?
+  should_have_instance_methods :email, :age, :email=, :valid?
   
   should_have_db_columns :name, :email, :age
   should_have_db_columns :name, :email, :type => "string"
