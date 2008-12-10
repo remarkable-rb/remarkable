@@ -144,6 +144,17 @@ module Remarkable # :nodoc:
           assert_accepts(matcher, model_class)
         end
       end
+      
+      # Ensures that the attribute cannot be changed once the record has been created.
+      #
+      #   should_have_readonly_attributes :password, :admin_flag
+      #
+      def should_have_readonly_attributes(*attributes)
+        matcher = have_readonly_attributes(*attributes)
+        it "should #{matcher.description}" do
+          assert_accepts(matcher, model_class)
+        end
+      end
     end
   end
 end

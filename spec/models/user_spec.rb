@@ -114,9 +114,11 @@ describe User do
   it { should_not ensure_length_is(:ssn, 10).message("Social Security Number is not the right length") }
   
   # it { should only_allow_numeric_values_for(:ssn) }
-  # 
-  # it { should have_readonly_attributes(:name) }
-  # 
+  
+  it { should have_readonly_attributes(:name) }
+  it { should_not have_readonly_attributes(:foo) }
+  it { should_not have_readonly_attributes(:ssn) }
+  
   # it { should_not protect_attributes(:name, :age) }
 end
 
@@ -171,5 +173,5 @@ describe User do
   should_ensure_length_is :ssn, 9, :message => "Social Security Number is not the right length"
 #   should_only_allow_numeric_values_for :ssn
   
-#   should_have_readonly_attributes :name
+  should_have_readonly_attributes :name
 end

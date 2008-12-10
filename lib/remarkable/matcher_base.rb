@@ -6,6 +6,14 @@ module Remarkable # :nodoc:
         self
       end
 
+      def failure_message
+        "Expected #{expectation} (#{@missing})"
+      end
+
+      def negative_failure_message
+        "Did not expect #{expectation}"
+      end
+
       private
 
       def model_class
@@ -39,7 +47,7 @@ module Remarkable # :nodoc:
         end
         positive?
       end
-      
+
       def remove_parenthesis(text)
         /#{text.gsub(/\s?\(.*\)$/, '')}/
       end
