@@ -83,7 +83,7 @@ module Remarkable # :nodoc:
 
         def has_column?
           return true if column_type
-          @missing = "#{model_class.name} does not have column #{@column}"
+          @missing = "#{model_name} does not have column #{@column}"
           false
         end
 
@@ -105,7 +105,7 @@ module Remarkable # :nodoc:
         end
 
         def expectation
-          "#{model_class.name} to have a column named #{@column}"
+          "#{model_name} to have a column named #{@column}"
         end
       end
 

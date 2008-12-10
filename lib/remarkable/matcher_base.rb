@@ -20,6 +20,10 @@ module Remarkable # :nodoc:
         @subject
       end
 
+      def model_name
+        model_class.is_a?(Class) ? model_class.name : model_class.class.name
+      end
+
       def positive?
         @negative ? false : true
       end

@@ -42,12 +42,12 @@ module Remarkable # :nodoc:
           return true if @scope_opts.empty?
           return true if @scope.proxy_options == @scope_opts
           
-          @missing = "#{model_class.name} didn't scope itself to #{@scope_opts.inspect}"
+          @missing = "#{model_name} didn't scope itself to #{@scope_opts.inspect}"
           return false
         end
         
         def expectation
-          "#{model_class.name} have to scope itself to #{@scope_opts.inspect} when #{@scope_call} is called"
+          "#{model_name} have to scope itself to #{@scope_opts.inspect} when #{@scope_call} is called"
         end
       end
 

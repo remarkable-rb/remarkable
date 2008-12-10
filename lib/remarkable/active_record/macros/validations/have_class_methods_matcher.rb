@@ -33,12 +33,12 @@ module Remarkable # :nodoc:
         def have_class_method?
           return true if model_class.respond_to?(@method)
 
-          @missing = "#{model_class.name} does not have class method #{@method}"
+          @missing = "#{model_name} does not have class method #{@method}"
           return false
         end
 
         def expectation
-          "#{model_class.name} to respond to class method #{@method}"
+          "#{model_name} to respond to class method #{@method}"
         end
       end
 

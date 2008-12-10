@@ -155,6 +155,77 @@ module Remarkable # :nodoc:
           assert_accepts(matcher, model_class)
         end
       end
+      
+      # Ensure that the attribute is numeric
+      #
+      # If an instance variable has been created in the setup named after the
+      # model being tested, then this method will use that.  Otherwise, it will
+      # create a new instance to test against.
+      #
+      # Options:
+      # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.not_a_number')</tt>
+      #
+      # Example:
+      #   should_only_allow_numeric_values_for :age
+      #
+      def should_only_allow_numeric_values_for(*attributes)
+        matcher = only_allow_numeric_values_for(*attributes)
+        it "should #{matcher.description}" do
+          assert_accepts(matcher, model_class)
+        end
+      end
+      
+      # Ensures that the attribute cannot be set on mass update.
+      #
+      #   should_protect_attributes :password, :admin_flag
+      #
+      def should_protect_attributes(*attributes)
+        matcher = protect_attributes(*attributes)
+        it "should #{matcher.description}" do
+          assert_accepts(matcher, model_class)
+        end
+      end
+      
+      # Ensures that the model cannot be saved if one of the attributes listed is not accepted.
+      #
+      # If an instance variable has been created in the setup named after the
+      # model being tested, then this method will use that.  Otherwise, it will
+      # create a new instance to test against.
+      #
+      # Options:
+      # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.accepted')</tt>
+      #
+      # Example:
+      #   should_require_acceptance_of :eula
+      #
+      def should_require_acceptance_of(*attributes)
+        matcher = require_acceptance_of(*attributes)
+        it "should #{matcher.description}" do
+          assert_accepts(matcher, model_class)
+        end
+      end
+      
+      # Ensures that the model cannot be saved if one of the attributes listed is not present.
+      #
+      # If an instance variable has been created in the setup named after the
+      # model being tested, then this method will use that.  Otherwise, it will
+      # create a new instance to test against.
+      #
+      # Options:
+      # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.blank')</tt>
+      #
+      # Example:
+      #   should_require_attributes :name, :phone_number
+      #
+      def should_require_attributes(*attributes)
+        matcher = require_attributes(*attributes)
+        it "should #{matcher.description}" do
+          assert_accepts(matcher, model_class)
+        end
+      end
     end
   end
 end

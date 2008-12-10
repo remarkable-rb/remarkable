@@ -57,7 +57,8 @@ describe User do
   it { should_not ensure_value_in_range(:age, 3..100) }
   it { should_not ensure_value_in_range(:age, 2..99) }
   
-  # it { should protect_attributes(:password) }
+  it { should protect_attributes(:password) }
+  it { should_not protect_attributes(:name, :age) }
   
   it { should have_class_methods(:find) }
   it { should_not have_class_methods(:foo) }
@@ -104,7 +105,9 @@ describe User do
   it { should have_db_column(:email,  :type => "string",  :default => nil,    :precision => nil,  :limit => 255,
                                       :null => true,      :primary => false,  :scale => nil,      :sql_type => 'varchar(255)') }
 
-  # it { should require_acceptance_of(:eula) }
+  it { should require_acceptance_of(:eula) }
+  it { should_not require_acceptance_of(:name) }
+  
   # it { should require_unique_attributes(:email, :scoped_to => :name) }
   
   it { should ensure_length_is(:ssn, 9, :message => "Social Security Number is not the right length") }
@@ -113,13 +116,11 @@ describe User do
   it { should_not ensure_length_is(:ssn, 8).message("Social Security Number is not the right length") }
   it { should_not ensure_length_is(:ssn, 10).message("Social Security Number is not the right length") }
   
-  # it { should only_allow_numeric_values_for(:ssn) }
+  it { should only_allow_numeric_values_for(:ssn) }
   
   it { should have_readonly_attributes(:name) }
   it { should_not have_readonly_attributes(:foo) }
   it { should_not have_readonly_attributes(:ssn) }
-  
-  # it { should_not protect_attributes(:name, :age) }
 end
 
 describe User do
@@ -155,7 +156,7 @@ describe User do
   should_allow_values_for :email, "a@b.com", "asdf@asdf.com"
   should_ensure_length_in_range :email, 2..100
   should_ensure_value_in_range :age, 2..100
-#   should_protect_attributes :password
+  should_protect_attributes :password
   should_have_class_methods :find, :destroy
   should_have_instance_methods :email, :age, :email=, :valid?
   
@@ -167,11 +168,11 @@ describe User do
   should_have_db_column :email, :type => "string",  :default => nil,    :precision => nil,  :limit => 255,
                                 :null => true,      :primary => false,  :scale => nil,      :sql_type => 'varchar(255)'
   
-#   should_require_acceptance_of :eula
+  should_require_acceptance_of :eula
 #   should_require_unique_attributes :email, :scoped_to => :name
   
   should_ensure_length_is :ssn, 9, :message => "Social Security Number is not the right length"
-#   should_only_allow_numeric_values_for :ssn
+  should_only_allow_numeric_values_for :ssn
   
   should_have_readonly_attributes :name
 end

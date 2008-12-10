@@ -7,9 +7,8 @@ describe Tag do
 
   it { should ensure_length_at_least(:name, 2) }
   
-  # it { should protect_attributes(:secret) }
-  # 
-  # it { should_not protect_attributes(:name) }
+  it { should protect_attributes(:secret) }
+  it { should_not protect_attributes(:name) }
 end
 
 describe Tag do
@@ -18,5 +17,5 @@ describe Tag do
 
   should_ensure_length_at_least :name, 2
   
-  # should_protect_attributes :secret
+  should_protect_attributes :secret
 end

@@ -93,7 +93,7 @@ module Remarkable # :nodoc:
 
         def through_association_exists?
           if through_reflection.nil?
-            @missing = "#{model_class.name} does not have any relationship to #{@options[:through]}"
+            @missing = "#{model_name} does not have any relationship to #{@options[:through]}"
             false
           else
             true
@@ -102,7 +102,7 @@ module Remarkable # :nodoc:
 
         def through_association_correct?
           if @options[:through] == reflection.options[:through]
-            @missing = "Expected #{model_class.name} to have #{@name} through #{@options[:through]}, " <<
+            @missing = "Expected #{model_name} to have #{@name} through #{@options[:through]}, " <<
             " but got it through #{reflection.options[:through]}"
             true
           else
@@ -163,7 +163,7 @@ module Remarkable # :nodoc:
         end
 
         def expectation
-          "#{model_class.name} to have a #{@macro} association called #{@name}"
+          "#{model_name} to have a #{@macro} association called #{@name}"
         end
 
         def macro_description

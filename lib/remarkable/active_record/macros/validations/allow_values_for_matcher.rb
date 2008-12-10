@@ -6,8 +6,8 @@ module Remarkable # :nodoc:
 
         def initialize(attribute, *good_values)
           @attribute = attribute
+          load_options(good_values.extract_options!)
           @good_values = good_values
-          load_options(good_values)
         end
 
         def message(message)
@@ -38,10 +38,10 @@ module Remarkable # :nodoc:
         
         private
         
-        def load_options(good_values)
+        def load_options(options)
           @options = {
             :message => default_error_message(:invalid)
-          }.merge(good_values.extract_options!)
+          }.merge(options)
         end
         
         def value_valid?
