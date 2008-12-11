@@ -4,6 +4,7 @@ require 'remarkable/active_record/helpers'
     require file
   end
 end
+require 'remarkable/active_record/macros'
 
 module Spec
   module Rails
