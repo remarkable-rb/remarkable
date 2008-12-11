@@ -33,14 +33,14 @@ module Remarkable # :nodoc:
       private
 
       def should_not_method_missing(method, *args)
-        matcher = self.send(method, *args).negative
+        matcher = send(method, *args).negative
         it "should not #{matcher.description}" do
           assert_rejects(matcher, model_class)
         end
       end
 
       def should_method_missing(method, *args)
-        matcher = self.send(method, *args)
+        matcher = send(method, *args)
         it "should #{matcher.description}" do
           assert_accepts(matcher, model_class)
         end
