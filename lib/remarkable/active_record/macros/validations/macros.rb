@@ -226,6 +226,69 @@ module Remarkable # :nodoc:
           assert_accepts(matcher, model_class)
         end
       end
+      
+      # Ensures that the model cannot be saved if one of the attributes listed is not unique.
+      # Requires an existing record
+      #
+      # Options:
+      # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.taken')</tt>
+      # * <tt>:scoped_to</tt> - field(s) to scope the uniqueness to.
+      #
+      # Examples:
+      #   should_require_unique_attributes :keyword, :username
+      #   should_require_unique_attributes :name, :message => "O NOES! SOMEONE STOELED YER NAME!"
+      #   should_require_unique_attributes :email, :scoped_to => :name
+      #   should_require_unique_attributes :address, :scoped_to => [:first_name, :last_name]
+      #
+      def should_require_unique_attributes(*attributes)
+        matcher = require_unique_attributes(*attributes)
+        it "should #{matcher.description}" do
+          assert_accepts(matcher, model_class)
+        end
+      end
+      
+      # Ensures that the model has a method named scope_name that returns a NamedScope object with the
+      # proxy options set to the options you supply.  scope_name can be either a symbol, or a method
+      # call which will be evaled against the model.  The eval'd method call has access to all the same
+      # instance variables that a should statement would.
+      #
+      # Options: Any of the options that the named scope would pass on to find.
+      #
+      # Example:
+      #
+      #   should_have_named_scope :visible, :conditions => {:visible => true}
+      #
+      # Passes for
+      #
+      #   named_scope :visible, :conditions => {:visible => true}
+      #
+      # Or for
+      #
+      #   def self.visible
+      #     scoped(:conditions => {:visible => true})
+      #   end
+      #
+      # You can test lambdas or methods that return ActiveRecord#scoped calls:
+      #
+      #   should_have_named_scope 'recent(5)', :limit => 5
+      #   should_have_named_scope 'recent(1)', :limit => 1
+      #
+      # Passes for
+      #   named_scope :recent, lambda {|c| {:limit => c}}
+      #
+      # Or for
+      #
+      #   def self.recent(c)
+      #     scoped(:limit => c)
+      #   end
+      #
+      def should_have_named_scope(scope_call, *args)
+        matcher = have_named_scope(scope_call, *args)
+        it "should #{matcher.description}" do
+          assert_accepts(matcher, model_class)
+        end
+      end
     end
   end
 end
