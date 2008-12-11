@@ -16,7 +16,10 @@ describe Post do
   it { should have_many(:tags, :through_tags).through(:taggings) }
   it { should have_many(:tags, :through_tags, :through => :taggings) }
 
-  # it { should require_unique_attributes(:title) }
+  it { should require_unique_attributes(:title) }
+  it { should_not require_unique_attributes(:body) }
+  it { should_not require_unique_attributes(:title).scoped_to(:user_id) }
+  it { should_not require_unique_attributes(:title, :scoped_to => :user_id) }
   
   it { should require_attributes(:body, :message => /wtf/) }
   it { should_not require_attributes(:body) }

@@ -108,7 +108,7 @@ describe User do
   it { should require_acceptance_of(:eula) }
   it { should_not require_acceptance_of(:name) }
   
-  # it { should require_unique_attributes(:email, :scoped_to => :name) }
+  it { should require_unique_attributes(:email, :scoped_to => :name) }
   
   it { should ensure_length_is(:ssn, 9, :message => "Social Security Number is not the right length") }
   it { should ensure_length_is(:ssn, 9).message("Social Security Number is not the right length") }
