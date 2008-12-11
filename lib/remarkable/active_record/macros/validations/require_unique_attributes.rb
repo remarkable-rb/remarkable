@@ -5,51 +5,28 @@ module Remarkable # :nodoc:
         # include Remarkable::ActiveRecord::Helpers
 
         def initialize(*attributes)
-          @message, scope = get_options!(attributes, :message, :scoped_to)
-          @scope = [*scope].compact
-          @message ||= default_error_message(:taken)
-
+          load_options(attributes.extract_options!)
           @attributes = attributes
         end
 
-        def matches?(klass)
-          @klass = klass
+        def message(message)
+          @options[:message] = message
+          self
+        end
+        
+        def scoped_to(scoped)
+          @options[:scoped_to] = [*scoped].compact
+          self
+        end
 
-          begin
-            @attributes.each do |attribute|
-              attribute = attribute.to_sym
-
-              existing = klass.find(:first)
-              fail("Can't find first #{klass}") unless existing
-
-              object = klass.new
-              existing_value = existing.send(attribute)
-
-              if !@scope.blank?
-                @scope.each do |s|
-                  fail("#{klass.name} doesn't seem to have a #{s} attribute.") unless object.respond_to?(:"#{s}=")
-                  object.send("#{s}=", existing.send(s))
-                end
-              end
-              return false unless assert_bad_value(object, attribute, existing_value, @message)
-
-              # Now test that the object is valid when changing the scoped attribute
-              # TODO:  There is a chance that we could change the scoped field
-              # to a value that's already taken.  An alternative implementation
-              # could actually find all values for scope and create a unique
-              # one.
-              if !@scope.blank?
-                @scope.each do |s|
-                  # Assume the scope is a foreign key if the field is nil
-                  object.send("#{s}=", existing.send(s).nil? ? 1 : existing.send(s).next)
-                  return false unless assert_good_value(object, attribute, existing_value, @message)
-                end
-              end
-            end
-
-            true
-          rescue Exception => e
-            false
+        def matches?(subject)
+          @subject = subject
+          
+          assert_matcher_for(@attributes) do |attribute|
+            @attribute = attribute
+            find_first_object? &&
+            have_attribute? &&
+            valid_when_changing_scoped_attribute?
           end
         end
 
@@ -63,6 +40,64 @@ module Remarkable # :nodoc:
 
         def negative_failure_message
           "expected that the #{@klass.name} can be saved if #{@attributes.to_sentence}#{" scoped to #{@scope.to_sentence}" unless @scope.blank?} is not unique, but it didn't"
+        end
+        
+        private
+        
+        def scope
+          @options[:scoped_to]
+        end
+        
+        def find_first_object?
+          return true if @existing = model_class.find(:first)
+          
+          @missing = "Can't find first #{model_class}"
+          return false
+        end
+        
+        def have_attribute?
+          @object = model_class.new
+          @existing_value = @existing.send(@attribute)
+          
+          if !scope.blank?
+            scope.each do |s|
+              unless @object.respond_to?(:"#{s}=")
+                @missing = "#{model_name} doesn't seem to have a #{s} attribute."
+                return false
+              end
+              @object.send("#{s}=", @existing.send(s))
+            end
+          end
+          
+          return true if assert_bad_value(@object, @attribute, @existing_value, @options[:message])
+          
+          @missing = "not require unique value for #{@attribute}#{" scoped to #{scope.join(', ')}" unless scope.blank?}"
+          return false
+        end
+        
+        # Now test that the object is valid when changing the scoped attribute
+        # TODO:  There is a chance that we could change the scoped field
+        # to a value that's already taken.  An alternative implementation
+        # could actually find all values for scope and create a unique
+        # one.
+        def valid_when_changing_scoped_attribute?
+          if !scope.blank?
+            scope.each do |s|
+              # Assume the scope is a foreign key if the field is nil
+              @object.send("#{s}=", @existing.send(s).nil? ? 1 : @existing.send(s).next)
+              return true if assert_good_value(@object, @attribute, @existing_value, @options[:message])
+              
+              @missing = "#{model_name} is not valid when changing the scoped attribute for #{s}"
+              return false
+            end
+          end
+        end
+        
+        def load_options(options)
+          @options = {
+            :message => default_error_message(:taken)
+          }.merge(options)
+          @options[:scoped_to] = [*options[:scoped_to]].compact
         end
       end
 
@@ -81,7 +116,7 @@ module Remarkable # :nodoc:
       #   it { should require_unique_attributes(:address, :scoped_to => [:first_name, :last_name]) }
       #
       def require_unique_attributes(*attributes)
-        Remarkable::ActiveRecord::Syntax::RSpec::RequireUniqueAttributes.new(*attributes)
+        RequireUniqueAttributes.new(*attributes)
       end
     end
   end
