@@ -30,9 +30,9 @@ module Remarkable # :nodoc:
         variables_added
         }.map(&:to_s)
 
-      def instantiate_variables_from_assigns(*names, &blk)
+      def instantiate_variables_from_assigns(*names, &blk) # :nodoc:
         old = {}
-        names = (response.template.assigns.keys - SPECIAL_INSTANCE_VARIABLES) if names.empty?
+        names = (@response.template.assigns.keys - SPECIAL_INSTANCE_VARIABLES) if names.empty?
         names.each do |name|
           old[name] = instance_variable_get("@#{name}")
           instance_variable_set("@#{name}", assigns(name.to_sym))
@@ -41,6 +41,10 @@ module Remarkable # :nodoc:
         names.each do |name|
           instance_variable_set("@#{name}", old[name])
         end
+      end
+      
+      def assigns(key)
+        @controller.instance_variable_get("@#{key}")
       end
       
     end

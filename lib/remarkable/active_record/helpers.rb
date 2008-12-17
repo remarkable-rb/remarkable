@@ -1,6 +1,6 @@
 module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
-    module Helpers
+    module Helpers # :nodoc:
       def pretty_error_messages(obj) # :nodoc:
         obj.errors.map do |a, m| 
           msg = "#{a} #{m}" 
@@ -33,7 +33,7 @@ module Remarkable # :nodoc:
       #
       #   @product = Product.new(:tangible => false)
       #   assert_good_value(Product, :price, "0")
-      def assert_good_value(object_or_klass, attribute, value, error_message_to_avoid = //)
+      def assert_good_value(object_or_klass, attribute, value, error_message_to_avoid = //) # :nodoc:
         object = get_instance_of(object_or_klass)
         object.send("#{attribute}=", value)
 
@@ -58,7 +58,7 @@ module Remarkable # :nodoc:
       #   @product = Product.new(:tangible => true)
       #   assert_bad_value(Product, :price, "0")
       def assert_bad_value(object_or_klass, attribute, value,
-                           error_message_to_expect = self.class.default_error_message(:invalid))
+                           error_message_to_expect = self.class.default_error_message(:invalid)) # :nodoc:
         object = get_instance_of(object_or_klass)
         object.send("#{attribute}=", value)
         
@@ -73,7 +73,7 @@ module Remarkable # :nodoc:
       #   assert_contains(['a', '1'], /\d/) => passes
       #   assert_contains(['a', '1'], 'a') => passes
       #   assert_contains(['a', '1'], /not there/) => fails
-      def assert_contains(collection, x)
+      def assert_contains(collection, x) # :nodoc:
         collection = [collection] unless collection.is_a?(Array)
 
         case x
@@ -86,7 +86,7 @@ module Remarkable # :nodoc:
 
       # Asserts that the given collection does not contain item x.  If x is a regular expression, ensure that
       # none of the elements from the collection match x.
-      def assert_does_not_contain(collection, x)
+      def assert_does_not_contain(collection, x) # :nodoc:
         !assert_contains(collection, x)
       end
 
@@ -97,7 +97,7 @@ module Remarkable # :nodoc:
       #   default_error_message(:blank)
       #   default_error_message(:too_short, :count => 5)
       #   default_error_message(:too_long, :count => 60)
-      def default_error_message(key, values = {})
+      def default_error_message(key, values = {}) # :nodoc:
         if Object.const_defined?(:I18n) # Rails >= 2.2
           I18n.translate("activerecord.errors.messages.#{key}", values)
         else # Rails <= 2.1.x

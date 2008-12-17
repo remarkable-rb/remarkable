@@ -4,6 +4,7 @@ class PostsController < ApplicationController
   
   def index
     @posts = @user.posts
+    @some_text = "foo bar"
 
     respond_to do |format|
       format.html # index.rhtml
