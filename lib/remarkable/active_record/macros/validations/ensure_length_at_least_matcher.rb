@@ -47,7 +47,7 @@ module Remarkable # :nodoc:
           return true unless @min_length > 0
 
           min_value = "x" * (@min_length - 1)
-          return true if assert_bad_value(model_class, @attribute, min_value, @options[:short_message])
+          return true if assert_bad_value(@subject, @attribute, min_value, @options[:short_message])
 
           @missing = "allow #{@attribute} to be less than #{@min_length} chars long"
           return false          
@@ -55,7 +55,7 @@ module Remarkable # :nodoc:
 
         def at_least_min_length?
           valid_value = "x" * (@min_length)
-          return true if assert_good_value(model_class, @attribute, valid_value, @options[:short_message])
+          return true if assert_good_value(@subject, @attribute, valid_value, @options[:short_message])
           @missing = "not allow #{@attribute} to be at least #{@min_length} chars long"
           false
         end

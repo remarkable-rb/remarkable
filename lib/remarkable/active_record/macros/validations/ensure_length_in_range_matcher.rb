@@ -49,7 +49,7 @@ module Remarkable # :nodoc:
           return true unless @range.first > 0
 
           min_value = "x" * (@range.first - 1)
-          return true if assert_bad_value(model_class, @attribute, min_value, @options[:short_message])
+          return true if assert_bad_value(@subject, @attribute, min_value, @options[:short_message])
 
           @missing = "allow #{@attribute} to be less than #{@range.first} chars long"
           return false          
@@ -59,7 +59,7 @@ module Remarkable # :nodoc:
           return true unless @range.first > 0
           
           min_value = "x" * @range.first
-          return true if assert_good_value(model_class, @attribute, min_value, @options[:short_message])
+          return true if assert_good_value(@subject, @attribute, min_value, @options[:short_message])
           
           @missing = "not allow #{@attribute} to be exactly #{@range.first} chars long"
           return false
@@ -67,7 +67,7 @@ module Remarkable # :nodoc:
         
         def more_than_max_length?
           max_value = "x" * (@range.last + 1)
-          return true if assert_bad_value(model_class, @attribute, max_value, @options[:long_message])
+          return true if assert_bad_value(@subject, @attribute, max_value, @options[:long_message])
 
           @missing = "allow #{@attribute} to be more than #{@range.last} chars long"
           return false
@@ -77,7 +77,7 @@ module Remarkable # :nodoc:
           return true if (@range.first == @range.last)
 
           max_value = "x" * @range.last
-          return true if assert_good_value(model_class, @attribute, max_value, @options[:long_message])
+          return true if assert_good_value(@subject, @attribute, max_value, @options[:long_message])
 
           @missing = "not allow #{@attribute} to be exactly #{@range.last} chars long"
           return false

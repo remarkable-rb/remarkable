@@ -30,7 +30,7 @@ module Remarkable # :nodoc:
         private
 
         def assigned_value?
-          @assigned_value = assigns(@name.to_sym)
+          @assigned_value = controller_assigns(@name.to_sym)
           return true if @assigned_value
 
           @missing = "the action isn't assigning to @#{@name}"

@@ -42,11 +42,11 @@ module Remarkable # :nodoc:
       private
 
       def model_class
-        @subject
+        @subject.is_a?(Class) ? @subject : @subject.class
       end
 
       def model_name
-        model_class.is_a?(Class) ? model_class.name : model_class.class.name
+        model_class.name
       end
 
       def positive?

@@ -50,28 +50,28 @@ module Remarkable # :nodoc:
         end
         
         def less_than_minimum?
-          return true if assert_bad_value(model_class, @attribute, (@range.first - 1), @options[:low_message])
+          return true if assert_bad_value(@subject, @attribute, (@range.first - 1), @options[:low_message])
 
           @missing = "allow #{@attribute} to be less than #{@range.first}"
           return false
         end
         
         def accepts_minimum?
-          return true if assert_good_value(model_class, @attribute, @range.first, @options[:low_message])
+          return true if assert_good_value(@subject, @attribute, @range.first, @options[:low_message])
 
           @missing = "not allow #{@attribute} to be #{@range.first}"
           return false
         end
         
         def more_than_maximum?
-          return true if assert_bad_value(model_class, @attribute, (@range.last + 1), @options[:high_message])
+          return true if assert_bad_value(@subject, @attribute, (@range.last + 1), @options[:high_message])
           
           @missing = "allow #{@attribute} to be more than #{@range.last}"
           return false
         end
         
         def accepts_maximum?
-          return true if assert_good_value(model_class, @attribute, @range.last, @options[:high_message])
+          return true if assert_good_value(@subject, @attribute, @range.last, @options[:high_message])
           
           @missing = "not allow #{@attribute} to be #{@range.last}"
           return false

@@ -30,7 +30,7 @@ module Remarkable # :nodoc:
         
         def only_allow_numeric_values?
           attribute = @attribute.to_sym
-          return true if assert_bad_value(model_class, attribute, "abcd", @options[:message])
+          return true if assert_bad_value(@subject, attribute, "abcd", @options[:message])
           
           @missing = "allow non-numeric values for #{attribute}"
           return false

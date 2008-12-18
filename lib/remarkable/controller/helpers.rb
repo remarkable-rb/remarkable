@@ -37,7 +37,7 @@ module Remarkable # :nodoc:
         names = (@response.template.assigns.keys - SPECIAL_INSTANCE_VARIABLES) if names.empty?
         names.each do |name|
           old[name] = instance_variable_get("@#{name}")
-          instance_variable_set("@#{name}", assigns(name.to_sym))
+          instance_variable_set("@#{name}", controller_assigns(name.to_sym))
         end
         blk.call
         names.each do |name|
@@ -45,7 +45,7 @@ module Remarkable # :nodoc:
         end
       end
       
-      def assigns(key)
+      def controller_assigns(key)
         @controller.instance_variable_get("@#{key}")
       end
       

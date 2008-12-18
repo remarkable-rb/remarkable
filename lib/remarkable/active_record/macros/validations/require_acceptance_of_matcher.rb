@@ -29,7 +29,7 @@ module Remarkable # :nodoc:
         private
         
         def require_accepted?
-          return true if assert_bad_value(model_class, @attribute, false, @options[:message])
+          return true if assert_bad_value(@subject, @attribute, false, @options[:message])
           
           @missing = "not require #{@attribute} to be accepted"
           return false

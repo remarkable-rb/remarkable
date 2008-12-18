@@ -45,7 +45,7 @@ module Remarkable # :nodoc:
         end
         
         def value_valid?
-          return true if assert_good_value(model_class, @attribute, @good_value, @options[:message])
+          return true if assert_good_value(@subject, @attribute, @good_value, @options[:message])
           @missing = "#{@attribute} cannot be set to #{@good_value}"
           false
         end
