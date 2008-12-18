@@ -33,10 +33,15 @@ describe PostsController do
       end
 #       should_respond_with 200
       should_assign_to :user, :class => User, :equals => 'users(:first)'
-#       it { lambda { should_assign_to(:user, :class => Post) }.should raise_error }
-#       it { lambda { should_assign_to :user, :equals => 'posts(:first)' }.should raise_error }
-#       should_assign_to :posts
-#       should_not_assign_to :foo, :bar
+      should_not_assign_to :user, :class => User, :equals => 'users(:second)'
+      
+      should_not_assign_to :user, :class => Post
+      should_not_assign_to :user, :equals => 'posts(:first)'
+      it { lambda { should_assign_to(:user, :class => Post) }.should raise_error }
+      it { lambda { should_assign_to(:user, :equals => 'posts(:first)') }.should raise_error }
+      
+      should_assign_to :posts
+      should_not_assign_to :foo, :bar
     end
 
     describe "on POST to :create" do
@@ -60,8 +65,8 @@ describe PostsController do
 #       should_respond_with_content_type /rss/
 #       should_return_from_session :special, "'$2 off your next purchase'"
 #       should_return_from_session :special_user_id, '@user.id'
-#       should_assign_to :user, :posts
-#       should_not_assign_to :foo, :bar
+      should_assign_to :user, :posts
+      should_not_assign_to :foo, :bar
     end
 
     describe "viewing a post on GET to #show" do

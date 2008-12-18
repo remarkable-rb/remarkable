@@ -16,25 +16,21 @@ module Remarkable # :nodoc:
 
       private
 
-      def should_not_method_missing(method, *args)
-        matcher = send(method, *args).controller(self.controller).
-                                      response(self.response).
-                                      spec(self).
-                                      negative
-        it "should not #{matcher.description}" do
-          assert_rejects(matcher, model_class)
-        end
-      end
-
       def should_method_missing(method, *args)
-        matcher = send(method, *args).controller(self.controller).
-                                      response(self.response).
-                                      spec(self)
+        matcher = send(method, *args)
         it "should #{matcher.description}" do
+          matcher.controller(controller).response(response).spec(self)
           assert_accepts(matcher, model_class)
         end
       end
 
+      def should_not_method_missing(method, *args)
+        matcher = send(method, *args)
+        it "should not #{matcher.description}" do
+          matcher.controller(controller).response(response).spec(self).negative
+          assert_rejects(matcher, model_class)
+        end
+      end
     end
   end
 end
