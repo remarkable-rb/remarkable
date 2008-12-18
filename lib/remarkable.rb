@@ -11,6 +11,7 @@ require 'spec/rails' if defined?(RAILS_ROOT)
 
 require 'remarkable/matcher_base'
 require 'remarkable/private_helpers'
+require 'remarkable/helpers'
 require 'remarkable/assertions'
 require 'remarkable/example/example_methods'
 

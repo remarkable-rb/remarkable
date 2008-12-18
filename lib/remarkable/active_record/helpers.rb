@@ -1,6 +1,8 @@
 module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Helpers # :nodoc:
+      include Remarkable::Default::Helpers
+      
       def pretty_error_messages(obj) # :nodoc:
         obj.errors.map do |a, m| 
           msg = "#{a} #{m}" 
@@ -65,29 +67,6 @@ module Remarkable # :nodoc:
         return false if object.valid?
         return false unless object.errors.on(attribute)
         assert_contains(object.errors.on(attribute), error_message_to_expect)
-      end
-
-      # Asserts that the given collection contains item x.  If x is a regular expression, ensure that
-      # at least one element from the collection matches x.  +extra_msg+ is appended to the error message if the assertion fails.
-      #
-      #   assert_contains(['a', '1'], /\d/) => passes
-      #   assert_contains(['a', '1'], 'a') => passes
-      #   assert_contains(['a', '1'], /not there/) => fails
-      def assert_contains(collection, x) # :nodoc:
-        collection = [collection] unless collection.is_a?(Array)
-
-        case x
-        when Regexp
-          collection.detect { |e| e =~ x }
-        else         
-          collection.include?(x)
-        end
-      end
-
-      # Asserts that the given collection does not contain item x.  If x is a regular expression, ensure that
-      # none of the elements from the collection match x.
-      def assert_does_not_contain(collection, x) # :nodoc:
-        !assert_contains(collection, x)
       end
 
       # Helper method that determines the default error message used by Active

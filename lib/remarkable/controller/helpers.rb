@@ -1,6 +1,8 @@
 module Remarkable # :nodoc:
   module Controller # :nodoc:
     module Helpers # :nodoc:
+      include Remarkable::Default::Helpers
+      
       private # :enddoc:
 
       SPECIAL_INSTANCE_VARIABLES = %w{

@@ -24,6 +24,16 @@ module Remarkable # :nodoc:
         self
       end
 
+      def session(session)
+        @session = session
+        self
+      end
+
+      def flash(flash)
+        @flash = flash
+        self        
+      end
+
       def spec(spec)
         @spec = spec
         self

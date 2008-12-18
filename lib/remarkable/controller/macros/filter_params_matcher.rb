@@ -3,6 +3,7 @@ module Remarkable # :nodoc:
     module Matchers # :nodoc:
       class FilterParams < Remarkable::Matcher::Base
         include Remarkable::Controller::Helpers
+        
         def initialize(*keys)
           @options = keys.extract_options!
           @keys = keys

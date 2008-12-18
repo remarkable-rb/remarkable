@@ -9,6 +9,8 @@ module Spec
         elsif remarkable_controller_matcher?(matcher)
           remarkable_subject.should matcher.controller(remarkable_controller).
                                             response(remarkable_response).
+                                            session(session).
+                                            flash(flash).
                                             spec(self)
         else
           super
@@ -24,6 +26,8 @@ module Spec
           remarkable_subject.should_not matcher.controller(remarkable_controller).
                                                 response(remarkable_response).
                                                 spec(self).
+                                                session(session).
+                                                flash(flash).
                                                 negative
         else
           super
