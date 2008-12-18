@@ -4,6 +4,7 @@ describe UsersController do
   fixtures :all
 
   should_filter_params :ssn
+  should_not_filter_params :email
 end
 
 describe UsersController do
