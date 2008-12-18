@@ -13,25 +13,9 @@ module Spec
         extend Remarkable::Controller::Macros
 
         private
+        include Remarkable::Controller::Helpers
         include Remarkable::Private
       end
     end
   end
 end
-
-
-
-# 
-# 
-# 
-# 
-# module Spec
-#   module Rails
-#     module Matchers
-#       include Remarkable::Controller::Helpers
-#     end
-#   end
-# end
-# 
-# Spec::Rails::Matchers.send(:include, Remarkable::Controller::Syntax::RSpec)
-# Spec::Example::ExampleGroupMethods.send(:include, Remarkable::Controller::Syntax::Shoulda)

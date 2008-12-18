@@ -50,7 +50,8 @@ describe PostsController do
         @post = Post.last
       end
 #       should_respond_with :redirect
-#       should_redirect_to "user_post_url(@post.user, @post)"
+      should_redirect_to "user_post_url(@post.user, @post)"
+      should_not_redirect_to "user_url(@post.user)"
 #       should_set_the_flash_to /created/i
     end
 
@@ -71,14 +72,18 @@ describe PostsController do
 
     describe "viewing a post on GET to #show" do
       before { get :show, :user_id => users(:first), :id => posts(:first) }
-#       should_render_with_layout 'wide'
-#       should_render_with_layout :wide
-#       should_render_template :show
+      
+      should_render_with_layout 'wide'
+      should_render_with_layout :wide
+      should_not_render_with_layout 'other'
+      
+      should_render_template :show
+      should_not_render_template :new
     end
 
     describe "on GET to #new" do
       before { get :new, :user_id => users(:first) }
-#       should_render_without_layout
+      should_render_without_layout
 #       should_not_set_the_flash
     end
   end
@@ -138,7 +143,8 @@ describe PostsController do
       end
 #       it { should respond_with(:redirect) }
 #       it { should_not respond_with(:success) }
-#       it { should redirect_to(user_post_url(@post.user, @post)) }
+      it { should redirect_to(user_post_url(@post.user, @post)) }
+      it { should_not redirect_to(user_url(@post.user)) }
 #       it { should set_the_flash_to(/created/i) }
 #       it { should_not set_the_flash_to(/foo/i) }
     end
@@ -158,19 +164,22 @@ describe PostsController do
       it { should assign_to(:user, :posts) }
       it { should_not assign_to(:foo, :bar) }
     end
-# 
+
     describe "viewing a post on GET to #show" do
        before { get :show, :user_id => users(:first), :id => posts(:first) }
-#       it { should render_with_layout('wide') }
-#       it { should render_with_layout(:wide) }
+      
+       it { should render_with_layout('wide') }
+       it { should render_with_layout(:wide) }
+       it { should_not render_with_layout('other') }
+      
 #       it { should_not respond_with_content_type(:rss) }
-#       it { should render_template(:show) }
-#       it { should_not render_template(:new) }
+      it { should render_template(:show) }
+      it { should_not render_template(:new) }
     end
-# 
+
     describe "on GET to #new" do
       before { get :new, :user_id => users(:first) }
-#       it { should render_without_layout }
+      it { should render_without_layout }
 #       it { should_not set_the_flash }
     end
   end

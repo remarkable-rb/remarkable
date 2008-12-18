@@ -9,21 +9,6 @@ module Remarkable # :nodoc:
           @names = names
         end
 
-        def controller(controller)
-          @controller = controller
-          self
-        end
-        
-        def response(response)
-          @response = response
-          self
-        end
-
-        def spec(spec)
-          @spec = spec
-          self
-        end
-
         def matches?(subject)
           @subject = subject
           assert_matcher_for(@names) do |name|
@@ -65,7 +50,11 @@ module Remarkable # :nodoc:
 
           instantiate_variables_from_assigns do
             expected_value = if @options[:equals].is_a?(String)
-              eval(@options[:equals], @spec.send(:binding), __FILE__, __LINE__) rescue @options[:equals]
+              warn_level = $VERBOSE
+              $VERBOSE = nil
+              result = eval(@options[:equals], @spec.send(:binding), __FILE__, __LINE__) rescue @options[:equals]
+              $VERBOSE = warn_level
+              result
             else
               @options[:equals]
             end
@@ -82,13 +71,11 @@ module Remarkable # :nodoc:
           expectation << " which is equal to #{@options[:equals].inspect}" if @options[:equals]
           expectation
         end
-        
       end
 
       def assign_to(*names)
         AssignTo.new(*names)
-      end
-      
+      end      
     end
   end
 end
