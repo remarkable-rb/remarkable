@@ -16,6 +16,8 @@ describe Address do
   
   it { should only_allow_numeric_values_for(:zip) }
   it { should_not only_allow_numeric_values_for(:title) }
+  
+  it { should_not only_allow_numeric_or_blank_values_for(:zip) }
 end
 
 describe Address do
@@ -24,6 +26,14 @@ describe Address do
   should_belong_to :addressable
   
   should_require_unique_attributes :title, :scoped_to => [:addressable_id, :addressable_type]
+  should_not_require_unique_attributes :zip
+  
   should_ensure_length_at_least :zip, 5
+  should_not_ensure_length_at_least :zip, 4
+  should_not_ensure_length_at_least :zip, 6
+  
   should_only_allow_numeric_values_for :zip
+  should_not_only_allow_numeric_values_for :title
+  
+  should_not_only_allow_numeric_or_blank_values_for :zip
 end
