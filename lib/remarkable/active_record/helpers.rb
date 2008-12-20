@@ -63,9 +63,9 @@ module Remarkable # :nodoc:
                            error_message_to_expect = self.class.default_error_message(:invalid)) # :nodoc:
         object = get_instance_of(object_or_klass)
         object.send("#{attribute}=", value)
-        
         return false if object.valid?
         return false unless object.errors.on(attribute)
+        
         assert_contains(object.errors.on(attribute), error_message_to_expect)
       end
 

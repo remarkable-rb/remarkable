@@ -3,6 +3,7 @@ class CreateDogs < ActiveRecord::Migration
     create_table :dogs do |t|
       t.column :owner_id, :integer
       t.column :address_id, :integer
+      t.column :age, :integer
     end
   end
 

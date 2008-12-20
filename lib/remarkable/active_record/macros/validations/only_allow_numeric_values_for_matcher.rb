@@ -4,7 +4,8 @@ module Remarkable # :nodoc:
       class OnlyAllowNumericValuesFor < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
         
-        def initialize(*attributes)
+        def initialize(attributes, opts)
+          @options = opts
           load_options(attributes.extract_options!)
           @attributes = attributes
         end
@@ -23,27 +24,46 @@ module Remarkable # :nodoc:
         end
 
         def description
-          "only allow numeric values for #{@attributes.to_sentence}"
+          if allow_blank_values
+            "only allow numeric or blank values for #{@attributes.to_sentence}"            
+          else
+            "only allow numeric values for #{@attributes.to_sentence}"
+          end
         end
         
         private
         
         def only_allow_numeric_values?
-          attribute = @attribute.to_sym
-          return true if assert_bad_value(@subject, attribute, "abcd", @options[:message])
-          
-          @missing = "allow non-numeric values for #{attribute}"
-          return false
+          if allow_blank_values
+            @missing = "allow non-numeric or blank values for #{@attribute.to_sym}"
+            !is_bad_value("") && is_bad_value("abcd")
+          else
+            @missing = "allow non-numeric values for #{@attribute.to_sym}"            
+            is_bad_value("") && is_bad_value("abcd")
+          end
         end
         
         def load_options(options)
-          @options = {
-            :message => default_error_message(:not_a_number)
-          }.merge(options)
+          key = :not_a_number
+          @options.merge!({
+            :message => default_error_message(key)
+          }).merge!(options)
         end
         
         def expectation
-          "only allow numeric values for #{@attribute}"
+          if allow_blank_values
+            "only allow numeric or blank values for #{@attribute}"
+          else
+            "only allow numeric values for #{@attribute}"
+          end
+        end
+        
+        def is_bad_value(value)
+          assert_bad_value(@subject, @attribute.to_sym, value, @options[:message])
+        end
+        
+        def allow_blank_values
+          @options[:allow_blank]
         end
       end
 
@@ -61,7 +81,11 @@ module Remarkable # :nodoc:
       #   it { should only_allow_numeric_values_for(:age) }
       #
       def only_allow_numeric_values_for(*attributes)
-        OnlyAllowNumericValuesFor.new(*attributes)
+        OnlyAllowNumericValuesFor.new(attributes, :allow_blank => false)
+      end
+      
+      def only_allow_numeric_or_blank_values_for(*attributes)
+        OnlyAllowNumericValuesFor.new(attributes, :allow_blank => true)
       end
     end
   end
