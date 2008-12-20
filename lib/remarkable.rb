@@ -2,7 +2,7 @@ $:.unshift(File.dirname(__FILE__)) unless
   $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
 module Remarkable
-  VERSION = '2.0.2'
+  VERSION = '2.1.1'
 end
 
 require File.expand_path(RAILS_ROOT + "/config/environment") if defined?(RAILS_ROOT)
