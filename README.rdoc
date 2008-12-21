@@ -1,4 +1,4 @@
-= Shoulda for RSpec is Remarkable!
+= Simplifying tests for trivial things!
 
 For a long time I was evangelizing Shoulda at Surgeworks and used it in my personal projects. The fact is, I didn’t have much success in convincing my co-workers to adopt Shoulda. On the other hand, they managed to convince me to learn and use RSpec.
 
