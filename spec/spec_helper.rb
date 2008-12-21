@@ -1,6 +1,6 @@
 # This file is copied to ~/spec when you run 'ruby script/generate rspec'
 # from the project root directory.
-ENV['RAILS_ENV'] = 'sqlite3'
+ENV['RAILS_ENV'] = 'remarkable_test'
 
 RAILS_ROOT = File.dirname(__FILE__) + '/rails_root'
 

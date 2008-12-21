@@ -5,9 +5,9 @@ module Remarkable
   VERSION = '2.1.1'
 end
 
-require File.expand_path(RAILS_ROOT + "/config/environment") if defined?(RAILS_ROOT)
-require 'spec'
-require 'spec/rails' if defined?(RAILS_ROOT)
+if ENV['RAILS_ENV'] == 'remarkable_test'
+  require 'spec/rails'
+end
 
 require 'remarkable/matcher_base'
 require 'remarkable/private_helpers'
