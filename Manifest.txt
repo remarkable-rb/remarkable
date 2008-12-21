@@ -96,7 +96,7 @@ spec/rails_root/app/views/users/show.rhtml
 spec/rails_root/config/boot.rb
 spec/rails_root/config/database.yml
 spec/rails_root/config/environment.rb
-spec/rails_root/config/environments/remarkable_test.rb
+spec/rails_root/config/environments/test.rb
 spec/rails_root/config/initializers/new_rails_defaults.rb
 spec/rails_root/config/initializers/shoulda.rb
 spec/rails_root/config/routes.rb
@@ -114,6 +114,7 @@ spec/rails_root/db/schema.rb
 spec/rails_root/log/.keep
 spec/rails_root/log/remarkable_test.log
 spec/rails_root/log/sqlite3.log
+spec/rails_root/log/test.log
 spec/rails_root/public/.htaccess
 spec/rails_root/public/404.html
 spec/rails_root/public/422.html

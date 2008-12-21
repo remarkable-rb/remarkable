@@ -1,4 +1,6 @@
 # Specifies gem version of Rails to use when vendor/rails is not present
+ENV['RAILS_ENV'] = 'test'
+
 old_verbose, $VERBOSE = $VERBOSE, nil
 RAILS_GEM_VERSION = '>= 2.1.0' unless defined? RAILS_GEM_VERSION
 $VERBOSE = old_verbose
