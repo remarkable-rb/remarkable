@@ -1,13 +1,18 @@
 module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Matchers # :nodoc:
-      class AllowValuesFor < Remarkable::Matcher::Base
+      class AllowedValuesMatcher < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
 
         def initialize(attribute, *good_values)
           @attribute = attribute
           load_options(good_values.extract_options!)
           @good_values = good_values
+        end
+
+        def allow_nil(value = true)
+          @options[:allow_nil] = value
+          self
         end
 
         def message(message)
@@ -21,10 +26,14 @@ module Remarkable # :nodoc:
           assert_matcher_for(@good_values) do |good_value|
             @good_value = good_value
             value_valid?
+          end &&
+          assert_matcher do
+            allow_nil?
           end
         end
 
         def description
+          @good_values << 'nil' if @options[:allow_nil]
           "allow #{@attribute} to be set to #{@good_values.to_sentence}"
         end
 
@@ -42,6 +51,18 @@ module Remarkable # :nodoc:
           @options = {
             :message => default_error_message(:invalid)
           }.merge(options)
+        end
+        
+        def allow_nil?
+          @good_value = 'nil'
+          if @options[:allow_nil]
+            return true if assert_good_value(@subject, @attribute, nil, @options[:message])
+          else
+            return true if assert_bad_value(@subject, @attribute, nil, @options[:message])
+          end
+          
+          @missing = "#{@attribute} can#{ 'not' if @options[:allow_nil] } be set to nil"
+          false
         end
         
         def value_valid?
@@ -66,7 +87,7 @@ module Remarkable # :nodoc:
       #   it { should_not allow_values_for(:isbn, "bad 1", "bad 2") }
       #
       def allow_values_for(attribute, *good_values)
-        AllowValuesFor.new(attribute, *good_values)
+        AllowedValuesMatcher.new(attribute, *good_values)
       end
     end
   end

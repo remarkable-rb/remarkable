@@ -42,6 +42,9 @@ describe User do
   
   it { should_not allow_values_for(:email, "blah", "b lah") }
   it { should allow_values_for(:email, "a@b.com", "asdf@asdf.com") }
+  it { should_not allow_values_for(:email, "a@b.com", "asdf@asdf.com").allow_nil }
+  it { should_not allow_values_for(:email, "a@b.com", "asdf@asdf.com").allow_nil(true) }
+  it { should allow_values_for(:email, "a@b.com", "asdf@asdf.com").allow_nil(false) }
   
   it { should ensure_length_in_range(:email, 2..100) }
   it { should_not ensure_length_in_range(:email, 1..100) }

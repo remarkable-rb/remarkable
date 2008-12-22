@@ -11,7 +11,7 @@ lib/remarkable/active_record/macros.rb
 lib/remarkable/active_record/macros/associations/association_matcher.rb
 lib/remarkable/active_record/macros/database/db_column_matcher.rb
 lib/remarkable/active_record/macros/database/index_matcher.rb
-lib/remarkable/active_record/macros/validations/allow_values_for_matcher.rb
+lib/remarkable/active_record/macros/validations/allowed_values_matcher.rb
 lib/remarkable/active_record/macros/validations/ensure_length_at_least_matcher.rb
 lib/remarkable/active_record/macros/validations/ensure_length_in_range_matcher.rb
 lib/remarkable/active_record/macros/validations/ensure_length_is_matcher.rb
