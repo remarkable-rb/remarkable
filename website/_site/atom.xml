@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+ <title>Remarkable</title>
+ <link href="http://carlosbrando.github.com/remarkable/atom.xml" rel="self"/>
+ <link href="http://carlosbrando.github.com/remarkable/"/>
+ <updated>2008-12-23T01:16:48-02:00</updated>
+ <id>http://carlosbrando.github.com/remarkable/</id>
+ <author>
+   <name>Dr Nic Williams</name>
+   <email>carlosbrandowilliams@gmail.com</email>
+ </author>
+
+ 
+ <entry>
+   <title>Welcome to 'Remarkable'</title>
+   <link href="http://carlosbrando.github.com/remarkable/2008/12/23/first-post.html"/>
+   <updated>2008-12-23T00:00:00-02:00</updated>
+   <id>http://carlosbrando.github.com/remarkable/2008/12/23/first-post</id>
+   <content type="html">&lt;p&gt;Remarkable is going to be an awesome project.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ 
+</feed>
