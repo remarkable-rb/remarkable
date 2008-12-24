@@ -12,7 +12,7 @@ module Remarkable # :nodoc:
 
     # Returns the model class constant, as determined by the test class name.
     def model_class
-      variable_name = "@#{self.class.described_type.to_s.underscore}"
+      variable_name = "@#{self.class.described_type.to_s.split(':').last.underscore}"
       if instance_variable_defined?(variable_name)
         instance_variable_get(variable_name)
       else

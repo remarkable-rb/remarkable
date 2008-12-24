@@ -13,7 +13,7 @@ module Remarkable # :nodoc:
       def get_instance_of(object_or_klass) # :nodoc:
         if object_or_klass.is_a?(Class)
           klass = object_or_klass
-          instance_variable_get("@#{klass.to_s.underscore}") || klass.new
+          instance_variable_get("@#{klass.to_s.split(':').last.underscore}") || klass.new
         else
           object_or_klass
         end
