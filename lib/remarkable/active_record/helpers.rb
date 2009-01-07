@@ -13,10 +13,14 @@ module Remarkable # :nodoc:
       def get_instance_of(object_or_klass) # :nodoc:
         if object_or_klass.is_a?(Class)
           klass = object_or_klass
-          instance_variable_get("@#{klass.to_s.split(':').last.underscore}") || klass.new
+          instance_variable_get("@#{instance_variable_name_for(klass)}") || klass.new
         else
           object_or_klass
         end
+      end
+      
+      def instance_variable_name_for(klass)
+        klass.to_s.split('::').last.underscore
       end
 
       # Asserts that an Active Record model validates with the passed

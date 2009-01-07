@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe Dog do
+describe Pets::Dog do
   it { should belong_to(:user) }
   it { should belong_to(:address) }
   it { should belong_to(:user, :address) }
@@ -19,7 +19,7 @@ describe Dog do
   it { should only_allow_numeric_or_blank_values_for(:age) }
 end
 
-describe Dog do
+describe Pets::Dog do
   should_belong_to :user
   should_belong_to :address
   should_belong_to :user, :address
