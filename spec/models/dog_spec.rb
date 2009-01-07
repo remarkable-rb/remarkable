@@ -17,6 +17,8 @@ describe Pets::Dog do
   it { should_not only_allow_numeric_values_for(:age, :allow_blank => false) }
   
   it { should only_allow_numeric_or_blank_values_for(:age) }
+  
+  it { should require_attributes(:owner_id) }
 end
 
 describe Pets::Dog do
@@ -32,4 +34,6 @@ describe Pets::Dog do
   should_not_only_allow_numeric_values_for :age, :allow_blank => false
   
   should_only_allow_numeric_or_blank_values_for :age
+  
+  should_require_attributes :owner_id
 end
