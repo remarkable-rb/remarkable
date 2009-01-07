@@ -22,6 +22,7 @@ describe Post do
   it { should_not require_unique_attributes(:title, :scoped_to => :user_id) }
   
   it { should require_attributes(:body, :message => /wtf/) }
+  it { should require_attributes(:body).message(/wtf/) }
   it { should_not require_attributes(:body) }
   it { should require_attributes(:title) }
   it { should_not require_attributes(:user_id) }

@@ -1,7 +1,7 @@
 module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Matchers # :nodoc:
-      class RequireAttributes < Remarkable::Matcher::Base
+      class RequireAttributeMatcher < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
 
         def initialize(*attributes)
@@ -60,7 +60,7 @@ module Remarkable # :nodoc:
       #   it { should require_attributes(:name, :phone_number) }
       #
       def require_attributes(*attributes)
-        RequireAttributes.new(*attributes)
+        RequireAttributeMatcher.new(*attributes)
       end
     end
   end
