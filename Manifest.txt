@@ -9,7 +9,7 @@ lib/remarkable/active_record/active_record.rb
 lib/remarkable/active_record/helpers.rb
 lib/remarkable/active_record/macros.rb
 lib/remarkable/active_record/macros/associations/association_matcher.rb
-lib/remarkable/active_record/macros/database/db_column_matcher.rb
+lib/remarkable/active_record/macros/database/column_matcher.rb
 lib/remarkable/active_record/macros/database/index_matcher.rb
 lib/remarkable/active_record/macros/validations/allowed_values_matcher.rb
 lib/remarkable/active_record/macros/validations/ensure_length_at_least_matcher.rb
@@ -66,6 +66,7 @@ spec/models/tag_spec.rb
 spec/models/tagging_spec.rb
 spec/models/user_spec.rb
 spec/other/custom_macros_spec.rb
+spec/other/my_own_matcher_spec.rb
 spec/other/private_helpers_spec.rb
 spec/rails_root/app/controllers/application.rb
 spec/rails_root/app/controllers/posts_controller.rb
@@ -74,9 +75,9 @@ spec/rails_root/app/helpers/application_helper.rb
 spec/rails_root/app/helpers/posts_helper.rb
 spec/rails_root/app/helpers/users_helper.rb
 spec/rails_root/app/models/address.rb
-spec/rails_root/app/models/dog.rb
 spec/rails_root/app/models/flea.rb
 spec/rails_root/app/models/friendship.rb
+spec/rails_root/app/models/pets/dog.rb
 spec/rails_root/app/models/post.rb
 spec/rails_root/app/models/product.rb
 spec/rails_root/app/models/tag.rb
@@ -112,8 +113,6 @@ spec/rails_root/db/migrate/009_create_products.rb
 spec/rails_root/db/migrate/010_create_friendships.rb
 spec/rails_root/db/schema.rb
 spec/rails_root/log/.keep
-spec/rails_root/log/remarkable_test.log
-spec/rails_root/log/sqlite3.log
 spec/rails_root/log/test.log
 spec/rails_root/public/.htaccess
 spec/rails_root/public/404.html
@@ -121,7 +120,9 @@ spec/rails_root/public/422.html
 spec/rails_root/public/500.html
 spec/rails_root/script/console
 spec/rails_root/script/generate
+spec/rails_root/spec/remarkable_macros/.keep
 spec/rails_root/vendor/plugins/.keep
+spec/rails_root/vendor/plugins/my_plugin/remarkable_macros/.keep
 spec/rcov.opts
 spec/spec.opts
 spec/spec_helper.rb
