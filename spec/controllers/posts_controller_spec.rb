@@ -43,6 +43,10 @@ describe PostsController do
 
       should_assign_to :posts
       should_not_assign_to :foo, :bar
+      
+      # should_render_page_with_metadata :title => /index/
+      # should_render_page_with_metadata :description => /Posts/, :title => /index/
+      # should_render_page_with_metadata :keywords => "posts"
     end
 
     describe "on POST to :create" do
@@ -144,6 +148,8 @@ describe PostsController do
       it { should_not assign_to(:user, :equals => 'posts(:first)') }
       it { should assign_to(:posts) }
       it { should_not assign_to(:foo, :bar) }
+      
+      it { should render_page_with_metadata(:title => /index/) }
     end
 
     describe "on POST to :create" do
