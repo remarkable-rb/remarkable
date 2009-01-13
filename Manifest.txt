@@ -29,8 +29,9 @@ lib/remarkable/assertions.rb
 lib/remarkable/controller/controller.rb
 lib/remarkable/controller/helpers.rb
 lib/remarkable/controller/macros.rb
-lib/remarkable/controller/macros/assign_to_matcher.rb
+lib/remarkable/controller/macros/assign_matcher.rb
 lib/remarkable/controller/macros/filter_params_matcher.rb
+lib/remarkable/controller/macros/metadata_matcher.rb
 lib/remarkable/controller/macros/render_with_layout_matcher.rb
 lib/remarkable/controller/macros/respond_with_content_type_matcher.rb
 lib/remarkable/controller/macros/respond_with_matcher.rb
