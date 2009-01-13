@@ -15,27 +15,33 @@ module Remarkable # :nodoc:
           
           assert_matcher_for(@options) do |option|
             @key, @value = option
-            has_metatag?
+            body_is_blank? && has_metatag?
           end
         end
 
         def description
-          "have metatag #{@option.inspect}"
+          "have metatag #{@options.inspect}"
         end
         
         private
         
+        def body_is_blank?
+          return true unless @response.body.strip.empty?
+          
+          @missing = "response.body is empty, integrate_views was included in your spec?"
+          false
+        end
+        
         def has_metatag?
-          if @key.to_sym == :title
-            # require "ruby-debug"; debugger
-            # matcher = Spec::Rails::Matchers::AssertSelect.new(:assert_select, @response, "title", @value)
-            # require "ruby-debug"; debugger
-            # success = matcher.matches?(@response)
-            # assert_accepts(matcher, @response)
-            # html_document = @response.body
-            assert_select "title", @value
-          else
-            assert_select "meta[name=?][content#{"*" if @value.is_a?(Regexp)}=?]", @key, @value
+          begin          
+            if @key.to_sym == :title
+              return true if assert_select("title", @value)
+            else
+              return true if assert_select("meta[name=?][content#{"*" if @value.is_a?(Regexp)}=?]", @key, @value)
+            end
+          rescue
+            @missing = "Expected metatag #{@key} matching \"#{@value}\", not found."
+            return false
           end
         end
         

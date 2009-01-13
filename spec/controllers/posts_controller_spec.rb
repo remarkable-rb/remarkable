@@ -3,6 +3,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe PostsController do
   fixtures :all
 
+  integrate_views
+
   # autodetects the :controller
   should_route     :get,    '/posts',         :controller => :posts, :action => :index
   should_not_route :get,    '/posts',         :controller => :posts, :action => :show
@@ -43,10 +45,12 @@ describe PostsController do
 
       should_assign_to :posts
       should_not_assign_to :foo, :bar
-      
-      # should_render_page_with_metadata :title => /index/
-      # should_render_page_with_metadata :description => /Posts/, :title => /index/
-      # should_render_page_with_metadata :keywords => "posts"
+
+      should_render_page_with_metadata :title => /index/
+      should_render_page_with_metadata :description => /Posts/, :title => /index/
+      should_render_page_with_metadata :keywords => "posts"
+      should_not_render_page_with_metadata :description => "user"
+      should_not_render_page_with_metadata :foo => "bar"
     end
 
     describe "on POST to :create" do
@@ -106,6 +110,8 @@ end
 describe PostsController do
   fixtures :all
 
+  integrate_views
+
   # autodetects the :controller
   it { should     route(:get, '/posts',    :action => :index) }
   it { should_not route(:get, '/posts',    :action => :show) }
@@ -148,8 +154,12 @@ describe PostsController do
       it { should_not assign_to(:user, :equals => 'posts(:first)') }
       it { should assign_to(:posts) }
       it { should_not assign_to(:foo, :bar) }
-      
+
       it { should render_page_with_metadata(:title => /index/) }
+      it { should render_page_with_metadata(:description => /Posts/, :title => /index/) }
+      it { should render_page_with_metadata(:keywords => "posts") }
+      it { should_not render_page_with_metadata(:description => "user") }
+      it { should_not render_page_with_metadata(:foo => "bar") }
     end
 
     describe "on POST to :create" do
