@@ -35,7 +35,7 @@ module Remarkable # :nodoc:
           filtered = @controller.send(:filter_parameters, { @key.to_s => @key.to_s })
           return true if filtered[@key.to_s] == '[FILTERED]'
           
-          @missing= "The key #{@key} is not filtered"
+          @missing = "The key #{@key} is not filtered"
           return false
         end
         
