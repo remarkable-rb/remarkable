@@ -20,6 +20,7 @@ class PostsController < ApplicationController
 
   def show
     @post = @user.posts.find(params[:id])
+    @false_flag = false
 
     respond_to do |format|
       format.html { render :layout => 'wide' }

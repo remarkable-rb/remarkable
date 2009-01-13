@@ -92,6 +92,8 @@ describe PostsController do
       should_render_with_layout :wide
       should_not_render_with_layout 'other'
 
+      should_assign_to :false_flag
+
       should_not_respond_with_content_type :rss
 
       should_render_template :show
@@ -200,7 +202,10 @@ describe PostsController do
       it { should render_with_layout(:wide) }
       it { should_not render_with_layout('other') }
 
+      it { should assign_to(:false_flag) }
+
       it { should_not respond_with_content_type(:rss) }
+      
       it { should render_template(:show) }
       it { should_not render_template(:new) }
     end

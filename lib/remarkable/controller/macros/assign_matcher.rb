@@ -1,22 +1,20 @@
 module Remarkable # :nodoc:
   module Controller # :nodoc:
     module Matchers # :nodoc:
-      class AssignTo < Remarkable::Matcher::Base
+      class AssignMatcher < Remarkable::Matcher::Base
         include Remarkable::Controller::Helpers
         
         def initialize(*names)
           @options = names.extract_options!
-          @names = names
+          @names   = names
         end
 
         def matches?(subject)
           @subject = subject
+          
           assert_matcher_for(@names) do |name|
             @name = name
-            
-            assigned_value? &&
-            is_kind_of? &&
-            is_equals_expected_value?
+            assigned_value? && is_kind_of? && is_equals_expected_value?
           end
         end
 
@@ -31,7 +29,7 @@ module Remarkable # :nodoc:
 
         def assigned_value?
           @assigned_value = controller_assigns(@name.to_sym)
-          return true if @assigned_value
+          return true unless @assigned_value.nil?
 
           @missing = "the action isn't assigning to @#{@name}"
           return false
@@ -74,8 +72,9 @@ module Remarkable # :nodoc:
       end
 
       def assign_to(*names)
-        AssignTo.new(*names)
-      end      
+        AssignMatcher.new(*names)
+      end
+      
     end
   end
 end
