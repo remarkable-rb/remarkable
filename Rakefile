@@ -9,8 +9,8 @@ $hoe = Hoe.new('remarkable', Remarkable::VERSION) do |p|
   p.post_install_message = 'PostInstall.txt' # TODO remove if post-install message not required
   p.rubyforge_name       = p.name # TODO this is default value
   p.extra_deps         = [
-    ['rspec','>= 1.1.11'],
-    ['rspec-rails','>= 1.1.11']
+    ['rspec','>= 1.1.12'],
+    ['rspec-rails','>= 1.1.12']
   ]
   p.extra_dev_deps = [
     ['newgem', ">= #{::Newgem::VERSION}"]
