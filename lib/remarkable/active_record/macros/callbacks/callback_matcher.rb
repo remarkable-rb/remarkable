@@ -11,38 +11,35 @@ module Remarkable # :nodoc:
       class CallbackMatcher < Remarkable::Matcher::Base
         def initialize(callback, method)
           @callback = callback
-          @method = method
+          @method   = method
         end
 
         def matches?(subject)
           @subject = subject
-        
-          assert_matcher_for(@callback) do |column|
-            callbacks_for(@callback).include?(@method)
-          end
-        end
-
-        def failure_message
-          "Expected #{expectation}"
-        end
-
-        def negative_failure_message
-          "Did not expect #{expectation}"
+          assert_matcher { has_callback? }
         end
 
         def description
           "have a #{@callback} callback named #{@method}"
         end
 
-        protected
+        private
 
-        def expectation
-          "#{model_name} to #{description}"
+        def has_callback?
+          return true if callbacks_for(@callback).include?(@method)
+
+          @missing = "#{model_name} does not have a #{@callback} callback named #{@method}"
+          return false
         end
-        
+
         def callbacks_for(callback)
           model_class.send("#{callback}_callback_chain").collect(&:method)
         end
+
+        def expectation
+          "#{model_name} have a #{@callback} callback named #{@method}"
+        end
+
       end
     end
   end
