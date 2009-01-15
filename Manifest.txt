@@ -9,6 +9,7 @@ lib/remarkable/active_record/active_record.rb
 lib/remarkable/active_record/helpers.rb
 lib/remarkable/active_record/macros.rb
 lib/remarkable/active_record/macros/associations/association_matcher.rb
+lib/remarkable/active_record/macros/callbacks/callback_matcher.rb
 lib/remarkable/active_record/macros/database/column_matcher.rb
 lib/remarkable/active_record/macros/database/index_matcher.rb
 lib/remarkable/active_record/macros/validations/allowed_values_matcher.rb
