@@ -1,5 +1,5 @@
 require 'remarkable/active_record/helpers'
-%w( database associations validations ).each do |folder|
+%w( database associations validations callbacks ).each do |folder|
   Dir[File.join(File.dirname(__FILE__), "macros", folder, '*.rb')].each do |file|
     require file
   end

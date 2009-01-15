@@ -40,6 +40,11 @@ describe User do
     it { should_not have_named_scope("recent(#{@count})", :limit => 1) }
   end
   
+  it { should have_after_create_callback(:send_welcome_email) }
+  it { should_not have_after_save_callback(:send_welcome_email) }
+  it { should_not have_after_destroy_callback(:goodbye_jerk) }
+  it { should have_before_validation_on_update_callback(:some_weird_callback) }
+  
   it { should_not allow_values_for(:email, "blah", "b lah") }
   it { should allow_values_for(:email, "a@b.com", "asdf@asdf.com") }
   it { should_not allow_values_for(:email, "a@b.com", "asdf@asdf.com").allow_nil }
@@ -152,6 +157,11 @@ describe User do
     end
     # should_have_named_scope "recent(@count)", :limit => 2
   end
+
+  should_have_after_create_callback(:send_welcome_email)
+  should_not_have_after_save_callback(:send_welcome_email)
+  should_not_have_after_destroy_callback(:goodbye_jerk)
+  should_have_before_validation_on_update_callback(:some_weird_callback)
   
   should_not_allow_values_for :email, "blah", "b lah"
   should_allow_values_for :email, "a@b.com", "asdf@asdf.com"

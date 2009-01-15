@@ -25,4 +25,10 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, :scope => :name
   validates_length_of :ssn, :is => 9, :message => "Social Security Number is not the right length"
   validates_numericality_of :ssn
+  
+  after_create :send_welcome_email
+  before_validation_on_update :some_weird_callback
+  
+  def send_welcome_email; end
+  def some_weird_callback; end
 end
