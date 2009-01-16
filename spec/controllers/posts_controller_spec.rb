@@ -46,11 +46,11 @@ describe PostsController do
       should_assign_to :posts
       should_not_assign_to :foo, :bar
 
-      should_render_page_with_metadata :title => /index/
-      should_render_page_with_metadata :description => /Posts/, :title => /index/
-      should_render_page_with_metadata :keywords => "posts"
-      should_not_render_page_with_metadata :description => "user"
-      should_not_render_page_with_metadata :foo => "bar"
+      # should_render_page_with_metadata :title => /index/
+      # should_render_page_with_metadata :description => /Posts/, :title => /index/
+      # should_render_page_with_metadata :keywords => "posts"
+      # should_not_render_page_with_metadata :description => "user"
+      # should_not_render_page_with_metadata :foo => "bar"
     end
 
     describe "on POST to :create" do
@@ -157,11 +157,11 @@ describe PostsController do
       it { should assign_to(:posts) }
       it { should_not assign_to(:foo, :bar) }
 
-      it { should render_page_with_metadata(:title => /index/) }
-      it { should render_page_with_metadata(:description => /Posts/, :title => /index/) }
-      it { should render_page_with_metadata(:keywords => "posts") }
-      it { should_not render_page_with_metadata(:description => "user") }
-      it { should_not render_page_with_metadata(:foo => "bar") }
+      # it { should render_page_with_metadata(:title => /index/) }
+      # it { should render_page_with_metadata(:description => /Posts/, :title => /index/) }
+      # it { should render_page_with_metadata(:keywords => "posts") }
+      # it { should_not render_page_with_metadata(:description => "user") }
+      # it { should_not render_page_with_metadata(:foo => "bar") }
     end
 
     describe "on POST to :create" do
