@@ -6,15 +6,15 @@ module Remarkable # :nodoc:
         
         def initialize(*keys)
           @options = keys.extract_options!
-          @keys = keys
+          @keys    = keys
         end
 
         def matches?(subject)
           @subject = subject
+          
           assert_matcher_for(@keys) do |key|
             @key = key
-            respond_to_filter_parameters? &&
-            is_filtered?
+            respond_to_filter_parameters? && is_filtered?
           end
         end
 
