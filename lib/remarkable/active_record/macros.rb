@@ -10,8 +10,9 @@ module Remarkable # :nodoc:
       #   should_have_index :age
       #
       def should_have_indices(*columns)
+        options = columns.extract_options!
         columns.each do |column|
-          matcher = have_index(column)
+          matcher = have_index(column, options)
           it "should have index on #{self.described_type.table_name} for #{column.inspect}" do
             assert_accepts(matcher, model_class)
           end
