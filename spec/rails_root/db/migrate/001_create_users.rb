@@ -6,7 +6,7 @@ class CreateUsers < ActiveRecord::Migration
       t.column :age, :integer
       t.column :ssn, :string
     end
-    add_index :users, :email
+    add_index :users, :email, :unique => true
     add_index :users, :name
     add_index :users, :age
     add_index :users, [:email, :name], :unique => true

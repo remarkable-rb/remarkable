@@ -16,9 +16,14 @@ describe User do
   it { should_not have_index(:foo, :bar) }
     
   it { should have_indices(:email, :name) }
-  it { should have_index([:email, :name], :unique => true) }
   it { should have_index([:email, :name]).unique }
   it { should have_index([:email, :name]).unique(true) }
+  it { should have_index([:email, :name], :unique => true) }
+  it { should have_index(:age, :unique => false) }
+  
+  it { should_not have_index(:phone) }
+  it { should_not have_index(:email, :unique => false) }
+  it { should_not have_index(:age, :unique => true) }
   
   it { should have_index(:age) }
   it { should_not have_index(:aged) }
@@ -147,8 +152,13 @@ describe User do
   should_have_one :address, :dependent => :destroy
   
   should_have_indices :email, :name
-  should_have_index [:email, :name], :unique => true
   should_have_index :age
+  should_have_index [:email, :name], :unique => true
+  should_have_index :age, :unique => false
+  
+  should_not_have_index :phone
+  should_not_have_index :email, :unique => false
+  should_not_have_index :age, :unique => true
   
   should_have_named_scope :old, :conditions => "age > 50"
   should_have_named_scope :eighteen, :conditions => { :age => 18 }
