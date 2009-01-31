@@ -12,6 +12,8 @@ module Spec
                                             session(session).
                                             flash(flash).
                                             spec(self)
+        elsif exists_a_rspec_subject?
+          subject.should(matcher)
         else
           super
         end
@@ -59,6 +61,10 @@ module Spec
       
       def remarkable_controller_matcher?(matcher)
         matcher.class.name =~ /^Remarkable::Controller::Matchers::.+$/
+      end
+      
+      def exists_a_rspec_subject?
+        !subject.nil?
       end
     end
   end
