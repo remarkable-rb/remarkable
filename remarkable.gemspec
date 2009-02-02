@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{remarkable}
-  s.version = "2.1.6.1"
+  s.version = "2.1.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Carlos Brando"]
-  s.date = %q{2009-01-16}
+  s.date = %q{2009-02-02}
   s.description = %q{Initially, the main objective of Remarkable is to port all Shoulda macros to RSpec, but of course the plan is more ambitious than that. I have other ideas that will hopefully be especially useful for Rspec users.  At this point you may ask: “But aren’t there already plug-ins that do the same thing. Why build something else?”  First, this isn’t simply “another” plugin with RSpec matchers. It also does a lot of things differently that I feel are better than other approaches.}
   s.email = ["eduardobrando@gmail.com"]
   s.extra_rdoc_files = ["History.txt", "Manifest.txt", "PostInstall.txt", "README.rdoc"]
