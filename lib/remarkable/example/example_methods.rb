@@ -31,6 +31,8 @@ module Spec
                                                 session(session).
                                                 flash(flash).
                                                 negative
+        elsif exists_a_rspec_subject?
+          subject.should_not(matcher)
         else
           super
         end
