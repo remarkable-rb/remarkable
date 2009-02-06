@@ -12,7 +12,6 @@ describe Pets::Dog do
   it { should only_allow_numeric_values_for(:age).allow_blank(true) }
   it { should only_allow_numeric_values_for(:age, :allow_blank => true) }
   
-  it { should_not only_allow_numeric_values_for(:age) }
   it { should_not only_allow_numeric_values_for(:age).allow_blank(false) }
   it { should_not only_allow_numeric_values_for(:age, :allow_blank => false) }
   
@@ -30,7 +29,6 @@ describe Pets::Dog do
   should_have_and_belong_to_many :fleas
   
   should_only_allow_numeric_values_for :age, :allow_blank => true
-  should_not_only_allow_numeric_values_for :age
   should_not_only_allow_numeric_values_for :age, :allow_blank => false
   
   should_only_allow_numeric_or_blank_values_for :age

@@ -54,6 +54,8 @@ module Remarkable # :nodoc:
         end
         
         def allow_nil?
+          return true unless @options.key? :allow_nil
+
           @good_value = 'nil'
           if @options[:allow_nil]
             return true if assert_good_value(@subject, @attribute, nil, @options[:message])

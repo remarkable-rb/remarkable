@@ -29,7 +29,7 @@ module Remarkable # :nodoc:
         end
 
         def description
-          "only allow numeric#{ ' or blank' if @options[:allow_blank] } values for #{@attributes.to_sentence}"
+          "to only allow numeric#{ ' or blank' if @options[:allow_blank] } values for #{@attributes.to_sentence}"
         end
         
         private
@@ -40,14 +40,16 @@ module Remarkable # :nodoc:
           @missing = "allow non-numeric values for #{@attribute}"
           false
         end
-        
+
         def allow_blank?
+          return true unless @options.key? :allow_blank
+
           if @options[:allow_blank]
             return true if assert_good_value(@subject, @attribute.to_sym, "", @options[:message])
           else
             return true if assert_bad_value(@subject, @attribute.to_sym, "", @options[:message])
           end
-          
+
           @missing = "#{ 'not ' if @options[:allow_blank] }allow blank values for #{@attribute}"
           false
         end
@@ -59,7 +61,7 @@ module Remarkable # :nodoc:
         end
         
         def expectation
-          "only allow numeric#{ ' or blank' if @options[:allow_blank] } values for #{@attribute}"
+          "to only allow numeric#{ ' or blank' if @options[:allow_blank] } values for #{@attribute}"
         end
       end
       
