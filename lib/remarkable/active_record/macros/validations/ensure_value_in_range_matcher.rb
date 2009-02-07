@@ -79,8 +79,8 @@ module Remarkable # :nodoc:
         
         def load_options(options)
           @options = {
-            :low_message  => default_error_message(:inclusion),
-            :high_message => default_error_message(:inclusion)
+            :low_message  => :inclusion,
+            :high_message => :inclusion
           }.merge(options.extract_options!)
         end
       end

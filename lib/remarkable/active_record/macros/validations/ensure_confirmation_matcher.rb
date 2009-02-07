@@ -45,7 +45,7 @@ module Remarkable # :nodoc:
 
         def load_options(options)
           @options = {
-            :message => default_error_message(:confirmation)
+            :message => :confirmation
           }.merge(options)
         end
 

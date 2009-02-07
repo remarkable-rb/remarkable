@@ -85,8 +85,8 @@ module Remarkable # :nodoc:
         
         def load_options(options)
           @options = {
-            :short_message => remove_parenthesis(default_error_message(:too_short, :count => @range.first)),
-            :long_message  => remove_parenthesis(default_error_message(:too_long,  :count => @range.last))
+            :short_message => { :too_short => { :count => @range.first } },
+            :long_message => { :too_long => { :count => @range.last } }
           }.merge(options.extract_options!)
         end
         

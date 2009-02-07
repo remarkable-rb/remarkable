@@ -39,7 +39,7 @@ module Remarkable # :nodoc:
 
         def load_options(options)
           @options = {
-            :short_message => remove_parenthesis(default_error_message(:too_short, :count => @min_length))
+            :short_message => { :too_short => { :count => @min_length } }
           }.merge(options.extract_options!)
         end
 

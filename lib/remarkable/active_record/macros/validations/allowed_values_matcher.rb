@@ -49,7 +49,7 @@ module Remarkable # :nodoc:
         
         def load_options(options)
           @options = {
-            :message => default_error_message(:invalid)
+            :message => :invalid
           }.merge(options)
         end
         

@@ -37,7 +37,7 @@ module Remarkable # :nodoc:
 
         def load_options(options)
           @options = {
-            :message => default_error_message(:blank)
+            :message => :blank
           }.merge(options)
         end
 

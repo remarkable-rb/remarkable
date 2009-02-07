@@ -56,7 +56,7 @@ module Remarkable # :nodoc:
         
         def load_options(options)
           @options = {
-            :message => default_error_message(:not_a_number)
+            :message => :not_a_number
           }.merge(options)
         end
         

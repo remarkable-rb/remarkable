@@ -65,7 +65,7 @@ module Remarkable # :nodoc:
         
         def load_options(options)
           @options = {
-            :message => remove_parenthesis(default_error_message(:wrong_length, :count => @length))
+            :message => { :wrong_length => { :count => @length } }
           }.merge(options.extract_options!)
         end
         

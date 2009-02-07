@@ -89,7 +89,7 @@ module Remarkable # :nodoc:
         
         def load_options(options)
           @options = {
-            :message => default_error_message(:taken)
+            :message => :taken
           }.merge(options)
           @options[:scoped_to] = [*options[:scoped_to]].compact
         end
