@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
     scoped(:limit => count)
   end
 
-  attr_accessor  :username
+  attr_accessor  :username, :username_confirmation
   attr_protected :password
   attr_readonly :name
 

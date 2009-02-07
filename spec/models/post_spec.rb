@@ -27,7 +27,11 @@ describe Post do
   it { should require_attributes(:title) }
   it { should_not require_attributes(:user_id) }
   
+  it { should validate_numericality_of(:user_id) }
   it { should only_allow_numeric_values_for(:user_id) }
+
+  it { should_not validate_numericality_of(:title) }
+  it { should_not only_allow_numeric_values_for(:title) }
 end
 
 describe Post do
@@ -44,5 +48,10 @@ describe Post do
   should_require_unique_attributes :title
   should_require_attributes :body, :message => /wtf/
   should_require_attributes :title
+
+  should_validate_numericality_of :user_id
   should_only_allow_numeric_values_for :user_id
+
+  should_not_validate_numericality_of :title
+  should_not_only_allow_numeric_values_for :title
 end

@@ -63,6 +63,9 @@ describe User do
 
   it { should ensure_confirmation_of(:username, :email) }
   it { should_not ensure_confirmation_of(:ssn) }
+
+  it { should validate_confirmation_of(:username, :email) }
+  it { should_not validate_confirmation_of(:ssn) }
   
   it { should ensure_length_in_range(:email, 2..100) }
   it { should_not ensure_length_in_range(:email, 1..100) }
@@ -126,9 +129,13 @@ describe User do
 
   it { should require_acceptance_of(:eula) }
   it { should_not require_acceptance_of(:name) }
-  
+
+  it { should validate_acceptance_of(:eula) }
+  it { should_not validate_acceptance_of(:name) }
+
+  it { should validate_uniqueness_of(:email, :scoped_to => :name) }
   it { should require_unique_attributes(:email, :scoped_to => :name) }
-  
+
   it { should ensure_length_is(:ssn, 9, :message => "Social Security Number is not the right length") }
   it { should ensure_length_is(:ssn, 9).message("Social Security Number is not the right length") }
   it { should_not ensure_length_is(:ssn, 9) }
@@ -189,6 +196,12 @@ describe User do
   should_protect_attributes :password
   should_have_class_methods :find, :destroy
   should_have_instance_methods :email, :age, :email=, :valid?
+
+  should_ensure_confirmation_of :username, :email
+  should_not_ensure_confirmation_of :ssn
+
+  should_validate_confirmation_of :username, :email
+  should_not_validate_confirmation_of :ssn
   
   should_have_db_columns :name, :email, :age
   should_have_db_columns :name, :email, :type => "string"
@@ -198,7 +211,13 @@ describe User do
   should_have_db_column :email, :type => "string",  :default => nil,    :precision => nil,  :limit => 255,
                                 :null => true,      :primary => false,  :scale => nil,      :sql_type => 'varchar(255)'
   
+  should_validate_acceptance_of :eula
   should_require_acceptance_of :eula
+
+  should_not_validate_acceptance_of :name
+  should_not_require_acceptance_of :name
+
+  should_validate_uniqueness_of :email, :scoped_to => :name
   should_require_unique_attributes :email, :scoped_to => :name
   
   should_ensure_length_is :ssn, 9, :message => "Social Security Number is not the right length"
