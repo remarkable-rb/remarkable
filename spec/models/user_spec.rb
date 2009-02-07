@@ -89,7 +89,10 @@ describe User do
   
   it { should protect_attributes(:password) }
   it { should_not protect_attributes(:name, :age) }
-  
+
+  it { should allow_mass_assignment_of(:name, :age) }
+  it { should_not allow_mass_assignment_of(:password) }
+
   it { should have_class_methods(:find) }
   it { should_not have_class_methods(:foo) }
   it { should have_class_methods(:find, :destroy) }
@@ -206,6 +209,9 @@ describe User do
   should_protect_attributes :password
   should_have_class_methods :find, :destroy
   should_have_instance_methods :email, :age, :email=, :valid?
+
+  should_allow_mass_assignment_of :email
+  should_not_allow_mass_assignment_of :password
 
   should_ensure_length_in_range :email, 2..100
   should_validate_length_of :email, :in => 2..100

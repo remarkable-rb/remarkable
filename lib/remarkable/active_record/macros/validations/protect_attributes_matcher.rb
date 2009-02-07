@@ -44,6 +44,7 @@ module Remarkable # :nodoc:
       #
       #   it { should protect_attributes(:password, :admin_flag) }
       #
+      # TODO Deprecate this whole matcher.
       def protect_attributes(*attributes)
         ProtectAttributes.new(*attributes)
       end
