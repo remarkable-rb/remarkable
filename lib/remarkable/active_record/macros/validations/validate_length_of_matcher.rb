@@ -203,6 +203,7 @@ module Remarkable # :nodoc:
         matcher
       end
       alias :validate_size_of :validate_length_of
+      alias :ensure_length_of :validate_length_of
 
       # Ensures that the length of the attribute is in the given range
       #

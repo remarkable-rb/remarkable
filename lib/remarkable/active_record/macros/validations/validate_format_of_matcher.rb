@@ -1,12 +1,11 @@
 module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Matchers # :nodoc:
-      class ValidateInclusionOfMatcher < Remarkable::Matcher::Base
+      class ValidateFormatOfMatcher < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
 
-        def initialize(attribute, behavior, *good_values)
+        def initialize(attribute, *good_values)
           @attribute = attribute
-          @behavior = behavior
           load_options(good_values.extract_options!)
           @good_values = good_values
         end
@@ -35,7 +34,7 @@ module Remarkable # :nodoc:
 
         def description
           @good_values << 'nil' if @options[:allow_nil]
-          "validate #{@behavior} of #{@good_values.to_sentence} in #{@attribute}"
+          "allow #{@attribute} to be set to #{@good_values.to_sentence}"
         end
 
         def failure_message
@@ -50,7 +49,7 @@ module Remarkable # :nodoc:
 
         def load_options(options)
           @options = {
-            :message => @behavior
+            :message => :invalid
           }.merge(options)
         end
 
@@ -69,48 +68,32 @@ module Remarkable # :nodoc:
         end
 
         def value_valid?
-          if @behavior == :inclusion
-            return true if assert_good_value(@subject, @attribute, @good_value, @options[:message])
-          else
-            return true if assert_bad_value(@subject, @attribute, @good_value, @options[:message])
-          end
-
-          @missing = "#{@good_value} is not #{sentence} #{@attribute}"
+          return true if assert_good_value(@subject, @attribute, @good_value, @options[:message])
+          @missing = "#{@attribute} cannot be set to #{@good_value}"
           false
         end
 
         def expectation
-          "validate #{@behavior} of #{@good_value} in #{@attribute}"
-        end
-
-        def sentence
-          @behavior == :inclusion ? 'included in' : 'excluded from'
+          "allow #{@attribute} to be set to #{@good_value}"
         end
       end
 
-      # Ensures that given values are valid for the attribute.
+      # Ensures that the attribute can be set to the given values.
       #
       # If an instance variable has been created in the setup named after the
       # model being tested, then this method will use that.  Otherwise, it will
       # create a new instance to test against.
       #
       # Example:
+      #   it { should validate_format_of(:isbn, "isbn 1 2345 6789 0", "ISBN 1-2345-6789-0") }
+      #   it { should_not validate_format_of(:isbn, "bad 1", "bad 2") }
       #
-      #   it { should validate_inclusion_of(:isbn, "isbn 1 2345 6789 0", "ISBN 1-2345-6789-0") }
-      #   it { should_not validate_inclusion_of(:isbn, "bad 1", "bad 2") }
+      # This matcher/macro is also aliased as "allow_values_for".
       #
-      #   it { should validate_inclusion_of(:age, 18..100) }
-      #
-      def validate_inclusion_of(attribute, *good_values)
-        # If the first good_values is a range, we should redirect to ensure_value_in_range_matcher.
-        if good_values.first.is_a? Range
-          EnsureValueInRangeMatcher.new(attribute, :inclusion, *good_values)
-        else
-          ValidateInclusionOfMatcher.new(attribute, :inclusion, *good_values)
-        end
+      def validate_format_of(attribute, *good_values)
+        ValidateFormatOfMatcher.new(attribute, *good_values)
       end
-      alias :allow_inclusion_of  :validate_inclusion_of
-      alias :ensure_inclusion_of :validate_inclusion_of
+      alias :allow_values_for :validate_format_of
     end
   end
 end
