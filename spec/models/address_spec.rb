@@ -13,7 +13,14 @@ describe Address do
   it { should ensure_length_at_least(:zip, 5) }
   it { should_not ensure_length_at_least(:zip, 4) }
   it { should_not ensure_length_at_least(:zip, 6) }
-  
+
+  it { should validate_length_of(:zip, :minimum => 5) }
+  it { should_not validate_length_of(:zip, :is => 5) }
+  it { should_not validate_length_of(:zip, :minimum => 4) }
+  it { should_not validate_length_of(:zip, :minimum => 6) }
+
+  it { proc{ should validate_length_of(:zip) }.should raise_error }
+
   it { should only_allow_numeric_values_for(:zip) }
   it { should_not only_allow_numeric_values_for(:title) }
   
@@ -31,6 +38,11 @@ describe Address do
   should_ensure_length_at_least :zip, 5
   should_not_ensure_length_at_least :zip, 4
   should_not_ensure_length_at_least :zip, 6
+
+  should_validate_length_of :zip, :minimum => 5
+  should_not_validate_length_of :zip, :is => 5
+  should_not_validate_length_of :zip, :minimum => 4
+  should_not_validate_length_of :zip, :minimum => 6
   
   should_only_allow_numeric_values_for :zip
   should_not_only_allow_numeric_values_for :title

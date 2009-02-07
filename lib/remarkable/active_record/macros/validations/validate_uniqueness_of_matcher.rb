@@ -14,8 +14,15 @@ module Remarkable # :nodoc:
           self
         end
 
+        def scope(scoped)
+          @options[:scope] = [*scoped].compact
+          self
+        end
+
+        # TODO Deprecate this
+        #
         def scoped_to(scoped)
-          @options[:scoped_to] = [*scoped].compact
+          @options[:scope] = [*scoped].compact
           self
         end
 
@@ -32,14 +39,10 @@ module Remarkable # :nodoc:
         end
 
         def description
-          "require unique value for #{@attributes.to_sentence}#{" scoped to #{scope.to_sentence}" unless scope.blank?}"
+          "require unique value for #{@attributes.to_sentence}#{" scoped to #{@options[:scope].to_sentence}" unless @options[:scope].blank?}"
         end
 
         private
-
-        def scope
-          @options[:scoped_to]
-        end
 
         def find_first_object?
           return true if @existing = model_class.find(:first)
@@ -52,19 +55,17 @@ module Remarkable # :nodoc:
           @object = model_class.new
           @existing_value = @existing.send(@attribute)
 
-          if !scope.blank?
-            scope.each do |s|
-              unless @object.respond_to?(:"#{s}=")
-                @missing = "#{model_name} doesn't seem to have a #{s} attribute."
-                return false
-              end
-              @object.send("#{s}=", @existing.send(s))
+          @options[:scope].each do |s|
+            unless @object.respond_to?(:"#{s}=")
+              @missing = "#{model_name} doesn't seem to have a #{s} attribute."
+              return false
             end
+            @object.send("#{s}=", @existing.send(s))
           end
 
           return true if assert_bad_value(@object, @attribute, @existing_value, @options[:message])
 
-          @missing = "not require unique value for #{@attribute}#{" scoped to #{scope.join(', ')}" unless scope.blank?}"
+          @missing = "not require unique value for #{@attribute}#{" scoped to #{@options[:scope].join(', ')}" unless @options[:scope].blank?}"
           return false
         end
 
@@ -74,14 +75,12 @@ module Remarkable # :nodoc:
         # could actually find all values for scope and create a unique
         # one.
         def valid_when_changing_scoped_attribute?
-          if !scope.blank?
-            scope.each do |s|
-              # Assume the scope is a foreign key if the field is nil
-              @object.send("#{s}=", @existing.send(s).nil? ? 1 : @existing.send(s).next)
-              unless assert_good_value(@object, @attribute, @existing_value, @options[:message])
-                @missing = "#{model_name} is not valid when changing the scoped attribute for #{s}"
-                return false
-              end
+          @options[:scope].each do |s|
+            # Assume the scope is a foreign key if the field is nil
+            @object.send("#{s}=", @existing.send(s).nil? ? 1 : @existing.send(s).next)
+            unless assert_good_value(@object, @attribute, @existing_value, @options[:message])
+              @missing = "#{model_name} is not valid when changing the scoped attribute for #{s}"
+              return false
             end
           end
           true
@@ -91,11 +90,16 @@ module Remarkable # :nodoc:
           @options = {
             :message => :taken
           }.merge(options)
-          @options[:scoped_to] = [*options[:scoped_to]].compact
+
+          if options[:scoped_to] # TODO Deprecate scoped_to
+            @options[:scope] = [*options[:scoped_to]].compact
+          else
+            @options[:scope] = [*options[:scope]].compact
+          end
         end
 
         def expectation
-          "that the #{model_name} cannot be saved if #{@attribute}#{" scoped to #{scope.to_sentence}" unless scope.blank?} is not unique"
+          "that the #{model_name} cannot be saved if #{@attribute}#{" scoped to #{@options[:scope].to_sentence}" unless @options[:scope].blank?} is not unique"
         end
       end
 
@@ -110,8 +114,8 @@ module Remarkable # :nodoc:
       # Examples:
       #   it { should validate_uniqueness_of(:keyword, :username) }
       #   it { should validate_uniqueness_of(:name, :message => "O NOES! SOMEONE STOELED YER NAME!") }
-      #   it { should validate_uniqueness_of(:email, :scoped_to => :name) }
-      #   it { should validate_uniqueness_of(:address, :scoped_to => [:first_name, :last_name]) }
+      #   it { should validate_uniqueness_of(:email, :scope => :name) }
+      #   it { should validate_uniqueness_of(:address, :scope => [:first_name, :last_name]) }
       #
       def validate_uniqueness_of(*attributes)
         ValidateUniquenessOfMatcher.new(*attributes)

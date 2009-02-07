@@ -72,7 +72,15 @@ describe User do
   it { should_not ensure_length_in_range(:email, 2..101) }
   it { should_not ensure_length_in_range(:email, 3..100) }
   it { should_not ensure_length_in_range(:email, 2..99) }
-  
+
+  it { should validate_length_of(:email, :in => 2..100) }
+  it { should validate_length_of(:email, :within => 2..100) }
+  it { should validate_size_of(:email, :maximum => 100) }
+  it { should validate_size_of(:email, :minimum => 2) }
+  it { should_not validate_length_of(:email, :within => 0..200) }
+  it { should_not validate_length_of(:email, :is => 2) }
+  it { should_not validate_length_of(:email, :is => 100) }
+
   it { should ensure_value_in_range(:age, 2..100) }
   it { should_not ensure_value_in_range(:age, 1..100) }
   it { should_not ensure_value_in_range(:age, 2..101) }
@@ -141,9 +149,12 @@ describe User do
   it { should_not ensure_length_is(:ssn, 9) }
   it { should_not ensure_length_is(:ssn, 8).message("Social Security Number is not the right length") }
   it { should_not ensure_length_is(:ssn, 10).message("Social Security Number is not the right length") }
-  
+
+  it { should validate_length_of(:ssn, :is => 9).message("Social Security Number is not the right length") }
+  it { should validate_length_of(:ssn, :is => 9, :message => "Social Security Number is not the right length") }
+
   it { should only_allow_numeric_values_for(:ssn) }
-  
+
   it { should have_readonly_attributes(:name) }
   it { should_not have_readonly_attributes(:foo) }
   it { should_not have_readonly_attributes(:ssn) }
@@ -191,11 +202,19 @@ describe User do
   
   should_not_allow_values_for :email, "blah", "b lah"
   should_allow_values_for :email, "a@b.com", "asdf@asdf.com"
-  should_ensure_length_in_range :email, 2..100
   should_ensure_value_in_range :age, 2..100
   should_protect_attributes :password
   should_have_class_methods :find, :destroy
   should_have_instance_methods :email, :age, :email=, :valid?
+
+  should_ensure_length_in_range :email, 2..100
+  should_validate_length_of :email, :in => 2..100
+  should_validate_length_of :email, :within => 2..100
+  should_validate_size_of :email, :maximum => 100
+  should_validate_size_of :email, :minimum => 2
+  should_not_validate_length_of :email, :within => 0..200
+  should_not_validate_length_of :email, :is => 2
+  should_not_validate_length_of :email, :is => 100
 
   should_ensure_confirmation_of :username, :email
   should_not_ensure_confirmation_of :ssn
