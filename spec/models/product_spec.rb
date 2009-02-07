@@ -23,9 +23,12 @@ describe Product do
       @product = Product.new(:tangible => true)
     end
 
-    it { @product.should_not allow_values_for(:size, "22", "10x15") }
-    it { @product.should allow_values_for(:size, "12x12x1") }
-    
+    it { @product.should_not allow_inclusion_of(:size, "XXXL", "XXL") }
+    it { @product.should allow_inclusion_of(:size, "S", "M", "L", "XL") }
+
+    it { @product.should ensure_exclusion_of(:size, "XS", "XM") }
+    it { @product.should_not ensure_exclusion_of(:size, "S", "M", "L", "XL") }
+
     it { @product.should require_attributes(:price, :title) }
     it { @product.should ensure_value_in_range(:price, 1..9999) }
     it { @product.should ensure_value_in_range(:weight, 1..100) }
@@ -51,9 +54,12 @@ describe Product do
       @product = Product.new(:tangible => true)
     end
 
-    should_not_allow_values_for :size, "22", "10x15"
-    should_allow_values_for :size, "12x12x1"
-    
+    should_not_allow_inclusion_of :size, "XXXL", "XXL"
+    should_allow_inclusion_of :size, "S", "M", "L", "XL"
+
+    should_ensure_exclusion_of :size, "XS", "XM"
+    should_not_ensure_exclusion_of :size, "S", "M", "L", "XL"
+
     should_require_attributes :price
     should_ensure_value_in_range :price, 1..9999
     should_ensure_value_in_range :weight, 1..100
