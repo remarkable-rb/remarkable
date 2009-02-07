@@ -28,13 +28,11 @@ module Remarkable # :nodoc:
         private
         
         def has_session_key?
-          instantiate_variables_from_assigns do
-            expected_value = eval(@expected, self.send(:binding), __FILE__, __LINE__)
-            return true if @session[@key] == expected_value
-            
-            @missing = "Expected #{expected_value.inspect} but was #{@session[@key]}"
-            return false
-          end
+          expected_value = @spec.instance_eval(@expected) rescue @expected
+          return true if @session[@key] == expected_value
+
+          @missing = "Expected #{expected_value.inspect} but was #{@session[@key]}"
+          return false
         end
         
         def expectation

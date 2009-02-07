@@ -17,23 +17,15 @@ module Remarkable # :nodoc:
 
       def should_redirect_to(url)
         it "should redirect to #{url.inspect}" do
-          instantiate_variables_from_assigns do
-            warn_level = $VERBOSE
-            $VERBOSE = nil
-            response.should redirect_to(eval(url, self.send(:binding), __FILE__, __LINE__))
-            $VERBOSE = warn_level
-          end
+          redirect_url = self.instance_eval(url) rescue url
+          response.should redirect_to(redirect_url)
         end
       end
-      
+
       def should_not_redirect_to(url)
         it "should not redirect to #{url.inspect}" do
-          instantiate_variables_from_assigns do
-            warn_level = $VERBOSE
-            $VERBOSE = nil
-            response.should_not redirect_to(eval(url, self.send(:binding), __FILE__, __LINE__))
-            $VERBOSE = warn_level
-          end
+          redirect_url = self.instance_eval(url) rescue url
+          response.should_not redirect_to(redirect_url)
         end
       end
 

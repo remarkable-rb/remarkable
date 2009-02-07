@@ -46,21 +46,15 @@ module Remarkable # :nodoc:
         def is_equals_expected_value?
           return true unless @options[:equals]
 
-          instantiate_variables_from_assigns do
-            expected_value = if @options[:equals].is_a?(String)
-              warn_level = $VERBOSE
-              $VERBOSE = nil
-              result = eval(@options[:equals], @spec.send(:binding), __FILE__, __LINE__) rescue @options[:equals]
-              $VERBOSE = warn_level
-              result
-            else
-              @options[:equals]
-            end
-            return true if @assigned_value == expected_value
-
-            @missing = "instance variable @#{@name} expected to be #{expected_value.inspect} but was #{@assigned_value.inspect}"
-            return false
+          expected_value = if @options[:equals].is_a?(String)
+            @spec.instance_eval(@options[:equals]) rescue @options[:equals]
+          else
+            @options[:equals]
           end
+          return true if @assigned_value == expected_value
+
+          @missing = "instance variable @#{@name} expected to be #{expected_value.inspect} but was #{@assigned_value.inspect}"
+          return false
         end
         
         def expectation
