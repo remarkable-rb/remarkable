@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
     scoped(:limit => count)
   end
 
+  attr_accessor  :username
   attr_protected :password
   attr_readonly :name
 
@@ -25,7 +26,9 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, :scope => :name
   validates_length_of :ssn, :is => 9, :message => "Social Security Number is not the right length"
   validates_numericality_of :ssn
-  
+
+  validates_confirmation_of :username, :email
+
   after_create :send_welcome_email
   before_validation_on_update :some_weird_callback
   
