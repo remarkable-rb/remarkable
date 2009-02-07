@@ -11,6 +11,9 @@ describe Product do
 
     it { @product.should_not allow_values_for(:size, "22") }
     it { @product.should allow_values_for(:size, "22kb") }
+
+    it { @product.should validate_exclusion_of(:weight, 10..100) }
+    it { @product.should_not validate_exclusion_of(:weight, 1..9) }
     
     it { @product.should require_attributes(:title) }
     it { @product.should_not require_attributes(:price) }
@@ -40,6 +43,10 @@ describe Product do
 
     it { @product.should ensure_value_in_range(:price, 1..9999) }
     it { @product.should ensure_value_in_range(:weight, 1..100) }
+
+    it { @product.should validate_inclusion_of(:price, 1..9999) }
+    it { @product.should validate_inclusion_of(:weight, 1..100) }
+
     it { @product.should ensure_length_in_range(:size, 5..20) }
   end
 end
@@ -84,6 +91,10 @@ describe Product do
 
     should_ensure_value_in_range :price, 1..9999
     should_ensure_value_in_range :weight, 1..100
+
+    should_validate_inclusion_of :price, 1..9999
+    should_validate_inclusion_of :weight, 1..100
+
     should_ensure_length_in_range :size, 5..20
   end
 end

@@ -35,7 +35,7 @@ module Remarkable # :nodoc:
 
         def description
           @good_values << 'nil' if @options[:allow_nil]
-          "#{verb} #{@behavior} of #{@good_values.to_sentence} #{preposition} #{@attribute}"
+          "validate #{@behavior} of #{@good_values.to_sentence} in #{@attribute}"
         end
 
         def failure_message
@@ -75,28 +75,12 @@ module Remarkable # :nodoc:
             return true if assert_bad_value(@subject, @attribute, @good_value, @options[:message])
           end
 
-          @missing = "#{@good_value} cannot be #{sentence} #{@attribute}"
+          @missing = "#{@good_value} is not #{sentence} #{@attribute}"
           false
         end
 
         def expectation
-          "#{verb} #{@behavior} of #{@good_value} #{preposition} #{@attribute}"
-        end
-
-        # Helpers to generate the message. If inclusion:
-        #
-        #   Expected to allow inclusion of "ISBN 1-2345-6789-0" in isbn  ("ISBN 1-2345-6789-0" was not included in isbn)
-        #
-        # If exclusion:
-        #
-        #   Expected to ensure exclusion of "admin" from username ("admin" was not excluded from username)
-        #
-        def verb
-          @behavior == :inclusion ? 'allow' : 'ensure'
-        end
-
-        def preposition
-          @behavior == :inclusion ? 'in' : 'from'
+          "validate #{@behavior} of #{@good_value} in #{@attribute}"
         end
 
         def sentence
@@ -111,11 +95,19 @@ module Remarkable # :nodoc:
       # create a new instance to test against.
       #
       # Example:
+      #
       #   it { should validate_inclusion_of(:isbn, "isbn 1 2345 6789 0", "ISBN 1-2345-6789-0") }
       #   it { should_not validate_inclusion_of(:isbn, "bad 1", "bad 2") }
       #
+      #   it { should validate_inclusion_of(:age, 18..100) }
+      #
       def validate_inclusion_of(attribute, *good_values)
-        ValidateInclusionOfMatcher.new(attribute, :inclusion, *good_values)
+        # If the first good_values is a range, we should redirect to ensure_value_in_range_matcher.
+        if good_values.first.is_a? Range
+          EnsureValueInRangeMatcher.new(attribute, :inclusion, *good_values)
+        else
+          ValidateInclusionOfMatcher.new(attribute, :inclusion, *good_values)
+        end
       end
       alias :allow_inclusion_of :validate_inclusion_of
 
@@ -126,11 +118,19 @@ module Remarkable # :nodoc:
       # create a new instance to test against.
       #
       # Example:
+      #
       #   it { should validate_exclusion_of(:username, "admin", "user") }
       #   it { should_not validate_exclusion_of(:username, "dhh", "peter_park") }
       #
+      #   it { should validate_exclusion_of(:age, 30..60) }
+      #
       def validate_exclusion_of(attribute, *good_values)
-        ValidateInclusionOfMatcher.new(attribute, :exclusion, *good_values)
+        # If the first good_values is a range, we should redirect to ensure_value_in_range_matcher.
+        if good_values.first.is_a? Range
+          EnsureValueInRangeMatcher.new(attribute, :exclusion, *good_values)
+        else
+          ValidateInclusionOfMatcher.new(attribute, :exclusion, *good_values)
+        end
       end
       alias :ensure_exclusion_of :validate_exclusion_of
     end

@@ -2,6 +2,7 @@ class Product < ActiveRecord::Base
   validates_presence_of :title
 
   validates_inclusion_of :price, :in => 0..99,    :unless => :tangible
+  validates_exclusion_of :weight, :in => 10..100, :unless => :tangible
   validates_format_of :size, :with => /^\d+\D+$/, :unless => :tangible
 
   validates_presence_of :price,                        :if => :tangible
