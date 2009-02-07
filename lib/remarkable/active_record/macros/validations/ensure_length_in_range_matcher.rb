@@ -1,12 +1,22 @@
 module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Matchers # :nodoc:
-      class EnsureLengthInRange < Remarkable::Matcher::Base
+      class EnsureLengthInRangeMatcher < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
 
-        def initialize(attribute, range, *options)
+        def initialize(attribute, range, behavior, *options)
           @attribute = attribute
-          @range     = range
+          @behavior  = behavior
+
+          if @behavior == :within
+            @min_value = range.first
+            @max_value = range.last
+          elsif @behavior == :minimum
+            @min_value = range
+          elsif @behavior == :maximum
+            @max_value = range
+          end
+
           load_options(options)
         end
 
@@ -46,52 +56,63 @@ module Remarkable # :nodoc:
         private
         
         def less_than_min_length?
-          return true unless @range.first > 0
+          return true if @behavior == :maximum && @min_value <= 0
 
-          min_value = "x" * (@range.first - 1)
+          min_value = "x" * (@min_value - 1)
           return true if assert_bad_value(@subject, @attribute, min_value, @options[:short_message])
 
-          @missing = "allow #{@attribute} to be less than #{@range.first} chars long"
-          return false          
-        end
-        
-        def exactly_min_length?
-          return true unless @range.first > 0
-          
-          min_value = "x" * @range.first
-          return true if assert_good_value(@subject, @attribute, min_value, @options[:short_message])
-          
-          @missing = "not allow #{@attribute} to be exactly #{@range.first} chars long"
+          @missing = "allow #{@attribute} to be less than #{@min_value} chars long"
           return false
         end
-        
+
+        def exactly_min_length?
+          return true if @behavior == :maximum && @min_value <= 0
+          
+          min_value = "x" * @min_value
+          return true if assert_good_value(@subject, @attribute, min_value, @options[:short_message])
+          
+          @missing = "not allow #{@attribute} to be exactly #{@min_value} chars long"
+          return false
+        end
+
         def more_than_max_length?
-          max_value = "x" * (@range.last + 1)
+          return true if @behavior == :minimum
+
+          max_value = "x" * (@max_value + 1)
           return true if assert_bad_value(@subject, @attribute, max_value, @options[:long_message])
 
-          @missing = "allow #{@attribute} to be more than #{@range.last} chars long"
+          @missing = "allow #{@attribute} to be more than #{@max_value} chars long"
           return false
         end
         
         def exactly_max_length?
-          return true if (@range.first == @range.last)
+          return true if @behavior == :minimum
 
-          max_value = "x" * @range.last
+          max_value = "x" * @max_value
           return true if assert_good_value(@subject, @attribute, max_value, @options[:long_message])
 
-          @missing = "not allow #{@attribute} to be exactly #{@range.last} chars long"
+          @missing = "not allow #{@attribute} to be exactly #{@max_value} chars long"
           return false
         end
         
         def load_options(options)
           @options = {
-            :short_message => { :too_short => { :count => @range.first } },
-            :long_message => { :too_long => { :count => @range.last } }
+            :short_message => { :too_short => { :count => @min_value } },
+            :long_message => { :too_long => { :count => @max_value } }
           }.merge(options.extract_options!)
         end
         
         def expectation
-          "that the length of the #{@attribute} is in #{@range}"
+          message = "that the length of the #{@attribute} is "
+
+          message << if @behavior == :within
+            "between #{@min_value} and #{@max_value}"
+          elsif @behavior == :minimum
+            "more than #{@min_value}"
+          elsif @behavior == :maximum
+            "less than #{@max_value}"
+          end
+
         end
       end
 
@@ -108,10 +129,19 @@ module Remarkable # :nodoc:
       #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.too_long') % range.last</tt>
       #
       # Example:
+      #
       #   it { should ensure_length_in_range(:password, 6..20) }
       #
       def ensure_length_in_range(attribute, range, *options)
-        EnsureLengthInRange.new(attribute, range, *options)
+        EnsureLengthInRangeMatcher.new(attribute, range, :within, *options)
+      end
+
+      def ensure_length_at_least(attribute, range, *options)
+        EnsureLengthInRangeMatcher.new(attribute, range, :minimum, *options)
+      end
+
+      def ensure_length_no_more(attribute, range, *options)
+        EnsureLengthInRangeMatcher.new(attribute, range, :maximum, *options)
       end
     end
   end

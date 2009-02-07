@@ -28,7 +28,7 @@ module Remarkable # :nodoc:
             if @behavior == :inclusion
               less_than_minimum? && accepts_minimum? &&
               more_than_maximum? && accepts_maximum?
-            else
+            elsif @behavior == :exclusion
               more_than_minimum? && accepts_minimum? &&
               less_than_maximum? && accepts_maximum?
             end
@@ -161,12 +161,12 @@ module Remarkable # :nodoc:
       # Example:
       #   it { should ensure_value_in_range(:age, 1..100) }
       #
-      # This matcher should be deprecated in a sense that should not have an API.
-      # But it will be internally used by validate_inclusion_of,
+      # TODO This matcher should be deprecated in a sense that should not have
+      # an API. But it will be internally used by validate_inclusion_of,
       # validate_exclusion_of and validate_numericality_of matchers.
       #
       # We should also deprecate :low_message and :high_message since they don't
-      # make since in validate_inclusion_of or validate_exclusion_of matchers. By
+      # make sense in validate_inclusion_of or validate_exclusion_of matchers. By
       # doing this we can refactor accepts_maximum? and accepts_minimum? into a
       # single assert_boundary method.
       #

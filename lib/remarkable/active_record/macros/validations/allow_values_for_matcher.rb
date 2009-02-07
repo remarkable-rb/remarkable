@@ -1,7 +1,7 @@
 module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Matchers # :nodoc:
-      class AllowedValuesMatcher < Remarkable::Matcher::Base
+      class AllowValuesForMatcher < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
 
         def initialize(attribute, *good_values)
@@ -89,7 +89,7 @@ module Remarkable # :nodoc:
       #   it { should_not allow_values_for(:isbn, "bad 1", "bad 2") }
       #
       def allow_values_for(attribute, *good_values)
-        AllowedValuesMatcher.new(attribute, *good_values)
+        AllowValuesForMatcher.new(attribute, *good_values)
       end
     end
   end

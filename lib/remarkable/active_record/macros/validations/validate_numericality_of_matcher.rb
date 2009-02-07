@@ -70,8 +70,7 @@ module Remarkable # :nodoc:
       end
       alias :only_allow_numeric_values_for :validate_numericality_of
 
-      # We should put a deprecation warning on this one.
-      # And said that it has to be changed to:
+      # TODO Deprecate this method and say that it has to be changed to:
       #
       #   validate_numericality_of :attribute, :allow_blank => true
       #
