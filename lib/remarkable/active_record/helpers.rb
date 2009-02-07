@@ -105,7 +105,7 @@ module Remarkable # :nodoc:
       #
       #   As we know, I18n API provides several interpolation options besides
       #   fallback when creating error messages. If the user changed the message,
-      #   macros would start to fail when they shouldn't.
+      #   macros would start to pass when they shouldn't.
       #
       #   Using the underlying mechanism inside ActiveRecord makes us free from
       #   all thos errors.
