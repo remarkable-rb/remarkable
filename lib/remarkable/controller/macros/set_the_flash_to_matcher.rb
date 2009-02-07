@@ -24,6 +24,10 @@ module Remarkable # :nodoc:
         private
 
         def initialize_with_spec!
+          # In Rspec 1.1.12 we can actually do:
+          #
+          #   @flash = @subject.flash
+          #
           @flash = @spec.instance_eval { flash }
         end
 

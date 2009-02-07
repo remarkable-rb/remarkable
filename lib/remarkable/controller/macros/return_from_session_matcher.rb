@@ -38,6 +38,10 @@ module Remarkable # :nodoc:
         end
 
         def initialize_with_spec!
+          # In Rspec 1.1.12 we can actually do:
+          #
+          #   @session = @subject.session
+          #
           @session = @spec.instance_eval { session }
         end
         

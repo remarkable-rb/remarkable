@@ -2,11 +2,9 @@ module Spec
   module Example
     module ExampleMethods
       def should(matcher)
-        if rspec_matcher?(matcher)
+        if rspec_rails_controller_matcher?(matcher)
           remarkable_response.should matcher
-        elsif remarkable_active_record_matcher?(matcher)
-          remarkable_subject.should matcher
-        elsif remarkable_controller_matcher?(matcher)
+        elsif remarkable_matcher?(matcher)
           remarkable_subject.should matcher.spec(self)
         elsif exists_a_rspec_subject?
           subject.should(matcher)
@@ -16,11 +14,9 @@ module Spec
       end
 
       def should_not(matcher)
-        if rspec_matcher?(matcher)
+        if rspec_rails_controller_matcher?(matcher)
           remarkable_response.should_not matcher
-        elsif remarkable_active_record_matcher?(matcher)
-          remarkable_subject.should_not matcher.negative
-        elsif remarkable_controller_matcher?(matcher)
+        elsif remarkable_matcher?(matcher)
           remarkable_subject.should_not matcher.spec(self).negative
         elsif exists_a_rspec_subject?
           subject.should_not(matcher)
@@ -40,18 +36,14 @@ module Spec
 
       private
 
-      def rspec_matcher?(matcher)
+      def rspec_rails_controller_matcher?(matcher)
         %w( Spec::Rails::Matchers::RenderTemplate Spec::Rails::Matchers::RedirectTo ).include?(matcher.class.name)
       end
 
-      def remarkable_active_record_matcher?(matcher)
-        matcher.class.name =~ /^Remarkable::ActiveRecord::Matchers::.+$/
+      def remarkable_matcher?(matcher)
+        matcher.class.name =~ /^Remarkable::\w+::Matchers::.+$/
       end
-      
-      def remarkable_controller_matcher?(matcher)
-        matcher.class.name =~ /^Remarkable::Controller::Matchers::.+$/
-      end
-      
+
       def exists_a_rspec_subject?
         !subject.nil?
       end
