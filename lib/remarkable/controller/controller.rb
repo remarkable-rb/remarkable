@@ -13,7 +13,6 @@ module Spec
         extend Remarkable::Controller::Macros
 
         private
-        include Remarkable::Controller::Helpers
         include Remarkable::Private
       end
     end

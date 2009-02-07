@@ -11,7 +11,9 @@ module Remarkable # :nodoc:
 
         def matches?(subject)
           @subject = subject
-          
+
+          initialize_with_spec!
+
           assert_matcher_for(@names) do |name|
             @name = name
             assigned_value? && is_kind_of? && is_equals_expected_value?
@@ -26,6 +28,14 @@ module Remarkable # :nodoc:
         end
         
         private
+
+        def initialize_with_spec!
+          # In Rspec 1.1.12 we can actually do:
+          #
+          #   @controller = @subject
+          #
+          @controller = @spec.instance_eval { controller }
+        end
 
         def assigned_value?
           @assigned_value = controller_assigns(@name.to_sym)
@@ -63,6 +73,7 @@ module Remarkable # :nodoc:
           expectation << " which is equal to #{@options[:equals].inspect}" if @options[:equals]
           expectation
         end
+
       end
 
       def assign_to(*names)

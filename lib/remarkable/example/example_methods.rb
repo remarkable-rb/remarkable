@@ -7,11 +7,7 @@ module Spec
         elsif remarkable_active_record_matcher?(matcher)
           remarkable_subject.should matcher
         elsif remarkable_controller_matcher?(matcher)
-          remarkable_subject.should matcher.controller(remarkable_controller).
-                                            response(remarkable_response).
-                                            session(session).
-                                            flash(flash).
-                                            spec(self)
+          remarkable_subject.should matcher.spec(self)
         elsif exists_a_rspec_subject?
           subject.should(matcher)
         else
@@ -25,12 +21,7 @@ module Spec
         elsif remarkable_active_record_matcher?(matcher)
           remarkable_subject.should_not matcher.negative
         elsif remarkable_controller_matcher?(matcher)
-          remarkable_subject.should_not matcher.controller(remarkable_controller).
-                                                response(remarkable_response).
-                                                spec(self).
-                                                session(session).
-                                                flash(flash).
-                                                negative
+          remarkable_subject.should_not matcher.spec(self).negative
         elsif exists_a_rspec_subject?
           subject.should_not(matcher)
         else
@@ -45,10 +36,6 @@ module Spec
 
       def remarkable_response
         @remarkable_response ||= self.response if self.respond_to?(:response)
-      end
-      
-      def remarkable_controller
-        @remarkable_controller ||= self.controller if self.respond_to?(:controller)
       end
 
       private

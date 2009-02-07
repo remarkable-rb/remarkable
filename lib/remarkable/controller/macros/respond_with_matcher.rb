@@ -8,6 +8,9 @@ module Remarkable # :nodoc:
 
         def matches?(subject)
           @subject = subject
+
+          initialize_with_spec!
+
           assert_matcher do
             respond_with_type?
           end
@@ -37,7 +40,11 @@ module Remarkable # :nodoc:
           end
           return false
         end
-        
+
+        def initialize_with_spec!
+          @response = @spec.instance_eval { response }
+        end
+
         def expectation
           "respond with #{@type}"
         end

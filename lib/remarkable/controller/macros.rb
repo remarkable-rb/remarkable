@@ -49,7 +49,7 @@ module Remarkable # :nodoc:
       def should_method_missing(method, *args)
         matcher = send(method, *args)
         it "should #{matcher.description}" do
-          matcher.controller(controller).response(response).session(session).flash(flash).spec(self)
+          matcher.spec(self)
           assert_accepts(matcher, model_class)
         end
       end
@@ -57,7 +57,7 @@ module Remarkable # :nodoc:
       def should_not_method_missing(method, *args)
         matcher = send(method, *args)
         it "should not #{matcher.description}" do
-          matcher.controller(controller).response(response).session(session).flash(flash).spec(self).negative
+          matcher.spec(self).negative
           assert_rejects(matcher, model_class)
         end
       end

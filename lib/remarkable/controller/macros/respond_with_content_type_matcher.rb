@@ -8,6 +8,9 @@ module Remarkable # :nodoc:
 
         def matches?(subject)
           @subject = subject
+
+          initialize_with_spec!
+
           assert_matcher do
             content_type_correct?
           end
@@ -20,9 +23,13 @@ module Remarkable # :nodoc:
         def failure_message
           @missing
         end
-        
+
         private
-        
+
+        def initialize_with_spec!
+          @response = @spec.instance_eval { response }
+        end
+
         def content_type_correct?
           @content_type = Mime::EXTENSION_LOOKUP[@content_type.to_s].to_s if @content_type.is_a?(Symbol)
           if @content_type.is_a?(Regexp)
@@ -38,11 +45,12 @@ module Remarkable # :nodoc:
         def expectation
           "respond with content type of #{@content_type}"
         end
+
       end
 
       def respond_with_content_type(content_type)
         RespondWithContentType.new(content_type)
-      end      
+      end
     end
   end
 end

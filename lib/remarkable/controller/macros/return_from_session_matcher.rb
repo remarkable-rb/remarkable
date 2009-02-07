@@ -11,7 +11,9 @@ module Remarkable # :nodoc:
 
         def matches?(subject)
           @subject = subject
-          
+
+          initialize_with_spec!
+
           assert_matcher do
             has_session_key?
           end
@@ -24,15 +26,19 @@ module Remarkable # :nodoc:
         def failure_message
           @missing
         end
-        
+
         private
-        
+
         def has_session_key?
           expected_value = @spec.instance_eval(@expected) rescue @expected
           return true if @session[@key] == expected_value
 
           @missing = "Expected #{expected_value.inspect} but was #{@session[@key]}"
           return false
+        end
+
+        def initialize_with_spec!
+          @session = @spec.instance_eval { session }
         end
         
         def expectation

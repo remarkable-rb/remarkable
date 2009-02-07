@@ -14,26 +14,6 @@ module Remarkable # :nodoc:
         "Did not expect #{expectation}"
       end
 
-      def controller(controller)
-        @controller = controller
-        self
-      end
-      
-      def response(response)
-        @response = response
-        self
-      end
-
-      def session(session)
-        @session = session
-        self
-      end
-
-      def flash(flash)
-        @flash = flash
-        self        
-      end
-
       def spec(spec)
         @spec = spec
         self

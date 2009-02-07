@@ -8,7 +8,9 @@ module Remarkable # :nodoc:
 
         def matches?(subject)
           @subject = subject
-          
+
+          initialize_with_spec!
+
           assert_matcher do
             if @expected_layout
               with_layout?
@@ -27,7 +29,11 @@ module Remarkable # :nodoc:
         end
         
         private
-        
+
+        def initialize_with_spec!
+          @response = @spec.instance_eval { response }
+        end
+
         def with_layout?
           response_layout = @response.layout.blank? ? "" : @response.layout.split('/').last
           return true if response_layout == @expected_layout.to_s
@@ -50,6 +56,7 @@ module Remarkable # :nodoc:
             "render without layout"
           end
         end
+
       end
 
       def render_with_layout(expected_layout = 'application')

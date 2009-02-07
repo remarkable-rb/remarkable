@@ -9,6 +9,8 @@ module Remarkable # :nodoc:
         end
 
         def matches?(subject)
+          initialize_with_spec!
+
           @subject = subject
           assert_matcher do
             flash_correct?
@@ -18,9 +20,13 @@ module Remarkable # :nodoc:
         def description
           expectation
         end
-        
+
         private
-        
+
+        def initialize_with_spec!
+          @flash = @spec.instance_eval { flash }
+        end
+
         def flash_correct?
           if @val
             return true if assert_contains(@flash.values, @val)
