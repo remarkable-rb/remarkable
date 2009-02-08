@@ -39,7 +39,7 @@ module Remarkable # :nodoc:
         end
 
         def description
-          "require unique value for #{@attributes.to_sentence}#{" scoped to #{@options[:scope].to_sentence}" unless @options[:scope].blank?}"
+          "require unique#{" case sensitive" if @options[:case_sensitive]} value for #{@attributes.to_sentence}#{" scoped to #{@options[:scope].to_sentence}" unless @options[:scope].blank?}"
         end
 
         private
@@ -62,10 +62,17 @@ module Remarkable # :nodoc:
             end
             @object.send("#{s}=", @existing.send(s))
           end
+          
+          
+          if @existing_value.nil?
+            return true if assert_bad_value(@object, @attribute, @existing_value, @options[:message])
+          elsif @options[:case_sensitive]
+            return true if assert_bad_value(@object, @attribute, @existing_value, @options[:message]) && !assert_bad_value(@object, @attribute, @existing_value.swapcase, @options[:message])
+          else
+            return true if assert_bad_value(@object, @attribute, @existing_value.swapcase, @options[:message])
+          end
 
-          return true if assert_bad_value(@object, @attribute, @existing_value, @options[:message])
-
-          @missing = "not require unique value for #{@attribute}#{" scoped to #{@options[:scope].join(', ')}" unless @options[:scope].blank?}"
+          @missing = "not require unique#{" case sensitive" if @options[:case_sensitive]} value for #{@attribute}#{" scoped to #{@options[:scope].join(', ')}" unless @options[:scope].blank?}"
           return false
         end
 
@@ -88,7 +95,8 @@ module Remarkable # :nodoc:
 
         def load_options(options)
           @options = {
-            :message => :taken
+            :message => :taken,
+            :case_sensitive => true
           }.merge(options)
 
           if options[:scoped_to] # TODO Deprecate scoped_to
@@ -99,7 +107,7 @@ module Remarkable # :nodoc:
         end
 
         def expectation
-          "that the #{model_name} cannot be saved if #{@attribute}#{" scoped to #{@options[:scope].to_sentence}" unless @options[:scope].blank?} is not unique"
+          "that the #{model_name} cannot be saved if#{" case sensitive" if @options[:case_sensitive]} #{@attribute}#{" scoped to #{@options[:scope].to_sentence}" unless @options[:scope].blank?} is not unique"
         end
       end
 
@@ -110,6 +118,7 @@ module Remarkable # :nodoc:
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
       #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.taken')</tt>
       # * <tt>:scoped_to</tt> - field(s) to scope the uniqueness to.
+      # * <tt>:case_sensitive</tt> - should the matcher look for an exact match?
       #
       # Examples:
       #   it { should validate_uniqueness_of(:keyword, :username) }
