@@ -53,7 +53,7 @@ module Remarkable # :nodoc:
 
         def have_attribute?
           @object = model_class.new
-          @existing_value = @existing.send(@attribute)
+          @value = @existing.send(@attribute)
 
           @options[:scope].each do |s|
             unless @object.respond_to?(:"#{s}=")
@@ -63,29 +63,27 @@ module Remarkable # :nodoc:
             @object.send("#{s}=", @existing.send(s))
           end
           
-          if @existing_value.nil?
-            if @options[:allow_nil]
-              return true if !bad_value?(@existing_value)
+          return true if (
+            if @value.nil?
+              @options[:allow_nil] ? good?(nil) : bad?(nil)
+            elsif @value.blank?
+              @options[:allow_blank] ? good?('') : bad?('')
+            elsif @options[:case_sensitive]
+              bad?(@value) && good?(@value.swapcase)
             else
-              return true if bad_value?(@existing_value)
-            end
-          elsif @existing_value.blank?
-            if @options[:allow_blank]
-              return true if !bad_value?(@existing_value)
-            else
-              return true if bad_value?(@existing_value)
-            end
-          elsif @options[:case_sensitive]
-            return true if bad_value?(@existing_value) && !bad_value?(@existing_value.swapcase)
-          else
-            return true if bad_value?(@existing_value.swapcase)
-          end
+              bad?(@value.swapcase)
+            end 
+          )
 
           @missing = "not require unique#{" case sensitive" if @options[:case_sensitive]} value for #{@attribute}#{" scoped to #{@options[:scope].join(', ')}" unless @options[:scope].blank?}"
           return false
         end
         
-        def bad_value?(value)
+        def good?(value)
+          assert_good_value(@object, @attribute, value, @options[:message])
+        end
+        
+        def bad?(value)
           assert_bad_value(@object, @attribute, value, @options[:message])
         end
 
@@ -98,7 +96,7 @@ module Remarkable # :nodoc:
           @options[:scope].each do |s|
             # Assume the scope is a foreign key if the field is nil
             @object.send("#{s}=", @existing.send(s).nil? ? 1 : @existing.send(s).next)
-            unless assert_good_value(@object, @attribute, @existing_value, @options[:message])
+            unless assert_good_value(@object, @attribute, @value, @options[:message])
               @missing = "#{model_name} is not valid when changing the scoped attribute for #{s}"
               return false
             end
