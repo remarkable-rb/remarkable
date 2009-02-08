@@ -25,7 +25,8 @@ module Remarkable # :nodoc:
         # Rails API). In this while, we have to hack message.
         def message(message)
           @options[:high_message] = message
-          @options[:low_message] = message
+          @options[:low_message]  = message
+          @options[:message]      = message
           self
         end
 
@@ -146,7 +147,8 @@ module Remarkable # :nodoc:
         def load_options(options = {})
           @options = {
             :low_message  => @behavior,
-            :high_message => @behavior
+            :high_message => @behavior,
+            :message      => @behavior
           }.merge(options)
         end
       end

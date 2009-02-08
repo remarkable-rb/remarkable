@@ -24,13 +24,13 @@ module Remarkable # :nodoc:
             allow_nil?
           end &&
           assert_matcher do
-            @good_value = '""'
+            @good_value = 'blank'
             allow_blank?
           end
         end
 
         def description
-          values = @good_values
+          values = @good_values.dup
           values << 'nil'   if @options[:allow_nil]
           values << 'blank' if @options[:allow_blank]
 

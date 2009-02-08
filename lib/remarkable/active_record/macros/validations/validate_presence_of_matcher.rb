@@ -4,6 +4,8 @@ module Remarkable # :nodoc:
       class ValidatePresenceOfMatcher < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
 
+        undef_method :allow_blank?, :allow_blank, :allow_nil?, :allow_nil
+
         def initialize(*attributes)
           load_options(attributes.extract_options!)
           @attributes = attributes
@@ -16,6 +18,7 @@ module Remarkable # :nodoc:
 
         def matches?(subject)
           @subject = subject
+
           assert_matcher_for(@attributes) do |attribute|
             @attribute = attribute
             require_set?

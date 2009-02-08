@@ -140,9 +140,19 @@ describe User do
 
   it { should require_acceptance_of(:eula) }
   it { should_not require_acceptance_of(:name) }
+  it { should_not validate_acceptance_of(:name) }
 
   it { should validate_acceptance_of(:eula) }
-  it { should_not validate_acceptance_of(:name) }
+  it { should validate_acceptance_of(:eula, :allow_nil => true) }
+  it { should_not validate_acceptance_of(:eula, :allow_nil => false) }
+
+  it { should validate_acceptance_of(:terms) }
+  it { should validate_acceptance_of(:terms).allow_nil(false) }
+  it { should_not validate_acceptance_of(:terms).allow_nil }
+
+  it "should rails error when calling allow_blank on validate_acceptance_of matcher" do
+   proc{ should validate_acceptance_of(:terms).allow_nil.allow_blank }.should raise_error(NoMethodError)
+  end
 
   it { should validate_uniqueness_of(:email, :scoped_to => :name) }
   it { should require_unique_attributes(:email, :scoped_to => :name) }
@@ -236,8 +246,14 @@ describe User do
   should_have_db_column :email, :type => "string",  :default => nil,    :precision => nil,  :limit => 255,
                                 :null => true,      :primary => false,  :scale => nil,      :sql_type => 'varchar(255)'
   
-  should_validate_acceptance_of :eula
   should_require_acceptance_of :eula
+  should_validate_acceptance_of :eula
+  should_validate_acceptance_of :eula, :allow_nil => true
+  should_not_validate_acceptance_of :eula, :allow_nil => false
+
+  should_validate_acceptance_of :terms
+  should_validate_acceptance_of :terms, :allow_nil => false
+  should_not_validate_acceptance_of :terms, :allow_nil => true
 
   should_not_validate_acceptance_of :name
   should_not_require_acceptance_of :name

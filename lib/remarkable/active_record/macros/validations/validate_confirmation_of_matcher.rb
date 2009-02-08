@@ -13,6 +13,7 @@ module Remarkable # :nodoc:
 
         def matches?(subject)
           @subject = subject
+
           assert_matcher_for(@attributes) do |attribute|
             @attribute = attribute
             confirmed?

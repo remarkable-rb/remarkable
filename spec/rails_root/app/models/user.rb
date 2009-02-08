@@ -15,17 +15,21 @@ class User < ActiveRecord::Base
     scoped(:limit => count)
   end
 
-  attr_accessor  :username, :username_confirmation
+  attr_accessor  :username, :username_confirmation, :terms
   attr_protected :password
   attr_readonly :name
 
   validates_format_of :email, :with => /\w*@\w*.com/
   validates_length_of :email, :in => 2..100
-  validates_inclusion_of :age, :in => 2..100
-  validates_acceptance_of :eula
   validates_uniqueness_of :email, :scope => :name
+
+  validates_inclusion_of :age, :in => 2..100
+
   validates_length_of :ssn, :is => 9, :message => "Social Security Number is not the right length"
   validates_numericality_of :ssn
+
+  validates_acceptance_of :eula
+  validates_acceptance_of :terms, :allow_nil => false
 
   validates_confirmation_of :username, :email
 
