@@ -16,6 +16,7 @@ describe Flea do
   end
   
   it { should validate_uniqueness_of :name, :case_sensitive => false }
+  it { should validate_uniqueness_of :color, :allow_nil => true }
 end
 
 describe Flea do
@@ -24,4 +25,5 @@ describe Flea do
   should_have_and_belong_to_many :dogs
   
   should_validate_uniqueness_of :name, :case_sensitive => false
+  should_validate_uniqueness_of :color, :allow_nil => true
 end

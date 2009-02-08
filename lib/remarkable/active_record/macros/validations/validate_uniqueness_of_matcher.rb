@@ -63,17 +63,24 @@ module Remarkable # :nodoc:
             @object.send("#{s}=", @existing.send(s))
           end
           
-          
           if @existing_value.nil?
-            return true if assert_bad_value(@object, @attribute, @existing_value, @options[:message])
+            if !@options[:allow_nil]
+              return true if bad_value?(@existing_value)
+            else
+              return true if !bad_value?(@existing_value)
+            end
           elsif @options[:case_sensitive]
-            return true if assert_bad_value(@object, @attribute, @existing_value, @options[:message]) && !assert_bad_value(@object, @attribute, @existing_value.swapcase, @options[:message])
+            return true if bad_value?(@existing_value) && !bad_value?(@existing_value.swapcase)
           else
-            return true if assert_bad_value(@object, @attribute, @existing_value.swapcase, @options[:message])
+            return true if bad_value?(@existing_value.swapcase)
           end
 
           @missing = "not require unique#{" case sensitive" if @options[:case_sensitive]} value for #{@attribute}#{" scoped to #{@options[:scope].join(', ')}" unless @options[:scope].blank?}"
           return false
+        end
+        
+        def bad_value?(value)
+          assert_bad_value(@object, @attribute, value, @options[:message])
         end
 
         # Now test that the object is valid when changing the scoped attribute
@@ -96,7 +103,8 @@ module Remarkable # :nodoc:
         def load_options(options)
           @options = {
             :message => :taken,
-            :case_sensitive => true
+            :case_sensitive => true,
+            :allow_nil => false
           }.merge(options)
 
           if options[:scoped_to] # TODO Deprecate scoped_to
@@ -119,6 +127,7 @@ module Remarkable # :nodoc:
       #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.taken')</tt>
       # * <tt>:scoped_to</tt> - field(s) to scope the uniqueness to.
       # * <tt>:case_sensitive</tt> - should the matcher look for an exact match?
+      # * <tt>:allow_nil</tt> - should skip the validation if the attribute is nil?
       #
       # Examples:
       #   it { should validate_uniqueness_of(:keyword, :username) }
