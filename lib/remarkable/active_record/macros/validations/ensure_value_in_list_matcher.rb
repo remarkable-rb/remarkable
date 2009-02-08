@@ -59,10 +59,10 @@ module Remarkable # :nodoc:
 
         def value_valid?
           if @behavior == :exclusion
-            return true if assert_bad_value(@subject, @attribute, @good_value, @options[:message])
+            return true if bad?(@good_value)
             @missing = "#{@attribute} can be set to #{@good_value.inspect}"
           else
-            return true if assert_good_value(@subject, @attribute, @good_value, @options[:message])
+            return true if good?(@good_value)
             @missing = "#{@attribute} cannot be set to #{@good_value.inspect}"
           end
 

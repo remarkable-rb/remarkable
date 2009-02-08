@@ -162,14 +162,6 @@ module Remarkable # :nodoc:
         def value_for_length(value)
           "x" * value
         end
-
-        def good?(value, message_sym)
-          assert_good_value(@subject, @attribute, value, @options[message_sym])
-        end
-
-        def bad?(value, message_sym)
-          assert_bad_value(@subject, @attribute, value, @options[message_sym])
-        end
       end
 
       # Validates the length of the given attributes. You have also to supply

@@ -12,7 +12,7 @@ module Remarkable # :nodoc:
         end
 
         def matches?(subject)
-          @subject = subject
+          @subject = get_instance_of(subject)
 
           assert_matcher_for(@attributes) do |attribute|
             @attribute = attribute
@@ -27,12 +27,11 @@ module Remarkable # :nodoc:
         private
 
         def confirmed?
-          object = get_instance_of(@subject)
           confirmation_assignment = "#{@attribute}_confirmation="
 
-          if object.respond_to? confirmation_assignment
-            object.send(confirmation_assignment, 'something')
-            return true if assert_bad_value(object, @attribute, 'different', @options[:message])
+          if @subject.respond_to? confirmation_assignment
+            @subject.send(confirmation_assignment, 'something')
+            return true if bad?('different')
 
             @missing = "#{model_name} is valid even if confirmation does not match"
             return false

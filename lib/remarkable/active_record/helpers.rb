@@ -83,6 +83,22 @@ module Remarkable # :nodoc:
         false
       end
 
+      # Shortcut for assert_good_value.
+      # Please notice that it has instance variables hard coded. So do not use
+      # it if you are trying to assert another instance besides @subject.
+      #
+      def good?(value, message_sym = :message)
+        assert_good_value(@subject, @attribute, value, @options[message_sym])
+      end
+
+      # Shortcut for assert_bad_value.
+      # Please notice that it has instance variables hard coded. So do not use
+      # it if you are trying to assert another instance besides @subject.
+      #
+      def bad?(value, message_sym = :message)
+        assert_bad_value(@subject, @attribute, value, @options[message_sym])
+      end
+
       # Asserts that an Active Record model validates with the passed
       # <tt>value</tt> by making sure the <tt>error_message_to_avoid</tt> is not
       # contained within the list of errors for that attribute.

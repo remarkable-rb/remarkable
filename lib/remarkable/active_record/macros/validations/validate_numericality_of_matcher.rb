@@ -31,7 +31,7 @@ module Remarkable # :nodoc:
         private
 
         def only_allow_numeric_values?
-          return true if assert_bad_value(@subject, @attribute, "abcd", @options[:message])
+          return true if bad?("abcd")
 
           @missing = "allow non-numeric values for #{@attribute}"
           false
@@ -42,9 +42,9 @@ module Remarkable # :nodoc:
           return true unless @options.key? :only_integer
 
           if @options[:only_integer]
-            return true if assert_bad_value(@subject, @attribute, 1.0, @options[:message])
+            return true if bad?(1.0)
           else
-            return true if assert_good_value(@subject, @attribute, 1.0, @options[:message])
+            return true if good?(1.0)
           end
 
           @missing = "#{'not ' unless @options[:only_integer]}allow non-integer values for #{@attribute}"

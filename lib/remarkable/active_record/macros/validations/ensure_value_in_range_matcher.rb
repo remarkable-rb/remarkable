@@ -134,14 +134,10 @@ module Remarkable # :nodoc:
 
         def boundary?(value, message_sym)
           if @behavior == :exclusion
-            assert_bad_value(@subject, @attribute, value, @options[message_sym])
+            bad?(value, message_sym)
           else
-            assert_good_value(@subject, @attribute, value, @options[message_sym])
+            good?(value, message_sym)
           end
-        end
-
-        def bad?(value, message_sym)
-          assert_bad_value(@subject, @attribute, value, @options[message_sym])
         end
 
         def load_options(options = {})

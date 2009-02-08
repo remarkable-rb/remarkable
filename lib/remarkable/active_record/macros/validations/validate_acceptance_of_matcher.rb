@@ -33,7 +33,7 @@ module Remarkable # :nodoc:
         private
 
         def require_accepted?
-          return true if assert_bad_value(@subject, @attribute, false, @options[:message])
+          return true if bad?(false)
 
           @missing = "not require #{@attribute} to be accepted"
           return false
@@ -41,7 +41,7 @@ module Remarkable # :nodoc:
 
         def accept_is_valid?
           return true unless @options.key? :accept
-          return true if assert_good_value(@subject, @attribute, @options[:accept], @options[:message])
+          return true if good?(@options[:accept])
 
           @missing = "is not accepted when #{@attribute} is #{@options[:accept].inspect}"
           return false

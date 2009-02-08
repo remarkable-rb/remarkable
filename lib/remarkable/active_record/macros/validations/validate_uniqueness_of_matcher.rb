@@ -27,7 +27,7 @@ module Remarkable # :nodoc:
         end
 
         def matches?(subject)
-          @subject = subject
+          @subject = get_instance_of(subject)
 
           assert_matcher_for(@attributes) do |attribute|
             @attribute = attribute
@@ -100,17 +100,16 @@ module Remarkable # :nodoc:
         # for equal values.
         #
         def have_attribute?
-          @object = model_class.new
           @value = @existing.send(@attribute)
 
           # Sets scope to be equal to the object found
           #
           @options[:scope].each do |s|
-            unless @object.respond_to?(:"#{s}=")
+            unless @subject.respond_to?(:"#{s}=")
               @missing = "#{model_name} doesn't seem to have a #{s} attribute."
               return false
             end
-            @object.send("#{s}=", @existing.send(s))
+            @subject.send("#{s}=", @existing.send(s))
           end
 
           return true if bad?(@value)
@@ -145,8 +144,8 @@ module Remarkable # :nodoc:
         def valid_when_changing_scoped_attribute?
           @options[:scope].each do |s|
             # Assume the scope is a foreign key if the field is nil
-            @object.send("#{s}=", new_value_for_scope(s))
-            unless assert_good_value(@object, @attribute, @value, @options[:message])
+            @subject.send("#{s}=", new_value_for_scope(s))
+            unless good?(@value)
               @missing = "#{model_name} is not valid when changing the scoped attribute for #{s}"
               return false
             end
@@ -161,14 +160,6 @@ module Remarkable # :nodoc:
         #
         def new_value_for_scope(scope)
           (@existing.send(scope) || 999).next
-        end
-
-        def good?(value)
-          assert_good_value(@object, @attribute, value, @options[:message])
-        end
-
-        def bad?(value)
-          assert_bad_value(@object, @attribute, value, @options[:message])
         end
 
         def load_options(options)
