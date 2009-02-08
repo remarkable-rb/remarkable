@@ -14,20 +14,20 @@ describe User do
   it { should have_one(:address, :dependent => :destroy) }
   
   it { should_not have_index(:foo, :bar) }
-    
+
   it { should have_indices(:email, :name) }
   it { should have_index([:email, :name]).unique }
   it { should have_index([:email, :name]).unique(true) }
   it { should have_index([:email, :name], :unique => true) }
   it { should have_index(:age, :unique => false) }
-  
+
   it { should_not have_index(:phone) }
   it { should_not have_index(:email, :unique => false) }
   it { should_not have_index(:age, :unique => true) }
-  
+
   it { should have_index(:age) }
   it { should_not have_index(:aged) }
-  
+
   it { should have_named_scope(:old)}
   it { should have_named_scope(:old, :conditions => "age > 50") }
   it { should_not have_named_scope(:old, :conditions => "age > 49") }
@@ -150,9 +150,10 @@ describe User do
   it { should validate_acceptance_of(:eula, :allow_nil => true) }
   it { should_not validate_acceptance_of(:eula, :allow_nil => false) }
 
-  it { should validate_acceptance_of(:terms) }
+  it { should validate_acceptance_of(:terms).accept(true) }
   it { should validate_acceptance_of(:terms).allow_nil(false) }
   it { should_not validate_acceptance_of(:terms).allow_nil }
+  it { should_not validate_acceptance_of(:terms, :accept => false) }
 
   it "should rails error when calling allow_blank on validate_acceptance_of matcher" do
    proc{ should validate_acceptance_of(:terms).allow_nil.allow_blank }.should raise_error(NoMethodError)
@@ -261,8 +262,10 @@ describe User do
   should_not_validate_acceptance_of :eula, :allow_nil => false
 
   should_validate_acceptance_of :terms
+  should_validate_acceptance_of :terms, :accept => true
   should_validate_acceptance_of :terms, :allow_nil => false
   should_not_validate_acceptance_of :terms, :allow_nil => true
+  should_not_validate_acceptance_of :terms, :accept => false
 
   should_not_validate_acceptance_of :name
   should_not_require_acceptance_of :name

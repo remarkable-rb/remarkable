@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
   validates_numericality_of :ssn
 
   validates_acceptance_of :eula
-  validates_acceptance_of :terms, :allow_nil => false
+  validates_acceptance_of :terms, :allow_nil => false, :accept => true
 
   validates_confirmation_of :username, :email
 

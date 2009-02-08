@@ -11,11 +11,16 @@ module Remarkable # :nodoc:
           @attributes = attributes
         end
 
+        def accept(value)
+          @options[:accept] = value
+          self
+        end
+
         def matches?(subject)
           @subject = subject
           assert_matcher_for(@attributes) do |attribute|
             @attribute = attribute
-            allow_nil? && require_accepted?
+            allow_nil? && require_accepted? && accept_is_valid?
           end
         end
 
@@ -31,6 +36,14 @@ module Remarkable # :nodoc:
           return true if assert_bad_value(@subject, @attribute, false, @options[:message])
 
           @missing = "not require #{@attribute} to be accepted"
+          return false
+        end
+
+        def accept_is_valid?
+          return true unless @options.key? :accept
+          return true if assert_good_value(@subject, @attribute, @options[:accept], @options[:message])
+
+          @missing = "is not accepted when #{@attribute} is #{@options[:accept].inspect}"
           return false
         end
 
@@ -55,11 +68,13 @@ module Remarkable # :nodoc:
       # create a new instance to test against.
       #
       # Options:
+      # * <tt>:accept</tt> - the expected value to be accepted
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
       #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.accepted')</tt>
       #
       # Example:
-      #   it { should validate_acceptance_of(:eula) }
+      #   it { should validate_acceptance_of(:eula, :terms) }
+      #   it { should validate_acceptance_of(:eula, :terms, :accept => true) }
       #
       def validate_acceptance_of(*attributes)
         ValidateAcceptanceOfMatcher.new(*attributes)
