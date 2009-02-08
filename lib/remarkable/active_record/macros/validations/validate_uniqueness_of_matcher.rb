@@ -4,14 +4,12 @@ module Remarkable # :nodoc:
       class ValidateUniquenessOfMatcher < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
 
+        # Undefine such methods because this kind of validation is different here.
+        undef_method :allow_nil?, :allow_blank?
+
         def initialize(*attributes)
           load_options(attributes.extract_options!)
           @attributes = attributes
-        end
-
-        def message(message)
-          @options[:message] = message
-          self
         end
 
         def scope(scoped)

@@ -9,27 +9,21 @@ module Remarkable # :nodoc:
           @attributes = attributes
         end
 
-        def message(message)
-          @options[:message] = message
-          self
-        end
-
-        def allow_blank(value = true)
-          @options[:allow_blank] = value
-          self
-        end
-
         def matches?(subject)
           @subject = subject
+
           assert_matcher_for(@attributes) do |attribute|
             @attribute = attribute
-
-            only_allow_numeric_values? && allow_blank?
+            only_allow_numeric_values? && allow_blank? && allow_nil?
           end
         end
 
         def description
-          "to only allow numeric#{ ' or blank' if @options[:allow_blank] } values for #{@attributes.to_sentence}"
+          message = "to only allow numeric "
+          message << "or nil "   if @options[:allow_nil]
+          message << "or blank " if @options[:allow_blank]
+          message << "values for #{@attributes.to_sentence}"
+          message
         end
 
         private
@@ -41,27 +35,18 @@ module Remarkable # :nodoc:
           false
         end
 
-        def allow_blank?
-          return true unless @options.key? :allow_blank
-
-          if @options[:allow_blank]
-            return true if assert_good_value(@subject, @attribute.to_sym, "", @options[:message])
-          else
-            return true if assert_bad_value(@subject, @attribute.to_sym, "", @options[:message])
-          end
-
-          @missing = "#{ 'not ' if @options[:allow_blank] }allow blank values for #{@attribute}"
-          false
-        end
-
-        def load_options(options)
+        def load_options(options = {})
           @options = {
             :message => :not_a_number
           }.merge(options)
         end
 
         def expectation
-          "to only allow numeric#{ ' or blank' if @options[:allow_blank] } values for #{@attribute}"
+          message = "to only allow numeric "
+          message << "or nil "   if @options[:allow_nil]
+          message << "or blank " if @options[:allow_blank]
+          message << "values for #{@attribute}"
+          message
         end
       end
 

@@ -4,14 +4,11 @@ module Remarkable # :nodoc:
       class ValidateConfirmationOfMatcher < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
 
+        undef_method :allow_nil?, :allow_nil, :allow_blank?, :allow_blank
+
         def initialize(*attributes)
           load_options(attributes.extract_options!)
           @attributes = attributes
-        end
-
-        def message(message)
-          @options[:message] = message
-          self
         end
 
         def matches?(subject)
@@ -44,7 +41,7 @@ module Remarkable # :nodoc:
           end
         end
 
-        def load_options(options)
+        def load_options(options = {})
           @options = {
             :message => :confirmation
           }.merge(options)

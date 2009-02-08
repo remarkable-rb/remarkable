@@ -2,6 +2,23 @@ module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Helpers # :nodoc:
       include Remarkable::Default::Helpers
+
+      def message(value)
+        @options[:message] = value
+        self
+      end
+
+      def allow_nil(value = true)
+        @options[:allow_nil] = value
+        self
+      end
+
+      def allow_blank(value = true)
+        @options[:allow_blank] = value
+        self
+      end
+
+      protected
       
       def pretty_error_messages(obj) # :nodoc:
         obj.errors.map do |a, m| 
@@ -21,6 +38,32 @@ module Remarkable # :nodoc:
       
       def instance_variable_name_for(klass)
         klass.to_s.split('::').last.underscore
+      end
+
+      def allow_nil?
+        return true unless @options.key? :allow_nil
+
+        if @options[:allow_nil]
+          return true if assert_good_value(@subject, @attribute, nil, @options[:message])
+        else
+          return true if assert_bad_value(@subject, @attribute, nil, @options[:message])
+        end
+
+        @missing = "#{@attribute} can#{ 'not' if @options[:allow_nil] } be set to nil"
+        false
+      end
+
+      def allow_blank?
+        return true unless @options.key? :allow_blank
+
+        if @options[:allow_blank]
+          return true if assert_good_value(@subject, @attribute, "", @options[:message])
+        else
+          return true if assert_bad_value(@subject, @attribute, "", @options[:message])
+        end
+
+        @missing = "#{@attribute} can#{ 'not' if @options[:allow_blank] } be set to blank"
+        false
       end
 
       # Asserts that an Active Record model validates with the passed

@@ -8,16 +8,24 @@ module Remarkable # :nodoc:
           @attribute = attribute
           @range     = range
           @behavior  = behavior
-          load_options(options)
+          load_options(options.extract_options!)
         end
         
         def low_message(message)
           @options[:low_message] = message
           self
         end
-        
+
         def high_message(message)
           @options[:high_message] = message
+          self
+        end
+
+        # TODO Low message and High message should be deprecated (not supported by
+        # Rails API). In this while, we have to hack message.
+        def message(message)
+          @options[:high_message] = message
+          @options[:low_message] = message
           self
         end
 
@@ -25,13 +33,8 @@ module Remarkable # :nodoc:
           @subject = subject
 
           assert_matcher do
-            if @behavior == :inclusion
-              less_than_minimum? && accepts_minimum? &&
-              more_than_maximum? && accepts_maximum?
-            elsif @behavior == :exclusion
-              more_than_minimum? && accepts_minimum? &&
-              less_than_maximum? && accepts_maximum?
-            end
+            less_than_minimum? && accepts_minimum? && more_than_minimum? && allow_nil? &&
+            more_than_maximum? && accepts_maximum? && less_than_maximum? && allow_blank?
           end
         end
 
@@ -46,59 +49,57 @@ module Remarkable # :nodoc:
         def negative_failure_message
           "Did not expect #{expectation}"
         end
-        
+
         private
-        
+
         def expectation
-          "that the #{@attribute} is #{'not ' if @behavior == :exclusion}in #{@range}"
+          message = "that the #{@attribute} is #{'not ' if @behavior == :exclusion}in #{@range}"
+          message << " or is nil"   if @options[:allow_nil]
+          message << " or is blank" if @options[:allow_blank]
+          message
         end
 
-        # -----------------------------
-        # validate_inclusion_of methods
-        # -----------------------------
         def less_than_minimum?
-          return true if assert_bad_value(@subject, @attribute, (@range.first - 1), @options[:low_message])
+          return true unless @behavior == :inclusion
+          return true if bad?(@range.first - 1, :low_message)
 
           @missing = "allow #{@attribute} to be less than #{@range.first}"
           return false
         end
 
         def more_than_maximum?
-          return true if assert_bad_value(@subject, @attribute, (@range.last + 1), @options[:high_message])
+          return true unless @behavior == :inclusion
+          return true if bad?(@range.last + 1, :high_message)
           
           @missing = "allow #{@attribute} to be more than #{@range.last}"
           return false
         end
 
-        # -----------------------------
-        # validate_exclusion_of methods
-        # -----------------------------
         def less_than_maximum?
-          return true if assert_bad_value(@subject, @attribute, (@range.last - 1), @options[:low_message])
+          return true unless @behavior == :exclusion
+          return true if bad?(@range.last - 1, :low_message)
 
           @missing = "allow #{@attribute} to be less than #{@range.last}"
           return false
         end
 
         def more_than_minimum?
-          return true if assert_bad_value(@subject, @attribute, (@range.first + 1), @options[:high_message])
+          return true unless @behavior == :exclusion
+          return true if bad?(@range.first + 1, :high_message)
           
           @missing = "allow #{@attribute} to be more than #{@range.first}"
           return false
         end
 
-        # --------------
-        # Common methods
-        # --------------
         def accepts_minimum?
-          return true if assert_boundary_value(@subject, @attribute, @range.first, @options[:low_message])
+          return true if boundary?(@range.first, :low_message)
 
           @missing = create_boundary_message("allow #{@attribute} to be #{@range.first}")
           return false
         end
 
         def accepts_maximum?
-          return true if assert_boundary_value(@subject, @attribute, @range.last, @options[:high_message])
+          return true if boundary?(@range.last, :high_message)
 
           @missing = create_boundary_message("allow #{@attribute} to be #{@range.last}")
           return false
@@ -130,19 +131,23 @@ module Remarkable # :nodoc:
           end
         end
 
-        def assert_boundary_value(*args)
+        def boundary?(value, message_sym)
           if @behavior == :exclusion
-            assert_bad_value(*args)
+            assert_bad_value(@subject, @attribute, value, @options[message_sym])
           else
-            assert_good_value(*args)
+            assert_good_value(@subject, @attribute, value, @options[message_sym])
           end
         end
 
-        def load_options(options)
+        def bad?(value, message_sym)
+          assert_bad_value(@subject, @attribute, value, @options[message_sym])
+        end
+
+        def load_options(options = {})
           @options = {
             :low_message  => @behavior,
             :high_message => @behavior
-          }.merge(options.extract_options!)
+          }.merge(options)
         end
       end
 

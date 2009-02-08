@@ -4,7 +4,7 @@ module Remarkable # :nodoc:
       class ValidateLengthOfMatcher < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
 
-        def initialize(attributes, range, behavior, options)
+        def initialize(attributes, range, behavior, options = {})
           @attributes = attributes
           @behavior   = behavior
 
@@ -17,6 +17,7 @@ module Remarkable # :nodoc:
           load_options(options)
         end
 
+        # Overwrite message default behavior.
         # This is used only when :is, :minimum or :maximum like in ActiveRecord.
         #
         def message(message)
@@ -67,8 +68,8 @@ module Remarkable # :nodoc:
           assert_matcher_for(@attributes) do |attribute|
             @attribute = attribute
 
-            less_than_min_length? && exactly_min_length? &&
-            more_than_max_length? && exactly_max_length?
+            less_than_min_length? && exactly_min_length? && allow_nil? &&
+            more_than_max_length? && exactly_max_length? && allow_blank?
           end
         end
 
@@ -88,9 +89,7 @@ module Remarkable # :nodoc:
 
         def less_than_min_length?
           return true if @behavior == :maximum || @minimum <= 0
-
-          min_value = "x" * (@minimum - 1)
-          return true if assert_bad_value(@subject, @attribute, min_value, @options[:short_message])
+          return true if bad?(value_for_length(@minimum - 1), :short_message)
 
           @missing = "allow #{@attribute} to be less than #{@minimum} chars long"
           return false
@@ -98,9 +97,7 @@ module Remarkable # :nodoc:
 
         def exactly_min_length?
           return true if @behavior == :maximum || @minimum <= 0
-
-          min_value = "x" * @minimum
-          return true if assert_good_value(@subject, @attribute, min_value, @options[:short_message])
+          return true if good?(value_for_length(@minimum), :short_message)
 
           @missing = "not allow #{@attribute} to be exactly #{@minimum} chars long"
           return false
@@ -108,9 +105,7 @@ module Remarkable # :nodoc:
 
         def more_than_max_length?
           return true if @behavior == :minimum
-
-          max_value = "x" * (@maximum + 1)
-          return true if assert_bad_value(@subject, @attribute, max_value, @options[:long_message])
+          return true if bad?(value_for_length(@maximum + 1), :long_message)
 
           @missing = "allow #{@attribute} to be more than #{@maximum} chars long"
           return false
@@ -118,9 +113,7 @@ module Remarkable # :nodoc:
 
         def exactly_max_length?
           return true if @behavior == :minimum || @minimum == @maximum
-
-          max_value = "x" * @maximum
-          return true if assert_good_value(@subject, @attribute, max_value, @options[:long_message])
+          return true if good?(value_for_length(@maximum), :long_message)
 
           @missing = "not allow #{@attribute} to be exactly #{@maximum} chars long"
           return false
@@ -158,6 +151,22 @@ module Remarkable # :nodoc:
           else #:is
             "equal to #{@minimum}"
           end
+
+          message << " or nil"   if @options[:allow_nil]
+          message << " or blank" if @options[:allow_blank]
+          message
+        end
+
+        def value_for_length(value)
+          "x" * value
+        end
+
+        def good?(value, message_sym)
+          assert_good_value(@subject, @attribute, value, @options[message_sym])
+        end
+
+        def bad?(value, message_sym)
+          assert_bad_value(@subject, @attribute, value, @options[message_sym])
         end
       end
 
