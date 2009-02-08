@@ -18,6 +18,14 @@ describe Pets::Dog do
   it { should only_allow_numeric_or_blank_values_for(:age) }
   
   it { should require_attributes(:owner_id) }
+
+  it { should validate_numericality_of(:age) }
+  it { should validate_numericality_of(:age).allow_blank(true) }
+  it { should_not validate_numericality_of(:age, :allow_blank => false) }
+
+  it { should validate_numericality_of(:owner_id) }
+  it { should validate_numericality_of(:owner_id).allow_nil(true) }
+  it { should_not validate_numericality_of(:owner_id, :allow_nil => false) }
 end
 
 describe Pets::Dog do
@@ -27,11 +35,18 @@ describe Pets::Dog do
   should_not_belong_to :foo, :bar
 
   should_have_and_belong_to_many :fleas
-  
+
+  should_only_allow_numeric_or_blank_values_for :age
   should_only_allow_numeric_values_for :age, :allow_blank => true
   should_not_only_allow_numeric_values_for :age, :allow_blank => false
-  
-  should_only_allow_numeric_or_blank_values_for :age
-  
+
   should_require_attributes :owner_id
+
+  should_validate_numericality_of :owner_id
+  should_validate_numericality_of :owner_id, :allow_nil => true
+  should_not_validate_numericality_of :owner_id, :allow_nil => false
+
+  should_validate_numericality_of :age
+  should_validate_numericality_of :age, :allow_blank => true
+  should_not_validate_numericality_of :age, :allow_blank => false
 end

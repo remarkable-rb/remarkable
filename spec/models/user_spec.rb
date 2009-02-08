@@ -73,13 +73,17 @@ describe User do
   it { should_not ensure_length_in_range(:email, 3..100) }
   it { should_not ensure_length_in_range(:email, 2..99) }
 
-  it { should validate_length_of(:email, :in => 2..100) }
-  it { should validate_length_of(:email, :within => 2..100) }
-  it { should validate_size_of(:email, :maximum => 100) }
   it { should validate_size_of(:email, :minimum => 2) }
-  it { should_not validate_length_of(:email, :within => 0..200) }
+  it { should validate_size_of(:email, :maximum => 100) }
+  it { should validate_length_of(:email, :in => 2..100) }
+  it { should validate_length_of(:email, :within => 2..100).allow_nil(false) }
+  it { should validate_length_of(:email, :within => 2..100).allow_blank(false) }
+
   it { should_not validate_length_of(:email, :is => 2) }
   it { should_not validate_length_of(:email, :is => 100) }
+  it { should_not validate_length_of(:email, :within => 0..200) }
+  it { should_not validate_length_of(:email, :in => 2..100, :allow_nil => true) }
+  it { should_not validate_length_of(:email, :in => 2..100, :allow_blank => true) }
 
   it { should ensure_value_in_range(:age, 2..100) }
   it { should_not ensure_value_in_range(:age, 1..100) }
@@ -224,13 +228,18 @@ describe User do
   should_not_allow_mass_assignment_of :password
 
   should_ensure_length_in_range :email, 2..100
-  should_validate_length_of :email, :in => 2..100
-  should_validate_length_of :email, :within => 2..100
-  should_validate_size_of :email, :maximum => 100
+
   should_validate_size_of :email, :minimum => 2
-  should_not_validate_length_of :email, :within => 0..200
+  should_validate_size_of :email, :maximum => 100
+  should_validate_length_of :email, :in => 2..100
+  should_validate_length_of :email, :within => 2..100 , :allow_nil => false
+  should_validate_length_of :email, :within => 2..100, :allow_blank => false
+
   should_not_validate_length_of :email, :is => 2
   should_not_validate_length_of :email, :is => 100
+  should_not_validate_length_of :email, :within => 0..200
+  should_not_validate_length_of :email, :in => 2..100, :allow_nil => true
+  should_not_validate_length_of :email, :in => 2..100, :allow_blank => true
 
   should_ensure_confirmation_of :username, :email
   should_not_ensure_confirmation_of :ssn

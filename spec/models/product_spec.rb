@@ -66,6 +66,9 @@ describe Product do
     it { @product.should_not validate_inclusion_of(:weight, 1..100, :allow_blank => false) }
 
     it { @product.should ensure_length_in_range(:size, 5..20) }
+    it { @product.should validate_length_of(:size, :in => 5..20).allow_blank }
+    it { @product.should_not validate_length_of(:size, :in => 1..10) }
+    it { @product.should_not validate_length_of(:size, :within => 5..20, :allow_blank => false) }
   end
 end
 
@@ -120,5 +123,8 @@ describe Product do
     should_not_validate_inclusion_of :weight, 1..100, :allow_blank => false
 
     should_ensure_length_in_range :size, 5..20
+    should_validate_length_of :size, :in => 5..20, :allow_blank => true
+    should_not_validate_length_of :size, :in => 1..10
+    should_not_validate_length_of :size, :within =>5..20, :allow_blank => false
   end
 end

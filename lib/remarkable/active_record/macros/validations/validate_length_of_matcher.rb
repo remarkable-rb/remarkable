@@ -17,13 +17,14 @@ module Remarkable # :nodoc:
           load_options(options)
         end
 
-        # Overwrite message default behavior.
-        # This is used only when :is, :minimum or :maximum like in ActiveRecord.
+        # If message is supplied, reassign it properly to :short_message
+        # and :long_message. This is ActiveRecord default behavior when
+        # the validation is :maximum, :minimum or :is.
         #
         def message(message)
           if [:is, :minimum, :maximum].include? @behavior
-            @options[:short_message] = message
-            @options[:long_message] = message
+            short_message(message)
+            long_message(message)
           end
           self
         end
@@ -54,6 +55,8 @@ module Remarkable # :nodoc:
 
         def short_message(message)
           @options[:short_message] = message
+          @options[:message] = message # make a copy in @options[:message], for
+                                       # allow_blank and allow_nil work properly.
           self
         end
 
@@ -132,11 +135,10 @@ module Remarkable # :nodoc:
             }.merge(options)
           end
 
-          # If message is supplied, reassign it properly to :short_message
-          # and :long_message. This is ActiveRecord default behavior when
-          # the validation is :maximum, :minimum or :is.
-          #
+          # Reassign messages properly
           message(@options[:message]) if @options[:message]
+          long_message(@options[:long_message])
+          short_message(@options[:short_message])
         end
 
         def expectation
@@ -178,11 +180,11 @@ module Remarkable # :nodoc:
       #
       # Options:
       #
-      # * <tt>:minimum - The minimum size of the attribute.
-      # * <tt>:maximum - The maximum size of the attribute.
-      # * <tt>:is - The exact size of the attribute.
-      # * <tt>:within - A range specifying the minimum and maximum size of the attribute.
-      # * <tt>:in - A synonym(or alias) for :within.
+      # * <tt>:minimum</tt> - The minimum size of the attribute.
+      # * <tt>:maximum</tt> - The maximum size of the attribute.
+      # * <tt>:is</tt> - The exact size of the attribute.
+      # * <tt>:within</tt> - A range specifying the minimum and maximum size of the attribute.
+      # * <tt>:in</tt> - A synonym(or alias) for :within.
       # * <tt>:short_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.too_short') % range.first</tt>
       # * <tt>:long_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
