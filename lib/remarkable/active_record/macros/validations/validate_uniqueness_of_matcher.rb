@@ -14,6 +14,11 @@ module Remarkable # :nodoc:
           self
         end
 
+        def case_sensitive(value = true)
+          @options[:case_sensitive] = value
+          self
+        end
+
         # TODO Deprecate this
         #
         def scoped_to(scoped)
@@ -47,6 +52,13 @@ module Remarkable # :nodoc:
 
         private
 
+        # Tries to find an object in the database.
+        #
+        # If allow_nil and/or allow_blank is given, we must find a record which
+        # is not nil or not blank.
+        #
+        # If any of these attempts fail, the validation fail.
+        #
         def find_first_object?
           if @options[:allow_nil]
             return true if @existing = model_class.find(:first, :conditions => "#{@attribute} IS NOT NULL")
@@ -62,6 +74,9 @@ module Remarkable # :nodoc:
           false
         end
 
+        # Tries to find an object where the given attribute is nil.
+        # This is required to test if the validation allows nil.
+        #
         def find_nil_object?
           return true unless @options.key? :allow_nil
           return true if model_class.find(:first, :conditions => "#{@attribute} IS NULL")
@@ -70,6 +85,9 @@ module Remarkable # :nodoc:
           false
         end
 
+        # Tries to find an object where the given attribute is blank.
+        # This is required to test if the validation allows blank.
+        #
         def find_blank_object?
           return true unless @options.key? :allow_blank
           return true if model_class.find(:first, :conditions => "#{@attribute} = ''")
@@ -78,10 +96,15 @@ module Remarkable # :nodoc:
           false
         end
 
+        # Check if the attribute given is valid and if the validation fails
+        # for equal values.
+        #
         def have_attribute?
           @object = model_class.new
           @value = @existing.send(@attribute)
 
+          # Sets scope to be equal to the object found
+          #
           @options[:scope].each do |s|
             unless @object.respond_to?(:"#{s}=")
               @missing = "#{model_name} doesn't seem to have a #{s} attribute."
@@ -97,6 +120,12 @@ module Remarkable # :nodoc:
           return false
         end
 
+        # If :case_sensitive is given and it's true, we swap the case of the
+        # value used in have_attribute? and see if the test object is valid.
+        #
+        # If :case_sensitive is given and it's true, we swap the case of the
+        # value used in have_attribute? and see if the test object is not valid.
+        #
         def case_sensitive?
           return true unless @options.key? :case_sensitive
 
@@ -112,20 +141,26 @@ module Remarkable # :nodoc:
         end
 
         # Now test that the object is valid when changing the scoped attribute
-        # TODO:  There is a chance that we could change the scoped field
-        # to a value that's already taken.  An alternative implementation
-        # could actually find all values for scope and create a unique
-        # one.
+
         def valid_when_changing_scoped_attribute?
           @options[:scope].each do |s|
             # Assume the scope is a foreign key if the field is nil
-            @object.send("#{s}=", @existing.send(s).nil? ? 1 : @existing.send(s).next)
+            @object.send("#{s}=", new_value_for_scope(s))
             unless assert_good_value(@object, @attribute, @value, @options[:message])
               @missing = "#{model_name} is not valid when changing the scoped attribute for #{s}"
               return false
             end
           end
           true
+        end
+
+        # Returns the value used in valid_when_changing_scoped_attribute.
+        # TODO: There is a chance that we could change the scoped field
+        # to a value that's already taken. An alternative implementation
+        # could actually find all values for scope and create a unique one.
+        #
+        def new_value_for_scope(scope)
+          (@existing.send(scope) || 999).next
         end
 
         def good?(value)
@@ -161,17 +196,22 @@ module Remarkable # :nodoc:
         end
       end
 
-      # Ensures that the model cannot be saved if one of the attributes listed is not unique.
-      # Requires an existing record
+      # Ensures that the model cannot be saved if one of the attributes listed
+      # is not unique.
+      #
+      # Requires an existing record in the database. If you supply :allow_nil as
+      # option, you need to have in the database a record with the given attribute
+      # nil and another with the given attribute not nil. The same is require for
+      # allow_blank option.
       #
       # Options:
       #
+      # * <tt>:scope</tt> - field(s) to scope the uniqueness to.
+      # * <tt>:case_sensitive</tt> - the matcher look for an exact match.
+      # * <tt>:allow_nil</tt> - when supplied, validates if it allows nil or not.
+      # * <tt>:allow_blank</tt> - when supplied, validates if it allows blank or not.
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
       #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.taken')</tt>
-      # * <tt>:scope</tt> - field(s) to scope the uniqueness to.
-      # * <tt>:case_sensitive</tt> - should the matcher look for an exact match?
-      # * <tt>:allow_nil</tt> - should skip the validation if the attribute is nil?
-      # * <tt>:allow_blank</tt> - should skip the validation if the attribute is blank?
       #
       # Examples:
       #

@@ -4,7 +4,7 @@ module Remarkable # :nodoc:
       class ValidatePresenceOfMatcher < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
 
-        undef_method :allow_blank?, :allow_blank, :allow_nil?, :allow_nil
+        undef_method :allow_blank?, :allow_blank, :allow_nil
 
         def initialize(*attributes)
           load_options(attributes.extract_options!)
@@ -21,7 +21,7 @@ module Remarkable # :nodoc:
 
           assert_matcher_for(@attributes) do |attribute|
             @attribute = attribute
-            require_set?
+            allow_nil?
           end
         end
 
@@ -31,16 +31,10 @@ module Remarkable # :nodoc:
 
         private
 
-        def require_set?
-          return true if assert_bad_value(@subject, @attribute, nil, @options[:message])
-
-          @missing = "not require #{@attribute} to be set"
-          return false
-        end
-
         def load_options(options)
           @options = {
-            :message => :blank
+            :message => :blank,
+            :allow_nil => false
           }.merge(options)
         end
 

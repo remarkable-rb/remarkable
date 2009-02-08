@@ -12,6 +12,9 @@ module Remarkable # :nodoc:
       # Note: this matcher accepts at once just one attribute to test.
       #
       # Options:
+      #
+      # * <tt>:allow_nil</tt> - when supplied, validates if it allows nil or not.
+      # * <tt>:allow_blank</tt> - when supplied, validates if it allows blank or not.
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
       #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.exclusion')</tt>
       #

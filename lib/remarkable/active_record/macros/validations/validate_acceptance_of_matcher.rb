@@ -68,7 +68,8 @@ module Remarkable # :nodoc:
       # create a new instance to test against.
       #
       # Options:
-      # * <tt>:accept</tt> - the expected value to be accepted
+      # * <tt>:accept</tt> - the expected value to be accepted.
+      # * <tt>:allow_nil</tt> - when supplied, validates if it allows nil or not.
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
       #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.accepted')</tt>
       #

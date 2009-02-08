@@ -179,6 +179,8 @@ module Remarkable # :nodoc:
       # model being tested, then this method will use that.  Otherwise, it will
       # create a new instance to test against.
       #
+      # Note: this method is also aliased as <tt>validate_length_of</tt>.
+      #
       # Options:
       #
       # * <tt>:minimum</tt> - The minimum size of the attribute.
@@ -186,6 +188,8 @@ module Remarkable # :nodoc:
       # * <tt>:is</tt> - The exact size of the attribute.
       # * <tt>:within</tt> - A range specifying the minimum and maximum size of the attribute.
       # * <tt>:in</tt> - A synonym(or alias) for :within.
+      # * <tt>:allow_nil</tt> - when supplied, validates if it allows nil or not.
+      # * <tt>:allow_blank</tt> - when supplied, validates if it allows blank or not.
       # * <tt>:short_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.too_short') % range.first</tt>
       # * <tt>:long_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
