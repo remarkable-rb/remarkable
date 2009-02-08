@@ -12,6 +12,7 @@ module Remarkable # :nodoc:
       # Note: this matcher accepts at once just one attribute to test.
       #
       # Options:
+      #
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
       #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.inclusion')</tt>
       #

@@ -20,11 +20,15 @@ describe Pets::Dog do
   it { should require_attributes(:owner_id) }
 
   it { should validate_numericality_of(:age) }
+  it { should validate_numericality_of(:age).only_integer }
   it { should validate_numericality_of(:age).allow_blank(true) }
+  it { should_not validate_numericality_of(:age, :only_integer => false) }
   it { should_not validate_numericality_of(:age, :allow_blank => false) }
 
   it { should validate_numericality_of(:owner_id) }
+  it { should validate_numericality_of(:owner_id).only_integer(false) }
   it { should validate_numericality_of(:owner_id).allow_nil(true) }
+  it { should_not validate_numericality_of(:owner_id, :only_integer => true) }
   it { should_not validate_numericality_of(:owner_id, :allow_nil => false) }
 end
 
