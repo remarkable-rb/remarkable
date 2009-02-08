@@ -14,13 +14,33 @@ module Remarkable # :nodoc:
           self
         end
 
+        def odd(value = true)
+          @options[:odd] = value
+          self
+        end
+
+        def even(value = true)
+          @options[:even] = value
+          self
+        end
+
+        def odd_message(value)
+          @options[:odd_message] = value
+          self
+        end
+
+        def even_message(value)
+          @options[:even_message] = value
+          self
+        end
+
         def matches?(subject)
           @subject = subject
 
           assert_matcher_for(@attributes) do |attribute|
             @attribute = attribute
             only_allow_numeric_values? && allow_blank? && allow_nil? &&
-            only_integer?
+            only_integer? && allow_odd? && allow_even?
           end
         end
 
@@ -42,18 +62,60 @@ module Remarkable # :nodoc:
           return true unless @options.key? :only_integer
 
           if @options[:only_integer]
-            return true if bad?(1.0)
+            return true if bad?(valid_value_for_test.to_f)
           else
-            return true if good?(1.0)
+            return true if good?(valid_value_for_test.to_f)
           end
 
           @missing = "#{'not ' unless @options[:only_integer]}allow non-integer values for #{@attribute}"
           false
         end
 
+        # TODO Add support to <= and >= in even
+        def allow_even?
+          return true unless @options.key? :even
+
+          if @options[:even]
+            return true if bad?(1, :even_message)
+          else
+            return true if good?(1, :even_message)
+          end
+
+          @missing = "#{'not ' unless @options[:even]}allow even values for #{@attribute}"
+          false
+        end
+
+        # TODO Add support to <= and >= in odd
+        def allow_odd?
+          return true unless @options.key? :odd
+
+          if @options[:odd]
+            return true if bad?(2, :odd_message)
+          else
+            return true if good?(2, :odd_message)
+          end
+
+          @missing = "#{'not ' unless @options[:odd]}allow odd values for #{@attribute}"
+          false
+        end
+
+        # Returns a valid value for testing.
+        #
+        def valid_value_for_test
+          if @options[:even]
+            2
+          elsif @options[:odd]
+            1
+          else
+            10
+          end
+        end
+
         def load_options(options = {})
           @options = {
-            :message => :not_a_number
+            :message => :not_a_number,
+            :odd_message => :odd,
+            :even_message => :even
           }.merge(options)
         end
 
@@ -62,7 +124,10 @@ module Remarkable # :nodoc:
         end
 
         def default_message
-          message = @options[:only_integer] ? "to only allow integer " : "to only allow numeric "
+          message = "to only allow "
+          message << "even " if @options[:even]
+          message << "odd " if @options[:even]
+          message << (@options[:only_integer] ? "integer " : "numeric ")
           message << "or nil "   if @options[:allow_nil]
           message << "or blank " if @options[:allow_blank]
           message
@@ -77,14 +142,27 @@ module Remarkable # :nodoc:
       #
       # Options:
       #
-      # * <tt>:only_integer</tt> - Is true if the given attributes accepts only integers
+      # * <tt>:only_integer</tt> - when supplied, checks if it accepts only integers or not
+      # * <tt>:odd</tt> - when supplied, checks if it accepts only odd values or not
+      # * <tt>:even</tt> - when supplied, checks if it accepts only even values or not
+      # * <tt>:odd_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.odd')</tt>
+      # * <tt>:even_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.even')</tt>
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.not_a_number')</tt>
       #
       # Example:
       #
       #   it { should validates_numericality_of(:age, :price) }
+      #   it { should validates_numericality_of(:age, :only_integer => true) }
+      #   it { should validates_numericality_of(:price, :only_integer => false) }
       #   it { should validates_numericality_of(:age).only_integer }
+      #
+      #   it { should validates_numericality_of(:age).odd }
+      #   it { should validates_numericality_of(:age).even }
+      #   it { should validates_numericality_of(:age, :odd => true) }
+      #   it { should validates_numericality_of(:age, :even => true) }
       #
       def validate_numericality_of(*attributes)
         ValidateNumericalityOfMatcher.new(*attributes)
