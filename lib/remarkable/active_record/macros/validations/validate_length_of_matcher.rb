@@ -172,7 +172,8 @@ module Remarkable # :nodoc:
         end
       end
 
-      # Validates the length of the attribute.
+      # Validates the length of the given attributes. You have also to supply
+      # one of the following options: minimum, maximum, is or within.
       #
       # If an instance variable has been created in the setup named after the
       # model being tested, then this method will use that.  Otherwise, it will
@@ -195,10 +196,14 @@ module Remarkable # :nodoc:
       # Example:
       #
       #   it { should validates_length_of(:password, :within => 6..20) }
-      #   it { should validates_length_of(:password, :in => 6..20) }
       #   it { should validates_length_of(:password, :maximum => 20) }
       #   it { should validates_length_of(:password, :minimum => 6) }
       #   it { should validates_length_of(:age, :is => 18) }
+      #
+      #   it { should validates_length_of(:password).within(6..20) }
+      #   it { should validates_length_of(:password).maximum(20) }
+      #   it { should validates_length_of(:password).minimum(6) }
+      #   it { should validates_length_of(:age).is(18) }
       #
       def validate_length_of(*attributes)
         matcher = nil

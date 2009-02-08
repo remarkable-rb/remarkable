@@ -2,11 +2,18 @@ module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Matchers # :nodoc:
 
-      # Ensures that given values are valid for the attribute.
+      # Ensures that given values are valid for the attribute. If a range
+      # is given, ensures that the attribute is valid in the given range.
       #
       # If an instance variable has been created in the setup named after the
       # model being tested, then this method will use that.  Otherwise, it will
       # create a new instance to test against.
+      #
+      # Note: this matcher accepts at once just one attribute to test.
+      #
+      # Options:
+      # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.inclusion')</tt>
       #
       # Example:
       #
@@ -16,7 +23,6 @@ module Remarkable # :nodoc:
       #   it { should validate_inclusion_of(:age, 18..100) }
       #
       def validate_inclusion_of(attribute, *good_values)
-        # If the first good_values is a range, we should redirect to ensure_value_in_range_matcher.
         if good_values.first.is_a? Range
           EnsureValueInRangeMatcher.new(attribute, :inclusion, *good_values)
         else
