@@ -19,7 +19,7 @@ module Remarkable # :nodoc:
       end
 
       protected
-      
+
       def pretty_error_messages(obj) # :nodoc:
         obj.errors.map do |a, m| 
           msg = "#{a} #{m}" 
@@ -27,6 +27,11 @@ module Remarkable # :nodoc:
         end
       end
 
+      # Get a instance of the given objecy or class.
+      #
+      # If a class is given, it will check if a instance variable of this class
+      # is already set.
+      #
       def get_instance_of(object_or_klass) # :nodoc:
         if object_or_klass.is_a?(Class)
           klass = object_or_klass
@@ -35,11 +40,18 @@ module Remarkable # :nodoc:
           object_or_klass
         end
       end
-      
+
+      # Guess instance variable name
+      #
       def instance_variable_name_for(klass)
         klass.to_s.split('::').last.underscore
       end
 
+      # Default allow_nil? validation.
+      #
+      # Notice that it checks for @options[:message], so be sure that this option
+      # is properly set.
+      #
       def allow_nil?
         return true unless @options.key? :allow_nil
 
@@ -53,6 +65,11 @@ module Remarkable # :nodoc:
         false
       end
 
+      # Default allow_blank? validation.
+      #
+      # Notice that it checks for @options[:message], so be sure that this option
+      # is properly set.
+      #
       def allow_blank?
         return true unless @options.key? :allow_blank
 

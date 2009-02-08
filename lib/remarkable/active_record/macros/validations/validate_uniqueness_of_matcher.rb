@@ -4,9 +4,6 @@ module Remarkable # :nodoc:
       class ValidateUniquenessOfMatcher < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
 
-        # Undefine such methods because this kind of validation is different here.
-        undef_method :allow_nil?, :allow_blank?
-
         def initialize(*attributes)
           load_options(attributes.extract_options!)
           @attributes = attributes
@@ -30,23 +27,55 @@ module Remarkable # :nodoc:
           assert_matcher_for(@attributes) do |attribute|
             @attribute = attribute
 
-            find_first_object? &&
-            have_attribute? &&
-            valid_when_changing_scoped_attribute?
+            find_first_object? && have_attribute? && case_sensitive? &&
+            valid_when_changing_scoped_attribute? && find_nil_object? &&
+            allow_nil? && find_blank_object? && allow_blank?
           end
         end
 
         def description
-          "require unique#{" case sensitive" if @options[:case_sensitive]} value for #{@attributes.to_sentence}#{" scoped to #{@options[:scope].to_sentence}" unless @options[:scope].blank?}"
+          message = "require unique "
+
+          if @options.key? :case_sensitive
+            message << (@options[:case_sensitive] ? 'case sensitive ' : 'case insensitive ')
+          end
+
+          message << "value for #{@attributes.to_sentence}"
+          message << " scoped to #{@options[:scope].to_sentence}" unless @options[:scope].empty?
+          message
         end
 
         private
 
         def find_first_object?
-          return true if @existing = model_class.find(:first)
+          if @options[:allow_nil]
+            return true if @existing = model_class.find(:first, :conditions => "#{@attribute} IS NOT NULL")
+            @missing = "can't find #{model_class} with #{@attribute} not nil"
+          elsif @options[:allow_blank]
+            return true if @existing = model_class.find(:first, :conditions => "#{@attribute} != ''")
+            @missing = "can't find #{model_class} with #{@attribute} not blank"
+          else
+            return true if @existing = model_class.find(:first)
+            @missing = "can't find first #{model_class}"
+          end
 
-          @missing = "Can't find first #{model_class}"
-          return false
+          false
+        end
+
+        def find_nil_object?
+          return true unless @options.key? :allow_nil
+          return true if model_class.find(:first, :conditions => "#{@attribute} IS NULL")
+
+          @missing = "can't find #{model_class} with #{@attribute} nil"
+          false
+        end
+
+        def find_blank_object?
+          return true unless @options.key? :allow_blank
+          return true if model_class.find(:first, :conditions => "#{@attribute} = ''")
+
+          @missing = "can't find #{model_class} with #{@attribute} blank"
+          false
         end
 
         def have_attribute?
@@ -60,29 +89,26 @@ module Remarkable # :nodoc:
             end
             @object.send("#{s}=", @existing.send(s))
           end
-          
-          return true if (
-            if @value.nil?
-              @options[:allow_nil] ? good?(nil) : bad?(nil)
-            elsif @value.blank?
-              @options[:allow_blank] ? good?('') : bad?('')
-            elsif @options[:case_sensitive]
-              bad?(@value) && good?(@value.swapcase)
-            else
-              bad?(@value.swapcase)
-            end 
-          )
 
-          @missing = "not require unique#{" case sensitive" if @options[:case_sensitive]} value for #{@attribute}#{" scoped to #{@options[:scope].join(', ')}" unless @options[:scope].blank?}"
+          return true if bad?(@value)
+
+          @missing = "not require unique value for #{@attribute}"
+          @missing << " scoped to #{@options[:scope].to_sentence}" unless @options[:scope].empty?
           return false
         end
-        
-        def good?(value)
-          assert_good_value(@object, @attribute, value, @options[:message])
-        end
-        
-        def bad?(value)
-          assert_bad_value(@object, @attribute, value, @options[:message])
+
+        def case_sensitive?
+          return true unless @options.key? :case_sensitive
+
+          if @options[:case_sensitive]
+            return true if good?(@value.swapcase)
+            @missing = "#{@attribute} is not case sensitive"
+          else
+            return true if bad?(@value.swapcase)
+            @missing = "#{@attribute} is case sensitive"
+          end
+
+          return false
         end
 
         # Now test that the object is valid when changing the scoped attribute
@@ -102,12 +128,17 @@ module Remarkable # :nodoc:
           true
         end
 
+        def good?(value)
+          assert_good_value(@object, @attribute, value, @options[:message])
+        end
+
+        def bad?(value)
+          assert_bad_value(@object, @attribute, value, @options[:message])
+        end
+
         def load_options(options)
           @options = {
-            :message => :taken,
-            :case_sensitive => true,
-            :allow_nil => false,
-            :allow_blank => false
+            :message => :taken
           }.merge(options)
 
           if options[:scoped_to] # TODO Deprecate scoped_to
@@ -118,7 +149,15 @@ module Remarkable # :nodoc:
         end
 
         def expectation
-          "that the #{model_name} cannot be saved if#{" case sensitive" if @options[:case_sensitive]} #{@attribute}#{" scoped to #{@options[:scope].to_sentence}" unless @options[:scope].blank?} is not unique"
+          message = "that the #{model_name} can be saved if "
+
+          if @options.key? :case_sensitive
+            message << (@options[:case_sensitive] ? 'case sensitive ' : 'case insensitive ')
+          end
+
+          message << @attribute.to_s
+          message << " scoped to #{@options[:scope].to_sentence}" unless @options[:scope].empty?
+          message << " is unique"
         end
       end
 
@@ -126,17 +165,19 @@ module Remarkable # :nodoc:
       # Requires an existing record
       #
       # Options:
+      #
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
       #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.taken')</tt>
-      # * <tt>:scoped_to</tt> - field(s) to scope the uniqueness to.
+      # * <tt>:scope</tt> - field(s) to scope the uniqueness to.
       # * <tt>:case_sensitive</tt> - should the matcher look for an exact match?
       # * <tt>:allow_nil</tt> - should skip the validation if the attribute is nil?
       # * <tt>:allow_blank</tt> - should skip the validation if the attribute is blank?
       #
       # Examples:
+      #
       #   it { should validate_uniqueness_of(:keyword, :username) }
       #   it { should validate_uniqueness_of(:name, :message => "O NOES! SOMEONE STOELED YER NAME!") }
-      #   it { should validate_uniqueness_of(:email, :scope => :name) }
+      #   it { should validate_uniqueness_of(:email, :scope => :name, :case_sensitive => false) }
       #   it { should validate_uniqueness_of(:address, :scope => [:first_name, :last_name]) }
       #
       def validate_uniqueness_of(*attributes)

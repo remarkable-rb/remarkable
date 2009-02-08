@@ -2,3 +2,9 @@ first:
   id: 1
   name: rocky
   address: ''
+
+second:
+  id: 2
+  name: cool
+  color: blue
+  address: 'Here'
