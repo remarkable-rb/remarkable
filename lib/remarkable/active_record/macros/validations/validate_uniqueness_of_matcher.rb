@@ -64,10 +64,16 @@ module Remarkable # :nodoc:
           end
           
           if @existing_value.nil?
-            if !@options[:allow_nil]
-              return true if bad_value?(@existing_value)
-            else
+            if @options[:allow_nil]
               return true if !bad_value?(@existing_value)
+            else
+              return true if bad_value?(@existing_value)
+            end
+          elsif @existing_value.blank?
+            if @options[:allow_blank]
+              return true if !bad_value?(@existing_value)
+            else
+              return true if bad_value?(@existing_value)
             end
           elsif @options[:case_sensitive]
             return true if bad_value?(@existing_value) && !bad_value?(@existing_value.swapcase)
@@ -104,7 +110,8 @@ module Remarkable # :nodoc:
           @options = {
             :message => :taken,
             :case_sensitive => true,
-            :allow_nil => false
+            :allow_nil => false,
+            :allow_blank => false
           }.merge(options)
 
           if options[:scoped_to] # TODO Deprecate scoped_to
@@ -128,6 +135,7 @@ module Remarkable # :nodoc:
       # * <tt>:scoped_to</tt> - field(s) to scope the uniqueness to.
       # * <tt>:case_sensitive</tt> - should the matcher look for an exact match?
       # * <tt>:allow_nil</tt> - should skip the validation if the attribute is nil?
+      # * <tt>:allow_blank</tt> - should skip the validation if the attribute is blank?
       #
       # Examples:
       #   it { should validate_uniqueness_of(:keyword, :username) }

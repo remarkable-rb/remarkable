@@ -17,6 +17,7 @@ describe Flea do
   
   it { should validate_uniqueness_of :name, :case_sensitive => false }
   it { should validate_uniqueness_of :color, :allow_nil => true }
+  it { should validate_uniqueness_of :address, :allow_blank => true }
 end
 
 describe Flea do
@@ -26,4 +27,5 @@ describe Flea do
   
   should_validate_uniqueness_of :name, :case_sensitive => false
   should_validate_uniqueness_of :color, :allow_nil => true
+  should_validate_uniqueness_of :address, :allow_blank => true
 end
