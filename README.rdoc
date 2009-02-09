@@ -28,43 +28,43 @@ How can we trust in a project that has no tests? How do you ensure that the last
 
 All Remarkable macros can be accessed in two different ways. For those who prefer the Shoulda style, let’s look at some model tests:
 
-	describe Post do
-	  fixtures :all
+  describe Post do
+    fixtures :all
 
-	  should_belong_to :user
-	  should_belong_to :owner
-	  should_belong_to :user, :owner
+    should_belong_to :user
+    should_belong_to :owner
+    should_belong_to :user, :owner
 
-	  should_have_many :tags, :through => :taggings
-	  should_have_many :through_tags, :through => :taggings
-	  should_have_many :tags, :through_tags, :through => :taggings
+    should_have_many :tags, :through => :taggings
+    should_have_many :through_tags, :through => :taggings
+    should_have_many :tags, :through_tags, :through => :taggings
 
-	  should_valiadte_uniqueness_of :title
-	  should_validate_presence_of :body, :message => /wtf/
-	  should_validate_presence_of :title
-	  should_validate_numericality_of :user_id
-	end
+    should_valiadte_uniqueness_of :title
+    should_validate_presence_of :body, :message => /wtf/
+    should_validate_presence_of :title
+    should_validate_numericality_of :user_id
+  end
 
 Notice how you declare your macros with the same name as you do in Rails! This is great because most of the time you won't have to check the documentation (just pay attention that <tt>has_many</tt> becomes <tt>have_many</tt> and <tt>validates</tt> become <tt>validate</tt> according to english grammar).
 
 The syntax above is similar with Shoulda, but those who likes more the Rspec way can simply do:
 
-	describe Post do
-	  fixtures :all
+  describe Post do
+    fixtures :all
 
-	  it { should belong_to(:user) }
-	  it { should belong_to(:owner) }
-	  it { should belong_to(:user, :owner) }
+    it { should belong_to(:user) }
+    it { should belong_to(:owner) }
+    it { should belong_to(:user, :owner) }
 
-	  it { should have_many(:tags, :through => :taggings) }
-	  it { should have_many(:through_tags, :through => :taggings) }
-	  it { should have_many(:tags, :through_tags, :through => :taggings) }
+    it { should have_many(:tags, :through => :taggings) }
+    it { should have_many(:through_tags, :through => :taggings) }
+    it { should have_many(:tags, :through_tags, :through => :taggings) }
 
-	  it { should validate_uniqueness_of(:title) }
-	  it { should validate_presence_of(:body, :message => /wtf/) }
-	  it { should validate_presence_of(:title) }
-	  it { should validate_numericality_of(:user_id) }
-	end
+    it { should validate_uniqueness_of(:title) }
+    it { should validate_presence_of(:body, :message => /wtf/) }
+    it { should validate_presence_of(:title) }
+    it { should validate_numericality_of(:user_id) }
+  end
 
 == Macros
 
@@ -76,19 +76,19 @@ For RSpec style: http://github.com/carlosbrando/remarkable/wikis/rspec-macros
 
 === Pending Macros
 
-Even more than just bringing macros to Rspec, we are bringing Rspec to macros. So let's suppose you are doing some code refactoring and you know some tests will fail before finish cleaning the house, what do you do then?
+Even more than just bringing macros to Rspec, we are bringing Rspec to macros. So let's suppose you are doing some code refactoring and you know some tests will fail while you clean the house, what do you do then?
 
 In Rspec you could do:
 
-	xit { should validate_numericality_of(:user_id) }
+  xit { should validate_numericality_of(:user_id) }
 
 Well, now you can do just the same with macros:
 
-	xvalidate_numericality_of(:user_id)
+  xvalidate_numericality_of(:user_id)
 
 And it's even better, because it will show a nice message:
 
-	"Example disabled: should validate numericality of user_id"
+  "Example disabled: should validate numericality of user_id"
 
 Yeah!
 
@@ -96,15 +96,15 @@ Yeah!
 
 Run the following if you haven't already:
 
-	gem sources -a http://gems.github.com
+  gem sources -a http://gems.github.com
 
 Install the gem:
 
-	sudo gem install carlosbrando-remarkable
+  sudo gem install carlosbrando-remarkable
 
 In RAILS_ROOT/config/environment.rb:
 
-	config.gem "carlosbrando-remarkable", :lib => "remarkable", :source => "http://gems.github.com"
+  config.gem "carlosbrando-remarkable", :lib => "remarkable", :source => "http://gems.github.com"
 
 == Requirements
 
