@@ -89,8 +89,8 @@ module Remarkable # :nodoc:
         def valid_value_for_test
           value = @options[:equal_to] || @options[:less_than_or_equal_to] || @options[:greater_than_or_equal_to]
 
-          value ||= @options[:less_than].pred    if @options[:less_than]
-          value ||= @options[:greater_than].next if @options[:greater_than]
+          value ||= @options[:less_than]    - 1 if @options[:less_than]
+          value ||= @options[:greater_than] + 1 if @options[:greater_than]
 
           value ||= 10
 
