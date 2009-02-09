@@ -6,23 +6,9 @@ module Remarkable # :nodoc:
 
         undef_method :allow_blank, :allow_blank?
 
-        def initialize(*attributes)
-          load_options(attributes.extract_options!)
-          @attributes = attributes
-        end
-
-        def accept(value)
-          @options[:accept] = value
-          self
-        end
-
-        def matches?(subject)
-          @subject = subject
-          assert_matcher_for(@attributes) do |attribute|
-            @attribute = attribute
-            allow_nil? && require_accepted? && accept_is_valid?
-          end
-        end
+        arguments  :attributes
+        optional   :accept
+        assertions :allow_nil?, :require_accepted?, :accept_is_valid?
 
         def description
           message = "require #{@attributes.to_sentence} to be accepted"

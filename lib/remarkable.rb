@@ -9,6 +9,7 @@ if ENV['RAILS_ENV'] == 'test'
   require 'spec/rails'
 end
 
+require 'remarkable/dsl'
 require 'remarkable/matcher_base'
 require 'remarkable/private_helpers'
 require 'remarkable/helpers'
