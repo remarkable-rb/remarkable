@@ -35,7 +35,8 @@ module Remarkable # :nodoc:
       def get_instance_of(object_or_klass) # :nodoc:
         if object_or_klass.is_a?(Class)
           klass = object_or_klass
-          instance_variable_get("@#{instance_variable_name_for(klass)}") || klass.new
+          object = @spec ? @spec.instance_variable_get("@#{instance_variable_name_for(klass)}") : nil
+          object ||= klass.new
         else
           object_or_klass
         end

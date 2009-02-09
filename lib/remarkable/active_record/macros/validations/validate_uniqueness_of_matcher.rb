@@ -183,8 +183,12 @@ module Remarkable # :nodoc:
       #
       # Requires an existing record in the database. If you supply :allow_nil as
       # option, you need to have in the database a record with the given attribute
-      # nil and another with the given attribute not nil. The same is require for
+      # nil and another with the given attribute not nil. The same is required for
       # allow_blank option.
+      #
+      # If an instance variable has been created in the setup named after the
+      # model being tested, then this method will use that.  Otherwise, it will
+      # create a new instance to test against.
       #
       # Options:
       #

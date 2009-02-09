@@ -1,11 +1,13 @@
 class User < ActiveRecord::Base
   has_many :posts
-  has_many :dogs, :foreign_key => :owner_id, :class_name => "Pets::Dog"
+  has_many :dogs, :foreign_key => :owner_id, :class_name => "Pets::Dog", :validate => false
 
   has_many :friendships
   has_many :friends, :through => :friendships
 
   has_one :address, :as => :addressable, :dependent => :destroy
+
+  validates_associated :address, :posts
 
   named_scope :old,      :conditions => "age > 50"
   named_scope :eighteen, :conditions => { :age => 18 }

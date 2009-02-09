@@ -44,7 +44,7 @@ module Remarkable # :nodoc:
           return true if good?(@options[:accept])
 
           @missing = "is not accepted when #{@attribute} is #{@options[:accept].inspect}"
-          return false
+          false
         end
 
         # Receives a Hash

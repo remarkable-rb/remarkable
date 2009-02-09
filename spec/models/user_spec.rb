@@ -8,6 +8,11 @@ describe User do
   it { should have_many(:friendships) }
   it { should have_many(:friends) }
   it { should have_many(:posts, :dogs, :friendships, :friends) }
+
+  it { should validate_associated(:posts) }
+  it { should validate_associated(:address) }
+  it { should validate_associated(:posts, :address) }
+  it { should_not validate_associated(:dogs) }
   
   it { should have_one(:address) }
   it { should have_one(:address).dependent(:destroy) }
@@ -193,6 +198,11 @@ describe User do
   
   should_have_one :address
   should_have_one :address, :dependent => :destroy
+
+  should_validate_associated(:posts)
+  should_validate_associated(:address)
+  should_validate_associated(:posts, :address)
+  should_not_validate_associated(:dogs)
   
   should_have_indices :email, :name
   should_have_index :age
