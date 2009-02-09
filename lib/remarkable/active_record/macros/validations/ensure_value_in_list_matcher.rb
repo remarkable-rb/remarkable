@@ -37,7 +37,7 @@ module Remarkable # :nodoc:
           if @behavior == :invalid
             "allow #{@attribute} to be set to #{values.to_sentence}"
           else
-            "validate #{@behavior} of #{values.to_sentence} in #{@attribute}"
+            "ensure #{@behavior} of #{values.to_sentence} in #{@attribute}"
           end
         end
 
