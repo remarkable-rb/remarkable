@@ -24,8 +24,13 @@ describe Address do
   it { proc{ should validate_length_of(:zip) }.should raise_error }
 
   it { should only_allow_numeric_values_for(:zip) }
+  it { should validate_numericality_of(:zip).less_than(20) }
+  it { should validate_numericality_of(:zip).greater_than(10) }
+  it { should validate_numericality_of(:zip).less_than(20).greater_than(10) }
+  it { should_not validate_numericality_of(:zip, :less_than => 10) }
+  it { should_not validate_numericality_of(:zip, :greater_than => 20) }
+
   it { should_not only_allow_numeric_values_for(:title) }
-  
   it { should_not only_allow_numeric_or_blank_values_for(:zip) }
 end
 
@@ -49,7 +54,12 @@ describe Address do
   should_not_validate_length_of :zip, :minimum => 6
   
   should_only_allow_numeric_values_for :zip
+  should_validate_numericality_of :zip, :less_than => 20
+  should_validate_numericality_of :zip, :greater_than => 10
+  should_validate_numericality_of :zip, :less_than => 20, :greater_than => 10
+  should_not_validate_numericality_of :zip, :less_than => 10
+  should_not_validate_numericality_of :zip, :greater_than => 20
+
   should_not_only_allow_numeric_values_for :title
-  
   should_not_only_allow_numeric_or_blank_values_for :zip
 end

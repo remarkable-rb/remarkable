@@ -68,7 +68,7 @@ module Remarkable # :nodoc:
         end
 
         def description
-          default_message + "values for #{@attributes.to_sentence}"
+          default_message + "for #{@attributes.to_sentence}"
         end
 
         private
@@ -99,7 +99,7 @@ module Remarkable # :nodoc:
           return true unless @options.key?(key)
           return true if good?(@options[key] + add, default_message_for(key), @options[key])
 
-          @missing = "not allow value equals to #{@options[key]} for #{@attribute}"
+          @missing = "did not allow value equals to #{@options[key]} for #{@attribute}"
           false
         end
 
@@ -107,7 +107,8 @@ module Remarkable # :nodoc:
           return true unless @options.key?(key)
           return true if bad?(@options[key] + add, default_message_for(key), @options[key])
 
-          @missing = "allow value #{@options[key] + add} which is more than #{@options[key]} for #{@attribute}"
+          # We should do @options[key] + add - 1 to adjust messages in less_than cases.
+          @missing = "allowed value #{@options[key] + add} which is more than #{@options[key] + add - 1} for #{@attribute}"
           false
         end
 
@@ -115,7 +116,8 @@ module Remarkable # :nodoc:
           return true unless @options.key?(key)
           return true if bad?(@options[key] + add, default_message_for(key), @options[key])
 
-          @missing = "allow value #{@options[key] + add} which is less than #{@options[key]} for #{@attribute}"
+          # We should do @options[key] + add + 1 to adjust messages in greater_than cases.
+          @missing = "allowed value #{@options[key] + add} which is less than #{@options[key] + add + 1} for #{@attribute}"
           false
         end
 
@@ -159,16 +161,16 @@ module Remarkable # :nodoc:
         end
 
         # Returns the default message for each key (:odd, :even, :equal_to, ...).
-        # If the main :message is not a Symbol, it means the user changed it
-        # so we should use it, otherwise returns :odd_message, :even_message and
-        # so on.
+        # If the main :message is equal :not_a_number, it means the user changed
+        # it so we should use it. Otherwise returns :odd_message, :even_message
+        # and so on.
         #
         def default_message_for(key)
-          @options[:message].is_a?(Symbol) ? :"#{key}_message" : :message
+          @options[:message] == :not_a_number ? :"#{key}_message" : :message
         end
 
         def expectation
-          default_message + "values for #{@attribute}"
+          default_message + "for #{@attribute}"
         end
 
         def default_message
@@ -176,11 +178,12 @@ module Remarkable # :nodoc:
           message << "even " if @options[:even]
           message << "odd "  if @options[:odd]
 
+          message << (@options[:only_integer] ? "integer values " : "numeric values ")
+
           message << NUMERIC_COMPARISIONS.map do |key|
             @options[key] ? "#{key.to_s.gsub('_', ' ')} #{@options[key]} " : nil
           end.compact.join('or ')
 
-          message << (@options[:only_integer] ? "integer " : "numeric ")
           message << "or nil "   if @options[:allow_nil]
           message << "or blank " if @options[:allow_blank]
           message

@@ -3,5 +3,5 @@ class Address < ActiveRecord::Base
   validates_uniqueness_of :title, :scope => [:addressable_type, :addressable_id]
   
   validates_length_of :zip, :minimum => 5, :allow_nil => true
-  validates_numericality_of :zip
+  validates_numericality_of :zip, :less_than => 20, :greater_than => 10
 end

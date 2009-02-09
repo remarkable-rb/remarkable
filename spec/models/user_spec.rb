@@ -173,6 +173,10 @@ describe User do
 
   it { should only_allow_numeric_values_for(:ssn) }
 
+  it { should validate_numericality_of(:ssn) }
+  it { should validate_numericality_of(:ssn).equal_to(123456789) }
+  it { should_not validate_numericality_of(:ssn, :equal_to => 123456780) }
+
   it { should have_readonly_attributes(:name) }
   it { should_not have_readonly_attributes(:foo) }
   it { should_not have_readonly_attributes(:ssn) }
@@ -255,7 +259,7 @@ describe User do
   should_have_db_column :id, :type => "integer", :primary => true
   should_have_db_column :email, :type => "string",  :default => nil,    :precision => nil,  :limit => 255,
                                 :null => true,      :primary => false,  :scale => nil,      :sql_type => 'varchar(255)'
-  
+
   should_require_acceptance_of :eula
   should_validate_acceptance_of :eula
   should_validate_acceptance_of :eula, :allow_nil => true
@@ -272,9 +276,13 @@ describe User do
 
   should_validate_uniqueness_of :email, :scoped_to => :name
   should_require_unique_attributes :email, :scoped_to => :name
-  
+
   should_ensure_length_is :ssn, 9, :message => "Social Security Number is not the right length"
   should_only_allow_numeric_values_for :ssn
-  
+
+  should_validate_numericality_of :ssn
+  should_validate_numericality_of :ssn, :equal_to => 123456789
+  should_not_validate_numericality_of :ssn, :equal_to => 123456780
+
   should_have_readonly_attributes :name
 end

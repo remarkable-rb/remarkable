@@ -26,6 +26,7 @@ describe Pets::Dog do
   it { should validate_numericality_of(:age).even(false) }
   it { should validate_numericality_of(:age).greater_than_or_equal_to(10) }
 
+  it { should_not validate_numericality_of(:age, :greater_than_or_equal_to => 9) }
   it { should_not validate_numericality_of(:age, :only_integer => false) }
   it { should_not validate_numericality_of(:age, :allow_blank => false) }
   it { should_not validate_numericality_of(:age).odd(false) }
@@ -36,7 +37,9 @@ describe Pets::Dog do
   it { should validate_numericality_of(:owner_id).allow_nil }
   it { should validate_numericality_of(:owner_id).odd(false) }
   it { should validate_numericality_of(:owner_id).even }
+  it { should validate_numericality_of(:owner_id).less_than_or_equal_to(10) }
 
+  it { should_not validate_numericality_of(:owner_id, :less_than_or_equal_to => 11) }
   it { should_not validate_numericality_of(:owner_id, :only_integer => true) }
   it { should_not validate_numericality_of(:owner_id, :allow_nil => false) }
   it { should_not validate_numericality_of(:owner_id).odd }
@@ -60,12 +63,16 @@ describe Pets::Dog do
   should_validate_numericality_of :owner_id
   should_validate_numericality_of :owner_id, :allow_nil => true
   should_validate_numericality_of :owner_id, :even => true
+  should_validate_numericality_of :owner_id, :less_than_or_equal_to => 10
+  should_not_validate_numericality_of :owner_id, :less_than_or_equal_to => 11
   should_not_validate_numericality_of :owner_id, :odd => true
   should_not_validate_numericality_of :owner_id, :allow_nil => false
 
   should_validate_numericality_of :age
   should_validate_numericality_of :age, :allow_blank => true
   should_validate_numericality_of :age, :odd => true
+  should_validate_numericality_of :age, :greater_than_or_equal_to => 10
+  should_not_validate_numericality_of :age, :greater_than_or_equal_to => 9
   should_not_validate_numericality_of :age, :even => true
   should_not_validate_numericality_of :age, :allow_blank => false
 end
