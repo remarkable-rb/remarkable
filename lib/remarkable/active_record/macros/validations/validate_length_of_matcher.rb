@@ -71,8 +71,8 @@ module Remarkable # :nodoc:
           assert_matcher_for(@attributes) do |attribute|
             @attribute = attribute
 
-            less_than_min_length? && exactly_min_length? && allow_nil? &&
-            more_than_max_length? && exactly_max_length? && allow_blank?
+            less_than_min_length? && exactly_min_length? && allow_nil?(:message, @minimum) &&
+            more_than_max_length? && exactly_max_length? && allow_blank?(:message, @minimum)
           end
         end
 
@@ -92,7 +92,7 @@ module Remarkable # :nodoc:
 
         def less_than_min_length?
           return true if @behavior == :maximum || @minimum <= 0
-          return true if bad?(value_for_length(@minimum - 1), :short_message)
+          return true if bad?(value_for_length(@minimum - 1), :short_message, @minimum)
 
           @missing = "allow #{@attribute} to be less than #{@minimum} chars long"
           return false
@@ -100,7 +100,7 @@ module Remarkable # :nodoc:
 
         def exactly_min_length?
           return true if @behavior == :maximum || @minimum <= 0
-          return true if good?(value_for_length(@minimum), :short_message)
+          return true if good?(value_for_length(@minimum), :short_message, @minimum)
 
           @missing = "not allow #{@attribute} to be exactly #{@minimum} chars long"
           return false
@@ -108,7 +108,7 @@ module Remarkable # :nodoc:
 
         def more_than_max_length?
           return true if @behavior == :minimum
-          return true if bad?(value_for_length(@maximum + 1), :long_message)
+          return true if bad?(value_for_length(@maximum + 1), :long_message, @maximum)
 
           @missing = "allow #{@attribute} to be more than #{@maximum} chars long"
           return false
@@ -116,7 +116,7 @@ module Remarkable # :nodoc:
 
         def exactly_max_length?
           return true if @behavior == :minimum || @minimum == @maximum
-          return true if good?(value_for_length(@maximum), :long_message)
+          return true if good?(value_for_length(@maximum), :long_message, @maximum)
 
           @missing = "not allow #{@attribute} to be exactly #{@maximum} chars long"
           return false
@@ -125,13 +125,13 @@ module Remarkable # :nodoc:
         def load_options(options)
           if @behavior == :is
             @options = {
-              :short_message => { :wrong_length => { :count => @minimum } },
-              :long_message => { :wrong_length => { :count => @maximum } }
+              :short_message => :wrong_length,
+              :long_message => :wrong_length
             }.merge(options)
           else
             @options = {
-              :short_message => { :too_short => { :count => @minimum } },
-              :long_message => { :too_long => { :count => @maximum } }
+              :short_message => :too_short,
+              :long_message => :too_long
             }.merge(options)
           end
 

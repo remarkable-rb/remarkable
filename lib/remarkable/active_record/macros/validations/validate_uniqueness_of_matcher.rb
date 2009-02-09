@@ -126,17 +126,8 @@ module Remarkable # :nodoc:
         # value used in have_attribute? and see if the test object is not valid.
         #
         def case_sensitive?
-          return true unless @options.key? :case_sensitive
-
-          if @options[:case_sensitive]
-            return true if good?(@value.swapcase)
-            @missing = "#{@attribute} is not case sensitive"
-          else
-            return true if bad?(@value.swapcase)
-            @missing = "#{@attribute} is case sensitive"
-          end
-
-          return false
+          message = "case sensitive when attribute is #{@attribute}"
+          assert_good_or_bad_if_key(:case_sensitive, @value.swapcase, message)
         end
 
         # Now test that the object is valid when changing the scoped attribute

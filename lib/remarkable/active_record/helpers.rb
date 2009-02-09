@@ -47,22 +47,50 @@ module Remarkable # :nodoc:
         klass.to_s.split('::').last.underscore
       end
 
+      # Common structure of tests that has been refactored.
+      # It checks for the key, if it exists and it's true, tests that the value
+      # given is bad, otherwise tests that the value is good.
+      #
+      def assert_bad_or_good_if_key(key, value, missing, message_key = :message, count_for_interpolation = 0)
+        return true unless @options.key? key
+
+        if @options[key]
+          return true if bad?(value, message_key)
+        else
+          return true if good?(value, message_key)
+          missing = 'not ' + missing
+        end
+
+        @missing = missing
+        false
+      end
+
+      # Common structure of tests that has been refactored.
+      # It checks for the key, if it exists and it's true, tests that the value
+      # given is good, otherwise tests that the value is bad.
+      #
+      def assert_good_or_bad_if_key(key, value, missing, message_key = :message, count_for_interpolation = 0)
+        return true unless @options.key? key
+
+        if @options[key]
+          return true if good?(value, message_key, count_for_interpolation)
+          missing = 'not ' + missing
+        else
+          return true if bad?(value, message_key, count_for_interpolation)
+        end
+
+        @missing = missing
+        false
+      end
+
       # Default allow_nil? validation.
       #
       # Notice that it checks for @options[:message], so be sure that this option
       # is properly set.
       #
-      def allow_nil?
-        return true unless @options.key? :allow_nil
-
-        if @options[:allow_nil]
-          return true if assert_good_value(@subject, @attribute, nil, @options[:message])
-        else
-          return true if assert_bad_value(@subject, @attribute, nil, @options[:message])
-        end
-
-        @missing = "#{@attribute} can#{ 'not' if @options[:allow_nil] } be set to nil"
-        false
+      def allow_nil?(message_key = :message, count_for_interpolation = 0)
+        message = "allow #{@attribute} be set to nil"
+        assert_good_or_bad_if_key(:allow_nil, nil, message, message_key, count_for_interpolation)
       end
 
       # Default allow_blank? validation.
@@ -70,33 +98,25 @@ module Remarkable # :nodoc:
       # Notice that it checks for @options[:message], so be sure that this option
       # is properly set.
       #
-      def allow_blank?
-        return true unless @options.key? :allow_blank
-
-        if @options[:allow_blank]
-          return true if assert_good_value(@subject, @attribute, "", @options[:message])
-        else
-          return true if assert_bad_value(@subject, @attribute, "", @options[:message])
-        end
-
-        @missing = "#{@attribute} can#{ 'not' if @options[:allow_blank] } be set to blank"
-        false
+      def allow_blank?(message_key = :message, count_for_interpolation = 0)
+        message = "allow #{@attribute} be set to blank"
+        assert_good_or_bad_if_key(:allow_blank, '', message, message_key, count_for_interpolation)
       end
 
       # Shortcut for assert_good_value.
       # Please notice that it has instance variables hard coded. So do not use
       # it if you are trying to assert another instance besides @subject.
       #
-      def good?(value, message_sym = :message)
-        assert_good_value(@subject, @attribute, value, @options[message_sym])
+      def good?(value, message_sym = :message, count_for_interpolation = 0)
+        assert_good_value(@subject, @attribute, value, @options[message_sym], count_for_interpolation)
       end
 
       # Shortcut for assert_bad_value.
       # Please notice that it has instance variables hard coded. So do not use
       # it if you are trying to assert another instance besides @subject.
       #
-      def bad?(value, message_sym = :message)
-        assert_bad_value(@subject, @attribute, value, @options[message_sym])
+      def bad?(value, message_sym = :message, count_for_interpolation = 0)
+        assert_bad_value(@subject, @attribute, value, @options[message_sym], count_for_interpolation)
       end
 
       # Asserts that an Active Record model validates with the passed
@@ -116,13 +136,13 @@ module Remarkable # :nodoc:
       #   @product = Product.new(:tangible => false)
       #   assert_good_value(Product, :price, "0")
       #
-      def assert_good_value(object_or_klass, attribute, value, error_message_to_avoid = //) # :nodoc:
+      def assert_good_value(object_or_klass, attribute, value, error_message_to_avoid = //, count_for_interpolation = 0) # :nodoc:
         object = get_instance_of(object_or_klass)
         object.send("#{attribute}=", value)
 
         return true if object.valid?
 
-        error_message_to_avoid = error_message_from_model(object, attribute, error_message_to_avoid)
+        error_message_to_avoid = error_message_from_model(object, attribute, error_message_to_avoid, count_for_interpolation)
 
         assert_does_not_contain(object.errors.on(attribute), error_message_to_avoid)
       end
@@ -144,14 +164,14 @@ module Remarkable # :nodoc:
       #   @product = Product.new(:tangible => true)
       #   assert_bad_value(Product, :price, "0")
       #
-      def assert_bad_value(object_or_klass, attribute, value, error_message_to_expect = :invalid) # :nodoc:
+      def assert_bad_value(object_or_klass, attribute, value, error_message_to_expect = :invalid, count_for_interpolation = 0) # :nodoc:
         object = get_instance_of(object_or_klass)
         object.send("#{attribute}=", value)
         
         return false if object.valid?
         return false unless object.errors.on(attribute)
 
-        error_message_to_expect = error_message_from_model(object, attribute, error_message_to_expect)
+        error_message_to_expect = error_message_from_model(object, attribute, error_message_to_expect, count_for_interpolation)
 
         assert_contains(object.errors.on(attribute), error_message_to_expect)
       end
@@ -159,9 +179,9 @@ module Remarkable # :nodoc:
       # Return the error message to be checked. If the message is not a Symbol
       # neither a Hash, it returns the own message.
       #
-      # But the nice thing is that when the message is a Symbol or a Hash we
-      # get the error messsage from within the model, using already existent
-      # structure inside ActiveRecord.
+      # But the nice thing is that when the message is a Symbol we get the error
+      # messsage from within the model, using already existent structure inside
+      # ActiveRecord.
       #
       # This allows a couple things from the user side:
       #
@@ -186,20 +206,14 @@ module Remarkable # :nodoc:
       #   Using the underlying mechanism inside ActiveRecord makes us free from
       #   all thos errors.
       #
-      # When the message is hash, it means that it has some interpolations options.
-      # This is used, for example in :too_short messages:
+      # The count value is used to do interpolation.
       #
-      #   error_message_from_model(user, :age, :too_short => { :count => 18 })
-      #
-      def error_message_from_model(model, attribute, message)
-        values = {}
-        message, values = message.keys.first.to_sym, message.values.first if message.is_a?(Hash)
-
+      def error_message_from_model(model, attribute, message, count_value = 0)
         if message.is_a? Symbol
           if Object.const_defined?(:I18n) # Rails >= 2.2
-            model.errors.generate_message(attribute, message, values)
+            model.errors.generate_message(attribute, message, :count => count_value)
           else # Rails <= 2.1
-            ::ActiveRecord::Errors.default_error_messages[message] % values[:count]
+            ::ActiveRecord::Errors.default_error_messages[message] % count_value
           end
         else
           message

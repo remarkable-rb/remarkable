@@ -24,6 +24,7 @@ describe Pets::Dog do
   it { should validate_numericality_of(:age).allow_blank(true) }
   it { should validate_numericality_of(:age).odd }
   it { should validate_numericality_of(:age).even(false) }
+  it { should validate_numericality_of(:age).greater_than_or_equal_to(10) }
 
   it { should_not validate_numericality_of(:age, :only_integer => false) }
   it { should_not validate_numericality_of(:age, :allow_blank => false) }
@@ -58,9 +59,13 @@ describe Pets::Dog do
 
   should_validate_numericality_of :owner_id
   should_validate_numericality_of :owner_id, :allow_nil => true
+  should_validate_numericality_of :owner_id, :even => true
+  should_not_validate_numericality_of :owner_id, :odd => true
   should_not_validate_numericality_of :owner_id, :allow_nil => false
 
   should_validate_numericality_of :age
   should_validate_numericality_of :age, :allow_blank => true
+  should_validate_numericality_of :age, :odd => true
+  should_not_validate_numericality_of :age, :even => true
   should_not_validate_numericality_of :age, :allow_blank => false
 end
