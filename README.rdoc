@@ -39,7 +39,7 @@ All Remarkable macros can be accessed in two different ways. For those who prefe
     should_have_many :through_tags, :through => :taggings
     should_have_many :tags, :through_tags, :through => :taggings
 
-    should_valiadte_uniqueness_of :title
+    should_validate_uniqueness_of :title
     should_validate_presence_of :body, :message => /wtf/
     should_validate_presence_of :title
     should_validate_numericality_of :user_id
