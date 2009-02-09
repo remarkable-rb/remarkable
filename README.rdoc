@@ -14,7 +14,7 @@ Here are some of the things that make Remarkable special (and we are working on 
 
 * <b>All</b> ActiveRecord validation macros with support to <b>all</b> options;
 * More Rails macros (all currently Shoulda macros are ported);
-* It has two different test syntaxes: one for those who like the RSpec style and another for those who are migrating their projects from Shoulda to RSpec;
+* It has two different test syntaxes: one for those who like the RSpec style and another for those who like macro (Shoulda) style;
 * It's a gem;
 * Tests;
 * More tests;
