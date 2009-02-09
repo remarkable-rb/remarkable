@@ -82,22 +82,22 @@ module Remarkable # :nodoc:
 
         def only_integer?
           message = "allow non-integer values for #{@attribute}"
-          assert_bad_or_good_if_key(:only_integer, valid_value_for_test.to_f, message)
+          assert_bad_or_good_if_key(:only_integer, valid_value_for_test.to_f, message, :message)
         end
 
         def allow_even?
           message = "allow even values for #{@attribute}"
-          assert_bad_or_good_if_key(:even, valid_value_for_test + 1, message, :even_message)
+          assert_bad_or_good_if_key(:even, valid_value_for_test + 1, message, default_message_for(:even))
         end
 
         def allow_odd?
           message = "allow odd values for #{@attribute}"
-          assert_bad_or_good_if_key(:odd, even_valid_value_for_test, message, :odd_message)
+          assert_bad_or_good_if_key(:odd, even_valid_value_for_test, message, default_message_for(:odd))
         end
 
         def equal_to?(key, add = 0)
           return true unless @options.key?(key)
-          return true if good?(@options[key] + add, :"#{key}_message", @options[key])
+          return true if good?(@options[key] + add, default_message_for(key), @options[key])
 
           @missing = "not allow value equals to #{@options[key]} for #{@attribute}"
           false
@@ -105,7 +105,7 @@ module Remarkable # :nodoc:
 
         def more_than_maximum?(key, add = 0)
           return true unless @options.key?(key)
-          return true if bad?(@options[key] + add, :"#{key}_message", @options[key])
+          return true if bad?(@options[key] + add, default_message_for(key), @options[key])
 
           @missing = "allow value #{@options[key] + add} which is more than #{@options[key]} for #{@attribute}"
           false
@@ -113,7 +113,7 @@ module Remarkable # :nodoc:
 
         def less_than_minimum?(key, add = 0)
           return true unless @options.key?(key)
-          return true if bad?(@options[key] + add, :"#{key}_message", @options[key])
+          return true if bad?(@options[key] + add, default_message_for(key), @options[key])
 
           @missing = "allow value #{@options[key] + add} which is less than #{@options[key]} for #{@attribute}"
           false
@@ -156,6 +156,15 @@ module Remarkable # :nodoc:
           NUMERIC_COMPARISIONS.map do |key|
             @options[:"#{key}_message"] = key
           end
+        end
+
+        # Returns the default message for each key (:odd, :even, :equal_to, ...).
+        # If the main :message is not a Symbol, it means the user changed it
+        # so we should use it, otherwise returns :odd_message, :even_message and
+        # so on.
+        #
+        def default_message_for(key)
+          @options[:message].is_a?(Symbol) ? :"#{key}_message" : :message
         end
 
         def expectation
