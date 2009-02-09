@@ -1,6 +1,44 @@
 module Remarkable # :nodoc:
   module Matcher # :nodoc:
     class Base
+
+      # Creates optional handlers for matchers dynamically. The following
+      # statement:
+      #
+      #   optional :range, :default => 0..10
+      #
+      # Will generate:
+      #
+      #   def range(value=0..10)
+      #     @options ||= {}
+      #     @options[:range] = value
+      #     self
+      #   end
+      #
+      # Options:
+      #
+      # * <tt>:default</tt> - The default value for this optional
+      # * <tt>:alias</tt>  - An alias for this optional
+      #
+      # Examples:
+      #
+      #   optional :name, :title
+      #   optional :range, :default => 0..10, :alias => :within
+      #
+      def self.optional(*names)
+        options = names.extract_options!
+        names.each do |name|
+          class_eval <<-END
+def #{name}(value#{ options[:default] ? "=#{options[:default].inspect}" : "" })
+  @options ||= {}
+  @options[:#{name}] = value
+  self
+end
+END
+          class_eval "alias_method(:#{options[:alias]}, :#{name})" if options[:alias]
+        end
+      end
+
       def negative
         @negative = true
         self

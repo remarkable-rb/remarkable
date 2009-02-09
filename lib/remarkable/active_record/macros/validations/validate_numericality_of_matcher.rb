@@ -11,45 +11,8 @@ module Remarkable # :nodoc:
           @attributes = attributes
         end
 
-        def only_integer(value = true)
-          @options[:only_integer] = value
-          self
-        end
-
-        def odd(value = true)
-          @options[:odd] = value
-          self
-        end
-
-        def even(value = true)
-          @options[:even] = value
-          self
-        end
-
-        def equal_to(value)
-          @options[:equal_to] = value
-          self
-        end
-
-        def less_than(value)
-          @options[:less_than] = value
-          self
-        end
-
-        def greater_than(value)
-          @options[:greater_than] = value
-          self
-        end
-
-        def less_than_or_equal_to(value)
-          @options[:less_than_or_equal_to] = value
-          self
-        end
-
-        def greater_than_or_equal_to(value)
-          @options[:greater_than_or_equal_to] = value
-          self
-        end
+        optional :only_integer, :odd, :even, :default => true
+        optional :equal_to, :less_than, :greater_than, :less_than_or_equal_to, :greater_than_or_equal_to
 
         def matches?(subject)
           @subject = subject
