@@ -216,6 +216,13 @@ module Remarkable # :nodoc:
       end
       alias :validate_size_of :validate_length_of
 
+      # TODO This one is for shoulda compatibility. Deprecate it?
+      def ensure_length_of(*attributes) #:nodoc:
+        warn "[DEPRECATION] should_ensure_length_of is deprecated. " <<
+             "Use should_validate_length_of instead."
+        validate_length_of(*attributes)
+      end
+
       # TODO Deprecate me
       def ensure_length_in_range(attribute, range, options = {}) #:nodoc:
         warn "[DEPRECATION] should_ensure_length_in_range is deprecated. " <<

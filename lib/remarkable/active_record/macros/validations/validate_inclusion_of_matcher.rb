@@ -33,6 +33,13 @@ module Remarkable # :nodoc:
         end
       end
 
+      # TODO This one is for shoulda compatibility. Deprecate it?
+      def ensure_inclusion_of(attribute, *good_values) #:nodoc:
+        warn "[DEPRECATION] should_ensure_inclusion_of is deprecated. " <<
+             "Use should_validate_inclusion_of instead."
+        validate_inclusion_of(attribute, *good_values)
+      end
+
     end
   end
 end
