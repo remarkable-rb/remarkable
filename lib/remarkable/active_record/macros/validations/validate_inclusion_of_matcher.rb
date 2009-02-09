@@ -32,8 +32,6 @@ module Remarkable # :nodoc:
           EnsureValueInListMatcher.new(attribute, :inclusion, *good_values)
         end
       end
-      alias :allow_inclusion_of  :validate_inclusion_of
-      alias :ensure_inclusion_of :validate_inclusion_of
 
     end
   end

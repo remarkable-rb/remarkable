@@ -9,8 +9,8 @@ module Remarkable # :nodoc:
           @attributes = attributes
         end
 
-        def scope(scoped)
-          @options[:scope] = [*scoped].compact
+        def scope(scope)
+          @options[:scope] = [*scope].compact
           self
         end
 
@@ -22,6 +22,8 @@ module Remarkable # :nodoc:
         # TODO Deprecate this
         #
         def scoped_to(scoped)
+          warn "[DEPRECATION] should_require_unique_attributes.scoped_to is deprecated. " <<
+               "Use should_validate_uniqueness_of.scope instead."
           @options[:scope] = [*scoped].compact
           self
         end
@@ -159,8 +161,12 @@ module Remarkable # :nodoc:
           }.merge(options)
 
           if options[:scoped_to] # TODO Deprecate scoped_to
+            warn "[DEPRECATION] should_require_unique_attributes with :scoped_to is deprecated. " <<
+                 "Use should_validate_uniqueness_of with :scope instead."
             @options[:scope] = [*options[:scoped_to]].compact
           else
+            warn "[DEPRECATION] should_require_unique_attributes is deprecated. " <<
+                 "Use should_validate_uniqueness_of instead."
             @options[:scope] = [*options[:scope]].compact
           end
         end
@@ -209,6 +215,7 @@ module Remarkable # :nodoc:
       def validate_uniqueness_of(*attributes)
         ValidateUniquenessOfMatcher.new(*attributes)
       end
+      #TODO Deprecate this alias, the deprecation warning is the matcher
       alias :require_unique_attributes :validate_uniqueness_of
     end
   end

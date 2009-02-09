@@ -32,7 +32,7 @@ module Remarkable # :nodoc:
           EnsureValueInListMatcher.new(attribute, :exclusion, *good_values)
         end
       end
-      alias :ensure_exclusion_of :validate_exclusion_of
+
     end
   end
 end

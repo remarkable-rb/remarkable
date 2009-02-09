@@ -12,11 +12,15 @@ module Remarkable # :nodoc:
         end
         
         def low_message(message)
+          warn "[DEPRECATION] should_ensure_value_in_range.low_message is deprecated. " <<
+               "Use should_validate_inclusion_of.message instead."
           @options[:low_message] = message
           self
         end
 
         def high_message(message)
+          warn "[DEPRECATION] should_ensure_value_in_range.high_message is deprecated. " <<
+               "Use should_validate_inclusion_of.message instead."
           @options[:high_message] = message
           self
         end
@@ -141,6 +145,15 @@ module Remarkable # :nodoc:
         end
 
         def load_options(options = {})
+          warn "[DEPRECATION] should_ensure_value_in_range with :low_message is deprecated. " <<
+               "Use should_validate_inclusion_of with :message instead." if options[:low_message]
+
+          warn "[DEPRECATION] should_ensure_value_in_range with :high_message is deprecated. " <<
+               "Use should_validate_inclusion_of with :message instead." if options[:high_message]
+
+          warn "[DEPRECATION] should_ensure_value_in_range is deprecated. " <<
+               "Use should_validate_inclusion_of instead." if options[:low_message].blank? && options[:high_message].blank?
+
           @options = {
             :low_message  => @behavior,
             :high_message => @behavior,
@@ -149,31 +162,9 @@ module Remarkable # :nodoc:
         end
       end
 
-      # Ensure that the attribute is in the range specified
-      #
-      # If an instance variable has been created in the setup named after the
-      # model being tested, then this method will use that.  Otherwise, it will
-      # create a new instance to test against.
-      #
-      # Options:
-      # * <tt>:low_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
-      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.inclusion')</tt>
-      # * <tt>:high_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
-      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.inclusion')</tt>
-      #
-      # Example:
-      #   it { should ensure_value_in_range(:age, 1..100) }
-      #
-      # TODO This matcher should be deprecated in a sense that should not have
-      # an API. But it will be internally used by validate_inclusion_of,
-      # validate_exclusion_of and validate_numericality_of matchers.
-      #
-      # We should also deprecate :low_message and :high_message since they don't
-      # make sense in validate_inclusion_of or validate_exclusion_of matchers. By
-      # doing this we can refactor accepts_maximum? and accepts_minimum? into a
-      # single assert_boundary method.
-      #
-      def ensure_value_in_range(attribute, range, *options)
+
+      # TODO Deprecate this method, but not the matcher.
+      def ensure_value_in_range(attribute, range, *options) #:nodoc:
         EnsureValueInRangeMatcher.new(attribute, :inclusion, range, *options)
       end
     end

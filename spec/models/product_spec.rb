@@ -40,9 +40,6 @@ describe Product do
       @product = Product.new(:tangible => true)
     end
 
-    it { @product.should allow_inclusion_of(:size, "S", "M", "L", "XL") }
-    it { @product.should_not allow_inclusion_of(:size, "XXXL", "XXL") }
-
     it { @product.should validate_inclusion_of(:size, "S", "M", "L", "XL") }
     it { @product.should validate_inclusion_of(:size, "S", "M", "L", "XL").allow_blank }
     it { @product.should_not validate_inclusion_of(:size, "XXXL", "XXL") }
@@ -95,15 +92,10 @@ describe Product do
       @product = Product.new(:tangible => true)
     end
 
-    should_allow_inclusion_of :size, "S", "M", "L", "XL"
-    should_not_allow_inclusion_of :size, "XXXL", "XXL"
     should_validate_inclusion_of :size, "S", "M", "L", "XL"
     should_validate_inclusion_of :size, :allow_blank => true
     should_not_validate_inclusion_of :size, "XXXL", "XXL"
     should_not_validate_inclusion_of :size, "S", "M", "L", "XL", :allow_blank => false
-
-    should_ensure_exclusion_of :size, "XS", "XM"
-    should_not_ensure_exclusion_of :size, "S", "M", "L", "XL"
 
     should_validate_exclusion_of :size, "XS", "XM"
     should_not_validate_exclusion_of :size, "S", "M", "L", "XL"

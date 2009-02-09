@@ -21,7 +21,7 @@ module Remarkable # :nodoc:
         end
 
         def description
-          "ensure confirmation of #{@attributes.to_sentence}"
+          "validate confirmation of #{@attributes.to_sentence}"
         end
 
         private
@@ -68,7 +68,6 @@ module Remarkable # :nodoc:
       def validate_confirmation_of(*attributes)
         ValidateConfirmationOfMatcher.new(*attributes)
       end
-      alias :ensure_confirmation_of :validate_confirmation_of
 
     end
   end

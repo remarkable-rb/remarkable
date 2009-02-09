@@ -40,12 +40,10 @@ module Remarkable # :nodoc:
         end
       end
 
-      # Ensures that the attribute cannot be set on mass update.
-      #
-      #   it { should protect_attributes(:password, :admin_flag) }
-      #
-      # TODO Deprecate this whole matcher.
-      def protect_attributes(*attributes)
+      # TODO Deprecate this method and the matcher.
+      def protect_attributes(*attributes) #:nodoc:
+        warn "[DEPRECATION] should_protect_attributes is deprecated. " <<
+             "Use should_not_allow_mass_assignment_of instead."
         ProtectAttributes.new(*attributes)
       end
     end

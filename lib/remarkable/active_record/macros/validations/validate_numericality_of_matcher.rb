@@ -187,13 +187,18 @@ module Remarkable # :nodoc:
       def validate_numericality_of(*attributes)
         ValidateNumericalityOfMatcher.new(*attributes)
       end
-      alias :only_allow_numeric_values_for :validate_numericality_of
 
-      # TODO Deprecate this method and say that it has to be changed to:
-      #
-      #   validate_numericality_of :attribute, :allow_blank => true
-      #
+      # TODO Deprecate me
+      def only_allow_numeric_values_for(*attributes) #:nodoc:
+        warn "[DEPRECATION] should_only_allow_numeric_values_for is deprecated. " <<
+             "Use should_validate_numericality_of instead."
+        ValidateNumericalityOfMatcher.new(*attributes)
+      end
+
+      # TODO Deprecate me
       def only_allow_numeric_or_blank_values_for(*attributes)
+        warn "[DEPRECATION] should_only_allow_numeric_or_blank_values_for is deprecated. " <<
+             "Use should_validate_numericality_of with :allow_blank => true instead."
         ValidateNumericalityOfMatcher.new(*attributes).allow_blank
       end
     end

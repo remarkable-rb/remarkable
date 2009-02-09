@@ -215,25 +215,25 @@ module Remarkable # :nodoc:
         matcher
       end
       alias :validate_size_of :validate_length_of
-      alias :ensure_length_of :validate_length_of
 
       # TODO Deprecate me
-      def ensure_length_in_range(attribute, range, options = {})
+      def ensure_length_in_range(attribute, range, options = {}) #:nodoc:
+        warn "[DEPRECATION] should_ensure_length_in_range is deprecated. " <<
+             "Use should_validate_length_of(#{attribute.inspect}, :in => #{range.inspect}) instead."
         ValidateLengthOfMatcher.new([attribute], range, :within, options)
       end
 
       # TODO Deprecate me
-      def ensure_length_at_least(attribute, range, options = {})
+      def ensure_length_at_least(attribute, range, options = {}) #:nodoc:
+        warn "[DEPRECATION] should_ensure_length_at_least is deprecated. " <<
+             "Use should_validate_length_of(#{attribute.inspect}, :minimum => #{range.inspect}) instead."
         ValidateLengthOfMatcher.new([attribute], range, :minimum, options)
       end
 
       # TODO Deprecate me
-      def ensure_length_no_more(attribute, range, options = {})
-        ValidateLengthOfMatcher.new([attribute], range, :maximum, options)
-      end
-
-      # TODO Deprecate me
-      def ensure_length_is(attribute, range, options = {})
+      def ensure_length_is(attribute, range, options = {}) #:nodoc:
+        warn "[DEPRECATION] should_ensure_length_is is deprecated. " <<
+             "Use should_validate_length_of(#{attribute.inspect}, :is => #{range.inspect}) instead."
         ValidateLengthOfMatcher.new([attribute], range, :is, options)
       end
     end

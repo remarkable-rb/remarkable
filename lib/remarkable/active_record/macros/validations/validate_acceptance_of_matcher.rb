@@ -66,7 +66,14 @@ module Remarkable # :nodoc:
       def validate_acceptance_of(*attributes)
         ValidateAcceptanceOfMatcher.new(*attributes)
       end
-      alias :require_acceptance_of :validate_acceptance_of
+
+      # TODO Deprecate this method.
+      def require_acceptance_of(*attributes) #:nodoc:
+        warn "[DEPRECATION] should_require_acceptance_of is deprecated. " <<
+             "Use should_validate_acceptance_of instead."
+        ValidateAcceptanceOfMatcher.new(*attributes)
+      end
+
     end
   end
 end

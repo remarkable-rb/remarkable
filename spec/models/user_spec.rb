@@ -66,9 +66,6 @@ describe User do
   it { should_not allow_values_for(:email, "a@b.com", "asdf@asdf.com").allow_nil(true) }
   it { should allow_values_for(:email, "a@b.com", "asdf@asdf.com").allow_nil(false) }
 
-  it { should ensure_confirmation_of(:username, :email) }
-  it { should_not ensure_confirmation_of(:ssn) }
-
   it { should validate_confirmation_of(:username, :email) }
   it { should_not validate_confirmation_of(:ssn) }
   
@@ -255,9 +252,6 @@ describe User do
   should_not_validate_length_of :email, :within => 0..200
   should_not_validate_length_of :email, :in => 2..100, :allow_nil => true
   should_not_validate_length_of :email, :in => 2..100, :allow_blank => true
-
-  should_ensure_confirmation_of :username, :email
-  should_not_ensure_confirmation_of :ssn
 
   should_validate_confirmation_of :username, :email
   should_not_validate_confirmation_of :ssn
