@@ -177,18 +177,62 @@ module Remarkable # :nodoc:
         end
       end
 
+
+      # Ensure that the belongs_to relationship exists.
+      #
+      # Examples:
+      #
+      #   should_belong_to :parent
+      #   it { should belong_to(:parent) }
+      #
       def belong_to(*associations)
         AssociationMatcher.new(:belongs_to, *associations)
       end
 
+      # Ensures that the has_many relationship exists. Will also test that the associated table has the required columns. Works with polymorphic associations.
+      #
+      # Options:
+      #
+      # * <tt>:through</tt> - association name for has_many :through
+      # * <tt>:dependent</tt> - tests that the association makes use of the dependent option.
+      #
+      # Examples:
+      #
+      #   should_have_many :friends
+      #   should_have_many :enemies, :through => :friends
+      #   should_have_many :enemies, :dependent => :destroy
+      #
+      #   it{ should have_many(:friends) }
+      #   it{ should have_many(:enemies, :through => :friends) }
+      #   it{ should have_many(:enemies, :dependent => :destroy) }
+      #
+      #
       def have_many(*associations)
         AssociationMatcher.new(:has_many, *associations)
       end
 
+      # Ensure that the has_one relationship exists. Will also test that the associated table has the required columns. Works with polymorphic associations.
+      #
+      # Options:
+      #
+      # * <tt>:dependent</tt> - tests that the association makes use of the dependent option.
+      #
+      # Examples:
+      #
+      #  should_have_one :god
+      #  it{ should have_one(:god) }
+      #
       def have_one(*associations)
         AssociationMatcher.new(:has_one, *associations)
       end
 
+      # Ensures that the has_and_belongs_to_many relationship exists, and that the join table is in place.
+      #
+      # Examples:
+      #
+      #  should_have_and_belong_to_many :posts, :cars
+      #  it{ should have_and_belong_to_many :posts, :cars }
+      #
       def have_and_belong_to_many(*associations)
         AssociationMatcher.new(:has_and_belongs_to_many, *associations)
       end
