@@ -78,12 +78,12 @@ module Remarkable # :nodoc:
         protected
 
         def column_type
-          model_class.columns.detect {|c| c.name == @column.to_s }
+          subject_class.columns.detect {|c| c.name == @column.to_s }
         end
 
         def has_column?
           return true if column_type
-          @missing = "#{model_name} does not have column #{@column}"
+          @missing = "#{subject_name} does not have column #{@column}"
           false
         end
 
@@ -99,13 +99,13 @@ module Remarkable # :nodoc:
           if found_value == expected_value.to_s
             true
           else
-            @missing = ":#{@column} column on table for #{model_class} does not match option :#{option}, found '#{found_value}' but expected '#{expected_value}'"
+            @missing = ":#{@column} column on table for #{subject_class} does not match option :#{option}, found '#{found_value}' but expected '#{expected_value}'"
             false
           end
         end
 
         def expectation
-          "#{model_name} to have a column named #{@column}"
+          "#{subject_name} to have a column named #{@column}"
         end
       end
 

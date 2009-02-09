@@ -12,7 +12,7 @@ module Remarkable # :nodoc:
           @subject = subject
 
           assert_matcher do
-            @scope = eval("#{model_class}.#{@scope_call}")
+            @scope = eval("#{subject_class}.#{@scope_call}")
             return_scope_object? && scope_itself_to_options?
           end
         end
@@ -42,12 +42,12 @@ module Remarkable # :nodoc:
           return true if @scope_opts.empty?
           return true if @scope.proxy_options == @scope_opts
           
-          @missing = "#{model_name} didn't scope itself to #{@scope_opts.inspect}"
+          @missing = "#{subject_name} didn't scope itself to #{@scope_opts.inspect}"
           return false
         end
         
         def expectation
-          "#{model_name} have to scope itself to #{@scope_opts.inspect} when #{@scope_call} is called"
+          "#{subject_name} have to scope itself to #{@scope_opts.inspect} when #{@scope_call} is called"
         end
       end
 

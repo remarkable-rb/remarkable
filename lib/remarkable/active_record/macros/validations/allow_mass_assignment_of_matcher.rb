@@ -24,14 +24,14 @@ module Remarkable # :nodoc:
 
         def allowed_to_mass_update?
           attribute  = @attribute.to_sym
-          protected  = model_class.protected_attributes || []
-          accessible = model_class.accessible_attributes || []
+          protected  = subject_class.protected_attributes || []
+          accessible = subject_class.accessible_attributes || []
 
           return true unless protected.include?(attribute.to_s)
           return true unless accessible.empty? || accessible.include?(attribute.to_s)
 
-          @missing = accessible.empty? ? "#{model_class} is protecting #{protected.to_a.to_sentence}" :
-                                         "#{model_class} has not made #{attribute} accessible"
+          @missing = accessible.empty? ? "#{subject_class} is protecting #{protected.to_a.to_sentence}" :
+                                         "#{subject_class} has not made #{attribute} accessible"
           return false
         end
 

@@ -22,10 +22,10 @@
 #   end
 # 
 #   class ::SomeModel; end
-#   describe "model_class" do
+#   describe "subject_class" do
 #     it "sniff the class constant from the test class" do
 #       self.should_receive(:described_type).and_return(SomeModel)
-#       model_class.should == SomeModel
+#       subject_class.should == SomeModel
 #     end
 #   end
 # end

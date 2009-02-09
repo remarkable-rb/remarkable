@@ -33,10 +33,10 @@ module Remarkable # :nodoc:
             @subject.send(confirmation_assignment, 'something')
             return true if bad?('different')
 
-            @missing = "#{model_name} is valid even if confirmation does not match"
+            @missing = "#{subject_name} is valid even if confirmation does not match"
             return false
           else
-            @missing = "#{model_name} does not respond to #{confirmation_assignment}"
+            @missing = "#{subject_name} does not respond to #{confirmation_assignment}"
             return false
           end
         end

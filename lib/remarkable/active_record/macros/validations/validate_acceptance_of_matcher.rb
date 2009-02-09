@@ -55,7 +55,7 @@ module Remarkable # :nodoc:
         end
 
         def expectation
-          message = "that the #{model_name} can be saved if #{@attribute} is accepted"
+          message = "that the #{subject_name} can be saved if #{@attribute} is accepted"
           message << " or nil" if @options[:allow_nil]
           message
         end

@@ -61,14 +61,14 @@ module Remarkable # :nodoc:
         #
         def find_first_object?
           if @options[:allow_nil]
-            return true if @existing = model_class.find(:first, :conditions => "#{@attribute} IS NOT NULL")
-            @missing = "can't find #{model_class} with #{@attribute} not nil"
+            return true if @existing = subject_class.find(:first, :conditions => "#{@attribute} IS NOT NULL")
+            @missing = "can't find #{subject_class} with #{@attribute} not nil"
           elsif @options[:allow_blank]
-            return true if @existing = model_class.find(:first, :conditions => "#{@attribute} != ''")
-            @missing = "can't find #{model_class} with #{@attribute} not blank"
+            return true if @existing = subject_class.find(:first, :conditions => "#{@attribute} != ''")
+            @missing = "can't find #{subject_class} with #{@attribute} not blank"
           else
-            return true if @existing = model_class.find(:first)
-            @missing = "can't find first #{model_class}"
+            return true if @existing = subject_class.find(:first)
+            @missing = "can't find first #{subject_class}"
           end
 
           false
@@ -79,9 +79,9 @@ module Remarkable # :nodoc:
         #
         def find_nil_object?
           return true unless @options.key? :allow_nil
-          return true if model_class.find(:first, :conditions => "#{@attribute} IS NULL")
+          return true if subject_class.find(:first, :conditions => "#{@attribute} IS NULL")
 
-          @missing = "can't find #{model_class} with #{@attribute} nil"
+          @missing = "can't find #{subject_class} with #{@attribute} nil"
           false
         end
 
@@ -90,9 +90,9 @@ module Remarkable # :nodoc:
         #
         def find_blank_object?
           return true unless @options.key? :allow_blank
-          return true if model_class.find(:first, :conditions => "#{@attribute} = ''")
+          return true if subject_class.find(:first, :conditions => "#{@attribute} = ''")
 
-          @missing = "can't find #{model_class} with #{@attribute} blank"
+          @missing = "can't find #{subject_class} with #{@attribute} blank"
           false
         end
 
@@ -106,7 +106,7 @@ module Remarkable # :nodoc:
           #
           @options[:scope].each do |s|
             unless @subject.respond_to?(:"#{s}=")
-              @missing = "#{model_name} doesn't seem to have a #{s} attribute."
+              @missing = "#{subject_name} doesn't seem to have a #{s} attribute."
               return false
             end
             @subject.send("#{s}=", @existing.send(s))
@@ -137,7 +137,7 @@ module Remarkable # :nodoc:
             # Assume the scope is a foreign key if the field is nil
             @subject.send("#{s}=", new_value_for_scope(s))
             unless good?(@value)
-              @missing = "#{model_name} is not valid when changing the scoped attribute for #{s}"
+              @missing = "#{subject_name} is not valid when changing the scoped attribute for #{s}"
               return false
             end
           end
@@ -166,7 +166,7 @@ module Remarkable # :nodoc:
         end
 
         def expectation
-          message = "that the #{model_name} can be saved if "
+          message = "that the #{subject_name} can be saved if "
 
           if @options.key? :case_sensitive
             message << (@options[:case_sensitive] ? 'case sensitive ' : 'case insensitive ')

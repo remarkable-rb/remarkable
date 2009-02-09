@@ -28,16 +28,16 @@ module Remarkable # :nodoc:
         def has_callback?
           return true if callbacks_for(@callback).include?(@method)
 
-          @missing = "#{model_name} does not have a #{@callback} callback named #{@method}"
+          @missing = "#{subject_name} does not have a #{@callback} callback named #{@method}"
           return false
         end
 
         def callbacks_for(callback)
-          model_class.send("#{callback}_callback_chain").collect(&:method)
+          subject_class.send("#{callback}_callback_chain").collect(&:method)
         end
 
         def expectation
-          "#{model_name} have a #{@callback} callback named #{@method}"
+          "#{subject_name} have a #{@callback} callback named #{@method}"
         end
 
       end

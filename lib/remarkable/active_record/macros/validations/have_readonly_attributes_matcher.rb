@@ -20,14 +20,14 @@ module Remarkable # :nodoc:
         end
 
         private
-        
+
         def attribute_readonly?
           attribute = @attribute.to_sym
-          readonly = model_class.readonly_attributes || []
+          readonly = subject_class.readonly_attributes || []
           return true if readonly.include?(attribute.to_s)
-          
-          @missing = (readonly.empty? ? "#{model_class} attribute #{attribute} is not read-only" :  
-                                        "#{model_class} is making #{readonly.to_a.to_sentence} read-only, but not #{attribute}.")
+
+          @missing = (readonly.empty? ? "#{subject_class} attribute #{attribute} is not read-only" :
+                                        "#{subject_class} is making #{readonly.to_a.to_sentence} read-only, but not #{attribute}.")
           return false
         end
         

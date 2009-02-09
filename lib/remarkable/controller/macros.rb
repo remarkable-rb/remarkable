@@ -52,7 +52,7 @@ module Remarkable # :nodoc:
         matcher = send(method, *args)
         it "should #{matcher.description}" do
           matcher.spec(self)
-          assert_accepts(matcher, model_class)
+          assert_accepts(matcher, subject_class)
         end
       end
 
@@ -60,7 +60,7 @@ module Remarkable # :nodoc:
         matcher = send(method, *args)
         it "should not #{matcher.description}" do
           matcher.spec(self).negative
-          assert_rejects(matcher, model_class)
+          assert_rejects(matcher, subject_class)
         end
       end
 

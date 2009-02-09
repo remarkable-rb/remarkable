@@ -31,14 +31,14 @@ module Remarkable # :nodoc:
         private
         
         def have_instance_method?
-          return true if model_class.new.respond_to?(@method)
+          return true if subject_class.new.respond_to?(@method)
           
-          @missing = "#{model_name} does not have instance method #{@method}"
+          @missing = "#{subject_name} does not have instance method #{@method}"
           return false
         end
 
         def expectation
-          "#{model_name} to respond to instance method #{@method}"
+          "#{subject_name} to respond to instance method #{@method}"
         end
       end
 

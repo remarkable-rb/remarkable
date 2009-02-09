@@ -78,7 +78,7 @@ module Remarkable # :nodoc:
         end
 
         def belongs_foreign_key_missing?
-          @macro == :belongs_to && !class_has_foreign_key?(model_class)
+          @macro == :belongs_to && !class_has_foreign_key?(subject_class)
         end
 
         def has_foreign_key_missing?
@@ -93,7 +93,7 @@ module Remarkable # :nodoc:
 
         def through_association_exists?
           if through_reflection.nil?
-            @missing = "#{model_name} does not have any relationship to #{@options[:through]}"
+            @missing = "#{subject_name} does not have any relationship to #{@options[:through]}"
             false
           else
             true
@@ -102,7 +102,7 @@ module Remarkable # :nodoc:
 
         def through_association_correct?
           if @options[:through] == reflection.options[:through]
-            @missing = "Expected #{model_name} to have #{@name} through #{@options[:through]}, " <<
+            @missing = "Expected #{subject_name} to have #{@name} through #{@options[:through]}, " <<
             " but got it through #{reflection.options[:through]}"
             true
           else
@@ -155,15 +155,15 @@ module Remarkable # :nodoc:
         end
 
         def reflection
-          model_class.reflect_on_association(@name)
+          subject_class.reflect_on_association(@name)
         end
 
         def through_reflection
-          model_class.reflect_on_association(@options[:through])
+          subject_class.reflect_on_association(@options[:through])
         end
 
         def expectation
-          "#{model_name} to have a #{@macro} association called #{@name}"
+          "#{subject_name} to have a #{@macro} association called #{@name}"
         end
 
         def macro_description

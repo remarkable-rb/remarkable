@@ -59,12 +59,12 @@ END
 
       private
 
-      def model_class
+      def subject_class
         @subject.is_a?(Class) ? @subject : @subject.class
       end
 
-      def model_name
-        model_class.name
+      def subject_name
+        subject_class.name
       end
 
       def positive?
@@ -95,9 +95,6 @@ END
         positive?
       end
 
-      def remove_parenthesis(text)
-        /#{text.gsub(/\s?\(.*\)$/, '')}/
-      end
     end
   end
 end

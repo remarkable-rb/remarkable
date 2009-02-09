@@ -81,7 +81,7 @@ module Remarkable # :nodoc:
         end
 
         def table_name
-          @table_name ||= model_class.table_name
+          @table_name ||= subject_class.table_name
         end
 
         def indexes

@@ -39,7 +39,7 @@ module Remarkable # :nodoc:
         end
 
         def expectation
-          "that the #{model_name} cannot be saved if #{@attribute} is not present"
+          "that the #{subject_name} cannot be saved if #{@attribute} is not present"
         end
       end
 

@@ -1,7 +1,7 @@
 module Remarkable # :nodoc:
   module Private # :nodoc:    
     # Returns the model class constant, as determined by the test class name.
-    def model_class
+    def subject_class
       # TODO: fazer um mixin na classe de string para retornar o formato do variable_name
       variable_name = "@#{instance_variable_name}"
       if instance_variable_defined?(variable_name)
