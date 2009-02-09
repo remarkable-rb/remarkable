@@ -1,35 +1,30 @@
-= Simplifying tests for trivial things!
+= Simplifying tests!
 
-For a long time I was evangelizing Shoulda at Surgeworks and used it in my personal projects. The fact is, I didn’t have much success in convincing my co-workers to adopt Shoulda. On the other hand, they managed to convince me to learn and use RSpec.
+Remarkable is a framework for Rspec matchers.
 
-RSpec is a very interesting Testing Framework. But I start to like it more after I started to use the Cucumber.
+Matchers are a powerful tool for DRYing and simplifying tests and if you are using Rspec on Rails, you are already using them for a long long time (redirect_to and be_success for example).
 
-The great thing about Shoulda is that it’s simplifies tests for trivial things.
+But the creation of matchers should not be in hand of few, but spreaded to millions. :)
 
-I got to like RSpec more and more, so I decided to adopt it as my official testing framework from now on. But I can no longer live without the resources that Shoulda offers me. So I decided to scratch my itch.
+If not enough, Remarkable also makes easy your matchers become macros and have even cleaner tests.
 
-== DESCRIPTION:
+== Current Features
 
-Initially, the main objective of Remarkable is to port all Shoulda macros to RSpec, but of course the plan is more ambitious than that. I have other ideas that will hopefully be especially useful for Rspec users.
+Here are some of the things that make Remarkable special (and we are working on even more):
 
-At this point you may ask: “But aren’t there already plug-ins that do the same thing. Why build something else?”
-
-First, this isn’t simply “another” plugin with RSpec matchers. It also does a lot of things differently that I feel are better than other approaches.
-
-== FEATURES:
-
-Here are some of the things that make Remarkable special:
-
-* It is not a plug-in; it’s a gem.
-* All currently Shoulda macros are ported to RSpec.
-* It has two different test syntaxes: one for those who like the RSpec style and another for those who are migrating their projects from Shoulda to RSpec.
-* Tests.
-* More tests.
+* <b>All</b> ActiveRecord validation macros with support to <b>all</b> options;
+* More Rails macros (all currently Shoulda macros are ported);
+* It has two different test syntaxes: one for those who like the RSpec style and another for those who are migrating their projects from Shoulda to RSpec;
+* It's a gem;
+* Tests;
+* More tests;
 * And a few more tests.
 
-Unlike other similar projects, Remarkable is the only one that tests itself, and this is a big difference, believe me! How can we trust in a project that has no tests? How can you develop an open-source project with no tests? How do you ensure that the last commit didn’t break anything?
+Unlike other similar projects, Remarkable is the only one that tests itself, and this is a big difference, believe me!
 
-== SYNOPSIS:
+How can we trust in a project that has no tests? How do you ensure that the last commit didn't break anything?
+
+== Synopsis
 
 All Remarkable macros can be accessed in two different ways. For those who prefer the Shoulda style, let’s look at some model tests:
 
@@ -44,15 +39,15 @@ All Remarkable macros can be accessed in two different ways. For those who prefe
 	  should_have_many :through_tags, :through => :taggings
 	  should_have_many :tags, :through_tags, :through => :taggings
 
-	  should_require_unique_attributes :title
-	  should_require_attributes :body, :message => /wtf/
-	  should_require_attributes :title
-	  should_only_allow_numeric_values_for :user_id
+	  should_valiadte_uniqueness_of :title
+	  should_validate_presence_of :body, :message => /wtf/
+	  should_validate_presence_of :title
+	  should_validate_numericality_of :user_id
 	end
 
-Like Shoulda, right? That’s the idea! This syntax is for those who wish to migrate their Shoulda tests to RSpec. You basically just have to change context to describe and wrap your should statements with it {}.
+Notice how you declare your macros with the same name as you do in Rails! This is great because most of the time you won't have to check the documentation (just pay attention that <tt>has_many</tt> becomes <tt>have_many</tt> and <tt>validates</tt> become <tt>validate</tt> according to english grammar).
 
-But if you don’t like this syntax, you can also create the same tests as follows.
+The syntax above is similar with Shoulda, but those who likes more the Rspec way can simply do:
 
 	describe Post do
 	  fixtures :all
@@ -65,13 +60,11 @@ But if you don’t like this syntax, you can also create the same tests as follo
 	  it { should have_many(:through_tags, :through => :taggings) }
 	  it { should have_many(:tags, :through_tags, :through => :taggings) }
 
-	  it { should require_unique_attributes(:title) }
-	  it { should require_attributes(:body, :message => /wtf/) }
-	  it { should require_attributes(:title) }
-	  it { should only_allow_numeric_values_for(:user_id) }
+	  it { should validate_uniqueness_of(:title) }
+	  it { should validate_presence_of(:body, :message => /wtf/) }
+	  it { should validate_presence_of(:title) }
+	  it { should validate_numericality_of(:user_id) }
 	end
-
-Now with an RSpec style!
 
 == Macros
 
@@ -80,13 +73,31 @@ Now with an RSpec style!
 For Shoulda style: http://github.com/carlosbrando/remarkable/wikis/shoulda-macros
 
 For RSpec style: http://github.com/carlosbrando/remarkable/wikis/rspec-macros
-	
-== REQUIREMENTS:
+
+=== Pending Macros
+
+Even more than just bringing macros to Rspec, we are bringing Rspec to macros. So let's suppose you are doing some code refactoring and you know some tests will fail before finish cleaning the house, what do you do then?
+
+In Rspec you could do:
+
+	xit { should validate_numericality_of(:user_id) }
+
+Well, now you can do just the same with macros:
+
+	xvalidate_numericality_of(:user_id)
+
+And it's even better, because it will show a nice message:
+
+	"Example disabled: should validate numericality of user_id"
+
+Yeah!
+
+== Requirements
 
 * rspec >= 1.1.11
 * rspec-rails >= 1.1.11
 
-== INSTALL:
+== Install
 
 Run the following if you haven't already:
 
@@ -100,12 +111,7 @@ In RAILS_ROOT/config/environment.rb:
 
 	config.gem "carlosbrando-remarkable", :lib => "remarkable", :source => "http://gems.github.com"
 
-Then:
-
-	rake gems:install
-	rake gems:unpack
-
-== LICENSE:
+== License
 
 (The MIT License)
 
