@@ -3,59 +3,12 @@ module Remarkable # :nodoc:
     module Matchers # :nodoc:
 
       class ColumnMatcher < Remarkable::Matcher::Base
-        def initialize(*columns)
-          @options = columns.extract_options!
-          @columns  = columns
-        end
+        arguments :columns
+        
+        optional  :type, :default, :precision, :limit, :scale, :sql_type
+        optional  :primary, :null, :default => true
 
-        def type(type)
-          @options[:type] = type
-          self
-        end
-
-        def primary(value = true)
-          @options[:primary] = value
-          self
-        end
-
-        def default(default)
-          @options[:default] = default
-          self
-        end
-
-        def precision(precision)
-          @options[:precision] = precision
-          self
-        end
-
-        def limit(limit)
-          @options[:limit] = limit
-          self
-        end
-
-        def null(value = true)
-          @options[:null] = value
-          self
-        end
-
-        def scale(scale)
-          @options[:scale] = scale
-          self
-        end
-
-        def sql_type(sql_type)
-          @options[:sql_type] = sql_type
-          self
-        end
-
-        def matches?(subject)
-          @subject = subject
-          
-          assert_matcher_for(@columns) do |column|
-            @column = column
-            has_column? && all_options_correct?
-          end
-        end
+        assertions :has_column?, :all_options_correct?
 
         def failure_message
           "Expected #{expectation} (#{@missing})"
@@ -75,7 +28,7 @@ module Remarkable # :nodoc:
           description
         end
 
-        protected
+        private
 
         def column_type
           subject_class.columns.detect {|c| c.name == @column.to_s }
