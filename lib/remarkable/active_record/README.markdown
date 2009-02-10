@@ -4,21 +4,21 @@ For each example below, we will show you the Rspec way and in the Macro (Shoulda
 
 h2. Associations
 
-h3. + belong_to
+h3. belong_to
 
 Ensure that the belongs_to relationship exists.
 
 <pre><code>  should_belong_to :parent
   it { should belong_to(:parent) }</code></pre>
 
-h3. + have_and_belong_to_many
+h3. have_and_belong_to_many
 
 Ensures that the has_and_belongs_to_many relationship exists, and that the join table is in place.
 
 <pre><code>  should_have_and_belong_to_many :posts, :cars
   it{ should have_and_belong_to_many :posts, :cars }</code></pre>
 
-h3. + have_many
+h3. have_many
 
 Ensures that the has_many relationship exists. Will also test that the associated table has the required columns. Works with polymorphic associations.
 
@@ -34,7 +34,7 @@ Options:
   it{ should have_many(:enemies, :through => :friends) }
   it{ should have_many(:enemies, :dependent => :destroy) }</code></pre>
 
-h3. + have_one
+h3. have_one
 
 Ensure that the has_one relationship exists. Will also test that the associated table has the required columns. Works with polymorphic associations.
 
@@ -46,7 +46,7 @@ Options:
 
 h2. Database
 
-h3. + have_db_column
+h3. have_db_column
 
 Ensure that the given column is defined on the models backing SQL table. The options are the same as the instance variables defined on the column definition: :precision, :limit, :default, :null, :primary, :type, :scale, and :sql_type.
 
@@ -56,14 +56,14 @@ Ensure that the given column is defined on the models backing SQL table. The opt
   it { should have_db_column(:email, :type => "string", :default  => nil, :precision => nil, :limit => 255,
                              :null => true, :primary => false, :scale => nil, :sql_type => 'varchar(255)') }</code></pre>
 
-h3. + have_db_columns
+h3. have_db_columns
 
 Ensure that the given columns are defined on the models backing SQL table.
 
 <pre><code>  should_have_db_columns :id, :email, :name, :created_at
   it { should have_db_columns :id, :email, :name, :created_at }</code></pre>
 
-h3. + have_indices
+h3. have_indices
 
 Ensures that there are DB indices on the given columns or tuples of columns. Also aliased to @should_have_index@ for readability.
 
@@ -73,7 +73,7 @@ Ensures that there are DB indices on the given columns or tuples of columns. Als
   it { should have_indices(:email, :name, [:commentable_type, :commentable_id]) }
   it { should have_index(:age) }</code></pre>
 
-h3. + have_index
+h3. have_index
 
 Alias for @should_have_indices@.
 
@@ -109,14 +109,14 @@ The third is, in any macro, if an instance variable has been created named after
 
 Deal? Now we are good to go!
 
-h3. + allow_mass_assignment_of
+h3. allow_mass_assignment_of
 
 Ensures that the attribute can be set on mass update.
 
   should_allow_mass_assignment_of :email, :name
   it { should allow_mass_assignment_of(:email, :name) }
 
-h3. + have_named_scope
+h3. have_named_scope
 
 Ensures that the model has a method named scope_name that returns a NamedScope object with the proxy options set to the options you supply. scope_name can be either a symbol, or a method call which will be evaled against the model. The eval‘d method call has access to all the same instance variables that a should statement would.
 
@@ -151,13 +151,13 @@ Or for:
     scoped(:limit => c)
   end
 
-h3. + have_readonly_attributes
+h3. have_readonly_attributes
 
 Ensures that the attribute cannot be changed once the record has been created.
 
   should_have_readonly_attributes :password, :admin_flag
 
-h3. + validate_acceptance_of
+h3. validate_acceptance_of
 
 Ensures that the model cannot be saved if one of the attributes listed is not accepted.
 
@@ -173,7 +173,7 @@ Options:
   it { should validate_acceptance_of(:eula, :terms) }
   it { should validate_acceptance_of(:eula, :terms, :accept => true) }</code></pre>
 
-h3. + validate_associated
+h3. validate_associated
 
 Ensures that the model is invalid if one of the associations given is invalid.
 
@@ -211,7 +211,7 @@ Options:
   it { should validate_associated(:projects, :account) }
   it { should validate_associated(:projects, :builder => proc { |user| user.projects.build }) }</code></pre>
 
-h3. + validate_confirmation_of
+h3. validate_confirmation_of
 
 Ensures that the model cannot be saved if one of the attributes is not confirmed.
 
@@ -222,7 +222,7 @@ Options:
   should_validate_confirmation_of :email, :password
   it { should validate_confirmation_of(:email, :password) }
 
-h3. + validate_exclusion_of
+h3. validate_exclusion_of
 
 Ensures that given values are not valid for the attribute. If a range is given, ensures that the attribute is not valid in the given range.
 
@@ -242,7 +242,7 @@ Options:
   it { should validate_exclusion_of(:username, "admin", "user") }
   it { should_not validate_exclusion_of(:username, "clark_kent", "peter_park") }</code></pre>
 
-h3. + validate_format_of
+h3. validate_format_of
 
 Ensures that the attribute can be set to the given values.
 
@@ -262,7 +262,7 @@ Options:
   it { should_not validate_format_of(:isbn, "bad 1", "bad 2") }
 </code></pre>
 
-h3. + validate_inclusion_of
+h3. validate_inclusion_of
 
 Ensures that given values are valid for the attribute. If a range is given, ensures that the attribute is valid in the given range.
 
@@ -281,7 +281,7 @@ Options:
   it { should_not validate_inclusion_of(:isbn, "bad 1", "bad 2") }
 </code></pre>
 
-h3. + validate_length_of
+h3. validate_length_of
 
 Validates the length of the given attributes. You have also to supply one of the following options: minimum, maximum, is or within.
 
@@ -312,7 +312,7 @@ Options:
   it { should validate_length_of(:password).minimum(6) }
   it { should validate_length_of(:age).is(18) }</code></pre>
 
-h3. + validate_numericality_of
+h3. validate_numericality_of
 
 Ensures that the given attributes accepts only numbers.
 
@@ -339,7 +339,7 @@ Options:
   it { should validate_numericality_of(:age, :even => true) }
   it { should validate_numericality_of(:age).only_integer }</code></pre>
 
-h3. + validate_presence_of
+h3. validate_presence_of
 
 Ensures that the model cannot be saved if one of the attributes listed is not present.
 
@@ -350,7 +350,7 @@ Options:
  should_validate_presence_of(:name, :phone_number)
  it { should validate_presence_of(:name, :phone_number) }
 
-h3. + validate_uniqueness_of
+h3. validate_uniqueness_of
 
 Ensures that the model cannot be saved if one of the attributes listed is not unique.
 
