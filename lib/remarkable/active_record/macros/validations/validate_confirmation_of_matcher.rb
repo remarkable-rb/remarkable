@@ -60,7 +60,7 @@ module Remarkable # :nodoc:
       #
       # Options:
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
-      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.confirmation')</tt>
+      #   Regexp, string or symbol.  Default = <tt>I18n.translate('activerecord.errors.messages.confirmation')</tt>
       #
       # Example:
       #   it { should validate_confirmation_of(:email, :password) }

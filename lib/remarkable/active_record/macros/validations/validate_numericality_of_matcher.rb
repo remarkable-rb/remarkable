@@ -174,15 +174,15 @@ module Remarkable # :nodoc:
       #
       # Example:
       #
-      #   it { should validates_numericality_of(:age, :price) }
-      #   it { should validates_numericality_of(:age, :only_integer => true) }
-      #   it { should validates_numericality_of(:price, :only_integer => false) }
-      #   it { should validates_numericality_of(:age).only_integer }
+      #   it { should validate_numericality_of(:age, :price) }
+      #   it { should validate_numericality_of(:age, :only_integer => true) }
+      #   it { should validate_numericality_of(:price, :only_integer => false) }
+      #   it { should validate_numericality_of(:age).only_integer }
       #
-      #   it { should validates_numericality_of(:age).odd }
-      #   it { should validates_numericality_of(:age).even }
-      #   it { should validates_numericality_of(:age, :odd => true) }
-      #   it { should validates_numericality_of(:age, :even => true) }
+      #   it { should validate_numericality_of(:age).odd }
+      #   it { should validate_numericality_of(:age).even }
+      #   it { should validate_numericality_of(:age, :odd => true) }
+      #   it { should validate_numericality_of(:age, :even => true) }
       #
       def validate_numericality_of(*attributes)
         ValidateNumericalityOfMatcher.new(*attributes)

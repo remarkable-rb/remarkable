@@ -135,7 +135,7 @@ module Remarkable # :nodoc:
       #
       #   it { should validate_associated(:projects) }
       #
-      # The first attempt to build the assciation would be:
+      # The first attempt to build the association would be:
       #
       #   @user.projects.build
       #
@@ -143,9 +143,11 @@ module Remarkable # :nodoc:
       #
       #   @user.build_project
       #
-      # If we can't build an association by this ways, a error will be raised.
-      # In such cases, you should instantiate the association before calling
-      # the matcher:
+      # Then it tries to save the associated object. If the object can be saved
+      # if success (in this case, it allows all attributes as blank), we won't
+      # be able to verify the validation and then an error will be raised. In
+      # such cases, you should instantiate the association before calling the
+      # matcher:
       #
       #   it do
       #     @user = User.new
@@ -155,12 +157,12 @@ module Remarkable # :nodoc:
       #
       # Or give :builder as option:
       #
-      #   it { should validate_associated(:projects, :builder => proc { |user| user.projects.build }) }
+      #   should_validate_associated :projects, :builder => proc { |user| user.projects.build }
       #
       # Options:
       # * <tt>:builder</tt> - a proc to build the association.
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
-      #   Regexp or string.  Default = <tt>I18n.translate('activerecord.errors.messages.invalid')</tt>
+      #   Regexp, string or symbol.  Default = <tt>I18n.translate('activerecord.errors.messages.invalid')</tt>
       #
       # Example:
       #

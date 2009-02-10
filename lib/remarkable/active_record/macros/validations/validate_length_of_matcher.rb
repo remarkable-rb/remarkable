@@ -171,7 +171,7 @@ module Remarkable # :nodoc:
       # model being tested, then this method will use that.  Otherwise, it will
       # create a new instance to test against.
       #
-      # Note: this method is also aliased as <tt>validate_length_of</tt>.
+      # Note: this method is also aliased as <tt>validate_size_of</tt>.
       #
       # Options:
       #
@@ -191,15 +191,15 @@ module Remarkable # :nodoc:
       #
       # Example:
       #
-      #   it { should validates_length_of(:password, :within => 6..20) }
-      #   it { should validates_length_of(:password, :maximum => 20) }
-      #   it { should validates_length_of(:password, :minimum => 6) }
-      #   it { should validates_length_of(:age, :is => 18) }
+      #   it { should validate_length_of(:password, :within => 6..20) }
+      #   it { should validate_length_of(:password, :maximum => 20) }
+      #   it { should validate_length_of(:password, :minimum => 6) }
+      #   it { should validate_length_of(:age, :is => 18) }
       #
-      #   it { should validates_length_of(:password).within(6..20) }
-      #   it { should validates_length_of(:password).maximum(20) }
-      #   it { should validates_length_of(:password).minimum(6) }
-      #   it { should validates_length_of(:age).is(18) }
+      #   it { should validate_length_of(:password).within(6..20) }
+      #   it { should validate_length_of(:password).maximum(20) }
+      #   it { should validate_length_of(:password).minimum(6) }
+      #   it { should validate_length_of(:age).is(18) }
       #
       def validate_length_of(*attributes)
         matcher = nil
