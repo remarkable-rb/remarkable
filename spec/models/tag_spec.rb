@@ -9,6 +9,9 @@ describe Tag do
   
   it { should protect_attributes(:secret) }
   it { should_not protect_attributes(:name) }
+
+  it { should allow_mass_assignment_of(:name) }
+  it { should_not allow_mass_assignment_of(:secret) }
 end
 
 describe Tag do

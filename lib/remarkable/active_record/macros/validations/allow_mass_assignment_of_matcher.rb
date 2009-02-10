@@ -27,8 +27,8 @@ module Remarkable # :nodoc:
           protected  = subject_class.protected_attributes || []
           accessible = subject_class.accessible_attributes || []
 
-          return true unless protected.include?(attribute.to_s)
-          return true unless accessible.empty? || accessible.include?(attribute.to_s)
+          return true if !protected.empty?  && !protected.include?(attribute.to_s)
+          return true if !accessible.empty? && accessible.include?(attribute.to_s)
 
           @missing = accessible.empty? ? "#{subject_class} is protecting #{protected.to_a.to_sentence}" :
                                          "#{subject_class} has not made #{attribute} accessible"
