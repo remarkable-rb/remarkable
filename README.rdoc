@@ -70,9 +70,9 @@ The syntax above is similar with Shoulda, but those who likes more the Rspec way
 
 === Here are all the available macros:
 
-For Shoulda style: http://github.com/carlosbrando/remarkable/wikis/shoulda-macros
+ActiveRecord macros: http://wiki.github.com/carlosbrando/remarkable/active-record-macros
 
-For RSpec style: http://github.com/carlosbrando/remarkable/wikis/rspec-macros
+Controller macros: http://wiki.github.com/carlosbrando/remarkable/controller-macros
 
 === Pending Macros
 
