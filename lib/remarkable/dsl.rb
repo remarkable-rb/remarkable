@@ -87,7 +87,7 @@ END
           #
           #   class ValidatePresenceOfMatcher < Remarkable::Matcher::Base
           #     def initialize(*attributes)
-          #       load_options(attributes.extract_options!)
+          #       @options = default_options.merge(attributes.extract_options!)
           #       @attributes = attributes
           #     end
           #   end
@@ -134,7 +134,7 @@ END
           #   class AllowValuesForMatcher < Remarkable::Matcher::Base
           #     def initialize(attribute, *good_values)
           #       @attribute = attribute
-          #       load_options(good_values.extract_options!)
+          #       @options = default_options.merge(good_values.extract_options!)
           #       @good_values = good_values
           #     end
           #   end
@@ -152,22 +152,10 @@ END
               "@#{name} = #{name}"
             end.join("\n")
 
-            # TODO:
-            #
-            # Do:
-            #
-            #   @options = default_options.merge(#{self.loop_argument}.extract_options!)
-            #
-            # Instead of:
-            #
-            #   load_options(#{self.loop_argument}.extract_options!)
-            #
-            # And deprecate load_options.
-            #
             class_eval <<-END, __FILE__, __LINE__
 def initialize(#{args})
   #{assignments}
-  load_options(#{self.loop_argument}.extract_options!)
+  @options = default_options.merge(#{self.loop_argument}.extract_options!)
   @#{self.loop_argument} = #{self.loop_argument}
   after_initialize!
 end
@@ -203,12 +191,6 @@ END
       end
 
       protected
-
-        # Do not overwrite this method. It's going to be deprecated.
-        #
-        def load_options(options = {})
-          @options = default_options.merge(options)
-        end
 
         # Overwrite to provide default options.
         #

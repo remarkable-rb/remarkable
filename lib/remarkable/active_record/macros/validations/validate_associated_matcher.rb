@@ -6,24 +6,10 @@ module Remarkable # :nodoc:
 
         undef_method :allow_nil, :allow_nil?, :allow_blank, :allow_blank?
 
-        def initialize(*associations)
-          load_options(associations.extract_options!)
-          @associations = associations
-        end
+        arguments :associations
+        optional :builder
 
-        def builder(value)
-          @options[:builder] = value
-          self
-        end
-
-        def matches?(subject)
-          @subject = get_instance_of(subject)
-
-          assert_matcher_for(@associations) do |association|
-            @association = association
-            build_association? && valid?
-          end
-        end
+        assertions :build_association?, :valid?
 
         def description
           "require association #{@associations.to_sentence} to be valid"
@@ -103,11 +89,15 @@ module Remarkable # :nodoc:
           false
         end
 
-        # Receives a Hash
-        def load_options(options = {})
-          @options = {
-            :message => :invalid
-          }.merge(options)
+        # Before make the assertions, convert the subject into a instance, if
+        # it's not already.
+        #
+        def before_assert!
+          @subject = get_instance_of(@subject)
+        end
+
+        def default_options
+          { :message => :invalid }
         end
 
         def plural?

@@ -6,35 +6,41 @@ module Remarkable # :nodoc:
 
         NUMERIC_COMPARISIONS = [:equal_to, :less_than, :greater_than, :less_than_or_equal_to, :greater_than_or_equal_to]
 
-        def initialize(*attributes)
-          load_options(attributes.extract_options!)
-          @attributes = attributes
-        end
+        arguments :attributes
 
         optional :only_integer, :odd, :even, :default => true
         optional :equal_to, :less_than, :greater_than, :less_than_or_equal_to, :greater_than_or_equal_to
 
-        def matches?(subject)
-          @subject = subject
-
-          assert_matcher_for(@attributes) do |attribute|
-            @attribute = attribute
-
-            only_allow_numeric_values? && allow_blank? && allow_nil? &&
-            only_integer? && allow_odd? && allow_even? && equal_to?(:equal_to) &&
-            equal_to?(:less_than, -1) && equal_to?(:greater_than, +1) &&
-            equal_to?(:less_than_or_equal_to) && equal_to?(:greater_than_or_equal_to) &&
-            more_than_maximum?(:equal_to, +1) && less_than_minimum?(:equal_to, -1) &&
-            more_than_maximum?(:less_than) && less_than_minimum?(:greater_than) &&
-            more_than_maximum?(:less_than_or_equal_to, +1) && less_than_minimum?(:greater_than_or_equal_to, -1)
-          end
-        end
+        assertions :only_allow_numeric_values?, :allow_blank?, :allow_nil?,
+                   :only_integer?, :allow_odd?, :allow_even?, :equal_to_for_each_option?,
+                   :less_than_maximum_for_each_option?, :more_than_maximum_for_each_option?
 
         def description
           default_message + "for #{@attributes.to_sentence}"
         end
 
         private
+
+        # Check equal_to? for each given option
+        #
+        def equal_to_for_each_option?
+          equal_to?(:equal_to) && equal_to?(:less_than, -1) && equal_to?(:greater_than, +1) &&
+          equal_to?(:less_than_or_equal_to) && equal_to?(:greater_than_or_equal_to)
+        end
+
+        # Check more_than_maximum? for each given option
+        #
+        def more_than_maximum_for_each_option?
+          more_than_maximum?(:equal_to, +1) && more_than_maximum?(:less_than) &&
+          more_than_maximum?(:less_than_or_equal_to, +1)
+        end
+
+        # Check less_than_maximum? for each given option
+        #
+        def less_than_maximum_for_each_option?
+           less_than_minimum?(:equal_to, -1) && less_than_minimum?(:greater_than) &&
+           less_than_minimum?(:greater_than_or_equal_to, -1)
+        end
 
         def only_allow_numeric_values?
           return true if bad?("abcd")
@@ -111,16 +117,18 @@ module Remarkable # :nodoc:
           (valid_value_for_test / 2) * 2
         end
 
-        def load_options(options = {})
-          @options = {
+        def default_options
+          options = {
             :message => :not_a_number,
             :odd_message => :odd,
             :even_message => :even
-          }.merge(options)
+          }
 
-          NUMERIC_COMPARISIONS.map do |key|
-            @options[:"#{key}_message"] = key
+          NUMERIC_COMPARISIONS.each do |key|
+            options[:"#{key}_message"] = key
           end
+
+          options
         end
 
         # Returns the default message for each key (:odd, :even, :equal_to, ...).

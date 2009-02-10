@@ -6,24 +6,9 @@ module Remarkable # :nodoc:
 
         undef_method :allow_blank?, :allow_blank, :allow_nil
 
-        def initialize(*attributes)
-          load_options(attributes.extract_options!)
-          @attributes = attributes
-        end
-
-        def message(message)
-          @options[:message] = message
-          self
-        end
-
-        def matches?(subject)
-          @subject = subject
-
-          assert_matcher_for(@attributes) do |attribute|
-            @attribute = attribute
-            allow_nil?
-          end
-        end
+        arguments  :attributes
+        optional   :message
+        assertions :allow_nil?
 
         def description
           "require #{@attributes.to_sentence} to be set"
@@ -31,11 +16,8 @@ module Remarkable # :nodoc:
 
         private
 
-        def load_options(options)
-          @options = {
-            :message => :blank,
-            :allow_nil => false
-          }.merge(options)
+        def default_options
+          { :message => :blank, :allow_nil => false }
         end
 
         def expectation

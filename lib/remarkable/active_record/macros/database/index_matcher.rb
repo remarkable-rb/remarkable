@@ -2,44 +2,16 @@ module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Matchers # :nodoc:
 
-      # Ensures the database column has specified index.
-      #
-      # Options:
-      # * <tt>unique</tt> - 
-      #
-      # Example:
-      #   it { should have_index(:ssn).unique(true) }
-      #
-      def have_indices(*columns)
-        IndexMatcher.new(*columns)
-      end
-      alias_method :have_index, :have_indices
-
       class IndexMatcher < Remarkable::Matcher::Base
         INDEX_TYPES = { true => "unique", false => "non-unique" }
-        
-        def initialize(*columns)
-          load_options(columns)
-          @columns = columns
-        end
 
-        def unique(value = true)
-          @options[:unique] = value
-          self
-        end
+        arguments :columns
+        optional  :unique, :default => true
+
+        assertions :index_exists?, :correct_unique?
 
         def table_name=(table_name)
           @table_name = table_name
-        end
-
-        def matches?(subject)
-          @subject = subject
-          @expected_uniqueness = @options[:unique] ? 'unique' : 'non-unique'
-          
-          assert_matcher_for(@columns) do |column|
-            @column = column
-            index_exists? && correct_unique?
-          end
         end
 
         def failure_message
@@ -55,6 +27,10 @@ module Remarkable # :nodoc:
         end
 
         protected
+
+        def after_initialize!
+          @expected_uniqueness = @options[:unique] ? 'unique' : 'non-unique'
+        end
 
         def index_exists?
           return true if matched_index
@@ -91,13 +67,22 @@ module Remarkable # :nodoc:
         def expectation
           "have #{index_type} index on #{table_name} for #{@column.inspect}"
         end
-        
-        def load_options(options)
-          @options = {
-            :unique => nil
-          }.merge(options.extract_options!)
-        end
+
       end
+
+      # Ensures the database column has specified index.
+      #
+      # Options:
+      # * <tt>unique</tt> - when supplied, tests if the index is unique or not
+      #
+      # Example:
+      #   it { should have_index(:ssn).unique(true) }
+      #
+      def have_indices(*columns)
+        IndexMatcher.new(*columns)
+      end
+      alias_method :have_index, :have_indices
+
     end
   end
 end

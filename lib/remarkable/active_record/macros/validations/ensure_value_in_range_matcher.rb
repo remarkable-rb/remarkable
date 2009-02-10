@@ -4,13 +4,8 @@ module Remarkable # :nodoc:
       class EnsureValueInRangeMatcher < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
 
-        def initialize(attribute, behavior, range, *options)
-          @attribute = attribute
-          @range     = range
-          @behavior  = behavior
-          load_options(options.extract_options!)
-        end
-        
+        arguments :attribute, :behavior, :ranges
+
         def low_message(message)
           warn "[DEPRECATION] should_ensure_value_in_range.low_message is deprecated. " <<
                "Use should_validate_inclusion_of.message instead."
@@ -34,14 +29,8 @@ module Remarkable # :nodoc:
           self
         end
 
-        def matches?(subject)
-          @subject = subject
-
-          assert_matcher do
-            less_than_minimum? && accepts_minimum? && more_than_minimum? && allow_nil? &&
-            more_than_maximum? && accepts_maximum? && less_than_maximum? && allow_blank?
-          end
-        end
+        assertions :less_than_minimum?, :accepts_minimum?, :more_than_minimum?, :allow_nil?,
+                   :more_than_maximum?, :accepts_maximum?, :less_than_maximum?, :allow_blank?
 
         def description
           "ensure #{expectation}"
@@ -144,27 +133,26 @@ module Remarkable # :nodoc:
           end
         end
 
-        def load_options(options = {})
-          warn "[DEPRECATION] should_ensure_value_in_range with :low_message is deprecated. " <<
-               "Use should_validate_inclusion_of with :message instead." if options[:low_message]
-
-          warn "[DEPRECATION] should_ensure_value_in_range with :high_message is deprecated. " <<
-               "Use should_validate_inclusion_of with :message instead." if options[:high_message]
-
-          warn "[DEPRECATION] should_ensure_value_in_range is deprecated. " <<
-               "Use should_validate_inclusion_of instead." if options[:low_message].blank? && options[:high_message].blank?
-
-          @options = {
-            :low_message  => @behavior,
+        def default_options
+          { :low_message  => @behavior,
             :high_message => @behavior,
-            :message      => @behavior
-          }.merge(options)
+            :message      => @behavior }
         end
       end
 
-
       # TODO Deprecate this method, but not the matcher.
       def ensure_value_in_range(attribute, range, *options) #:nodoc:
+        hash_options = options.extract_options!
+
+        warn "[DEPRECATION] should_ensure_value_in_range with :low_message is deprecated. " <<
+             "Use should_validate_inclusion_of with :message instead." if hash_options[:low_message]
+
+        warn "[DEPRECATION] should_ensure_value_in_range with :high_message is deprecated. " <<
+             "Use should_validate_inclusion_of with :message instead." if hash_options[:high_message]
+
+        warn "[DEPRECATION] should_ensure_value_in_range is deprecated. " <<
+             "Use should_validate_inclusion_of instead." if hash_options[:low_message].blank? && hash_options[:high_message].blank?
+
         EnsureValueInRangeMatcher.new(attribute, :inclusion, range, *options)
       end
     end

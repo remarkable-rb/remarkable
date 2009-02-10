@@ -34,10 +34,8 @@ module Remarkable # :nodoc:
         end
 
         # Receives a Hash
-        def load_options(options = {})
-          @options = {
-            :message => :accepted
-          }.merge(options)
+        def default_options
+          { :message => :accepted }
         end
 
         def expectation

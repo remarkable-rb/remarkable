@@ -6,25 +6,25 @@ module Remarkable # :nodoc:
 
         undef_method :allow_nil?, :allow_nil, :allow_blank?, :allow_blank
 
-        def initialize(*attributes)
-          load_options(attributes.extract_options!)
-          @attributes = attributes
-        end
-
-        def matches?(subject)
-          @subject = get_instance_of(subject)
-
-          assert_matcher_for(@attributes) do |attribute|
-            @attribute = attribute
-            confirmed?
-          end
-        end
+        arguments :attributes
+        assertions :confirmed?
 
         def description
           "validate confirmation of #{@attributes.to_sentence}"
         end
 
         private
+
+        # Before make the assertions, convert the subject into a instance, if
+        # it's not already.
+        #
+        def before_assert!
+          @subject = get_instance_of(@subject)
+        end
+
+        def default_options
+          { :message => :confirmation }
+        end
 
         def confirmed?
           confirmation_assignment = "#{@attribute}_confirmation="
@@ -39,12 +39,6 @@ module Remarkable # :nodoc:
             @missing = "#{subject_name} does not respond to #{confirmation_assignment}"
             return false
           end
-        end
-
-        def load_options(options = {})
-          @options = {
-            :message => :confirmation
-          }.merge(options)
         end
 
         def expectation

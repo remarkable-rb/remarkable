@@ -4,18 +4,11 @@ module Remarkable # :nodoc:
       class ValidateLengthOfMatcher < Remarkable::Matcher::Base
         include Remarkable::ActiveRecord::Helpers
 
-        def initialize(attributes, range, behavior, options = {})
-          @attributes = attributes
-          @behavior   = behavior
+        arguments :behavior, :range, :attributes
+        optional  :minimum, :maximum, :short_message, :long_message
 
-          # Set the values, for example:
-          #
-          #   send(:within, 0..10)
-          #
-          send(@behavior, range)
-
-          load_options(options)
-        end
+        assertions :less_than_min_length?, :exactly_min_length?, :allow_nil?,
+                   :more_than_max_length?, :exactly_max_length?, :allow_blank?
 
         # If message is supplied, reassign it properly to :short_message
         # and :long_message. This is ActiveRecord default behavior when
@@ -31,49 +24,16 @@ module Remarkable # :nodoc:
 
         def within(range)
           @behavior = :within
-          @minimum  = range.first
-          @maximum  = range.last
+          @options[:minimum] = range.first
+          @options[:maximum] = range.last
           self
         end
         alias :in :within
 
-        def minimum(value)
-          @minimum = value
-          self
-        end
-
-        def maximum(value)
-          @maximum = value
-          self
-        end
-
         def is(value)
-          @minimum = value
-          @maximum = value
+          @options[:minimum] = value
+          @options[:maximum] = value
           self
-        end
-
-        def short_message(message)
-          @options[:short_message] = message
-          @options[:message] = message # make a copy in @options[:message], for
-                                       # allow_blank and allow_nil work properly.
-          self
-        end
-
-        def long_message(message)
-          @options[:long_message] = message
-          self
-        end
-
-        def matches?(subject)
-          @subject = subject
-
-          assert_matcher_for(@attributes) do |attribute|
-            @attribute = attribute
-
-            less_than_min_length? && exactly_min_length? && allow_nil?(:message, @minimum) &&
-            more_than_max_length? && exactly_max_length? && allow_blank?(:message, @minimum)
-          end
         end
 
         def description
@@ -90,68 +50,76 @@ module Remarkable # :nodoc:
 
         private
 
-        def less_than_min_length?
-          return true if @behavior == :maximum || @minimum <= 0
-          return true if bad?(value_for_length(@minimum - 1), :short_message, @minimum)
+        def default_options
+          if @behavior == :is
+            { :short_message => :wrong_length, :long_message => :wrong_length }
+          else
+            { :short_message => :too_short, :long_message => :too_long }
+          end
+        end
 
-          @missing = "allow #{@attribute} to be less than #{@minimum} chars long"
+        # Reassign messages properly
+        def after_initialize!
+          # Set the values, for example:
+          # send(:within, 0..10)
+          send(@behavior, @range)
+
+          message(@options.delete(:message)) if @options[:message]
+          long_message(@options[:long_message])
+          short_message(@options[:short_message])
+        end
+
+        def allow_nil?
+          super(:short_message, @options[:minimum])
+        end
+
+        def allow_blank?
+          super(:short_message, @options[:minimum])
+        end
+
+        def less_than_min_length?
+          return true if @behavior == :maximum || @options[:minimum] <= 0
+          return true if bad?(value_for_length(@options[:minimum] - 1), :short_message, @options[:minimum])
+
+          @missing = "allow #{@attribute} to be less than #{@options[:minimum]} chars long"
           return false
         end
 
         def exactly_min_length?
-          return true if @behavior == :maximum || @minimum <= 0
-          return true if good?(value_for_length(@minimum), :short_message, @minimum)
+          return true if @behavior == :maximum || @options[:minimum] <= 0
+          return true if good?(value_for_length(@options[:minimum]), :short_message, @options[:minimum])
 
-          @missing = "not allow #{@attribute} to be exactly #{@minimum} chars long"
+          @missing = "not allow #{@attribute} to be exactly #{@options[:minimum]} chars long"
           return false
         end
 
         def more_than_max_length?
           return true if @behavior == :minimum
-          return true if bad?(value_for_length(@maximum + 1), :long_message, @maximum)
+          return true if bad?(value_for_length(@options[:maximum] + 1), :long_message, @options[:maximum])
 
-          @missing = "allow #{@attribute} to be more than #{@maximum} chars long"
+          @missing = "allow #{@attribute} to be more than #{@options[:maximum]} chars long"
           return false
         end
 
         def exactly_max_length?
-          return true if @behavior == :minimum || @minimum == @maximum
-          return true if good?(value_for_length(@maximum), :long_message, @maximum)
+          return true if @behavior == :minimum || @options[:minimum] == @options[:maximum]
+          return true if good?(value_for_length(@options[:maximum]), :long_message, @options[:maximum])
 
-          @missing = "not allow #{@attribute} to be exactly #{@maximum} chars long"
+          @missing = "not allow #{@attribute} to be exactly #{@options[:maximum]} chars long"
           return false
-        end
-
-        def load_options(options)
-          if @behavior == :is
-            @options = {
-              :short_message => :wrong_length,
-              :long_message => :wrong_length
-            }.merge(options)
-          else
-            @options = {
-              :short_message => :too_short,
-              :long_message => :too_long
-            }.merge(options)
-          end
-
-          # Reassign messages properly
-          message(@options[:message]) if @options[:message]
-          long_message(@options[:long_message])
-          short_message(@options[:short_message])
         end
 
         def expectation
           message = "that the length of the #{@attribute} is "
 
           message << if @behavior == :within
-            "between #{@minimum} and #{@maximum}"
+            "between #{@options[:minimum]} and #{@options[:maximum]}"
           elsif @behavior == :minimum
-            "more than #{@minimum}"
+            "more than #{@options[:minimum]}"
           elsif @behavior == :maximum
-            "less than #{@maximum}"
+            "less than #{@options[:maximum]}"
           else #:is
-            "equal to #{@minimum}"
+            "equal to #{@options[:minimum]}"
           end
 
           message << " or nil"   if @options[:allow_nil]
@@ -207,7 +175,7 @@ module Remarkable # :nodoc:
 
         [:within, :in, :maximum, :minimum, :is].each do |behavior|
           if options.key? behavior
-            matcher ||= ValidateLengthOfMatcher.new(attributes, options.delete(behavior), behavior, options)
+            matcher ||= ValidateLengthOfMatcher.new(behavior, options.delete(behavior), *(attributes << options))
           end
         end
 
@@ -227,21 +195,21 @@ module Remarkable # :nodoc:
       def ensure_length_in_range(attribute, range, options = {}) #:nodoc:
         warn "[DEPRECATION] should_ensure_length_in_range is deprecated. " <<
              "Use should_validate_length_of(#{attribute.inspect}, :in => #{range.inspect}) instead."
-        ValidateLengthOfMatcher.new([attribute], range, :within, options)
+        ValidateLengthOfMatcher.new(:within, range, attribute, options)
       end
 
       # TODO Deprecate me
       def ensure_length_at_least(attribute, range, options = {}) #:nodoc:
         warn "[DEPRECATION] should_ensure_length_at_least is deprecated. " <<
              "Use should_validate_length_of(#{attribute.inspect}, :minimum => #{range.inspect}) instead."
-        ValidateLengthOfMatcher.new([attribute], range, :minimum, options)
+        ValidateLengthOfMatcher.new(:minimum, range, attribute, options)
       end
 
       # TODO Deprecate me
       def ensure_length_is(attribute, range, options = {}) #:nodoc:
         warn "[DEPRECATION] should_ensure_length_is is deprecated. " <<
              "Use should_validate_length_of(#{attribute.inspect}, :is => #{range.inspect}) instead."
-        ValidateLengthOfMatcher.new([attribute], range, :is, options)
+        ValidateLengthOfMatcher.new(:is, range, attribute, options)
       end
     end
   end
