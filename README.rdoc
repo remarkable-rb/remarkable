@@ -102,9 +102,28 @@ Install the gem:
 
   sudo gem install carlosbrando-remarkable
 
-In RAILS_ROOT/config/environment.rb:
+== Installing via Rails
+
+Specify the gem dependency in your config/environment.rb file:
 
   config.gem "carlosbrando-remarkable", :lib => "remarkable", :source => "http://gems.github.com"
+
+Then run in terminal:
+
+  $ rake gems:install
+  $ rake gems:unpack
+  
+=== As a Plugin
+
+You can also install Remarkable as a plugin:
+
+  $ script/plugin install git://github.com/carlosbrando/remarkable.git
+
+Or using git submodules:
+
+  $ git submodule add git://github.com/carlosbrando/remarkable.git vendor/plugins/remarkable
+
+Note: When installed as a plugin, you need to also install the rspec and rspec-rails in your project.
 
 == Requirements
 
