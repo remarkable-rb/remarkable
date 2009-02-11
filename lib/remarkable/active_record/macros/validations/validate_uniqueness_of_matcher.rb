@@ -129,13 +129,17 @@ module Remarkable # :nodoc:
           return false
         end
 
-        # If :case_sensitive is given and it's true, we swap the case of the
-        # value used in have_attribute? and see if the test object is valid.
+        # If :case_sensitive is given and it's false, we swap the case of the
+        # value used in have_attribute? and see if the test object remains valid.
         #
         # If :case_sensitive is given and it's true, we swap the case of the
         # value used in have_attribute? and see if the test object is not valid.
         #
+        # This validation will only occur if the test object is a String.
+        # 
         def case_sensitive?
+          return true unless @value.is_a?(String)
+          
           message = "case sensitive when attribute is #{@attribute}"
           assert_good_or_bad_if_key(:case_sensitive, @value.swapcase, message)
         end
@@ -207,8 +211,13 @@ module Remarkable # :nodoc:
       def validate_uniqueness_of(*attributes)
         ValidateUniquenessOfMatcher.new(*attributes)
       end
+      
       #TODO Deprecate this alias, the deprecation warning is the matcher
-      alias :require_unique_attributes :validate_uniqueness_of
+      def require_unique_attributes(*attributes)
+        warn "[DEPRECATION] should_require_unique_attributes is deprecated. " <<
+             "Use should_validate_uniqueness_of instead."
+        validate_uniqueness_of(*attributes)
+      end
     end
   end
 end
