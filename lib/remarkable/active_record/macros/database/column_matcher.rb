@@ -8,6 +8,14 @@ module Remarkable # :nodoc:
         optional  :type, :default, :precision, :limit, :scale, :sql_type
         optional  :primary, :null, :default => true
 
+        # Method used to load all options via hash.
+        # (:type, :default, :precision, :limit, :scale, :sql_type, :primary, :null)
+        # 
+        def with_options(opts = {})
+          @options.merge!(opts.extract_options!)
+          self
+        end
+
         assertions :has_column?, :all_options_correct?
 
         def failure_message
@@ -62,10 +70,28 @@ module Remarkable # :nodoc:
         end
       end
 
+      # Ensures that a column of the database actually exists.
+      #
+      # Options:
+      # * <tt>type</tt> - database column types like :string, :integer, etc.
+      # 
+      # * All options available in migrations are also available here.
+      #   (.type, .default, .precision, .limit, .scale, .sql_type, .primary, .null)
+      # 
+      # * <tt>with_options</tt> - option used to load the above options via hash
+      #   (:type => :string, :primary => true, etc.)
+      #
+      # Example:
+      # it { should have_db_column(:name).type(:string) }
+      # it { should have_db_column(:age).with_options(:type => :integer) }
+      # it { should_not have_db_column(:salary) }
+      # 
       def have_db_column(column, options = {})
         ColumnMatcher.new(column, options)
       end
-      
+
+      # Alias for #have_db_column
+      # 
       def have_db_columns(*columns)
         ColumnMatcher.new(*columns)
       end
