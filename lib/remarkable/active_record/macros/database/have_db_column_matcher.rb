@@ -8,11 +8,18 @@ module Remarkable # :nodoc:
         optional  :type, :default, :precision, :limit, :scale, :sql_type
         optional  :primary, :null, :default => true
 
+        # TODO: remove it
+        def of_type(type)
+          warn "[DEPRECATION] option of_type is deprecated. Use type instead."
+          @options[:type] = type
+          self
+        end
+
         # Method used to load all options via hash.
         # (:type, :default, :precision, :limit, :scale, :sql_type, :primary, :null)
         # 
         def with_options(opts = {})
-          @options.merge!(opts.extract_options!)
+          @options.merge!(opts)
           self
         end
 
