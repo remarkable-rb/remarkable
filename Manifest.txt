@@ -11,7 +11,7 @@ lib/remarkable/active_record/helpers.rb
 lib/remarkable/active_record/macros.rb
 lib/remarkable/active_record/macros/associations/association_matcher.rb
 lib/remarkable/active_record/macros/callbacks/callback_matcher.rb
-lib/remarkable/active_record/macros/database/column_matcher.rb
+lib/remarkable/active_record/macros/database/have_db_column_matcher.rb
 lib/remarkable/active_record/macros/database/index_matcher.rb
 lib/remarkable/active_record/macros/validations/allow_mass_assignment_of_matcher.rb
 lib/remarkable/active_record/macros/validations/ensure_value_in_list_matcher.rb
