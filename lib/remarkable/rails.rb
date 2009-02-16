@@ -1,5 +1,7 @@
 if defined?(RAILS_ROOT)
 
+  require "remarkable/rails/extract_options"
+
   def create_macro_methods(macro)
     method_name = File.basename(macro, ".rb")
     Spec::Example::ExampleGroupMethods::send(:define_method, "should_#{method_name}") { instance_eval(IO.read(macro)) }
