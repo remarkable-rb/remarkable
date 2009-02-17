@@ -28,7 +28,7 @@ module Remarkable # :nodoc:
 
         protected
 
-        def after_initialize!
+        def after_initialize
           @expected_uniqueness = @options[:unique] ? 'unique' : 'non-unique'
         end
 

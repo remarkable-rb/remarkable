@@ -40,7 +40,7 @@ module Remarkable # :nodoc:
         # Before make the assertions, convert the subject into a instance, if
         # it's not already.
         #
-        def before_assert!
+        def before_assert
           @subject = get_instance_of(@subject)
         end
 
@@ -48,7 +48,7 @@ module Remarkable # :nodoc:
           { :message => :taken }
         end
 
-        def after_initialize!
+        def after_initialize
           if @options[:scoped_to] # TODO Deprecate scoped_to
             warn "[DEPRECATION] :scoped_to is deprecated. Use :scope instead."
             @options[:scope] = [*@options.delete(:scoped_to)].compact

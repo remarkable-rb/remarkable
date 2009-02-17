@@ -59,7 +59,7 @@ module Remarkable # :nodoc:
         end
 
         # Reassign messages properly
-        def after_initialize!
+        def after_initialize
           # Set the values, for example:
           # send(:within, 0..10)
           send(@behavior, @range)

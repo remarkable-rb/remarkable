@@ -18,7 +18,7 @@ module Remarkable # :nodoc:
         # Before make the assertions, convert the subject into a instance, if
         # it's not already.
         #
-        def before_assert!
+        def before_assert
           @subject = get_instance_of(@subject)
         end
 

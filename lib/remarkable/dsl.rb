@@ -157,7 +157,7 @@ def initialize(#{args})
   #{assignments}
   @options = default_options.merge(#{self.loop_argument}.extract_options!)
   @#{self.loop_argument} = #{self.loop_argument}
-  after_initialize!
+  after_initialize
 end
 END
           end
@@ -166,8 +166,7 @@ END
       def matches?(subject)
         @subject = subject
 
-        # Execute before_assert! callback
-        before_assert!
+        before_assert
 
         # Gets the loop_argument and loops it setting the singular name of
         # loop argument. For example, if loop_argument is :good_values, we
@@ -208,12 +207,12 @@ END
 
         # Callback called after initialization.
         #
-        def after_initialize!
+        def after_initialize
         end
 
         # Callback before begin assertions.
         #
-        def before_assert!
+        def before_assert
         end
 
     end
