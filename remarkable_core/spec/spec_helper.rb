@@ -1,5 +1,5 @@
 $TESTING=true
-require File.join(File.dirname(__FILE__), '..', 'lib', 'remarkable-core')
+require File.join(File.dirname(__FILE__), '..', 'lib', 'remarkable_core')
 
 Dir[File.join(File.dirname(__FILE__), 'matchers', '*.rb')].each do |file|
   require file

@@ -1,1 +1,1 @@
-require 'remarkable-core'
+require 'remarkable_core'
