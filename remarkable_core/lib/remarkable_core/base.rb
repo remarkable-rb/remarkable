@@ -1,5 +1,6 @@
 module Remarkable
   class Base
+    include Remarkable::DSL
 
     # Overwrite this method to provide a description
     # def description

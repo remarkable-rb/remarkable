@@ -12,5 +12,9 @@ end
 
 dir = File.dirname(__FILE__)
 require File.join(dir, 'remarkable_core', 'version')
+require File.join(dir, 'remarkable_core', 'core_ext', 'array')
+
+require File.join(dir, 'remarkable_core', 'dsl')
 require File.join(dir, 'remarkable_core', 'base')
 require File.join(dir, 'remarkable_core', 'macros')
+
