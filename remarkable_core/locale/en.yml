@@ -3,3 +3,10 @@ en:
     core:
       should: should
       should_not: should not
+      failure_message: Expected {{expectation}} ({{missing}})
+      negative_failure_message: Did not expect {{expectation}}
+
+      helpers:
+        words_connector: ', '
+        two_words_connector: ' and '
+        last_word_connector: ', and '

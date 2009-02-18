@@ -1,3 +1,37 @@
+# This is a wrapper for I18n default functionality
+module Remarkable
+  class << self
+
+    # Add locale files to I18n
+    def add_locale(*locales)
+      I18n.backend.load_translations *locales
+    end
+
+    # Set Remarkable locale (which is not necessarily the same as the application)
+    def locale=(locale)
+      @@locale = locale
+    end
+
+    # Get Remarkable locale (which is not necessarily the same as the application)
+    def locale
+      @@locale
+    end
+
+    # Wrapper for translation
+    def translate(string, options = {})
+      I18n.t string, { :locale => @@locale }.merge(options)
+    end
+    alias :t :translate
+
+    # Wrapper for localization
+    def localize(object, options = {})
+      I18n.l object, { :locale => @@locale }.merge(options)
+    end
+    alias :l :localize
+
+  end
+end
+
 # Load I18n
 unless Object.const_defined?('I18n')
   begin
@@ -13,6 +47,9 @@ unless Object.const_defined?('I18n')
   I18n.default_locale = :en
 end
 
+# Set Remarkable locale
+Remarkable.locale = I18n.locale
+
 # Add Remarkable default locale file
 Remarkable.add_locale File.join(File.dirname(__FILE__), '..', '..', 'locale', 'en.yml')
 
@@ -21,7 +58,7 @@ module Spec
   module Matchers
     def self.generated_description
       return nil if last_should.nil?
-      verb = I18n.t "remarkable.core.#{last_should}", :default => last_should.to_s.gsub('_',' ')
+      verb = Remarkable.t "remarkable.core.#{last_should}", :default => last_should.to_s.gsub('_',' ')
       "#{verb} #{last_description}"
     end
   end

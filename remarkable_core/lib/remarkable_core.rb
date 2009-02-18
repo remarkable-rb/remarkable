@@ -18,11 +18,6 @@ module Remarkable
     klass.send :extend,  base::Matchers if defined?(base::Matchers)
     klass.send :extend,  base::Macros   if defined?(base::Macros)
   end
-
-  # Add locale files to I18n
-  def self.add_locale(*locales)
-    I18n.backend.load_translations *locales
-  end
 end
 
 # Load core files

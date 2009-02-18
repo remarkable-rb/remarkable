@@ -21,14 +21,6 @@ module Remarkable
           @missing = "#{@value} is not included in #{@subject.inspect}"
           false
         end
-
-        def description
-          "contain #{@values.join(', ')}"
-        end
-
-        def expectation
-          "#{@value} is included in #{@subject.inspect}"
-        end
       end
 
       def contain(*args)

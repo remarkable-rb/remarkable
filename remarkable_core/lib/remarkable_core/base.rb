@@ -2,22 +2,34 @@ module Remarkable
   class Base
     include Remarkable::DSL
 
-    # Overwrite this method to provide a description
-    # def description
-    # end
+    # Provides a default description message. Overwrite it if needed.
+    def description(options={})
+      options = {
+        :scope => matcher_i18n_scope
+      }.merge(options)
 
-    # Overwrite this method to provide a expectation
-    # def expectation
-    # end
+      Remarkable.t 'description', options
+    end
+
+    # Provides a default expectation message. Overwrite it if needed.
+    def expectation(options={})
+      options = {
+        :scope => matcher_i18n_scope,
+        :subject_name => subject_name,
+        :subject_inspect => @subject.inspect
+      }.merge(options)
+
+      Remarkable.t 'expectation', options
+    end
 
     # Provides a default failure message. Overwrite it if needed.
     def failure_message
-      "Expected #{expectation} (#{@missing})"
+      Remarkable.t 'remarkable.core.failure_message', :expectation => expectation, :missing => @missing
     end
 
     # Provides a default negative failure message. Overwrite it if needed.
     def negative_failure_message
-      "Did not expect #{expectation}"
+      Remarkable.t 'remarkable.core.negative_failure_message', :expectation => expectation
     end
 
     # This method is called in <tt>should_not</tt> cases to mark the current
@@ -37,12 +49,33 @@ module Remarkable
 
       # Returns the subject class if it's not one.
       def subject_class
+        nil unless @subject
         @subject.is_a?(Class) ? @subject : @subject.class
       end
 
-      # Returns the subject name based on its class.
+      # Returns the subject name based on its class. If the class respond to
+      # human_name (which is usually localized) returns it.
       def subject_name
-        subject_class.name
+        nil unless @subject
+        subject_class.respond_to?(:human_name) ? subject_class.human_name : subject_class.name
+      end
+
+      # Returns the matcher scope in I18n.
+      #
+      # If the matcher is Remarkable::ActiveRecord::Matchers::ValidatePresenceOfMatcher
+      # the default scope will be:
+      #
+      #   'remarkable.active_record.validate_presence_of'
+      #
+      def matcher_i18n_scope
+        @matcher_i18n_scope ||= self.class.name.to_s.
+                                gsub(/::Matchers::/, '::').
+                                gsub(/::/, '.').
+                                gsub(/Matcher$/, '').
+                                gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+                                gsub(/([a-z\d])([A-Z])/,'\1_\2').
+                                tr("-", "_").
+                                downcase
       end
 
       def positive? #:nodoc:

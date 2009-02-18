@@ -22,22 +22,22 @@ describe Remarkable::Base do
   end
 
   it 'should provide a description' do
-    @matcher.description.should == 'contain 1, 2, 3'
+    @matcher.description.should == 'contain the given values'
   end
 
   it 'should provide a expectation' do
     @matcher.matches?([4])
-    @matcher.expectation.should == '1 is included in [4]'
+    @matcher.expectation.should == 'the given values are included in [4]'
   end
 
   it 'should provide a failure message' do
     @matcher.matches?([4])
-    @matcher.failure_message.should == 'Expected 1 is included in [4] (1 is not included in [4])'
+    @matcher.failure_message.should == 'Expected the given values are included in [4] (1 is not included in [4])'
   end
 
   it 'should provide a negative failure message' do
     @matcher.negative.matches?([1])
-    @matcher.negative_failure_message.should == 'Did not expect 1 is included in [1]'
+    @matcher.negative_failure_message.should == 'Did not expect the given values are included in [1]'
   end
 
   it 'should provide default structure to matchers' do
