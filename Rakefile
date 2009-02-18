@@ -34,3 +34,9 @@ Dir['tasks/**/*.rake'].each { |t| load t }
 
 # TODO - want other tests/tasks run by default? Add them to the list
 task :default => [:spec, :features]
+require 'spec/rake/spectask'
+desc "Run the specs under spec/models"
+Spec::Rake::SpecTask.new do |t|
+  t.spec_opts = ['--options', "spec/spec.opts"]
+  t.spec_files = FileList['spec/**/*_spec.rb']
+end
