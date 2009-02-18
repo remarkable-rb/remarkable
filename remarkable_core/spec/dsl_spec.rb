@@ -76,8 +76,26 @@ describe Remarkable::DSL do
   end
 
   describe "with options" do
-    xit "should store given value properly"
-    xit "should allow defaults values"
-    xit "should allow alias to be set"
+    before(:each) do
+      @matcher = Remarkable::Specs::Matchers::BeAPersonMatcher.new
+    end
+
+    it "should store given value properly" do
+      @matcher.first_name('José')
+      @matcher.instance_variable_get('@options')[:first_name].should == 'José'
+
+      @matcher.last_name('Valim')
+      @matcher.instance_variable_get('@options')[:last_name].should == 'Valim'
+    end
+
+    it "should allow defaults values" do
+      @matcher.age
+      @matcher.instance_variable_get('@options')[:age].should == 18
+    end
+
+    it "should allow alias to be set" do
+      @matcher.family_name('Valim')
+      @matcher.instance_variable_get('@options')[:last_name].should == 'Valim'
+    end
   end
 end

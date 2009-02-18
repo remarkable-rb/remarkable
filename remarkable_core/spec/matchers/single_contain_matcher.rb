@@ -7,7 +7,7 @@ module Remarkable
         single_assertions :is_array?, :included?
 
         def description
-          "contain #{@values.join(', ')}"
+          "contain #{@value}"
         end
 
         def expectation
