@@ -3,6 +3,7 @@ en:
     core:
       should: should
       should_not: should not
+      example_disabled: Example disabled
       failure_message: Expected {{expectation}} ({{missing}})
       negative_failure_message: Did not expect {{expectation}}
 

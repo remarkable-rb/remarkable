@@ -32,7 +32,9 @@ module Remarkable
         matcher = find_and_configure_matcher(method, *args, &block)
         matcher.negative if negative
         description = matcher.description
-        xit "should #{'not ' if negative}#{description}"
+
+        verb = Remarkable.t(negative ? 'remarkable.core.should_not' : 'remarkable.core.should')
+        xit "#{verb} #{description}"
       rescue
         xit "should #{'not ' if negative}#{method.to_s.gsub('_',' ')}"
       end

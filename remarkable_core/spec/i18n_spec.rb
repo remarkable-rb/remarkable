@@ -3,8 +3,11 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe Remarkable::Base do
   subject { [1, 2, 3] }
 
-  before(:each) do
+  before(:all) do
     Remarkable.locale = :"pt-BR"
+  end
+
+  before(:each) do
     @matcher = Remarkable::Specs::Matchers::ContainMatcher.new(1, 2, 3)
   end
 
@@ -31,10 +34,13 @@ describe Remarkable::Base do
     I18n.locale.should_not == Remarkable.locale
   end
 
-  should_contain(1)
-  should_not_contain(4)
-
   after(:all) do
     Remarkable.locale = :en
   end
+
+  Remarkable.locale = :"pt-BR"
+  should_contain(1)
+  should_not_contain(4)
+  xshould_not_contain(5)
+  Remarkable.locale = :en
 end

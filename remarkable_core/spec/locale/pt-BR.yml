@@ -3,6 +3,7 @@ pt-BR:
     core:
       should: deve
       should_not: não deve
+      example_disabled: Exemplo desativado
       failure_message: Esperava que {{expectation}} ({{missing}})
       negative_failure_message: Não esperava que {{expectation}}
 
