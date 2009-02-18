@@ -4,6 +4,7 @@ module Remarkable
       class CollectionContainMatcher < Remarkable::Base
         arguments :collection => :values, :as => :value
 
+        optional :working
         default_options :working => true
 
         single_assertion :is_array? do

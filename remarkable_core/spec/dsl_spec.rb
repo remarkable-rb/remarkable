@@ -22,6 +22,31 @@ describe Remarkable::DSL do
       matcher = Remarkable::Specs::Matchers::CollectionContainMatcher.new(1, 2, 3, :args => true)
       matcher.instance_variable_get('@options').should == { :working => true, :args => true }
     end
+
+    describe "and I18n" do
+      before(:each) do
+        @matcher = Remarkable::Specs::Matchers::CollectionContainMatcher.new(1, 2, 3)
+      end
+
+      it 'should provide a description' do
+        @matcher.description.should == 'contain 1, 2, and 3'
+      end
+
+      it 'should provide a expectation' do
+        @matcher.matches?([4])
+        @matcher.expectation.should == '1 is included in [4]'
+      end
+
+      it 'should provide a failure message' do
+        @matcher.matches?([4])
+        @matcher.failure_message.should == 'Expected 1 is included in [4] (1 is not included in [4])'
+      end
+
+      it 'should provide a negative failure message' do
+        @matcher.negative.matches?([1])
+        @matcher.negative_failure_message.should == 'Did not expect 1 is included in [1]'
+      end
+    end
   end
 
   describe "without collection" do
@@ -75,7 +100,7 @@ describe Remarkable::DSL do
     end
   end
 
-  describe "with options" do
+  describe "with optionals" do
     before(:each) do
       @matcher = Remarkable::Specs::Matchers::BeAPersonMatcher.new
     end
@@ -97,30 +122,25 @@ describe Remarkable::DSL do
       @matcher.family_name('Valim')
       @matcher.instance_variable_get('@options')[:last_name].should == 'Valim'
     end
-  end
 
-  describe "with I18n and collection" do
-    before(:each) do
-      @matcher = Remarkable::Specs::Matchers::CollectionContainMatcher.new(1, 2, 3)
-    end
+    describe "and I18n" do
+      before(:each) do
+        @matcher = Remarkable::Specs::Matchers::SingleContainMatcher.new(1)
+      end
 
-    it 'should provide a description' do
-      @matcher.description.should == 'contain 1, 2, and 3'
-    end
+      it 'should provide a description with optionals' do
+        @matcher.description.should == 'contain the given value not checking for blank'
 
-    it 'should provide a expectation' do
-      @matcher.matches?([4])
-      @matcher.expectation.should == '1 is included in [4]'
-    end
+        @matcher.allow_blank(true)
+        @matcher.description.should == 'contain the given value checking for blank'
 
-    it 'should provide a failure message' do
-      @matcher.matches?([4])
-      @matcher.failure_message.should == 'Expected 1 is included in [4] (1 is not included in [4])'
-    end
+        @matcher.allow_nil(true)
+        @matcher.description.should == 'contain the given value allowing nil and checking for blank'
 
-    it 'should provide a negative failure message' do
-      @matcher.negative.matches?([1])
-      @matcher.negative_failure_message.should == 'Did not expect 1 is included in [1]'
+        @matcher.allow_nil(false)
+        @matcher.description.should == 'contain the given value not allowing nil and checking for blank'
+      end
     end
   end
+
 end

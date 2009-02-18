@@ -6,13 +6,8 @@ module Remarkable
 
         single_assertions :is_array?, :included?
 
-        def description
-          "contain #{@value}"
-        end
-
-        def expectation
-          "#{@value} is included in #{@subject.inspect}"
-        end
+        optional :allow_nil
+        optional :allow_blank
 
         protected
 

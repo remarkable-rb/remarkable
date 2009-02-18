@@ -254,6 +254,43 @@ END
         end
     end
 
+    # Overwrites description to support optionals and collection name.
+    #
+    # For each optional given, attaches it to the message. It searches for
+    # 4 values:
+    #
+    #   * <tt>positive</tt> - When the key is given and it's not false or nil.
+    #   * <tt>negative</tt> - When the key is given and it's false or nil.
+    #   * <tt>given</tt> - When the key is given, doesn't matter the value.
+    #   * <tt>not_given</tt> - When the key is not given.
+    #
+    def description(options={})
+      if collection_name = self.class.matcher_arguments[:collection]
+        collection_name = collection_name.to_sym
+        collection = instance_variable_get("@#{collection_name}")
+        options[collection_name] = array_to_sentence(collection)
+      end
+
+      message = super(options)
+
+      optionals = self.class.matcher_optionals.map do |optional|
+        scope = matcher_i18n_scope + ".optional.#{optional}"
+
+        if @options.key?(optional)
+          i18n_key = @options[optional] ? :positive : :negative
+          Remarkable.t i18n_key, :default => :given, :raise => true, :scope => scope
+        else
+          Remarkable.t :not_given, :raise => true, :scope => scope
+        end rescue nil
+      end.compact
+
+      if optionals.empty?
+        message
+      else
+        message + " " + array_to_sentence(optionals)
+      end
+    end
+
     # Gets the collection and loops it setting an instance variable with its
     # singular name. For example, if loop_argument is :good_values, we
     # will get @good_values and then set the instance variable @good_value.
