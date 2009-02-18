@@ -48,4 +48,7 @@ describe Remarkable::Base do
     [1, 2, 3].should_not contain(4)
     [1, 2, 3].should_not contain(1, 4)
   end
+
+  it { [1, 2, 3].should contain(1) }
+  it { [1, 2, 3].should_not contain(10) }
 end

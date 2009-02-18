@@ -1,5 +1,13 @@
-dir = File.dirname(__FILE__)
+# Load rspec
+begin
+  require 'spec'
+rescue Exception => e
+  require 'rubygems'
+  gem 'spec'
+  require 'spec'
+end
 
+# Remarkable core module
 module Remarkable
   # Helper that includes required Remarkable modules into the given klass.
   def self.include_matchers!(base, klass)
@@ -17,22 +25,9 @@ module Remarkable
   end
 end
 
-# Load I18n
-unless Object.const_defined?('I18n')
-  begin
-    require 'i18n'
-  rescue Exception => e
-    require 'rubygems'
-    # TODO Move to i18n gem as soon as it gets updated
-    gem 'josevalim-i18n'
-    require 'i18n'
-  end
-end
-
-# Add Remarkable default locale file
-Remarkable.add_locale File.join(dir, '..', 'locale', 'en.yml')
-
 # Load core files
+dir = File.dirname(__FILE__)
+require File.join(dir, 'remarkable_core', 'i18n')
 require File.join(dir, 'remarkable_core', 'version')
 require File.join(dir, 'remarkable_core', 'core_ext', 'array')
 require File.join(dir, 'remarkable_core', 'dsl')

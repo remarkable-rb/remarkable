@@ -1,3 +1,5 @@
 en:
   remarkable:
-    description: should
+    core:
+      should: should
+      should_not: should not
