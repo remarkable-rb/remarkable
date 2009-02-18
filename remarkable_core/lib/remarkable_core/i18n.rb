@@ -1,10 +1,10 @@
 # This is a wrapper for I18n default functionality
 module Remarkable
-  class << self
+  module I18n
 
     # Add locale files to I18n
     def add_locale(*locales)
-      I18n.backend.load_translations *locales
+      ::I18n.backend.load_translations *locales
     end
 
     # Set Remarkable locale (which is not necessarily the same as the application)
@@ -19,13 +19,13 @@ module Remarkable
 
     # Wrapper for translation
     def translate(string, options = {})
-      I18n.t string, { :locale => @@locale }.merge(options)
+      ::I18n.t string, { :locale => @@locale }.merge(options)
     end
     alias :t :translate
 
     # Wrapper for localization
     def localize(object, options = {})
-      I18n.l object, { :locale => @@locale }.merge(options)
+      ::I18n.l object, { :locale => @@locale }.merge(options)
     end
     alias :l :localize
 
@@ -46,6 +46,9 @@ unless Object.const_defined?('I18n')
   # Set default locale
   I18n.default_locale = :en
 end
+
+# Add module to Remarkable
+Remarkable.send :extend, Remarkable::I18n
 
 # Set Remarkable locale
 Remarkable.locale = I18n.locale

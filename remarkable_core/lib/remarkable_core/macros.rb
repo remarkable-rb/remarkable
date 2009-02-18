@@ -1,4 +1,4 @@
-module Remarkable # :nodoc:
+module Remarkable
   module Macros
 
     def method_missing_with_remarkable(method_id, *args, &block)

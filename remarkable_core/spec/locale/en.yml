@@ -2,5 +2,8 @@ en:
   remarkable:
     specs:
       contain:
-        description: contain the given values
-        expectation: the given values are included in {{subject_inspect}}
+        description: "contain the given values"
+        expectation: "the given values are included in {{subject_inspect}} which is a {{subject_name}}"
+      collection_contain:
+        description: "contain {{values}}"
+        expectation: "{{value}} is included in {{subject_inspect}}"

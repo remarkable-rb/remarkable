@@ -1,4 +1,4 @@
-module Remarkable # :nodoc:
+module Remarkable
   module DSL
 
     def self.included(base)
@@ -73,7 +73,7 @@ module Remarkable # :nodoc:
 
           if collection = options.delete(:collection)
             @matcher_arguments[:collection] = collection
-            @matcher_arguments[:as]         = singularize!(@matcher_arguments[:loop].to_s, options.delete(:as))
+            @matcher_arguments[:as]         = singularize!(@matcher_arguments[:collection].to_s, options.delete(:as))
 
             args          << "*#{collection}"
             get_options    = "#{collection}.extract_options!"
@@ -211,6 +211,17 @@ END
           define_method :before_assert, &block
         end
 
+        # Class method that accepts a block or a Hash which is called in
+        # default_options.
+        #
+        def default_options(hash = {}, &block)
+          if block_given?
+            define_method :default_options, &block
+          else
+            class_eval "def default_options; #{hash.inspect}; end"
+          end
+        end
+
       private
 
         # Helper that deals with string singularization. If a default is not given
@@ -239,7 +250,30 @@ END
           base.instance_variable_set('@matcher_assertions',     @matcher_assertions     || [])
           base.instance_variable_set('@matcher_for_assertions', @matcher_for_assertions || [])
         end
+    end
 
+    # Add collection interpolation to description when available
+    #
+    def description(options={})
+      if collection_name = self.class.matcher_arguments[:collection]
+        collection_name = collection_name.to_sym
+        collection = instance_variable_get("@#{collection_name}")
+        options[collection_name] = array_to_sentence(collection)
+      end
+
+      super(options)
+    end
+
+    # Add current collection instance interpolation to expectation when available
+    #
+    def expectation(options={})
+      if object_name = self.class.matcher_arguments[:as]
+        object_name = object_name.to_sym
+        object = instance_variable_get("@#{object_name}")
+        options[object_name] = object
+      end
+
+      super(options)
     end
 
     # Gets the collection and loops it setting an instance variable with its
@@ -297,6 +331,25 @@ END
           send(*method)
         else
           send(method)
+        end
+      end
+
+      # Converts an array to a sentence
+      #
+      def array_to_sentence(array)
+        words_connector     = Remarkable.t 'remarkable.core.helpers.words_connector'
+        two_words_connector = Remarkable.t 'remarkable.core.helpers.two_words_connector'
+        last_word_connector = Remarkable.t 'remarkable.core.helpers.last_word_connector'
+
+        case array.length
+          when 0
+            ''
+          when 1
+            array[0].to_s
+          when 2
+            "#{array[0]}#{two_words_connector}#{array[1]}"
+          else
+            "#{array[0...-1].join(words_connector)}#{last_word_connector}#{array[-1]}"
         end
       end
 

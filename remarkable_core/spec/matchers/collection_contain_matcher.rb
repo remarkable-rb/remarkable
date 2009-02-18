@@ -4,6 +4,8 @@ module Remarkable
       class CollectionContainMatcher < Remarkable::Base
         arguments :collection => :values, :as => :value
 
+        default_options :working => true
+
         single_assertion :is_array? do
           return true if @subject.is_a?(Array)
 
@@ -25,21 +27,6 @@ module Remarkable
         before_assert do
           @before_assert = true
         end
-
-        def description
-          "contain #{@values.join(', ')}"
-        end
-
-        def expectation
-          "#{@value} is included in #{@subject.inspect}"
-        end
-
-        protected
-
-          def default_options
-            { :working => true }
-          end
-
       end
 
       def collection_contain(*args)
