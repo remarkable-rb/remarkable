@@ -31,24 +31,6 @@ module Remarkable
         subject_class.respond_to?(:human_name) ? subject_class.human_name : subject_class.name
       end
 
-      # Returns the matcher scope in I18n.
-      #
-      # If the matcher is Remarkable::ActiveRecord::Matchers::ValidatePresenceOfMatcher
-      # the default scope will be:
-      #
-      #   'remarkable.active_record.validate_presence_of'
-      #
-      def matcher_i18n_scope
-        @matcher_i18n_scope ||= self.class.name.to_s.
-                                gsub(/::Matchers::/, '::').
-                                gsub(/::/, '.').
-                                gsub(/Matcher$/, '').
-                                gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-                                gsub(/([a-z\d])([A-Z])/,'\1_\2').
-                                tr("-", "_").
-                                downcase
-      end
-
       def positive? #:nodoc:
         @negative ? false : true
       end
