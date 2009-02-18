@@ -23,7 +23,7 @@ module Remarkable
         end
 
         def description
-          "should contain #{@values.join(', ')}"
+          "contain #{@values.join(', ')}"
         end
 
         def expectation

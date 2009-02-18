@@ -22,7 +22,7 @@ describe Remarkable::Base do
   end
 
   it 'should provide a description' do
-    @matcher.description.should == 'should contain 1, 2, 3'
+    @matcher.description.should == 'contain 1, 2, 3'
   end
 
   it 'should provide a expectation' do
