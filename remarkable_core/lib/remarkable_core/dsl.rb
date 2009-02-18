@@ -129,18 +129,37 @@ END
         # and the matcher subject is available under the instance variable
         # @subject.
         #
-        def assertions(*methods)
+        # If a block is given, it will create a method with the name given.
+        # So we could write the same class as above just as:
+        #
+        #   class ValidatePresenceOfMatcher < Remarkable::Base
+        #     arguments :attributes
+        #
+        #     assertion :allow_nil? do
+        #       # matcher logic
+        #     end
+        #   end
+        #
+        # For readability purpouses, assertions is also aliased as assertion.
+        #
+        def assertions(*methods, &block)
+          define_method methods.last, &block if block_given?
           @matcher_for_assertions += methods
         end
-        alias :collection_assertions :assertions
+        alias :assertion :assertions
 
-        # In contrast to assertions, the methods given here are run just once.
-        # In other words, it does not iterate through the collection given
-        # in arguments.
+        # In contrast to <tt>assertions</tt>, the methods given here are called
+        # just once. In other words, it does not iterate through the collection
+        # given in arguments.
         #
-        def single_assertions(*methods)
+        # It also accepts blocks and is aliased as single_assertion. Check
+        # <tt>assertions</tt> for more info.
+        #
+        def single_assertions(*methods, &block)
+          define_method methods.last, &block if block_given?
           @matcher_assertions += methods
         end
+        alias :single_assertion :single_assertions
 
         # Creates optional handlers for matchers dynamically. The following
         # statement:
@@ -178,6 +197,18 @@ end
 END
           end
           class_eval "alias_method(:#{options[:alias]}, :#{names.last})" if options[:alias]
+        end
+
+        # Class method that accepts a block which is called after initialization.
+        #
+        def after_initialize(&block)
+          define_method :after_initialize, &block
+        end
+
+        # Class method that accepts a block which is called before assertion.
+        #
+        def before_assert(&block)
+          define_method :before_assert, &block
         end
 
       private

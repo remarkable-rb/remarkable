@@ -49,6 +49,17 @@ describe Remarkable::DSL do
       should_not single_contain(4)
       should single_contain(4){ |array| array << 4 }
     end
+
+    it 'should provide an interface for after initialize hook' do
+      matcher = Remarkable::Specs::Matchers::CollectionContainMatcher.new(1)
+      matcher.instance_variable_get('@after_initialize').should be_true
+    end
+
+    it 'should provide an interface for before assert hook' do
+      matcher = Remarkable::Specs::Matchers::CollectionContainMatcher.new(1)
+      [1, 2, 3].should matcher
+      matcher.instance_variable_get('@before_assert').should be_true
+    end
   end
 
   describe "instance methods" do
@@ -62,5 +73,11 @@ describe Remarkable::DSL do
       [1, 2, 3].should matcher
       matcher.instance_variable_get('@before_assert').should be_true
     end
+  end
+
+  describe "with options" do
+    xit "should store given value properly"
+    xit "should allow defaults values"
+    xit "should allow alias to be set"
   end
 end

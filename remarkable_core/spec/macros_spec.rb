@@ -12,4 +12,11 @@ describe Remarkable::Macros do
 
   xshould_contain(5)
   xshould_not_contain(1)
+
+  describe "with blocks" do
+    subject { [1, 2, 3] }
+
+    should_not_single_contain(4)
+    should_single_contain(4){ |array| array << 4 }
+  end
 end
