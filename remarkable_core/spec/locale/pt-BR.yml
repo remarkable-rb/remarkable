@@ -1,0 +1,17 @@
+pt-BR:
+  remarkable:
+    core:
+      should: deve
+      should_not: não deve
+      failure_message: Esperava que {{expectation}} ({{missing}})
+      negative_failure_message: Não esperava que {{expectation}}
+
+      helpers:
+        words_connector: ', '
+        two_words_connector: ' e '
+        last_word_connector: ' e '
+
+    specs:
+      contain:
+        description: "conter os valores fornecidos"
+        expectation: "os valores fornecidos sejam inclusos em {{subject_inspect}}"
