@@ -7,17 +7,11 @@ module Remarkable
         default_options :working => true
 
         single_assertion :is_array? do
-          return true if @subject.is_a?(Array)
-
-          @missing = "subject is a #{subject_name}"
-          false
+          @subject.is_a?(Array)
         end
 
         assertion :included? do
-          return true if @subject.include?(@value)
-
-          @missing = "#{@value} is not included in #{@subject.inspect}"
-          false
+          @subject.include?(@value)
         end
 
         after_initialize do

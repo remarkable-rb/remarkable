@@ -7,3 +7,6 @@ en:
       collection_contain:
         description: "contain {{values}}"
         expectation: "{{value}} is included in {{subject_inspect}}"
+        missing:
+          included?: "{{value}} is not included in {{subject_inspect}}"
+          is_array?: "subject is a {{subject_name}}"

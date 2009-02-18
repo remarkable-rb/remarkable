@@ -186,6 +186,7 @@ END
         #
         def optional(*names)
           options = names.extract_options!
+          @matcher_optionals += names
 
           names.each do |name|
             class_eval <<-END, __FILE__, __LINE__
@@ -242,38 +243,15 @@ END
         def inherited(base)
           base.class_eval do
             class << self
-              attr_reader :matcher_arguments, :matcher_assertions, :matcher_for_assertions
+              attr_reader :matcher_arguments, :matcher_optionals, :matcher_assertions, :matcher_for_assertions
             end
           end
 
           base.instance_variable_set('@matcher_arguments',      @matcher_arguments      || {})
+          base.instance_variable_set('@matcher_optionals',      @matcher_optionals      || [])
           base.instance_variable_set('@matcher_assertions',     @matcher_assertions     || [])
           base.instance_variable_set('@matcher_for_assertions', @matcher_for_assertions || [])
         end
-    end
-
-    # Add collection interpolation to description when available
-    #
-    def description(options={})
-      if collection_name = self.class.matcher_arguments[:collection]
-        collection_name = collection_name.to_sym
-        collection = instance_variable_get("@#{collection_name}")
-        options[collection_name] = array_to_sentence(collection)
-      end
-
-      super(options)
-    end
-
-    # Add current collection instance interpolation to expectation when available
-    #
-    def expectation(options={})
-      if object_name = self.class.matcher_arguments[:as]
-        object_name = object_name.to_sym
-        object = instance_variable_get("@#{object_name}")
-        options[object_name] = object
-      end
-
-      super(options)
     end
 
     # Gets the collection and loops it setting an instance variable with its
@@ -291,15 +269,21 @@ END
       before_assert
 
       assert_matcher do
-        self.class.matcher_assertions.inject(true) do |bool, method|
-          bool && send_assertion_method(method)
+        self.class.matcher_assertions.each do |method|
+          unless send_assertion_method(method)
+            @missing ||= Remarkable.t "missing.#{method}", default_i18n_options
+            return false
+          end
         end
       end &&
       assert_matcher_for(instance_variable_get("@#{self.class.matcher_arguments[:collection]}") || []) do |value|
         instance_variable_set("@#{self.class.matcher_arguments[:as]}", value)
 
-        self.class.matcher_for_assertions.inject(true) do |bool, method|
-          bool && send_assertion_method(method)
+        self.class.matcher_for_assertions.each do |method|
+          unless send_assertion_method(method)
+            @missing ||= Remarkable.t "missing.#{method}", default_i18n_options
+            return false
+          end
         end
       end
     end
@@ -351,6 +335,24 @@ END
           else
             "#{array[0...-1].join(words_connector)}#{last_word_connector}#{array[-1]}"
         end
+      end
+
+      # Overwrites default_i18n_options to provide collection interpolation.
+      #
+      def default_i18n_options
+        options = super
+
+        if collection_name = self.class.matcher_arguments[:collection]
+          collection_name = collection_name.to_sym
+          collection = instance_variable_get("@#{collection_name}")
+          options[collection_name] = array_to_sentence(collection) if collection
+
+          object_name = self.class.matcher_arguments[:as].to_sym
+          object = instance_variable_get("@#{object_name}")
+          options[object_name] = object if object
+        end
+
+        options
       end
 
   end
