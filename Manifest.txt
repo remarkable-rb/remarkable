@@ -42,7 +42,7 @@ lib/remarkable/controller/macros/metadata_matcher.rb
 lib/remarkable/controller/macros/render_with_layout_matcher.rb
 lib/remarkable/controller/macros/respond_with_content_type_matcher.rb
 lib/remarkable/controller/macros/respond_with_matcher.rb
-lib/remarkable/controller/macros/return_from_session_matcher.rb
+lib/remarkable/controller/macros/set_session_matcher.rb
 lib/remarkable/controller/macros/route_matcher.rb
 lib/remarkable/controller/macros/set_the_flash_to_matcher.rb
 lib/remarkable/dsl.rb
