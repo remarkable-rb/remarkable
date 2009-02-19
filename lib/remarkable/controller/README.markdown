@@ -9,18 +9,19 @@ Macro that creates a test asserting that the controller assigned to each of the 
 Options:
 
     * :class - The expected class of the instance variable being checked.
-    * :equals - A string which is evaluated and compared for equality with the instance variable being checked.
+    * :equals - A string or a proc which is evaluated and compared with the instance variable being checked.
 
 Example:
 
 <pre><code>  should_assign_to :user, :posts
   should_assign_to :user, :class => User
-  should_assign_to :user, :equals => '@user'
+  should_assign_to :user, :equals => proc { @user }
+  should_assign_to(:user){ @user }
   should_not_assign_to :user, :posts
 
   it { should assign_to(:user, :posts) }
   it { should assign_to(:user, :class => User) }
-  it { should assign_to(:user, :equals => '@user') }
+  it { should assign_to(:user, :equals => @user) }
   it { should_not assign_to(:user, :posts) }</code></pre>
 
 h2. filter_params
@@ -89,14 +90,15 @@ Example:
   it { should respond_with_content_type(:rss) }
   it { should respond_with_content_type(/rss/) }</code></pre>
 
-h2. return_from_session
+h2. set_session
 
-Macro that creates a test asserting that a value returned from the session is correct. The given string is evalued to produce the resulting redirect path. All of the instance variables set by the controller are available to the evalued string.
+Macro that creates a test asserting that a value returned from the session is correct. You can given a string to compare to or a proc which will be evaluated.
 
 Example:
 
-  should_return_from_session(:user_id, "@user.id")
-  it { should return_from_session(:message, '"Free stuff"') }
+  should_set_session(:user_id, proc { @user.id })
+  should_set_session(:user_id){ @user.id }
+  it { should set_session(:message, 'Free stuff') }
 
 h2. route
 
@@ -137,11 +139,9 @@ Macro that creates a test asserting that the controller returned a redirect to t
 
 Example:
 
-<pre><code>  should_redirect_to "user_post_url(@post.user, @post)"
-  should_redirect_to "user_url(@user)"
-  should_redirect_to "users_url"
+<pre><code>  should_redirect_to "http://test.host/users/1/post/1"
+  should_redirect_to { user_url(@user) }
 
   it { should redirect_to(user_post_url(@post.user, @post)) }
-  it { should redirect_to(user_url(@user)) }
   it { should redirect_to(users_url) }</code></pre>
 
