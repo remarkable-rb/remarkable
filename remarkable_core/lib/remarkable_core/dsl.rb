@@ -278,7 +278,7 @@ END
 
         if @options.key?(optional)
           i18n_key = @options[optional] ? :positive : :negative
-          Remarkable.t i18n_key, :default => :given, :raise => true, :scope => scope
+          Remarkable.t i18n_key, :default => :given, :raise => true, :scope => scope, :inspect => @options[optional].inspect
         else
           Remarkable.t :not_given, :raise => true, :scope => scope
         end rescue nil

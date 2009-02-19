@@ -131,14 +131,17 @@ describe Remarkable::DSL do
       it 'should provide a description with optionals' do
         @matcher.description.should == 'contain the given value not checking for blank'
 
+        @matcher.allow_blank(10)
+        @matcher.description.should == 'contain the given value with blank equal 10'
+
         @matcher.allow_blank(true)
-        @matcher.description.should == 'contain the given value checking for blank'
+        @matcher.description.should == 'contain the given value with blank equal true'
 
         @matcher.allow_nil(true)
-        @matcher.description.should == 'contain the given value allowing nil and checking for blank'
+        @matcher.description.should == 'contain the given value allowing nil and with blank equal true'
 
         @matcher.allow_nil(false)
-        @matcher.description.should == 'contain the given value not allowing nil and checking for blank'
+        @matcher.description.should == 'contain the given value not allowing nil and with blank equal true'
       end
     end
   end
