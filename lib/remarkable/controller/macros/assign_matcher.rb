@@ -4,9 +4,12 @@ module Remarkable # :nodoc:
       class AssignMatcher < Remarkable::Matcher::Base
         include Remarkable::Controller::Helpers
         
-        def initialize(*names)
-          @options = names.extract_options!
-          @names   = names
+        def initialize(*names, &block)
+          @options          = names.extract_options!
+          @names            = names
+          @options[:equals] = block if block_given?
+
+          warn "[DEPRECATION] Strings given in :equals to assign_to won't be evaluated anymore. You can give procs or use blocks instead." if @options[:equals].is_a?(String)
         end
 
         def matches?(subject)
@@ -58,6 +61,8 @@ module Remarkable # :nodoc:
 
           expected_value = if @options[:equals].is_a?(String)
             @spec.instance_eval(@options[:equals]) rescue @options[:equals]
+          elsif @options[:equals].is_a?(Proc)
+            @spec.instance_eval &@options[:equals]
           else
             @options[:equals]
           end
@@ -70,7 +75,7 @@ module Remarkable # :nodoc:
         def expectation
           expectation = "assign @#{@name}"
           expectation << " as class #{@options[:class]}" if @options[:class]
-          expectation << " which is equal to #{@options[:equals].inspect}" if @options[:equals]
+          expectation << " which is equal to #{@options[:equals].inspect}" if @options[:equals] && !@options[:equals].is_a?(Proc)
           expectation
         end
 

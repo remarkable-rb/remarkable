@@ -1,12 +1,13 @@
 module Remarkable # :nodoc:
   module Controller # :nodoc:
     module Matchers # :nodoc:
-      class ReturnFromSession < Remarkable::Matcher::Base
+      class SetSessionMatcher < Remarkable::Matcher::Base
         include Remarkable::Controller::Helpers
         
-        def initialize(key, expected)
+        def initialize(key, expected=nil, &block)
           @key      = key
           @expected = expected
+          @expected = block if block_given?
         end
 
         def matches?(subject)
@@ -30,7 +31,12 @@ module Remarkable # :nodoc:
         private
 
         def has_session_key?
-          expected_value = @spec.instance_eval(@expected) rescue @expected
+          expected_value = if @expected.is_a?(Proc)
+            @spec.instance_eval &@expected
+          else
+            warn "[DEPRECATION] Strings given to set_session won't be evaluated anymore. Give a block or a proc instead."
+            @spec.instance_eval(@expected) rescue @expected
+          end
           return true if @session[@key] == expected_value
 
           @missing = "Expected #{expected_value.inspect} but was #{@session[@key]}"
@@ -50,8 +56,13 @@ module Remarkable # :nodoc:
         end
       end
 
-      def return_from_session(key, expected)
-        ReturnFromSession.new(key, expected)
+      def set_session(key, expected=nil, &block)
+        SetSessionMatcher.new(key, expected, &block)
+      end
+
+      def return_from_session(*args, &block)
+        warn "[DEPRECATION] return_from_session is deprecated. Use set_session instead."
+        set_session(*args, &block)
       end
     end
   end

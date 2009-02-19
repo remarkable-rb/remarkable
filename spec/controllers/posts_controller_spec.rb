@@ -35,8 +35,10 @@ describe PostsController do
         get :index, :user_id => users(:first)
       end
       should_respond_with 200
-      should_assign_to :user, :class => User, :equals => 'users(:first)'
+      should_assign_to(:user, :class => User, :equals => 'users(:first)')
+      should_assign_to(:user, :class => User){ users(:first) }
       should_not_assign_to :user, :class => User, :equals => 'users(:second)'
+      should_not_assign_to :user, :class => User, :equals => proc { users(:second) }
 
       should_not_assign_to :user, :class => Post
       should_not_assign_to :user, :equals => 'posts(:first)'
@@ -63,7 +65,9 @@ describe PostsController do
       should_not_respond_with :success
 
       should_redirect_to "user_post_url(@post.user, @post)"
+      should_redirect_to { user_post_url(@post.user, @post) }
       should_not_redirect_to "user_url(@post.user)"
+      should_not_redirect_to { user_url(@post.user) }
       should_set_the_flash_to /created/i
     end
 
@@ -80,6 +84,11 @@ describe PostsController do
       should_return_from_session :special, "'$2 off your next purchase'"
       should_return_from_session :special_user_id, '@user.id'
       should_not_return_from_session(:monkey, "'fat'")
+
+      should_set_session :special, "'$2 off your next purchase'"
+      should_set_session :special_user_id, proc { @user.id }
+      should_set_session(:special_user_id){ @user.id }
+      should_not_set_session :monkey, "fat"
 
       should_assign_to :user, :posts
       should_not_assign_to :foo, :bar
@@ -150,6 +159,7 @@ describe PostsController do
       it { should_not assign_to(:some_text, :equals => "foo without bar") }
       it { should assign_to(:user, :class => User, :equals => 'users(:first)') }
       it { should assign_to(:user, :class => User, :equals => users(:first)) }
+      it { should assign_to(:user, :class => User){ users(:first) } }
       it { should_not assign_to(:user, :class => User, :equals => 'users(:second)') }
       it { should_not assign_to(:user, :class => User, :equals => users(:second)) }
       it { should_not assign_to(:user, :class => Post) }
@@ -188,9 +198,16 @@ describe PostsController do
       it { should respond_with_content_type('application/rss+xml') }
       it { should respond_with_content_type(:rss) }
       it { should respond_with_content_type(/rss/) }
+
       it { should return_from_session(:special, "'$2 off your next purchase'") }
       it { should return_from_session(:special_user_id, '@user.id') }
       it { should_not return_from_session(:monkey, "'fat'") }
+
+      it { should set_session(:special, "'$2 off your next purchase'") }
+      it { should set_session(:special_user_id, proc{ @user.id }) }
+      it { should set_session(:special_user_id){ @user.id } }
+      it { should_not set_session(:monkey, "'fat'") }
+
       it { should assign_to(:user, :posts) }
       it { should_not assign_to(:foo, :bar) }
     end
