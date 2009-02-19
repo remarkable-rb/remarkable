@@ -4,7 +4,7 @@ require 'rubygems'
 require 'ruby-debug'
 
 dir = File.dirname(__FILE__)
-require File.join(dir, '..', 'lib', 'remarkable_core')
+require File.join(dir, '..', 'lib', 'remarkable')
 
 Dir[File.join(dir, 'matchers', '*.rb')].each do |file|
   require file

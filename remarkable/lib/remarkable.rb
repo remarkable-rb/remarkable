@@ -22,11 +22,11 @@ end
 
 # Load core files
 dir = File.dirname(__FILE__)
-require File.join(dir, 'remarkable_core', 'version')
-require File.join(dir, 'remarkable_core', 'i18n')
-require File.join(dir, 'remarkable_core', 'dsl')
-require File.join(dir, 'remarkable_core', 'messages')
+require File.join(dir, 'remarkable', 'version')
+require File.join(dir, 'remarkable', 'i18n')
+require File.join(dir, 'remarkable', 'dsl')
+require File.join(dir, 'remarkable', 'messages')
 
-require File.join(dir, 'remarkable_core', 'base')
-require File.join(dir, 'remarkable_core', 'macros')
-require File.join(dir, 'remarkable_core', 'core_ext', 'array')
+require File.join(dir, 'remarkable', 'base')
+require File.join(dir, 'remarkable', 'macros')
+require File.join(dir, 'remarkable', 'core_ext', 'array')

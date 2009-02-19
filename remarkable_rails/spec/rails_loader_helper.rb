@@ -16,7 +16,7 @@ def rails_load!
   require "#{RAILS_ROOT}/config/environment.rb"
 
   # Load Remarkable core on place to avoid gem to be loaded
-  require File.join(File.dirname(__FILE__), '..', '..', 'remarkable_core', 'lib', 'remarkable_core')
+  require File.join(File.dirname(__FILE__), '..', '..', 'remarkable', 'lib', 'remarkable')
 
   # Execute block if given
   yield if block_given?
