@@ -1,21 +1,11 @@
-begin
-  require 'spec'
-rescue LoadError
-  require 'rubygems'
-  gem 'rspec'
-  require 'spec'
-end
+require 'rubygems'
+require 'ruby-debug'
 
-RAILS_ROOT = File.dirname(__FILE__) + '/rails_root'
-require "#{RAILS_ROOT}/config/environment.rb"
+dir = File.dirname(__FILE__)
+FIXTURE_PATH = File.join(dir, "fixtures")
+require File.join(dir, '..', '..', 'remarkable_rails', 'spec', 'rails_loader_helper')
 
-silence_warnings { RAILS_ENV = ENV['RAILS_ENV'] }
-
-ActiveRecord::Migration.verbose = false
-ActiveRecord::Migrator.migrate("#{RAILS_ROOT}/db/migrate")
-
-Spec::Runner.configure do |config|
-  config.use_transactional_fixtures = false
-  config.use_instantiated_fixtures  = false
-  config.fixture_path = File.join(File.dirname(__FILE__), "fixtures")
+rails_load! do
+  # Load Remarkable ActiveRecord
+  require File.join(dir, '..', 'lib', 'remarkable_activerecord')
 end

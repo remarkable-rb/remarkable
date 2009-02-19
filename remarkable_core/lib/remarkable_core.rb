@@ -1,7 +1,7 @@
 # Load rspec
 begin
   require 'spec'
-rescue Exception => e
+rescue LoadError
   require 'rubygems'
   gem 'spec'
   require 'spec'

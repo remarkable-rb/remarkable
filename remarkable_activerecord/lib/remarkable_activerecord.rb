@@ -1,14 +1,24 @@
-module Remarkable
-  # This helper deals with Remarkable matchers and macros inclusion.
-  #
-  def self.include_matchers!(matchers_base, klass)
-    klass.class_eval do
-      include matchers_base::Matchers if defined? matchers_base::Matchers
-      extend  matchers_base::Macros   if defined? matchers_base::Macros
-    end
+# Load Remarkable (whick loads rspec)
+unless Object.const_defined?('Remarkable')
+  begin
+    require 'remarkable'
+  rescue LoadError
+    require 'rubygems'
+    gem 'remarkable'
+    require 'remarkable'
   end
 end
 
+module Remarkable
+  module ActiveRecord
+  end
+end
+
+# Load Remarkable ActiveRecord files
 dir = File.dirname(__FILE__)
-require File.join(dir, 'remarkable-core', 'version')
-require File.join(dir, 'remarkable-core', 'base')
+
+# By default, ActiveRecord matchers are not included in any example group.
+# The responsable for this is RemarkableRails. If you are using ActiveRecord
+# without Rails, put the line below in your spec_helper to include ActiveRecord
+# matchers into rspec globally.
+# Remarkable.include_matchers!(Remarkable::ActiveRecord, Spec::Example::ExampleGroup)

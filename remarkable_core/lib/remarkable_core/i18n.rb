@@ -36,7 +36,7 @@ end
 unless Object.const_defined?('I18n')
   begin
     require 'i18n'
-  rescue Exception => e
+  rescue LoadError
     require 'rubygems'
     # TODO Move to i18n gem as soon as it gets updated
     gem 'josevalim-i18n'
@@ -44,7 +44,7 @@ unless Object.const_defined?('I18n')
   end
 
   # Set default locale
-  I18n.default_locale = :en
+  ::I18n.default_locale = :en
 end
 
 # Add module to Remarkable
