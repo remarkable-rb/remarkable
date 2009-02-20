@@ -12,7 +12,7 @@ describe Remarkable::Messages do
       @matcher.description.should == 'contain the given values'
     end
 
-    it 'should provide a expectation' do
+    it 'should provide an expectation' do
       @matcher.matches?([4])
       @matcher.expectation.should == 'the given values are included in [4] which is a Array'
     end
@@ -23,7 +23,7 @@ describe Remarkable::Messages do
     end
 
     it 'should provide a negative failure message' do
-      @matcher.negative.matches?([1])
+      @matcher.matches?([1])
       @matcher.negative_failure_message.should == 'Did not expect the given values are included in [1] which is a Array'
     end
 
@@ -56,7 +56,7 @@ describe Remarkable::Messages do
     end
 
     it 'should provide a translated negative failure message' do
-      @matcher.negative.matches?([1])
+      @matcher.matches?([1])
       @matcher.negative_failure_message.should == 'Não esperava que os valores fornecidos sejam inclusos em [1]'
     end
 
