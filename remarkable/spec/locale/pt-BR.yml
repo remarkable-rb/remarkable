@@ -1,6 +1,7 @@
 pt-BR:
   remarkable:
     core:
+      not: não
       should: deve
       should_not: não deve
       example_disabled: Exemplo desativado

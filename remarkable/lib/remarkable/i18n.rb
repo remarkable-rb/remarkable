@@ -19,13 +19,13 @@ module Remarkable
 
     # Wrapper for translation
     def translate(string, options = {})
-      ::I18n.t string, { :locale => @@locale }.merge(options)
+      ::I18n.translate string, { :locale => @@locale }.merge(options)
     end
     alias :t :translate
 
     # Wrapper for localization
     def localize(object, options = {})
-      ::I18n.l object, { :locale => @@locale }.merge(options)
+      ::I18n.localize object, { :locale => @@locale }.merge(options)
     end
     alias :l :localize
 

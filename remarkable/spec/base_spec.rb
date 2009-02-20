@@ -21,25 +21,6 @@ describe Remarkable::Base do
     @matcher.instance_variable_get('@spec').should == :binding
   end
 
-  it 'should provide a description' do
-    @matcher.description.should == 'contain the given values'
-  end
-
-  it 'should provide a expectation' do
-    @matcher.matches?([4])
-    @matcher.expectation.should == 'the given values are included in [4] which is a Array'
-  end
-
-  it 'should provide a failure message' do
-    @matcher.matches?([4])
-    @matcher.failure_message.should == 'Expected the given values are included in [4] which is a Array (1 is not included in [4])'
-  end
-
-  it 'should provide a negative failure message' do
-    @matcher.negative.matches?([1])
-    @matcher.negative_failure_message.should == 'Did not expect the given values are included in [1] which is a Array'
-  end
-
   it 'should provide default structure to matchers' do
     [1, 2, 3].should contain(1)
     [1, 2, 3].should contain(1, 2)

@@ -1,45 +1,32 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe Remarkable::Base do
+describe Remarkable::I18n do
   subject { [1, 2, 3] }
 
   before(:all) do
     Remarkable.locale = :"pt-BR"
   end
 
-  before(:each) do
-    @matcher = Remarkable::Specs::Matchers::ContainMatcher.new(1, 2, 3)
-  end
-
-  it 'should provide a translated description' do
-    @matcher.description.should == 'conter os valores fornecidos'
-  end
-
-  it 'should provide a translated expectation' do
-    @matcher.matches?([4])
-    @matcher.expectation.should == 'os valores fornecidos sejam inclusos em [4]'
-  end
-
-  it 'should provide a translated failure message' do
-    @matcher.matches?([4])
-    @matcher.failure_message.should == 'Esperava que os valores fornecidos sejam inclusos em [4] (1 is not included in [4])'
-  end
-
-  it 'should provide a translated negative failure message' do
-    @matcher.negative.matches?([1])
-    @matcher.negative_failure_message.should == 'Não esperava que os valores fornecidos sejam inclusos em [1]'
-  end
-
   it 'should have a locale apart from I18n' do
     I18n.locale.should_not == Remarkable.locale
   end
 
-  it 'should provide an i18n not word' do
-    @matcher.send(:not_word).should == 'not'
+  it 'should delegate translate to I18n API overwriting the default locale' do
+    ::I18n.should_receive(:translate).with('remarkable.core.not', :locale => :"pt-BR").and_return('translated')
+    Remarkable.t('remarkable.core.not').should == 'translated'
   end
 
-  it 'should provide a default i18n scope' do
-    @matcher.send(:matcher_i18n_scope).should == 'remarkable.specs.contain'
+  it 'should delegate localize to I18n API overwriting the default locale' do
+    ::I18n.should_receive(:localize).with('remarkable.core.not', :locale => :"pt-BR").and_return('localized')
+    Remarkable.l('remarkable.core.not').should == 'localized'
+  end
+
+  it 'should delegate add_locale to I18n backend' do
+    backend = mock(::I18n::Backend)
+    ::I18n.should_receive(:backend).and_return(backend)
+    backend.should_receive(:load_translations).with('a', 'b', 'c')
+
+    Remarkable.add_locale('a', 'b', 'c')
   end
 
   after(:all) do
