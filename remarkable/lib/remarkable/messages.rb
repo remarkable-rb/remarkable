@@ -70,7 +70,7 @@ module Remarkable
       # Returns the not word from I18n API.
       #
       def not_word
-        Remarkable.t 'remarkable.core.not', :default => 'not'
+        Remarkable.t('remarkable.core.not', :default => 'not') + " "
       end
 
       # Converts an array to a sentence

@@ -28,7 +28,7 @@ describe Remarkable::Messages do
     end
 
     it 'should provide a not word' do
-      @matcher.send(:not_word).should == 'not'
+      @matcher.send(:not_word).should == 'not '
     end
   end
 
@@ -61,7 +61,7 @@ describe Remarkable::Messages do
     end
 
     it 'should provide an i18n not word' do
-      @matcher.send(:not_word).should == 'não'
+      @matcher.send(:not_word).should == 'não '
     end
 
     after(:all) do
