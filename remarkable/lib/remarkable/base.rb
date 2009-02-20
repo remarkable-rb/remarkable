@@ -1,7 +1,7 @@
 module Remarkable
   class Base
     include Remarkable::Messages
-    include Remarkable::DSL
+    extend  Remarkable::DSL
 
     # This method is called in <tt>should_not</tt> cases to mark the current
     # matcher as negative.
