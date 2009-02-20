@@ -1,6 +1,7 @@
 en:
   remarkable:
     core:
+      not: not
       should: should
       should_not: should not
       example_disabled: Example disabled

@@ -24,11 +24,13 @@ module Remarkable
     end
 
     # Provides a default failure message. Overwrite it if needed.
+    #
     def failure_message
       Remarkable.t 'remarkable.core.failure_message', :expectation => expectation, :missing => @missing
     end
 
     # Provides a default negative failure message. Overwrite it if needed.
+    #
     def negative_failure_message
       Remarkable.t 'remarkable.core.negative_failure_message', :expectation => expectation
     end
@@ -64,5 +66,31 @@ module Remarkable
           :subject_inspect => @subject.inspect
         }
       end
+
+      # Returns the not word from I18n API.
+      #
+      def not_word
+        Remarkable.t 'remarkable.core.not', :default => 'not'
+      end
+
+      # Converts an array to a sentence
+      #
+      def array_to_sentence(array)
+        words_connector     = Remarkable.t 'remarkable.core.helpers.words_connector'
+        two_words_connector = Remarkable.t 'remarkable.core.helpers.two_words_connector'
+        last_word_connector = Remarkable.t 'remarkable.core.helpers.last_word_connector'
+
+        case array.length
+          when 0
+            ''
+          when 1
+            array[0].to_s
+          when 2
+            "#{array[0]}#{two_words_connector}#{array[1]}"
+          else
+            "#{array[0...-1].join(words_connector)}#{last_word_connector}#{array[-1]}"
+        end
+      end
+
   end
 end

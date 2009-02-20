@@ -354,22 +354,11 @@ END
       before_assert
 
       assert_matcher do
-        self.class.matcher_assertions.each do |method|
-          unless send(method)
-            @missing ||= Remarkable.t "missing.#{method}", default_i18n_options
-            return false
-          end
-        end
+        send_methods_and_generate_message(self.class.matcher_assertions)
       end &&
       assert_matcher_for(instance_variable_get("@#{self.class.matcher_arguments[:collection]}") || []) do |value|
         instance_variable_set("@#{self.class.matcher_arguments[:as]}", value)
-
-        self.class.matcher_for_assertions.each do |method|
-          unless send(method)
-            @missing ||= Remarkable.t "missing.#{method}", default_i18n_options
-            return false
-          end
-        end
+        send_methods_and_generate_message(self.class.matcher_for_assertions)
       end
     end
 
@@ -390,25 +379,6 @@ END
       # to use it to manipulate the @subject before assertions start.
       #
       def before_assert
-      end
-
-      # Converts an array to a sentence
-      #
-      def array_to_sentence(array)
-        words_connector     = Remarkable.t 'remarkable.core.helpers.words_connector'
-        two_words_connector = Remarkable.t 'remarkable.core.helpers.two_words_connector'
-        last_word_connector = Remarkable.t 'remarkable.core.helpers.last_word_connector'
-
-        case array.length
-          when 0
-            ''
-          when 1
-            array[0].to_s
-          when 2
-            "#{array[0]}#{two_words_connector}#{array[1]}"
-          else
-            "#{array[0...-1].join(words_connector)}#{last_word_connector}#{array[-1]}"
-        end
       end
 
       # Overwrites default_i18n_options to provide collection interpolation.
@@ -435,5 +405,20 @@ END
         options
       end
 
+      # Helper that send the methods given and create a missing message if any
+      # returns false.
+      #
+      def send_methods_and_generate_message(methods)
+        methods.each do |method|
+          bool, hash = send(method)
+
+          unless bool
+            @missing ||= Remarkable.t "missing.#{method}", default_i18n_options.merge(hash || {})
+            return false
+          end
+        end
+
+        return true
+      end
   end
 end

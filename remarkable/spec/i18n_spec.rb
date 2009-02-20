@@ -34,6 +34,14 @@ describe Remarkable::Base do
     I18n.locale.should_not == Remarkable.locale
   end
 
+  it 'should provide an i18n not word' do
+    @matcher.send(:not_word).should == 'not'
+  end
+
+  it 'should provide a default i18n scope' do
+    @matcher.send(:matcher_i18n_scope).should == 'remarkable.specs.contain'
+  end
+
   after(:all) do
     Remarkable.locale = :en
   end
