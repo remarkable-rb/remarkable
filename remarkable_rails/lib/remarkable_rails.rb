@@ -31,6 +31,7 @@ if defined?(ActiveRecord::Base)
   end
 
   # Include Remarkable ActiveRecord matcher in appropriate ExampleGroup
+  Remarkable.include_matchers!(Remarkable::ActiveRecord, Spec::Rails::Example::ModelExampleGroup)
 end
 
 module Remarkable
