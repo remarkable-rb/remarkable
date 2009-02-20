@@ -51,6 +51,7 @@ lib/remarkable/helpers.rb
 lib/remarkable/matcher_base.rb
 lib/remarkable/private_helpers.rb
 lib/remarkable/rails.rb
+lib/remarkable/rails/extract_options.rb
 rails/init.rb
 remarkable.gemspec
 script/console
