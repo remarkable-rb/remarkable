@@ -2,11 +2,16 @@ module Remarkable
   module Messages
 
     # Provides a default description message. Overwrite it if needed.
-    # By default it does not use default i18n options since most options are not
-    # available at this point.
+    # By default it uses default i18n options, but without the subjects, which
+    # usually are not available when description is called.
     #
     def description(options={})
-      options = { :scope => matcher_i18n_scope }.merge(options)
+      options = default_i18n_options.merge(options)
+
+      # Remove subject keys
+      options.delete(:subject_name)
+      options.delete(:subject_inspect)
+
       Remarkable.t 'description', options
     end
 
@@ -49,7 +54,9 @@ module Remarkable
       end
 
       # Default i18n options used in expectations, failure_message and
-      # negative_failure_message.
+      # negative_failure_message. It provides by default the subject_name and
+      # the subject_inspect value. But when used with DSL, it provides a whole
+      # bunch of options (check dsl.rb for more information).
       #
       def default_i18n_options
         { :scope => matcher_i18n_scope,

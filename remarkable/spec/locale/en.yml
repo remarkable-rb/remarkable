@@ -5,8 +5,8 @@ en:
         description: "contain the given values"
         expectation: "the given values are included in {{subject_inspect}} which is a {{subject_name}}"
       single_contain:
-        description: "contain the given value"
-        expectation: "the given value is included in {{subject_inspect}}"
+        description: "contain {{value}}"
+        expectation: "{{value}} is included in {{subject_inspect}}"
         optional:
           allow_nil:
             positive: "allowing nil"

@@ -71,6 +71,8 @@ module Remarkable
           options = names.extract_options!
           args = names.dup
 
+          @matcher_arguments[:names] = names
+
           if collection = options.delete(:collection)
             @matcher_arguments[:collection] = collection
             @matcher_arguments[:as]         = singularize!(@matcher_arguments[:collection].to_s, options.delete(:as))
@@ -140,7 +142,18 @@ END
         #     end
         #   end
         #
-        # For readability purpouses, assertions is also aliased as assertion.
+        # Those methods should return true if it pass or false if it fails. When
+        # it fails, it will use I18n API to find the proper failure message:
+        #
+        #   missing:
+        #     allow_nil?: allowed the value to be nil
+        #     allow_blank?: allowed the value to be blank
+        #
+        # Or you can set the message in the instance variable @missing in the
+        # assertion method if you don't want to rely on I18n API.
+        #
+        # As you might have noticed from samples, this method is also aliased
+        # as <tt>assertion</tt>.
         #
         def assertions(*methods, &block)
           define_method methods.last, &block if block_given?
@@ -184,6 +197,36 @@ END
         #   optional :name, :title
         #   optional :range, :default => 0..10, :alias => :within
         #
+        # Optionals will be included in description messages if you assign them
+        # properly on your locale file. If you have a validate_uniqueness_of
+        # matcher with the following on your locale file:
+        #
+        #   description: validate uniqueness of {{attributes}}
+        #   optional:
+        #     scope:
+        #       given: scoped to {{inspect}}
+        #     case_sensitive:
+        #       positive: case sensitive
+        #       negative: case insensitive
+        #
+        # When invoked like below will generate the following messages:
+        #
+        #   validate_uniqueness_of :project_id, :scope => :company_id
+        #   #=> "validate uniqueness of project_id scoped to company_id"
+        #
+        #   validate_uniqueness_of :project_id, :scope => :company_id, :case_sensitive => true
+        #   #=> "validate uniqueness of project_id scoped to company_id and case sensitive"
+        #
+        #   validate_uniqueness_of :project_id, :scope => :company_id, :case_sensitive => false
+        #   #=> "validate uniqueness of project_id scoped to company_id and case insensitive"
+        #
+        # The options for each optional are:
+        #
+        #   * <tt>positive</tt> - When the key is given and it's not false or nil.
+        #   * <tt>negative</tt> - When the key is given and it's false or nil.
+        #   * <tt>given</tt> - When the key is given, doesn't matter the value.
+        #   * <tt>not_given</tt> - When the key is not given.
+        #
         def optional(*names)
           options = names.extract_options!
           @matcher_optionals += names
@@ -212,8 +255,8 @@ END
           define_method :before_assert, &block
         end
 
-        # Class method that accepts a block or a Hash which is called in
-        # default_options.
+        # Class method that accepts a block or a Hash that will overwrite
+        # instance method default_options.
         #
         def default_options(hash = {}, &block)
           if block_given?
@@ -247,30 +290,17 @@ END
             end
           end
 
-          base.instance_variable_set('@matcher_arguments',      @matcher_arguments      || {})
+          base.instance_variable_set('@matcher_arguments',      @matcher_arguments      || { :names => [] })
           base.instance_variable_set('@matcher_optionals',      @matcher_optionals      || [])
           base.instance_variable_set('@matcher_assertions',     @matcher_assertions     || [])
           base.instance_variable_set('@matcher_for_assertions', @matcher_for_assertions || [])
         end
     end
 
-    # Overwrites description to support optionals and collection name.
-    #
-    # For each optional given, attaches it to the message. It searches for
-    # 4 values:
-    #
-    #   * <tt>positive</tt> - When the key is given and it's not false or nil.
-    #   * <tt>negative</tt> - When the key is given and it's false or nil.
-    #   * <tt>given</tt> - When the key is given, doesn't matter the value.
-    #   * <tt>not_given</tt> - When the key is not given.
+    # Overwrites description to support optionals. Check <tt>optional</tt> for
+    # more information.
     #
     def description(options={})
-      if collection_name = self.class.matcher_arguments[:collection]
-        collection_name = collection_name.to_sym
-        collection = instance_variable_get("@#{collection_name}")
-        options[collection_name] = array_to_sentence(collection)
-      end
-
       message = super(options)
 
       optionals = self.class.matcher_optionals.map do |optional|
@@ -291,14 +321,32 @@ END
       end
     end
 
-    # Gets the collection and loops it setting an instance variable with its
-    # singular name. For example, if loop_argument is :good_values, we
-    # will get @good_values and then set the instance variable @good_value.
+    # For each instance under the collection declared in <tt>arguments</tt>,
+    # this method will call each method declared in <tt>assertions</tt>.
     #
-    # Then we call all methods declared in single_assertion. This method
-    # receives the subject as argument and provides a before assert callback
-    # that you might want to use it when you want to manipulate the subject
-    # before the assertions start.
+    # As an example, let's assume you have the following matcher:
+    #
+    #   arguments  :collection => :attributes
+    #   assertions :allow_nil?, :allow_blank?
+    #
+    # For each attribute in @attributes, we will set the instance variable
+    # @attribute and then call allow_nil? and allow_blank?. Assertions should
+    # return true if it pass or false if it fails. When it fails, it will use
+    # I18n API to find the proper failure message:
+    #
+    #   missing:
+    #     allow_nil?: allowed the value to be nil
+    #     allow_blank?: allowed the value to be blank
+    #
+    # Or you can set the message in the instance variable @missing in the
+    # assertion method if you don't want to rely on I18n API.
+    #
+    # This method also call the methods declared in single_assertions. Which
+    # work the same way as assertions, except it doesn't loop for each value in
+    # the collection.
+    #
+    # It also provides a before_assert callback that you might want to use it
+    # to manipulate the subject before the assertions start.
     #
     def matches?(subject)
       @subject = subject
@@ -307,7 +355,7 @@ END
 
       assert_matcher do
         self.class.matcher_assertions.each do |method|
-          unless send_assertion_method(method)
+          unless send(method)
             @missing ||= Remarkable.t "missing.#{method}", default_i18n_options
             return false
           end
@@ -317,7 +365,7 @@ END
         instance_variable_set("@#{self.class.matcher_arguments[:as]}", value)
 
         self.class.matcher_for_assertions.each do |method|
-          unless send_assertion_method(method)
+          unless send(method)
             @missing ||= Remarkable.t "missing.#{method}", default_i18n_options
             return false
           end
@@ -338,21 +386,10 @@ END
       def after_initialize
       end
 
-      # Overwrite to provide a callback before begin assertions.
-      # You might want to use it when you want to manipulate the @subject
-      # before the assertions start.
+      # Overwrite to provide a callback before begin assertions. You might want
+      # to use it to manipulate the @subject before assertions start.
       #
       def before_assert
-      end
-
-      # Helper to call assertions.
-      #
-      def send_assertion_method(method)
-        if method.is_a? Array
-          send(*method)
-        else
-          send(method)
-        end
       end
 
       # Converts an array to a sentence
@@ -379,6 +416,7 @@ END
       def default_i18n_options
         options = super
 
+        # Add collection to options
         if collection_name = self.class.matcher_arguments[:collection]
           collection_name = collection_name.to_sym
           collection = instance_variable_get("@#{collection_name}")
@@ -387,6 +425,11 @@ END
           object_name = self.class.matcher_arguments[:as].to_sym
           object = instance_variable_get("@#{object_name}")
           options[object_name] = object if object
+        end
+
+        # Add arguments to options
+        self.class.matcher_arguments[:names].each do |name|
+          options[name] = instance_variable_get("@#{name}").inspect
         end
 
         options
