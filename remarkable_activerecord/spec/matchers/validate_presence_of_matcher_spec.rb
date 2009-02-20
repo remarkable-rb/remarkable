@@ -11,12 +11,12 @@ describe 'validate_presence_of' do
   end
 
   it 'should have an expectation message' do
-    @matcher.matches?(Product)
+    @matcher.matches?(Product.new)
     @matcher.expectation.should == 'Product could not be saved if size is not set'
   end
 
   it 'should have set allow_nil missing message' do
-    @matcher.matches?(Product)
+    @matcher.matches?(Product.new)
     @matcher.instance_variable_get('@missing').should == 'allow nil values for size'
   end
 

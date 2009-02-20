@@ -5,35 +5,7 @@ module Remarkable
       optional :message
       optional :allow_nil, :allow_blank, :default => true
 
-      # If subject is a class, tries to find an already existent instance of
-      # this class or create one.
-      #
-      before_assert do
-        @subject = get_instance_of(@subject)
-      end
-
       protected
-
-        # Get a instance of the given objecy or class.
-        #
-        # If a class is given, it will check if a instance variable of this class
-        # is already set.
-        #
-        def get_instance_of(object_or_klass) #:nodoc:
-          if object_or_klass.is_a?(Class)
-            klass = object_or_klass
-            object = @spec ? @spec.instance_variable_get("@#{instance_variable_name_for(klass)}") : nil
-            object ||= klass.new
-          else
-            object_or_klass
-          end
-        end
-
-        # Guess instance variable name
-        #
-        def instance_variable_name_for(klass) #:nodoc:
-          klass.to_s.split('::').last.underscore
-        end
 
         # Checks for the given key in @options, if it exists and it's true,
         # tests that the value is bad, otherwise tests that the value is good.
