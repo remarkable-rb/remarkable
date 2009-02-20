@@ -119,7 +119,6 @@ module Remarkable
         #   assert_good_value(Product, :price, "0")
         #
         def assert_good_value(model, attribute, value, error_message_to_avoid=//, count=0) # :nodoc:
-          model = get_instance_of(model)
           model.send("#{attribute}=", value)
 
           return true if object.valid?
@@ -146,7 +145,6 @@ module Remarkable
         #   assert_bad_value(Product, :price, "0")
         #
         def assert_bad_value(model, attribute, value, error_message_to_expect=:invalid, count=0) #:nodoc:
-          model = get_instance_of(model)
           model.send("#{attribute}=", value)
 
           return false if model.valid? || model.errors.on(attribute).blank?

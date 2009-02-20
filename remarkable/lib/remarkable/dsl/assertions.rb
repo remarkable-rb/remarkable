@@ -98,7 +98,7 @@ def initialize(#{args.join(',')})
   #{assignments}
   @options = default_options.merge(#{get_options})
   #{set_collection}
-  after_initialize
+  after_initialize if self.respond_to?(:after_initialize)
 end
 END
         end
