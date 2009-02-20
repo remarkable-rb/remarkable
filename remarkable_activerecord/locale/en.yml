@@ -1,9 +1,9 @@
 en:
   remarkable:
     active_record:
+      allow_nil: "{{not}}allow nil values for {{attribute}}"
+      allow_blank: "{{not}}allow blank values for {{attribute}}"
       validate_presence_of:
         description: "require {{attributes}} to be set"
         expectation: "{{subject_name}} could not be saved if {{attribute}} is not set"
-        missing:
-          allow_nil?: "allow nil values for {{attribute}}"
 

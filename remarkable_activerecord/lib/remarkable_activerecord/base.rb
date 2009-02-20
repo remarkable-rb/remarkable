@@ -47,10 +47,10 @@ module Remarkable
 
           if @options[key]
             return true if bad?(value, message_key, count)
-            return false, :negative => ''
+            return false, :not => ''
           else
             return true if good?(value, message_key, count)
-            return false, :negative => not_word
+            return false, :not => not_word
           end
         end
 
@@ -66,10 +66,10 @@ module Remarkable
 
           if @options[key]
             return true if good?(value, message_key, count)
-            return false, :negative => not_word
+            return false, :not => not_word
           else
             return true if bad?(value, message_key, count)
-            return false, :negative => ''
+            return false, :not => ''
           end
         end
 
@@ -77,16 +77,36 @@ module Remarkable
         # the key which contain the message in @options and a count, which is
         # used for interpolation.
         #
+        # It also gets an allow_nil message on remarkable.active_record.allow_nil
+        # to be used as default.
+        #
         def allow_nil?(message_key=:message, count=0) #:nodoc:
-          assert_good_or_bad_if_key(:allow_nil, nil, message_key, count)
+          bool, options = assert_good_or_bad_if_key(:allow_nil, nil, message_key, count)
+
+          unless bool
+            default = Remarkable.t "remarkable.active_record.allow_nil", default_i18n_options.except(:scope).merge(options)
+            return false, options.merge(:default => default)
+          end
+
+          true
         end
 
         # Default allow_blank? validation. It accepts the message_key which is
         # the key which contain the message in @options and a count, which is
         # used for interpolation.
         #
+        # It also gets an allow_blank message on remarkable.active_record.allow_blank
+        # to be used as default.
+        #
         def allow_blank?(message_key=:message, count=0) #:nodoc:
-          assert_good_or_bad_if_key(:allow_blank, '', message_key, count)
+          bool, options = assert_good_or_bad_if_key(:allow_blank, '', message_key, count)
+
+          unless bool
+            default = Remarkable.t "remarkable.active_record.allow_blank", default_i18n_options.except(:scope).merge(options)
+            return false, options.merge(:default => default)
+          end
+
+          true
         end
 
         # Shortcut for assert_good_value.

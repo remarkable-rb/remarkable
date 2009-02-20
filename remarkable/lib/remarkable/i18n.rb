@@ -2,9 +2,10 @@
 module Remarkable
   module I18n
 
-    # Add locale files to I18n
+    # Add locale files to I18n and to load path, if it exists.
     def add_locale(*locales)
       ::I18n.backend.load_translations *locales
+      ::I18n.load_path += locales if ::I18n.respond_to?(:load_path)
     end
 
     # Set Remarkable locale (which is not necessarily the same as the application)
