@@ -52,7 +52,7 @@ module Remarkable # :nodoc:
       # It checks for the key, if it exists and it's true, tests that the value
       # given is bad, otherwise tests that the value is good.
       #
-      def assert_bad_or_good_if_key(key, value, missing, message_key = :message, count_for_interpolation = 0)
+      def assert_bad_or_good_if_key(key, value, missing, message_key = :message)
         return true unless @options.key? key
 
         if @options[key]
@@ -70,14 +70,14 @@ module Remarkable # :nodoc:
       # It checks for the key, if it exists and it's true, tests that the value
       # given is good, otherwise tests that the value is bad.
       #
-      def assert_good_or_bad_if_key(key, value, missing, message_key = :message, count_for_interpolation = 0)
+      def assert_good_or_bad_if_key(key, value, missing, message_key = :message)
         return true unless @options.key? key
 
         if @options[key]
-          return true if good?(value, message_key, count_for_interpolation)
+          return true if good?(value, message_key)
           missing = 'not ' + missing
         else
-          return true if bad?(value, message_key, count_for_interpolation)
+          return true if bad?(value, message_key)
         end
 
         @missing = missing
@@ -89,9 +89,9 @@ module Remarkable # :nodoc:
       # Notice that it checks for @options[:message], so be sure that this option
       # is properly set.
       #
-      def allow_nil?(message_key = :message, count_for_interpolation = 0)
+      def allow_nil?(message_key = :message)
         message = "allow #{@attribute} be set to nil"
-        assert_good_or_bad_if_key(:allow_nil, nil, message, message_key, count_for_interpolation)
+        assert_good_or_bad_if_key(:allow_nil, nil, message, message_key)
       end
 
       # Default allow_blank? validation.
@@ -99,25 +99,25 @@ module Remarkable # :nodoc:
       # Notice that it checks for @options[:message], so be sure that this option
       # is properly set.
       #
-      def allow_blank?(message_key = :message, count_for_interpolation = 0)
+      def allow_blank?(message_key = :message)
         message = "allow #{@attribute} be set to blank"
-        assert_good_or_bad_if_key(:allow_blank, '', message, message_key, count_for_interpolation)
+        assert_good_or_bad_if_key(:allow_blank, '', message, message_key)
       end
 
       # Shortcut for assert_good_value.
       # Please notice that it has instance variables hard coded. So do not use
       # it if you are trying to assert another instance besides @subject.
       #
-      def good?(value, message_sym = :message, count_for_interpolation = 0)
-        assert_good_value(@subject, @attribute, value, @options[message_sym], count_for_interpolation)
+      def good?(value, message_sym = :message)
+        assert_good_value(@subject, @attribute, value, @options[message_sym])
       end
 
       # Shortcut for assert_bad_value.
       # Please notice that it has instance variables hard coded. So do not use
       # it if you are trying to assert another instance besides @subject.
       #
-      def bad?(value, message_sym = :message, count_for_interpolation = 0)
-        assert_bad_value(@subject, @attribute, value, @options[message_sym], count_for_interpolation)
+      def bad?(value, message_sym = :message)
+        assert_bad_value(@subject, @attribute, value, @options[message_sym])
       end
 
       # Asserts that an Active Record model validates with the passed
@@ -137,13 +137,13 @@ module Remarkable # :nodoc:
       #   @product = Product.new(:tangible => false)
       #   assert_good_value(Product, :price, "0")
       #
-      def assert_good_value(object_or_klass, attribute, value, error_message_to_avoid = //, count_for_interpolation = 0) # :nodoc:
+      def assert_good_value(object_or_klass, attribute, value, error_message_to_avoid = //) # :nodoc:
         object = get_instance_of(object_or_klass)
         object.send("#{attribute}=", value)
 
         return true if object.valid?
 
-        error_message_to_avoid = error_message_from_model(object, attribute, error_message_to_avoid, count_for_interpolation)
+        error_message_to_avoid = error_message_from_model(object, attribute, error_message_to_avoid)
 
         assert_does_not_contain(object.errors.on(attribute), error_message_to_avoid)
       end
@@ -165,14 +165,14 @@ module Remarkable # :nodoc:
       #   @product = Product.new(:tangible => true)
       #   assert_bad_value(Product, :price, "0")
       #
-      def assert_bad_value(object_or_klass, attribute, value, error_message_to_expect = :invalid, count_for_interpolation = 0) # :nodoc:
+      def assert_bad_value(object_or_klass, attribute, value, error_message_to_expect = :invalid) # :nodoc:
         object = get_instance_of(object_or_klass)
         object.send("#{attribute}=", value)
         
         return false if object.valid?
         return false unless object.errors.on(attribute)
 
-        error_message_to_expect = error_message_from_model(object, attribute, error_message_to_expect, count_for_interpolation)
+        error_message_to_expect = error_message_from_model(object, attribute, error_message_to_expect)
 
         assert_contains(object.errors.on(attribute), error_message_to_expect)
       end
@@ -207,18 +207,25 @@ module Remarkable # :nodoc:
       #   Using the underlying mechanism inside ActiveRecord makes us free from
       #   all thos errors.
       #
-      # The count value is used to do interpolation.
+      # We replace {{count}} interpolation for __count__ which later is
+      # replaced by a regexp which contains \d+.
       #
-      def error_message_from_model(model, attribute, message, count_value = 0)
+      def error_message_from_model(model, attribute, message) #:nodoc:
         if message.is_a? Symbol
-          if Object.const_defined?(:I18n) # Rails >= 2.2
-            model.errors.generate_message(attribute, message, :count => count_value)
+          message = if Object.const_defined?(:I18n) # Rails >= 2.2
+            model.errors.generate_message(attribute, message, :count => '__count__')
           else # Rails <= 2.1
-            ::ActiveRecord::Errors.default_error_messages[message] % count_value
+            ::ActiveRecord::Errors.default_error_messages[message] % '__count__'
           end
-        else
-          message
+
+          if message =~ /__count__/
+            message = Regexp.escape(message)
+            message.gsub!('__count__', '\d+')
+            message = /#{message}/
+          end
         end
+
+        message
       end
 
     end

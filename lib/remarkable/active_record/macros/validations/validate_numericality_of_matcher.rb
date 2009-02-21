@@ -66,7 +66,7 @@ module Remarkable # :nodoc:
 
         def equal_to?(key, add = 0)
           return true unless @options.key?(key)
-          return true if good?(@options[key] + add, default_message_for(key), @options[key])
+          return true if good?(@options[key] + add, default_message_for(key))
 
           @missing = "did not allow value equals to #{@options[key]} for #{@attribute}"
           false
@@ -74,7 +74,7 @@ module Remarkable # :nodoc:
 
         def more_than_maximum?(key, add = 0)
           return true unless @options.key?(key)
-          return true if bad?(@options[key] + add, default_message_for(key), @options[key])
+          return true if bad?(@options[key] + add, default_message_for(key))
 
           # We should do @options[key] + add - 1 to adjust messages in less_than cases.
           @missing = "allowed value #{@options[key] + add} which is more than #{@options[key] + add - 1} for #{@attribute}"
@@ -83,7 +83,7 @@ module Remarkable # :nodoc:
 
         def less_than_minimum?(key, add = 0)
           return true unless @options.key?(key)
-          return true if bad?(@options[key] + add, default_message_for(key), @options[key])
+          return true if bad?(@options[key] + add, default_message_for(key))
 
           # We should do @options[key] + add + 1 to adjust messages in greater_than cases.
           @missing = "allowed value #{@options[key] + add} which is less than #{@options[key] + add + 1} for #{@attribute}"

@@ -70,16 +70,16 @@ module Remarkable # :nodoc:
         end
 
         def allow_nil?
-          super(:short_message, @options[:minimum])
+          super(:short_message)
         end
 
         def allow_blank?
-          super(:short_message, @options[:minimum])
+          super(:short_message)
         end
 
         def less_than_min_length?
           return true if @behavior == :maximum || @options[:minimum] <= 0
-          return true if bad?(value_for_length(@options[:minimum] - 1), :short_message, @options[:minimum])
+          return true if bad?(value_for_length(@options[:minimum] - 1), :short_message)
 
           @missing = "allow #{@attribute} to be less than #{@options[:minimum]} chars long"
           return false
@@ -87,7 +87,7 @@ module Remarkable # :nodoc:
 
         def exactly_min_length?
           return true if @behavior == :maximum || @options[:minimum] <= 0
-          return true if good?(value_for_length(@options[:minimum]), :short_message, @options[:minimum])
+          return true if good?(value_for_length(@options[:minimum]), :short_message)
 
           @missing = "not allow #{@attribute} to be exactly #{@options[:minimum]} chars long"
           return false
@@ -95,7 +95,7 @@ module Remarkable # :nodoc:
 
         def more_than_max_length?
           return true if @behavior == :minimum
-          return true if bad?(value_for_length(@options[:maximum] + 1), :long_message, @options[:maximum])
+          return true if bad?(value_for_length(@options[:maximum] + 1), :long_message)
 
           @missing = "allow #{@attribute} to be more than #{@options[:maximum]} chars long"
           return false
@@ -103,7 +103,7 @@ module Remarkable # :nodoc:
 
         def exactly_max_length?
           return true if @behavior == :minimum || @options[:minimum] == @options[:maximum]
-          return true if good?(value_for_length(@options[:maximum]), :long_message, @options[:maximum])
+          return true if good?(value_for_length(@options[:maximum]), :long_message)
 
           @missing = "not allow #{@attribute} to be exactly #{@options[:maximum]} chars long"
           return false
