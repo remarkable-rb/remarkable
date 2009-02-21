@@ -12,6 +12,12 @@ describe Product do
 
     it { should validate_presence_of(:title) }
     it { should_not validate_presence_of(:price) }
+
+    it { should validate_length_of(:size, :in => 3..5) }
+    it { should validate_length_of(:size, :in => 3..5).allow_blank }
+    it { should_not validate_length_of(:size, :within => 2..5) }
+    it { should_not validate_length_of(:size, :within => 3..6) }
+    it { should_not validate_length_of(:size, :within => 3..5, :allow_blank => false) }
   end
 end
 
@@ -27,5 +33,11 @@ describe Product do
 
     should_validate_presence_of :title
     should_not_validate_presence_of :price
+
+    should_validate_length_of :size, :in => 3..5
+    should_validate_length_of :size, :in => 3..5, :allow_blank => true
+    should_not_validate_length_of :size, :within => 2..5
+    should_not_validate_length_of :size, :within => 3..6
+    should_not_validate_length_of :size, :within => 3..5, :allow_blank => false
   end
 end

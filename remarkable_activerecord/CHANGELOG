@@ -1,3 +1,4 @@
-# Edge
+# v3.0.0
 
-
+* Added validate_presence_of matcher
+* Added validate_length_of matcher
