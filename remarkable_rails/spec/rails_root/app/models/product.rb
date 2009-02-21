@@ -10,4 +10,5 @@ class Product < ActiveRecord::Base
   validates_inclusion_of :price,  :in => 1..9999,      :if => :tangible, :allow_nil => true
   validates_inclusion_of :weight, :in => 1..100,       :if => :tangible, :allow_blank => true
   validates_inclusion_of :size,   :in => %w(S M L XL), :if => :tangible, :allow_blank => true
-  validates_exclusion_of :size,   :in => %w(XS XM),    :if => :tangibleend
+  validates_exclusion_of :size,   :in => %w(XS XM),    :if => :tangible
+end

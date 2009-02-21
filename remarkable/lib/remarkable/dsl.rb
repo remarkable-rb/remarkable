@@ -9,6 +9,8 @@ module Remarkable
     def self.extended(base)
       base.extend Assertions
       base.extend Optionals
+      base.send :include, Matches
+      base.send :include, Description
     end
 
     # Make Remarkable::Base DSL inheritable.

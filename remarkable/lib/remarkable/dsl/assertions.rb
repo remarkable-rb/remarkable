@@ -66,8 +66,6 @@ module Remarkable
           options = names.extract_options!
           args = names.dup
 
-          include Remarkable::DSL::Matches unless ancestors.include?(Remarkable::DSL::Matches)
-
           @matcher_arguments[:names] = names
 
           if collection = options.delete(:collection)
@@ -98,7 +96,7 @@ def initialize(#{args.join(',')})
   #{assignments}
   @options = default_options.merge(#{get_options})
   #{set_collection}
-  after_initialize if self.respond_to?(:after_initialize)
+  after_initialize
 end
 END
         end

@@ -61,8 +61,6 @@ module Remarkable
           options = names.extract_options!
           @matcher_optionals += names
 
-          include Remarkable::DSL::Description unless ancestors.include?(Remarkable::DSL::Description)
-
           names.each do |name|
             class_eval <<-END, __FILE__, __LINE__
 def #{name}(value#{ options[:default] ? "=#{options[:default].inspect}" : "" })
