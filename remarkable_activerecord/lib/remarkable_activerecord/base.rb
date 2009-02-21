@@ -168,20 +168,21 @@ module Remarkable
         #   Using the underlying mechanism inside ActiveRecord makes us free from
         #   all thos errors.
         #
-        # When the message contain parenthesis, they are removed and a regexp
-        # is returned.
+        # We replace {{count}} interpolation for __count__ which later is
+        # replaced by a regexp which contains \d+.
         #
         def error_message_from_model(model, attribute, message) #:nodoc:
           if message.is_a? Symbol
             message = if Object.const_defined?(:I18n) # Rails >= 2.2
-              model.errors.generate_message(attribute, message, :count => 0)
+              model.errors.generate_message(attribute, message, :count => '__count__')
             else # Rails <= 2.1
-              ::ActiveRecord::Errors.default_error_messages[message] % 0
+              ::ActiveRecord::Errors.default_error_messages[message] % '__count__'
             end
 
-            if message.gsub!(/\([^\)]*\)/, '')
-              message.strip!
-              message = /#{Regexp.escape(message)}/
+            if message =~ /__count__/
+              message = Regexp.escape(message)
+              message.gsub!('__count__', '\d+')
+              message = /#{message}/
             end
           end
 
