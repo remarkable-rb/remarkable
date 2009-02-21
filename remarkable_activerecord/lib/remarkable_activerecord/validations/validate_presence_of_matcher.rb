@@ -3,11 +3,9 @@ module Remarkable
     module Matchers
       class ValidatePresenceOfMatcher < Remarkable::ActiveRecord::Base
         arguments :collection => :attributes
+        optional  :message
+
         assertions :allow_nil?
-
-        # Undefine inherited optionals that are not available
-        undef_method :allow_blank, :allow_nil
-
         default_options :message => :blank, :allow_nil => false
       end
 

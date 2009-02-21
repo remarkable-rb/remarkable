@@ -5,5 +5,28 @@ en:
       allow_blank: "{{not}}allow blank values for {{attribute}}"
       validate_presence_of:
         description: "require {{attributes}} to be set"
-        expectation: "{{subject_name}} could not be saved if {{attribute}} is not set"
+        expectation: "{{subject_name}} requires {{attribute}} to be set"
+      validate_length_of:
+        description: "ensure {{attributes}} length is"
+        expectation: "{{subject_name}} ensures length of {{attribute}}"
+        optional:
+          within:
+            positive: "within {{inspect}}"
+          maximum:
+            positive: "maximum {{inspect}}"
+          minimum:
+            positive: "minimum {{inspect}}"
+          is:
+            positive: "{{inspect}}"
+          allow_nil:
+            positive: "allow nil values"
+            negative: "not allow nil values"
+          allow_blank:
+            positive: "allow blank values"
+            negative: "not allow blank values"
+        missing:
+          less_than_min_length?: "allow {{attribute}} to be less than {{count}}"
+          exactly_min_length?: "not allow {{attribute}} to be {{count}}"
+          more_than_max_length?: "allow {{attribute}} to be more than {{count}}"
+          exactly_max_length?: "not allow {{attribute}} to be {{count}}"
 

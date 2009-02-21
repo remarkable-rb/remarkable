@@ -2,26 +2,22 @@ module Remarkable
   module ActiveRecord
     class Base < Remarkable::Base
 
-      optional :message
-      optional :allow_nil, :allow_blank, :default => true
-
       protected
 
         # Checks for the given key in @options, if it exists and it's true,
         # tests that the value is bad, otherwise tests that the value is good.
         #
-        # It accepts the key to check for, the value that is used for testing,
-        # an @options key where the message to search for is and count which is
-        # used to find the exact error message.
+        # It accepts the key to check for, the value that is used for testing
+        # and an @options key where the message to search for is.
         #
-        def assert_bad_or_good_if_key(key, value, message_key=:message, count=0) #:nodoc:
+        def assert_bad_or_good_if_key(key, value, message_key=:message) #:nodoc:
           return true unless @options.key? key
 
           if @options[key]
-            return true if bad?(value, message_key, count)
+            return true if bad?(value, message_key)
             return false, :not => ''
           else
-            return true if good?(value, message_key, count)
+            return true if good?(value, message_key)
             return false, :not => not_word
           end
         end
@@ -29,31 +25,29 @@ module Remarkable
         # Checks for the given key in @options, if it exists and it's true,
         # tests that the value is good, otherwise tests that the value is bad.
         #
-        # It accepts the key to check for, the value that is used for testing,
-        # an @options key where the message to search for is and count which is
-        # used to find the exact error message.
+        # It accepts the key to check for, the value that is used for testing
+        # and an @options key where the message to search for is.
         #
-        def assert_good_or_bad_if_key(key, value, message_key=:message, count=0) #:nodoc:
+        def assert_good_or_bad_if_key(key, value, message_key=:message) #:nodoc:
           return true unless @options.key? key
 
           if @options[key]
-            return true if good?(value, message_key, count)
+            return true if good?(value, message_key)
             return false, :not => not_word
           else
-            return true if bad?(value, message_key, count)
+            return true if bad?(value, message_key)
             return false, :not => ''
           end
         end
 
         # Default allow_nil? validation. It accepts the message_key which is
-        # the key which contain the message in @options and a count, which is
-        # used for interpolation.
+        # the key which contain the message in @options.
         #
         # It also gets an allow_nil message on remarkable.active_record.allow_nil
         # to be used as default.
         #
-        def allow_nil?(message_key=:message, count=0) #:nodoc:
-          bool, options = assert_good_or_bad_if_key(:allow_nil, nil, message_key, count)
+        def allow_nil?(message_key=:message) #:nodoc:
+          bool, options = assert_good_or_bad_if_key(:allow_nil, nil, message_key)
 
           unless bool
             default = Remarkable.t "remarkable.active_record.allow_nil", default_i18n_options.except(:scope).merge(options)
@@ -64,14 +58,13 @@ module Remarkable
         end
 
         # Default allow_blank? validation. It accepts the message_key which is
-        # the key which contain the message in @options and a count, which is
-        # used for interpolation.
+        # the key which contain the message in @options.
         #
         # It also gets an allow_blank message on remarkable.active_record.allow_blank
         # to be used as default.
         #
-        def allow_blank?(message_key=:message, count=0) #:nodoc:
-          bool, options = assert_good_or_bad_if_key(:allow_blank, '', message_key, count)
+        def allow_blank?(message_key=:message) #:nodoc:
+          bool, options = assert_good_or_bad_if_key(:allow_blank, '', message_key)
 
           unless bool
             default = Remarkable.t "remarkable.active_record.allow_blank", default_i18n_options.except(:scope).merge(options)
@@ -83,14 +76,14 @@ module Remarkable
 
         # Shortcut for assert_good_value.
         #
-        def good?(value, message_sym=:message, count=0) #:nodoc:
-          assert_good_value(@subject, @attribute, value, @options[message_sym], count)
+        def good?(value, message_sym=:message) #:nodoc:
+          assert_good_value(@subject, @attribute, value, @options[message_sym])
         end
 
         # Shortcut for assert_bad_value.
         #
-        def bad?(value, message_sym=:message, count=0) #:nodoc:
-          assert_bad_value(@subject, @attribute, value, @options[message_sym], count)
+        def bad?(value, message_sym=:message) #:nodoc:
+          assert_bad_value(@subject, @attribute, value, @options[message_sym])
         end
 
         # Asserts that an Active Record model validates with the passed
@@ -110,12 +103,12 @@ module Remarkable
         #   @product = Product.new(:tangible => false)
         #   assert_good_value(Product, :price, "0")
         #
-        def assert_good_value(model, attribute, value, error_message_to_avoid=//, count=0) # :nodoc:
+        def assert_good_value(model, attribute, value, error_message_to_avoid=//) # :nodoc:
           model.send("#{attribute}=", value)
 
-          return true if object.valid?
+          return true if model.valid?
 
-          error_message_to_avoid = error_message_from_model(model, attribute, error_message_to_avoid, count)
+          error_message_to_avoid = error_message_from_model(model, attribute, error_message_to_avoid)
           assert_does_not_contain(model.errors.on(attribute), error_message_to_avoid)
         end
 
@@ -136,12 +129,12 @@ module Remarkable
         #   @product = Product.new(:tangible => true)
         #   assert_bad_value(Product, :price, "0")
         #
-        def assert_bad_value(model, attribute, value, error_message_to_expect=:invalid, count=0) #:nodoc:
+        def assert_bad_value(model, attribute, value, error_message_to_expect=:invalid) #:nodoc:
           model.send("#{attribute}=", value)
 
           return false if model.valid? || model.errors.on(attribute).blank?
 
-          error_message_to_expect = error_message_from_model(model, attribute, error_message_to_expect, count)
+          error_message_to_expect = error_message_from_model(model, attribute, error_message_to_expect)
           assert_contains(model.errors.on(attribute), error_message_to_expect)
         end
 
@@ -175,18 +168,24 @@ module Remarkable
         #   Using the underlying mechanism inside ActiveRecord makes us free from
         #   all thos errors.
         #
-        # The count value is used to do interpolation.
+        # When the message contain parenthesis, they are removed and a regexp
+        # is returned.
         #
-        def error_message_from_model(model, attribute, message, count=0) #:nodoc:
+        def error_message_from_model(model, attribute, message) #:nodoc:
           if message.is_a? Symbol
-            if Object.const_defined?(:I18n) # Rails >= 2.2
-              model.errors.generate_message(attribute, message, :count => count)
+            message = if Object.const_defined?(:I18n) # Rails >= 2.2
+              model.errors.generate_message(attribute, message, :count => 0)
             else # Rails <= 2.1
-              ::ActiveRecord::Errors.default_error_messages[message] % count
+              ::ActiveRecord::Errors.default_error_messages[message] % 0
             end
-          else
-            message
+
+            if message.gsub!(/\([^\)]*\)/, '')
+              message.strip!
+              message = /#{Regexp.escape(message)}/
+            end
           end
+
+          message
         end
 
         # Asserts that the given collection does not contain item x. If x is a
