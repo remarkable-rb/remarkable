@@ -22,11 +22,11 @@ describe 'validate_length_of' do
     @matcher.maximum(nil).minimum(2)
     @matcher.description.should == 'ensure size length is minimum 2'
 
-    @matcher.allow_nil
-    @matcher.description.should == 'ensure size length is minimum 2 and allow nil values'
+    @matcher.allow_nil(false)
+    @matcher.description.should == 'ensure size length is minimum 2 and not allow nil values'
 
     @matcher.allow_blank
-    @matcher.description.should == 'ensure size length is minimum 2, allow nil values, and allow blank values'
+    @matcher.description.should == 'ensure size length is minimum 2, not allow nil values, and allow blank values'
   end
 
   it 'should have an expectation message' do
