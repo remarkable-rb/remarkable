@@ -30,6 +30,8 @@ module Remarkable
         end
 
         before_assert do
+          super
+
           if @options[:is]
             @min_value, @max_value = @options[:is], nil
             @options[:message] ||= :wrong_length

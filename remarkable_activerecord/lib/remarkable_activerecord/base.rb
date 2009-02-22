@@ -4,6 +4,33 @@ module Remarkable
 
       protected
 
+        # Before each assertion, get an instance of the @subject. Although this
+        # is not needed when used with Spec::Rails, it might be usefull when
+        # used outside it.
+        #
+        def before_assert
+          @subject = get_instance_of(@subject)
+        end
+
+        # Get a instance of the given object or class. If a class is given, it
+        # will check if a instance variable of this class is already set.
+        #
+        def get_instance_of(object_or_klass) # :nodoc:
+          if object_or_klass.is_a?(Class)
+            klass = object_or_klass
+            object = @spec ? @spec.instance_variable_get("@#{instance_variable_name_for(klass)}") : nil
+            object ||= klass.new
+          else
+            object_or_klass
+          end
+        end
+
+        # Guess instance variable name
+        #
+        def instance_variable_name_for(klass)
+          klass.to_s.split('::').last.underscore
+        end
+
         # Checks for the given key in @options, if it exists and it's true,
         # tests that the value is bad, otherwise tests that the value is good.
         #
