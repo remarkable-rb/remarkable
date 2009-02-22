@@ -12,21 +12,9 @@ module Remarkable
         assertions :less_than_min_length?, :exactly_min_length?, :allow_nil?,
                    :more_than_max_length?, :exactly_max_length?, :allow_blank?
 
-        # If message is supplied, reassign it properly to :short_message
-        # and :long_message. This is ActiveRecord default behavior when
-        # the validation is :maximum, :minimum or :is.
-        #
-        def message(message)
-          unless message.nil? || @options.slice(:is, :minimum, :maximum).empty?
-            @options[:short_message] = message
-            @options[:long_message]  = message
-          end
-          self
-        end
-
         # Reassign :in to :within
         after_initialize do
-          @options[:within] ||= @options.delete(:in)
+          @options[:within] ||= @options.delete(:in) if @options.key? :in
         end
 
         before_assert do
@@ -44,7 +32,10 @@ module Remarkable
           end
 
           # Reassing message to short_message and long_message
-          message(@options.delete(:message))
+          if @options[:message] && !@options.slice(:is, :maximum, :minimum).empty?
+            @options[:short_message] = @options.delete(:message)
+            @options[:long_message]  = @options[:short_message]
+          end
         end
 
         default_options do
@@ -61,28 +52,28 @@ module Remarkable
           end
 
           def less_than_min_length?
-            return true if @min_value && @min_value > 0 &&
+            return true if @min_value.nil? || @min_value <= 1 ||
                            bad?(value_for_length(@min_value - 1), :short_message)
 
             return false, :count => @min_value
           end
 
           def exactly_min_length?
-            return true if @min_value && @min_value >= 0 &&
+            return true if @min_value.nil? || @min_value <= 0 ||
                            good?(value_for_length(@min_value), :short_message)
 
             return false, :count => @min_value
           end
 
           def more_than_max_length?
-            return true if @max_value &&
+            return true if @max_value.nil? ||
                            bad?(value_for_length(@max_value + 1), :long_message)
 
             return false, :count => @max_value
           end
 
           def exactly_max_length?
-            return true if @max_value && @min_value != @max_value &&
+            return true if @max_value.nil? || @min_value == @max_value ||
                            good?(value_for_length(@max_value), :long_message)
 
             return false, :count => @max_value
