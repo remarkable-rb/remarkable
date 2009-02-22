@@ -5,8 +5,8 @@ module Remarkable
       protected
 
         # Before each assertion, get an instance of the @subject. Although this
-        # is not needed when used with Spec::Rails, it might be usefull when
-        # used outside it.
+        # is not needed in theory, we will keep it since subject are still
+        # experimental on rspec.
         #
         def before_assert
           @subject = get_instance_of(@subject)
