@@ -3,6 +3,11 @@ module Remarkable
     include Remarkable::Messages
     extend  Remarkable::DSL
 
+    def spec(binding)
+      @spec = binding
+      self
+    end
+
     private
 
       # Returns the subject class if it's not one.

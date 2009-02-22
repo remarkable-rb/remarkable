@@ -1,6 +1,9 @@
 # Remarkable core module
 module Remarkable
+  @@registered_subjects = []
+
   # Helper that includes required Remarkable modules into the given klass.
+  #
   def self.include_matchers!(base, klass)
     # Add Remarkable core modules
     klass.send :extend,  Remarkable::Macros
@@ -8,6 +11,23 @@ module Remarkable
     klass.send :include, base::Matchers if defined?(base::Matchers)
     klass.send :extend,  base::Matchers if defined?(base::Matchers)
     klass.send :extend,  base::Macros   if defined?(base::Macros)
+  end
+
+  # Register a block that will be called when the specified condition is met.
+  #
+  # This is used when the matcher subject is not the same as the current rspec
+  # subject. The condition receives as parameter a matcher and the block given
+  # is evaluated in the spec instance scope.
+  #
+  def self.register_subject(condition, &block)
+    @@registered_subjects.unshift [ condition, block ]
+  end
+
+  # Return the registered subjects. This method is called in should and
+  # should_not methods.
+  #
+  def self.registered_subjects
+    @@registered_subjects
   end
 end
 
