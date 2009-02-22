@@ -35,22 +35,22 @@ module Remarkable
     # After we try to find a subject for it from the registered subjects. If
     # we can't, we will call super.
     #
-    def should_with_remarkable_hooks(matcher)
+    def should_with_remarkable_hooks(method, matcher)
       matcher.spec(self) if matcher.class.ancestors.include?(Remarkable::Base)
 
       Remarkable.registered_subjects.each do |condition, block|
-        return instance_eval(&block).should(matcher) if condition.call(matcher)
+        return instance_eval(&block).send(method, matcher) if condition.call(matcher)
       end
 
       nil
     end
 
     def should(matcher=nil) #:nodoc:
-      super(matcher) unless should_with_remarkable_hooks(matcher)
+      super(matcher) unless should_with_remarkable_hooks(:should, matcher)
     end
 
     def should_not(matcher) #:nodoc:
-      super(matcher) unless should_with_remarkable_hooks(matcher)
+      super(matcher) unless should_with_remarkable_hooks(:should_not, matcher)
     end
 
   end
