@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe 'validate_length_of' do
 
   before(:each) do
-    @matcher = Remarkable::ActiveRecord::Matchers::ValidateLengthOfMatcher.new(:size)
+    @matcher = Remarkable::ActiveRecord::Matchers::ValidateLengthOfMatcher.new(:size).spec(self)
   end
 
   it 'should have a description' do

@@ -200,7 +200,7 @@ module Remarkable
         #
         def error_message_from_model(model, attribute, message) #:nodoc:
           if message.is_a? Symbol
-            message = if Object.const_defined?(:I18n) # Rails >= 2.2
+            message = if RAILS_I18N # Rails >= 2.2
               model.errors.generate_message(attribute, message, :count => '__count__')
             else # Rails <= 2.1
               ::ActiveRecord::Errors.default_error_messages[message] % '__count__'

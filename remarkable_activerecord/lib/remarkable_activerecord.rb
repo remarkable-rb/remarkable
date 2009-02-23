@@ -12,7 +12,7 @@ end
 # Load Remarkable ActiveRecord files
 dir = File.dirname(__FILE__)
 require File.join(dir, 'remarkable_activerecord', 'base')
-require File.join(dir, 'remarkable_activerecord', 'human_name_description')
+require File.join(dir, 'remarkable_activerecord', 'human_names')
 
 # Add locale
 Remarkable.add_locale File.join(dir, '..', 'locale', 'en.yml')

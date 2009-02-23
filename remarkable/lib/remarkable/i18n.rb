@@ -34,7 +34,9 @@ module Remarkable
 end
 
 # Load I18n
-unless Object.const_defined?('I18n')
+RAILS_I18N = Object.const_defined?('I18n') # Rails >= 2.2
+
+unless RAILS_I18N
   begin
     require 'i18n'
   rescue LoadError
@@ -48,5 +50,5 @@ unless Object.const_defined?('I18n')
   ::I18n.default_locale = :en
 end
 
-Remarkable.send :extend, Remarkable::I18n
+Remarkable.extend Remarkable::I18n
 Remarkable.locale = I18n.locale

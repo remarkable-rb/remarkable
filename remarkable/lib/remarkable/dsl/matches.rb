@@ -62,10 +62,25 @@ module Remarkable
         def before_assert
         end
 
-        # Overwrites default_i18n_options to provide collection interpolation.
+        # Overwrites default_i18n_options to provide arguments and collection
+        # interpolation.
         #
         def default_i18n_options
-          options = super
+          options = super.merge(collection_interpolation)
+
+          # Add arguments to options
+          self.class.matcher_arguments[:names].each do |name|
+            options[name] = instance_variable_get("@#{name}").inspect
+          end
+
+          options
+        end
+
+        # Methods that return collection_name and object_name as a Hash for
+        # interpolation.
+        #
+        def collection_interpolation
+          options = {}
 
           # Add collection to options
           if collection_name = self.class.matcher_arguments[:collection]
@@ -76,11 +91,6 @@ module Remarkable
             object_name = self.class.matcher_arguments[:as].to_sym
             object = instance_variable_get("@#{object_name}")
             options[object_name] = object if object
-          end
-
-          # Add arguments to options
-          self.class.matcher_arguments[:names].each do |name|
-            options[name] = instance_variable_get("@#{name}").inspect
           end
 
           options

@@ -1,0 +1,61 @@
+module Spec
+  module Example
+    module ExampleGroupMethods
+
+      # This allows "describe User" to use the I18n human name of User.
+      #
+      def self.description_text(*args)
+        args.inject("") do |description, arg|
+          arg = if RAILS_I18N && arg.respond_to?(:human_name)
+            arg.human_name(:locale => Remarkable.locale)
+          else
+            arg.to_s
+          end
+
+          description << " " unless (description == "" || arg =~ /^(\s|\.|#)/)
+          description << arg
+        end
+      end
+
+    end
+  end
+end
+
+module Remarkable
+  module ActiveRecord
+    class Base < Remarkable::Base
+
+      protected
+
+        # Changes collection interpolation to provide the attribute localized
+        # name whenever is possible.
+        #
+        def collection_interpolation
+          described_class = if @subject
+            subject_class
+          elsif @spec
+            @spec.send(:described_class)
+          end
+
+          if described_class.respond_to?(:human_attribute_name) && RAILS_I18N && self.class.matcher_arguments[:collection] == :attributes
+            options = {}
+
+            if collection = instance_variable_get('@attributes')
+              collection.map!{|attr| described_class.human_attribute_name(attr.to_s, :locale => Remarkable.locale).downcase }
+              options[:attributes] = array_to_sentence(collection)
+            end
+
+            if object = instance_variable_get('@attribute')
+              object = described_class.human_attribute_name(object.to_s, :locale => Remarkable.locale).downcase
+              options[:attribute] = object
+            end
+
+            options
+          else
+            super
+          end
+        end
+
+    end
+  end
+end
