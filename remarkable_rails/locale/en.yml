@@ -1,0 +1,10 @@
+en:
+  remarkable:
+    action_controller:
+      redirect_to:
+        description: "redirect to {{expected}}"
+        expectation: "redirect to {{expected}}"
+        missing:
+          redirected?: "got no redirect"
+          url_match?: "redirected to {{actual}}"
+

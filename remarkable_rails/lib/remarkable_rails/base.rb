@@ -1,5 +1,5 @@
 module Remarkable
-  module ActiveController
+  module ActionController
     class Base < Remarkable::Base
 
     end

@@ -93,7 +93,7 @@ module Remarkable
       #
       # Note: this method is also aliased as <tt>validate_size_of</tt>.
       #
-      # Options:
+      # == Options
       #
       # * <tt>:minimum</tt> - The minimum size of the attribute.
       # * <tt>:maximum</tt> - The maximum size of the attribute.
@@ -109,12 +109,12 @@ module Remarkable
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt> only when :minimum, :maximum or :is is given.
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.wrong_length') % value</tt>
       #
-      # Example:
+      # == Examples
       #
-      #   it { should validate_length_of(:password, :within => 6..20) }
-      #   it { should validate_length_of(:password, :maximum => 20) }
-      #   it { should validate_length_of(:password, :minimum => 6) }
-      #   it { should validate_length_of(:age, :is => 18) }
+      #   should_validate_length_of :password, :within => 6..20
+      #   should_validate_length_of :password, :maximum => 20
+      #   should_validate_length_of :password, :minimum => 6
+      #   should_validate_length_of :age, :is => 18
       #
       #   it { should validate_length_of(:password).within(6..20) }
       #   it { should validate_length_of(:password).maximum(20) }

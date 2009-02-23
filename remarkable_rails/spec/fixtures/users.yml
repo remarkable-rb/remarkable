@@ -1,0 +1,13 @@
+first:
+  id: 1
+  name: Some dude
+  age: 2
+  email: none@none.com
+  ssn: 123456789
+
+second:
+  id: 2
+  name: Another guy
+  age: 10
+  email: gut@none.com
+  ssn: 123456789

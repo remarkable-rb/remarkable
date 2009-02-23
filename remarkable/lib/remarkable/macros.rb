@@ -20,12 +20,12 @@ module Remarkable
 
       def should_not_method_missing(method, *args, &block)
         matcher = find_and_configure_matcher(method, *args, &block)
-        it { should_not matcher }
+        it { should_not matcher.spec(self) }
       end
 
       def should_method_missing(method, *args, &block)
         matcher = find_and_configure_matcher(method, *args, &block)
-        it { should matcher }
+        it { should matcher.spec(self) }
       end
 
       def pending_method_missing(method, negative, *args, &block)
