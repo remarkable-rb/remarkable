@@ -18,7 +18,7 @@ module Remarkable
       end
 
       def be_a_person(*args, &block)
-        BeAPersonMatcher.new(*args, &block)
+        BeAPersonMatcher.new(*args, &block).spec(self)
       end
     end
   end

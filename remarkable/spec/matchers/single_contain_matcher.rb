@@ -41,7 +41,7 @@ module Remarkable
       end
 
       def single_contain(*args, &block)
-        SingleContainMatcher.new(*args, &block)
+        SingleContainMatcher.new(*args, &block).spec(self)
       end
     end
   end

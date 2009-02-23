@@ -24,7 +24,7 @@ module Remarkable
       end
 
       def contain(*args)
-        ContainMatcher.new(*args)
+        ContainMatcher.new(*args).spec(self)
       end
     end
   end

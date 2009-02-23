@@ -28,20 +28,6 @@ describe Remarkable::Base do
     matcher.instance_variable_get('@spec').class.ancestors.should include(Spec::Example::ExampleGroup)
   end
 
-  it 'should alow subjects to be registered' do
-    matcher = contain(:value)
-
-    condition = proc{ |m| m.instance_variable_get('@values') == [:value] }
-    Remarkable.register_subject(condition){ [:key, :value] }
-    should matcher
-
-    matcher = contain(:keys)
-
-    condition = proc{ |m| m.instance_variable_get('@values') == [:keys] }
-    Remarkable.register_subject(condition){ [] }
-    should_not matcher
-  end
-
   it { should contain(1) }
   it { should_not contain(10) }
 

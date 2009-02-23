@@ -25,7 +25,7 @@ module Remarkable
       end
 
       def collection_contain(*args)
-        CollectionContainMatcher.new(*args)
+        CollectionContainMatcher.new(*args).spec(self)
       end
     end
   end

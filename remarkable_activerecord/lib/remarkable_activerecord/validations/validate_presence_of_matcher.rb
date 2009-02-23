@@ -23,7 +23,7 @@ module Remarkable
       #   it { should validate_presence_of(:name, :phone_number) }
       #
       def validate_presence_of(*args)
-        ValidatePresenceOfMatcher.new(*args)
+        ValidatePresenceOfMatcher.new(*args).spec(self)
       end
     end
   end

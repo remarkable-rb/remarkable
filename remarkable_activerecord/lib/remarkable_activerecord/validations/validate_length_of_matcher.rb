@@ -122,7 +122,7 @@ module Remarkable
       #   it { should validate_length_of(:age).is(18) }
       #
       def validate_length_of(*attributes)
-        ValidateLengthOfMatcher.new(*attributes)
+        ValidateLengthOfMatcher.new(*attributes).spec(self)
       end
     end
   end
