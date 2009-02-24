@@ -3,21 +3,18 @@ en:
     active_record:
       allow_nil: "{{not}}allow nil values for {{attribute}}"
       allow_blank: "{{not}}allow blank values for {{attribute}}"
-      validate_presence_of:
-        description: "require {{attributes}} to be set"
-        expectation: "{{subject_name}} requires {{attribute}} to be set"
       validate_length_of:
-        description: "ensure {{attributes}} length is"
+        description: "ensure length of {{attributes}}"
         expectation: "{{subject_name}} ensures length of {{attribute}}"
         optional:
           within:
-            positive: "within {{inspect}}"
+            positive: "within {{inspect}} characters"
           maximum:
-            positive: "maximum {{inspect}}"
+            positive: "maximum {{inspect}} characters"
           minimum:
-            positive: "minimum {{inspect}}"
+            positive: "minimum {{inspect}} characters"
           is:
-            positive: "{{inspect}}"
+            positive: "equals to {{inspect}} characters"
           allow_nil:
             positive: "allow nil values"
             negative: "not allow nil values"
@@ -25,8 +22,45 @@ en:
             positive: "allow blank values"
             negative: "not allow blank values"
         missing:
-          less_than_min_length?: "allow {{attribute}} to be less than {{count}}"
-          exactly_min_length?: "not allow {{attribute}} to be {{count}}"
-          more_than_max_length?: "allow {{attribute}} to be more than {{count}}"
-          exactly_max_length?: "not allow {{attribute}} to be {{count}}"
+          less_than_min_length?: "allow {{attribute}} to be less than {{count}} characters"
+          exactly_min_length?: "not allow {{attribute}} to be {{count}} characters"
+          more_than_max_length?: "allow {{attribute}} to be more than {{count}} characters"
+          exactly_max_length?: "not allow {{attribute}} to be {{count}} characters"
+      validate_numericality_of:
+        description: "ensure numericality of {{attributes}}"
+        expectation: "{{subject_name}} ensures numericality of {{attribute}}"
+        optional:
+          only_integer:
+            positive: "allow only integer values"
+          odd:
+            positive: "allow only odd values"
+          even:
+            positive: "allow only even values"
+          equal_to:
+            given: "equal to {{inspect}}"
+          less_than:
+            given: "less than {{inspect}}"
+          greater_than:
+            given: "greater than {{inspect}}"
+          less_than_or_equal_to:
+            given: "less than or equal to {{inspect}}"
+          greater_than_or_equal_to:
+            given: "greater than or equal to {{inspect}}"
+          allow_nil:
+            positive: "allow nil values"
+            negative: "not allow nil values"
+          allow_blank:
+            positive: "allow blank values"
+            negative: "not allow blank values"
+        missing:
+          only_numeric_values?: "allow non-numeric values for {{attribute}}"
+          only_integer?: "{{not}}allow non-integer values for {{attribute}}"
+          only_even?: "{{not}}allow non-even values for {{attribute}}"
+          only_odd?: "{{not}}allow non-odd values for {{attribute}}"
+          equal_to?: "not allow {{attribute}} to be equal to {{count}}"
+          more_than_maximum?: "allow {{attribute}} to be greater than {{count}}"
+          less_than_minimum?: "allow {{attribute}} to be less than {{count}}"
+      validate_presence_of:
+        description: "require {{attributes}} to be set"
+        expectation: "{{subject_name}} requires {{attribute}} to be set"
 

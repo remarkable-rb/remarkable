@@ -19,11 +19,8 @@ module Remarkable
           end rescue nil
         end.compact
 
-        if optionals.empty?
-          message
-        else
-          message + " " + array_to_sentence(optionals)
-        end
+        optionals.unshift(message)
+        array_to_sentence(optionals)
       end
 
     end

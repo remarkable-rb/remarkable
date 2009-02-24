@@ -2,8 +2,12 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe 'validate_presence_of' do
 
+  def create_matcher(*attr)
+    Remarkable::ActiveRecord::Matchers::ValidatePresenceOfMatcher.new(*attr).spec(self)
+  end
+
   before(:each) do
-    @matcher = Remarkable::ActiveRecord::Matchers::ValidatePresenceOfMatcher.new(:title, :size).spec(self)
+    @matcher = create_matcher(:title, :size)
   end
 
   it 'should have a description' do
