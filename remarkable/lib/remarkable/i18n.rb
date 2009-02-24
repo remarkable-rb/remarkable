@@ -42,7 +42,7 @@ unless RAILS_I18N
   rescue LoadError
     require 'rubygems'
     # TODO Move to i18n gem as soon as it gets updated
-    gem 'josevalim-i18n'
+    gem 'svenfuchs-i18n'
     require 'i18n'
   end
 
