@@ -5,6 +5,6 @@ en:
         description: "redirect to {{expected}}"
         expectation: "redirect to {{expected}}"
         missing:
-          redirected?: "got no redirect"
-          url_match?: "redirected to {{actual}}"
+          redirected: "got no redirect"
+          url_match: "redirected to {{actual}}"
 

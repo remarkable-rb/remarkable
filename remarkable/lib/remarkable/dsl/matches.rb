@@ -86,14 +86,28 @@ module Remarkable
         end
 
         # Helper that send the methods given and create a missing message if any
-        # returns false.
+        # returns false. Since most assertion methods ends with an question
+        # mark and it looks strange on I18n yml files, we also search for the
+        # assertion method name without the question mark or exclamation mark
+        # at the end. So if you have a method called is_valid? on I18n yml file
+        # we will check for a key :is_valid? and :is_valid.
         #
         def send_methods_and_generate_message(methods)
           methods.each do |method|
             bool, hash = send(method)
 
             unless bool
-              @missing ||= Remarkable.t "missing.#{method}", default_i18n_options.merge(hash || {})
+              if @missing.nil?
+                hash = default_i18n_options.merge(hash || {})
+
+                if method.to_s =~ /\?|\!$/
+                  hash[:default] = Array(hash[:default])
+                  hash[:default] << :"missing.#{method.to_s.chop}"
+                end
+
+                @missing = Remarkable.t "missing.#{method}", hash
+              end
+
               return false
             end
           end
