@@ -32,7 +32,7 @@ module Remarkable
       def matches?(subject)
         @subject = subject
 
-        before_assert
+        run_before_assert_callbacks
 
         assert_matcher do
           send_methods_and_generate_message(self.class.matcher_assertions)
@@ -49,17 +49,6 @@ module Remarkable
         #
         def default_options
           {}
-        end
-
-        # Overwrite to provide a callback called after initialization.
-        #
-        def after_initialize
-        end
-
-        # Overwrite to provide a callback before begin assertions. You might want
-        # to use it to manipulate the @subject before assertions start.
-        #
-        def before_assert
         end
 
         # Overwrites default_i18n_options to provide arguments and collection

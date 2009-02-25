@@ -96,7 +96,7 @@ def initialize(#{args.join(',')})
   #{assignments}
   @options = default_options.merge(#{get_options})
   #{set_collection}
-  after_initialize
+  run_after_initialize_callbacks
 end
 END
         end
@@ -168,18 +168,6 @@ END
           @matcher_assertions += methods
         end
         alias :single_assertion :single_assertions
-
-        # Class method that accepts a block which is called after initialization.
-        #
-        def after_initialize(&block)
-          define_method :after_initialize, &block
-        end
-
-        # Class method that accepts a block which is called before assertion.
-        #
-        def before_assert(&block)
-          define_method :before_assert, &block
-        end
 
         # Class method that accepts a block or a Hash that will overwrite
         # instance method default_options.

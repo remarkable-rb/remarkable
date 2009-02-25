@@ -9,6 +9,13 @@ module Remarkable
         optional :allow_nil
         optional :allow_blank
 
+        after_initialize :set_after_initialize
+
+        before_assert do
+          @before_assert = true
+          @iterator.call(@subject) if @iterator
+        end
+
         protected
 
           def included?
@@ -25,17 +32,12 @@ module Remarkable
             false
           end
 
-          def after_initialize
-            @after_initialize = true
-          end
-
-          def before_assert
-            @before_assert = true
-            @iterator.call(@subject) if @iterator
-          end
-
           def default_options
             { :working => true }
+          end
+
+          def set_after_initialize
+            @after_initialize = true
           end
 
       end
