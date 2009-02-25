@@ -37,8 +37,6 @@ module Remarkable
         # a minimum value. While :equal_to generate both.
         #
         before_assert do
-          super
-
           @maximum_values = {}
           @minimum_values = {}
 

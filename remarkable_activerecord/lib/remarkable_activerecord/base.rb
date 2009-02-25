@@ -2,15 +2,15 @@ module Remarkable
   module ActiveRecord
     class Base < Remarkable::Base
 
-      protected
+      # Before each assertion, get an instance of the @subject. Although this
+      # is not needed in theory, we will keep it since subject are still
+      # experimental on rspec.
+      #
+      before_assert do
+        @subject = get_instance_of(@subject)
+      end
 
-        # Before each assertion, get an instance of the @subject. Although this
-        # is not needed in theory, we will keep it since subject are still
-        # experimental on rspec.
-        #
-        def before_assert
-          @subject = get_instance_of(@subject)
-        end
+      protected
 
         # Get a instance of the given object or class. If a class is given, it
         # will check if a instance variable of this class is already set.
