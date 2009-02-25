@@ -5,7 +5,6 @@ module Remarkable
         arguments :expected, :block => :block
 
         before_assert do
-          super
           @expected = @spec.instance_eval(&@block) if @block
 
           if @subject.is_a?(::ActionController::TestResponse)
