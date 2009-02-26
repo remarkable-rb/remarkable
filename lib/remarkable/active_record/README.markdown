@@ -50,10 +50,10 @@ h3. have_db_column
 
 Ensure that the given column is defined on the models backing SQL table. The options are the same as the instance variables defined on the column definition: :precision, :limit, :default, :null, :primary, :type, :scale, and :sql_type.
 
-<pre><code>  should_have_db_column :email, :type => "string", :default  => nil, :precision => nil, :limit => 255,
+<pre><code>  should_have_db_column :email, :type => "string", :default  => nil, :precision => nil, :limit => 255, 		
                         :null => true, :primary => false, :scale => nil, :sql_type => 'varchar(255)'
 
-  it { should have_db_column(:email, :type => "string", :default  => nil, :precision => nil, :limit => 255,
+  it { should have_db_column(:email, :type => "string", :default  => nil, :precision => nil, :limit => 255, 		
                              :null => true, :primary => false, :scale => nil, :sql_type => 'varchar(255)') }</code></pre>
 
 h3. have_db_columns
@@ -229,20 +229,21 @@ Ensures that given values are not valid for the attribute. If a range is given, 
 Note: this matcher accepts at once just one attribute to test.
 
 Options:
+* :in - values to ensure exclusion
 * :allow_nil - when supplied, validates if it allows nil or not.
 * :allow_blank - when supplied, validates if it allows blank or not.
 * :message - value the test expects to find in errors.on(:attribute).
   Regexp, string or symbol. Default = I18n.translate('activerecord.errors.messages.exclusion')
 
-<pre><code>  should_validate_exclusion_of :age, 30..60
-  should_validate_exclusion_of :username, "admin", "user"
-  should_not validate_exclusion_of :username, "clark_kent", "peter_park"
+<pre><code>  should_validate_exclusion_of :age, :in => 30..60
+  should_validate_exclusion_of :username, :in => ["admin", "user"]
+  should_not validate_exclusion_of :username, :in => ["clark_kent", "peter_park"]
 
-  it { should validate_exclusion_of(:age, 30..60) }
-  it { should validate_exclusion_of(:username, "admin", "user") }
-  it { should_not validate_exclusion_of(:username, "clark_kent", "peter_park") }</code></pre>
+  it { should validate_exclusion_of(:age, :in => 30..60) }
+  it { should validate_exclusion_of(:username, :in => ["admin", "user"]) }
+  it { should_not validate_exclusion_of(:username, :in => ["clark_kent", "peter_park"]) }</code></pre>
 
-h3. validate_format_of
+h3. validate_format_of 
 
 Ensures that the attribute can be set to the given values.
 
@@ -269,16 +270,17 @@ Ensures that given values are valid for the attribute. If a range is given, ensu
 Note: this matcher accepts at once just one attribute to test.
 
 Options:
+* :in - values to ensure inclusion
 * :allow_nil - when supplied, validates if it allows nil or not.
 * :allow_blank - when supplied, validates if it allows blank or not.
 * :message - value the test expects to find in errors.on(:attribute).
   Regexp, string or symbol. Default = I18n.translate('activerecord.errors.messages.inclusion')
 
-<pre><code>
-  it { should validate_inclusion_of(:age, 18..100) }
-  it { should validate_inclusion_of(:isbn, "isbn 1 2345 6789 0", "ISBN 1-2345-6789-0") }
+<pre><code>  should_validate_inclusion_of :age, :in => 18..100
+  should_validate_inclusion_of :size :in => ['S', 'M', 'L', 'XL']
 
-  it { should_not validate_inclusion_of(:isbn, "bad 1", "bad 2") }
+  it { should validate_inclusion_of(:age, :in => 18..100) }
+  it { should validate_inclusion_of(:size :in => ['S', 'M', 'L', 'XL']) }
 </code></pre>
 
 h3. validate_length_of
