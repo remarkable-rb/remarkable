@@ -34,7 +34,7 @@ module Remarkable # :nodoc:
           expected_value = if @expected.is_a?(Proc)
             @spec.instance_eval &@expected
           else
-            warn "[DEPRECATION] Strings given to set_session won't be evaluated anymore. Give a block or a proc instead."
+            warn "[DEPRECATION] Strings given to should_set_session won't be evaluated anymore. Give a block or a proc instead."
             @spec.instance_eval(@expected) rescue @expected
           end
           return true if @session[@key] == expected_value
@@ -61,7 +61,7 @@ module Remarkable # :nodoc:
       end
 
       def return_from_session(*args, &block)
-        warn "[DEPRECATION] return_from_session is deprecated. Use set_session instead."
+        warn "[DEPRECATION] should_return_from_session is deprecated. Use should_set_session instead."
         set_session(*args, &block)
       end
     end

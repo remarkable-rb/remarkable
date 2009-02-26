@@ -50,7 +50,7 @@ module Remarkable # :nodoc:
 
         def after_initialize
           if @options[:scoped_to] # TODO Deprecate scoped_to
-            warn "[DEPRECATION] :scoped_to is deprecated. Use :scope instead."
+            warn "[DEPRECATION] :scoped_to is deprecated in should_validate_uniqueness_of. Use :scope instead."
             @options[:scope] = [*@options.delete(:scoped_to)].compact
           else
             @options[:scope] = [*@options[:scope]].compact

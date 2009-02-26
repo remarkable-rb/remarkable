@@ -9,7 +9,7 @@ module Remarkable # :nodoc:
           @names            = names
           @options[:equals] = block if block_given?
 
-          warn "[DEPRECATION] Strings given in :equals to assign_to won't be evaluated anymore. You can give procs or use blocks instead." if @options[:equals].is_a?(String)
+          warn "[DEPRECATION] Strings given in :equals to should_assign_to won't be evaluated anymore. You can give procs or use blocks instead." if @options[:equals].is_a?(String)
         end
 
         def matches?(subject)
