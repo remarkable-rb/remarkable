@@ -16,6 +16,7 @@ describe Product do
     it { @product.should validate_format_of(:size, "22kb") }
 
     it { @product.should validate_exclusion_of(:weight, 10..100) }
+    it { @product.should validate_exclusion_of(:weight, :in => 10..100) }
     it { @product.should_not validate_exclusion_of(:weight, 1..9) }
 
     it { @product.should require_attributes(:title) }
@@ -26,11 +27,13 @@ describe Product do
     
     it { @product.should ensure_value_in_range(:price, 0..99) }
     it { @product.should validate_inclusion_of(:price, 0..99) }
+    it { @product.should validate_inclusion_of(:price, :in => 0..99) }
     it { @product.should validate_inclusion_of(:price, 0..99).allow_nil(false) }
     it { @product.should validate_inclusion_of(:price, 0..99).allow_blank(false) }
 
     it { @product.should_not ensure_value_in_range(:price, 2..80) }
     it { @product.should_not validate_inclusion_of(:price, 2..80) }
+    it { @product.should_not validate_inclusion_of(:price, :in => 2..80) }
     it { @product.should_not validate_inclusion_of(:price, 0..99, :allow_nil => true) }
     it { @product.should_not validate_inclusion_of(:price, 0..99, :allow_blank => true) }
   end
@@ -41,11 +44,13 @@ describe Product do
     end
 
     it { @product.should validate_inclusion_of(:size, "S", "M", "L", "XL") }
+    it { @product.should validate_inclusion_of(:size, :in => ["S", "M", "L", "XL"]) }
     it { @product.should validate_inclusion_of(:size, "S", "M", "L", "XL").allow_blank }
     it { @product.should_not validate_inclusion_of(:size, "XXXL", "XXL") }
     it { @product.should_not validate_inclusion_of(:size, "S", "M", "L", "XL", :allow_blank => false) }
 
     it { @product.should validate_exclusion_of(:size, "XS", "XM") }
+    it { @product.should validate_exclusion_of(:size, :in => ["XS", "XM"]) }
     it { @product.should_not validate_exclusion_of(:size, "S", "M", "L", "XL") }
 
     it { @product.should require_attributes(:price, :title) }

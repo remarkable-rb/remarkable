@@ -13,6 +13,7 @@ module Remarkable # :nodoc:
       #
       # Options:
       #
+      # * <tt>:in</tt> - values to test inclusion.
       # * <tt>:allow_nil</tt> - when supplied, validates if it allows nil or not.
       # * <tt>:allow_blank</tt> - when supplied, validates if it allows blank or not.
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
@@ -20,12 +21,27 @@ module Remarkable # :nodoc:
       #
       # Example:
       #
-      #   it { should validate_inclusion_of(:isbn, "isbn 1 2345 6789 0", "ISBN 1-2345-6789-0") }
-      #   it { should_not validate_inclusion_of(:isbn, "bad 1", "bad 2") }
-      #
+      #   it { should validate_inclusion_of(:size, :in => ["S", "M", "L", "XL"]) }
       #   it { should validate_inclusion_of(:age, 18..100) }
       #
+      #   should_validate_inclusion_of :size, :in => ["S", "M", "L", "XL"]
+      #   should_validate_inclusion_of :age, :in => 18..100
+      #
       def validate_inclusion_of(attribute, *good_values)
+        # TODO Remove this until the next comment
+        options = good_values.extract_options!
+
+        unless options.key?(:in) || good_values.empty?
+          warn "[DEPRECATION] Please use validate_inclusion_of #{attribute.inspect}, :in => #{good_values[0..-2].inspect} " <<
+               "instead of validate_inclusion_of #{attribute.inspect}, #{good_values[0..-2].inspect[1..-2]}."
+        end
+
+        options[:in] ||= good_values
+
+        # From now on is what should be the actual method.
+        good_values = [options.delete(:in)].flatten.compact
+        good_values << options
+
         if good_values.first.is_a? Range
           EnsureValueInRangeMatcher.new(attribute, :inclusion, *good_values)
         else
