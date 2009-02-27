@@ -23,7 +23,7 @@ module Remarkable
         subject_class.respond_to?(:human_name) ? subject_class.human_name : subject_class.name
       end
 
-      # Assert the block given.
+      # Assert the block given. Used to encapsulate the matcher behavior.
       def assert_matcher
         return false unless yield
         true

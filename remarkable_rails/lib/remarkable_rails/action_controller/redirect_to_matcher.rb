@@ -18,7 +18,7 @@ module Remarkable
           @request = @spec.instance_variable_get('@request')
         end
 
-        single_assertions :redirected?, :url_match?
+        assertions :redirected?, :url_match?
 
         protected
 

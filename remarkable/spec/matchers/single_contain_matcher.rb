@@ -4,7 +4,7 @@ module Remarkable
       class SingleContainMatcher < Remarkable::Base
         arguments :value, :block => :iterator
 
-        single_assertions :is_array?, :included?
+        assertions :is_array?, :included?
 
         optional :allow_nil
         optional :allow_blank

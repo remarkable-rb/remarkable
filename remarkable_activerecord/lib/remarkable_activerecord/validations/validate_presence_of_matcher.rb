@@ -5,7 +5,7 @@ module Remarkable
         arguments :collection => :attributes
         optional  :message
 
-        assertions :allow_nil?
+        collection_assertions :allow_nil?
         default_options :message => :blank, :allow_nil => false
       end
 

@@ -101,14 +101,14 @@ end
 END
         end
 
-        # Call it to declare your matcher assertions. Every method given will
+        # Call it to declare your collection assertions. Every method given will
         # iterate through the whole collection given in <tt>:arguments</tt>.
         #
         # For example, validate_presence_of can be written as:
         #
         #   class ValidatePresenceOfMatcher < Remarkable::Base
-        #     arguments  :attributes
-        #     assertions :allow_nil?
+        #     arguments :collection => :attributes
+        #     collection_assertions :allow_nil?
         #
         #     protected
         #       def allow_nil?
@@ -130,9 +130,9 @@ END
         # So we could write the same class as above just as:
         #
         #   class ValidatePresenceOfMatcher < Remarkable::Base
-        #     arguments :attributes
+        #     arguments :collection => :attributes
         #
-        #     assertion :allow_nil? do
+        #     collection_assertion :allow_nil? do
         #       # matcher logic
         #     end
         #   end
@@ -147,27 +147,26 @@ END
         # Or you can set the message in the instance variable @missing in the
         # assertion method if you don't want to rely on I18n API.
         #
-        # As you might have noticed from samples, this method is also aliased
-        # as <tt>assertion</tt>.
+        # As you might have noticed from the examples above, this method is also
+        # aliased as <tt>collection_assertion</tt>.
         #
-        def assertions(*methods, &block)
+        def collection_assertions(*methods, &block)
           define_method methods.last, &block if block_given?
           @matcher_for_assertions += methods
         end
-        alias :assertion :assertions
+        alias :collection_assertion :collection_assertions
 
-        # In contrast to <tt>assertions</tt>, the methods given here are called
-        # just once. In other words, it does not iterate through the collection
-        # given in arguments.
+        # In contrast to <tt>collection_assertions</tt>, the methods given here
+        # are called just once. In other words, it does not iterate through the
+        # collection given in arguments.
         #
-        # It also accepts blocks and is aliased as single_assertion. Check
-        # <tt>assertions</tt> for more info.
+        # It also accepts blocks and is aliased as assertion.
         #
-        def single_assertions(*methods, &block)
+        def assertions(*methods, &block)
           define_method methods.last, &block if block_given?
           @matcher_assertions += methods
         end
-        alias :single_assertion :single_assertions
+        alias :assertion :assertions
 
         # Class method that accepts a block or a Hash that will overwrite
         # instance method default_options.

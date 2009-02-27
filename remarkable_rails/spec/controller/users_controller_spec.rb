@@ -17,11 +17,20 @@ describe UsersController do
     it { should redirect_to(:controller => 'users') }
     it { should redirect_to(:controller => 'users', :action => 'index') }
 
+    # For rspec-rails compatibility
+    it { response.should redirect_to(users_url) }
+    it { response.should redirect_to('/users') }
+    it { response.should redirect_to(:controller => 'users', :action => 'index') }
+
     it { should_not redirect_to('/posts') }
     it { should_not redirect_to('http://test.host/posts') }
     it { should_not redirect_to(:action => 'show') }
     it { should_not redirect_to(:controller => 'posts') }
     it { should_not redirect_to(:controller => 'users', :action => 'show') }
+
+    # For rspec-rails compatibility
+    it { response.should_not redirect_to('/posts') }
+    it { response.should_not redirect_to(:controller => 'users', :action => 'show') }
   end
 
 end

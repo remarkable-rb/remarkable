@@ -7,11 +7,11 @@ module Remarkable
         optional :working
         default_options :working => true
 
-        single_assertion :is_array? do
+        assertion :is_array? do
           @subject.is_a?(Array)
         end
 
-        assertion :included? do
+        collection_assertion :included? do
           return @subject.include?(@value), :more => 'ERROR: '
         end
 

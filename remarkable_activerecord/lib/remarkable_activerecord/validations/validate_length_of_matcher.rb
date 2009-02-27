@@ -9,8 +9,8 @@ module Remarkable
         optional :allow_nil, :allow_blank, :default => true
         optional :message, :short_message, :long_message
 
-        assertions :less_than_min_length?, :exactly_min_length?, :allow_nil?,
-                   :more_than_max_length?, :exactly_max_length?, :allow_blank?
+        collection_assertions :less_than_min_length?, :exactly_min_length?, :allow_nil?,
+                              :more_than_max_length?, :exactly_max_length?, :allow_blank?
 
         # Reassign :in to :within
         after_initialize do
@@ -36,9 +36,7 @@ module Remarkable
           end
         end
 
-        default_options do
-          { :short_message => :too_short, :long_message => :too_long }
-        end
+        default_options :short_message => :too_short, :long_message => :too_long
 
         protected
           def allow_nil?

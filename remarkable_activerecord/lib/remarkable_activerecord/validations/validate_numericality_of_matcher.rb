@@ -13,9 +13,9 @@ module Remarkable
 
         optional :only_integer, :odd, :even, :allow_nil, :allow_blank, :default => true
 
-        assertions :only_numeric_values?, :allow_blank?, :allow_nil?,
-                   :only_integer?, :only_odd?, :only_even?, :equal_to?,
-                   :less_than_minimum?, :more_than_maximum?
+        collection_assertions :only_numeric_values?, :allow_blank?, :allow_nil?,
+                              :only_integer?, :only_odd?, :only_even?, :equal_to?,
+                              :less_than_minimum?, :more_than_maximum?
 
         default_options do
           options = {
