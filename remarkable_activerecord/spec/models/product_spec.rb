@@ -5,6 +5,7 @@ describe Product do
     before(:each){ @product = Product.new(:tangible => true) }
 
     it { should validate_presence_of(:title, :price) }
+    it { should validate_length_of(:size, :minimum => 1).allow_blank }
 
     it { should validate_numericality_of(:price) }
     it { should validate_numericality_of(:price).even }
@@ -40,6 +41,7 @@ describe Product do
     before(:each){ @product = Product.new(:tangible => true) }
 
     should_validate_presence_of :title, :price
+    should_validate_length_of :size, :minimum => 1, :allow_blank => true
 
     should_validate_numericality_of :price
     should_validate_numericality_of :price, :even => true
