@@ -78,7 +78,7 @@ module Remarkable # :nodoc:
         end
 
         def less_than_min_length?
-          return true if @behavior == :maximum || @options[:minimum] <= 0 || (@options[:minimum] == 1 && @options[:allow_blank])
+          return true if @behavior == :maximum || @options[:minimum] <= 1
           return true if bad?(value_for_length(@options[:minimum] - 1), :short_message)
 
           @missing = "allow #{@attribute} to be less than #{@options[:minimum]} chars long"

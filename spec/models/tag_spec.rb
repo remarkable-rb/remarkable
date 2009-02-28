@@ -6,6 +6,7 @@ describe Tag do
   it { should have_many(:posts) }
 
   it { should validate_length_of(:name, :minimum => 1) }
+  it { should validate_length_of(:name, :minimum => 1).allow_blank }
   
   it { should protect_attributes(:secret) }
   it { should_not protect_attributes(:name) }
@@ -19,6 +20,7 @@ describe Tag do
   should_have_many :posts
 
   should_validate_length_of :name, :minimum => 1
+  should_validate_length_of :name, :minimum => 1, :allow_blank => true
 
   should_protect_attributes :secret
 end
