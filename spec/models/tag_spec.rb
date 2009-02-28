@@ -5,7 +5,7 @@ describe Tag do
   it { should have_many(:taggings, :dependent => :destroy) }
   it { should have_many(:posts) }
 
-  it { should ensure_length_at_least(:name, 2) }
+  it { should validate_length_of(:name, :minimum => 1) }
   
   it { should protect_attributes(:secret) }
   it { should_not protect_attributes(:name) }
@@ -18,7 +18,7 @@ describe Tag do
   should_have_many :taggings, :dependent => :destroy
   should_have_many :posts
 
-  should_ensure_length_at_least :name, 2
-  
+  should_validate_length_of :name, :minimum => 1
+
   should_protect_attributes :secret
 end
