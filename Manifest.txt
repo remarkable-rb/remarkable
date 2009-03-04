@@ -48,6 +48,7 @@ lib/remarkable/controller/macros/set_the_flash_to_matcher.rb
 lib/remarkable/dsl.rb
 lib/remarkable/example/example_methods.rb
 lib/remarkable/helpers.rb
+lib/remarkable/inflections.rb
 lib/remarkable/matcher_base.rb
 lib/remarkable/private_helpers.rb
 lib/remarkable/rails.rb

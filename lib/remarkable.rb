@@ -2,7 +2,7 @@ $:.unshift(File.dirname(__FILE__)) unless
   $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
 module Remarkable
-  VERSION = '2.2.7'
+  VERSION = '2.2.8'
 end
 
 if ENV['RAILS_ENV'] == 'test'
@@ -19,3 +19,4 @@ require 'remarkable/example/example_methods'
 require 'remarkable/active_record/active_record' if defined?(ActiveRecord::Base)
 require 'remarkable/controller/controller' if defined?(ActionController::Base)
 require 'remarkable/rails' if defined?(RAILS_ROOT)
+require 'remarkable/inflections'
