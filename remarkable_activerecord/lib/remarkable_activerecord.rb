@@ -13,6 +13,7 @@ end
 dir = File.dirname(__FILE__)
 require File.join(dir, 'remarkable_activerecord', 'base')
 require File.join(dir, 'remarkable_activerecord', 'human_names')
+require File.join(dir, 'remarkable_activerecord', 'inflections')
 
 # Add locale
 Remarkable.add_locale File.join(dir, '..', 'locale', 'en.yml')
