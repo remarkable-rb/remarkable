@@ -5,7 +5,7 @@ module Remarkable
   VERSION = '2.2.8'
 end
 
-if ENV['RAILS_ENV'] == 'test'
+if ENV['RAILS_ENV'] == 'test' && defined?(Spec)
   require 'spec/rails'
 end
 
