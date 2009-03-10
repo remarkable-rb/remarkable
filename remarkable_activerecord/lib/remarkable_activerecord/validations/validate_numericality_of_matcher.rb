@@ -19,9 +19,9 @@ module Remarkable
 
         default_options do
           options = {
-            :message => :not_a_number,
             :odd_message => :odd,
-            :even_message => :even
+            :even_message => :even,
+            :number_message => :not_a_number
           }
 
           NUMERIC_COMPARISIONS.each do |key|
@@ -56,12 +56,20 @@ module Remarkable
 
         private
 
+          def allow_nil?
+            super(default_message_for(:number))
+          end
+
+          def allow_blank?
+            super(default_message_for(:number))
+          end
+
           def only_numeric_values?
-            bad?("abcd")
+            bad?("abcd", default_message_for(:number))
           end
 
           def only_integer?
-            assert_bad_or_good_if_key(:only_integer, valid_value_for_test.to_f, :message)
+            assert_bad_or_good_if_key(:only_integer, valid_value_for_test.to_f, default_message_for(:number))
           end
 
           def only_even?
@@ -138,7 +146,7 @@ module Remarkable
           # and so on.
           #
           def default_message_for(key)
-            @options[:message] == :not_a_number ? :"#{key}_message" : :message
+            @options[:message] ? :message : :"#{key}_message"
           end
       end
 

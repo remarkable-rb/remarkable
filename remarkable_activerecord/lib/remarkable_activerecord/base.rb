@@ -201,14 +201,14 @@ module Remarkable
         def error_message_from_model(model, attribute, message) #:nodoc:
           if message.is_a? Symbol
             message = if RAILS_I18N # Rails >= 2.2
-              model.errors.generate_message(attribute, message, :count => '__count__')
+              model.errors.generate_message(attribute, message, :count => '12345')
             else # Rails <= 2.1
-              ::ActiveRecord::Errors.default_error_messages[message] % '__count__'
+              ::ActiveRecord::Errors.default_error_messages[message] % '12345'
             end
 
-            if message =~ /__count__/
+            if message =~ /12345/
               message = Regexp.escape(message)
-              message.gsub!('__count__', '\d+')
+              message.gsub!('12345', '\d+')
               message = /#{message}/
             end
           end
