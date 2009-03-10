@@ -173,11 +173,12 @@ describe User do
   it { should validate_length_of(:ssn, :is => 9).message("Social Security Number is not the right length") }
   it { should validate_length_of(:ssn, :is => 9, :message => "Social Security Number is not the right length") }
 
-  it { should only_allow_numeric_values_for(:ssn) }
+  it { should only_allow_numeric_values_for(:ssn, :message => 'Bad SSN') }
 
-  it { should validate_numericality_of(:ssn) }
-  it { should validate_numericality_of(:ssn).equal_to(123456789) }
-  it { should_not validate_numericality_of(:ssn, :equal_to => 123456780) }
+  it { should validate_numericality_of(:ssn).message('Bad SSN') }
+  it { should validate_numericality_of(:ssn).equal_to(123456789).message('Bad SSN') }
+  it { should_not validate_numericality_of(:ssn, :equal_to => 123456780, :message => 'Bad SSN') }
+  it { should_not validate_numericality_of(:ssn, :equal_to => 123456789, :message => 'Good SSN') }
 
   it { should have_readonly_attributes(:name) }
   it { should_not have_readonly_attributes(:foo) }
@@ -282,11 +283,12 @@ describe User do
   should_require_unique_attributes :email, :scoped_to => :name
 
   should_ensure_length_is :ssn, 9, :message => "Social Security Number is not the right length"
-  should_only_allow_numeric_values_for :ssn
+  should_only_allow_numeric_values_for :ssn, :message => 'Bad SSN'
 
-  should_validate_numericality_of :ssn
-  should_validate_numericality_of :ssn, :equal_to => 123456789
-  should_not_validate_numericality_of :ssn, :equal_to => 123456780
+  should_validate_numericality_of :ssn, :message => 'Bad SSN'
+  should_validate_numericality_of :ssn, :equal_to => 123456789, :message => 'Bad SSN'
+  should_not_validate_numericality_of :ssn, :equal_to => 123456780, :message => 'Bad SSN'
+  should_not_validate_numericality_of :ssn, :equal_to => 123456789, :message => 'Good SSN' 
 
   should_have_readonly_attributes :name
 end

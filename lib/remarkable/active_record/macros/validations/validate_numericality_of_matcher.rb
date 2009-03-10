@@ -21,6 +21,14 @@ module Remarkable # :nodoc:
 
         private
 
+        def allow_nil?
+          super(default_message_for(:number))
+        end
+
+        def allow_blank?
+          super(default_message_for(:number))
+        end
+
         # Check equal_to? for each given option
         #
         def equal_to_for_each_option?
@@ -43,7 +51,7 @@ module Remarkable # :nodoc:
         end
 
         def only_allow_numeric_values?
-          return true if bad?("abcd")
+          return true if bad?("abcd", default_message_for(:number))
 
           @missing = "allow non-numeric values for #{@attribute}"
           false
@@ -51,7 +59,7 @@ module Remarkable # :nodoc:
 
         def only_integer?
           message = "allow non-integer values for #{@attribute}"
-          assert_bad_or_good_if_key(:only_integer, valid_value_for_test.to_f, message, :message)
+          assert_bad_or_good_if_key(:only_integer, valid_value_for_test.to_f, message, default_message_for(:number))
         end
 
         def allow_even?
@@ -119,9 +127,9 @@ module Remarkable # :nodoc:
 
         def default_options
           options = {
-            :message => :not_a_number,
             :odd_message => :odd,
-            :even_message => :even
+            :even_message => :even,
+            :number_message => :not_a_number
           }
 
           NUMERIC_COMPARISIONS.each do |key|
@@ -137,11 +145,11 @@ module Remarkable # :nodoc:
         # and so on.
         #
         def default_message_for(key)
-          @options[:message] == :not_a_number ? :"#{key}_message" : :message
+          @options[:message] ? :message : :"#{key}_message"
         end
 
         def expectation
-          default_message + "for #{@attribute}"
+          default_message + " for #{@attribute}"
         end
 
         def default_message
