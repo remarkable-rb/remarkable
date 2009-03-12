@@ -28,6 +28,5 @@ if defined?(Spec)
   require File.join(dir, 'remarkable', 'rspec')
 end
 
-
 # Add Remarkable default locale file
 Remarkable.add_locale File.join(dir, '..', 'locale', 'en.yml')

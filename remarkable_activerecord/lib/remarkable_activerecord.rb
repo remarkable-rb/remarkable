@@ -1,4 +1,4 @@
-# Load Remarkable (whick loads rspec)
+# Load Remarkable
 unless Object.const_defined?('Remarkable')
   begin
     require 'remarkable'

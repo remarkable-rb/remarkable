@@ -1,4 +1,4 @@
-# Load Remarkable (whick loads rspec)
+# Load Remarkable
 unless Object.const_defined?('Remarkable')
   begin
     require 'remarkable'
@@ -9,13 +9,15 @@ unless Object.const_defined?('Remarkable')
   end
 end
 
-# Load rspec-rails
-begin
-  require 'spec/rails'
-rescue LoadError
-  require 'rubygems'
-  gem 'rspec-rails'
-  require 'spec/rails'
+# Load rspec-rails if rspec is defined.
+if defined?(Spec)
+  begin
+    require 'spec/rails'
+  rescue LoadError
+    require 'rubygems'
+    gem 'rspec-rails'
+    require 'spec/rails'
+  end
 end
 
 # Load Remarkable Rails files
@@ -27,7 +29,7 @@ require File.join(dir, 'remarkable_rails', 'base')
 Dir[File.join(dir, 'remarkable_rails', 'action_controller', '*.rb')].each do |file|
   require file
 end
-Remarkable.include_matchers!(Remarkable::ActionController, Spec::Rails::Example::RailsExampleGroup)
+Remarkable.include_matchers!(Remarkable::ActionController, Spec::Rails::Example::FunctionalExampleGroup)
 
 # Include ActionView matchers
 # Dir[File.join(dir, 'remarkable_rails', 'action_view', '*.rb')].each do |file|

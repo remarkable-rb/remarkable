@@ -1,22 +1,24 @@
-module Spec
-  module Example
-    module ExampleGroupMethods
+if defined?(Spec)
+  module Spec
+    module Example
+      module ExampleGroupMethods
 
-      # This allows "describe User" to use the I18n human name of User.
-      #
-      def self.description_text(*args)
-        args.inject("") do |description, arg|
-          arg = if RAILS_I18N && arg.respond_to?(:human_name)
-            arg.human_name(:locale => Remarkable.locale)
-          else
-            arg.to_s
+        # This allows "describe User" to use the I18n human name of User.
+        #
+        def self.description_text(*args)
+          args.inject("") do |description, arg|
+            arg = if RAILS_I18N && arg.respond_to?(:human_name)
+              arg.human_name(:locale => Remarkable.locale)
+            else
+              arg.to_s
+            end
+
+            description << " " unless (description == "" || arg =~ /^(\s|\.|#)/)
+            description << arg
           end
-
-          description << " " unless (description == "" || arg =~ /^(\s|\.|#)/)
-          description << arg
         end
-      end
 
+      end
     end
   end
 end
@@ -27,8 +29,8 @@ module Remarkable
 
       protected
 
-        # Changes collection interpolation to provide the attribute localized
-        # name whenever is possible.
+        # Changes collection_interpolation method to provide the attribute's
+        # localized names whenever is possible.
         #
         def collection_interpolation
           described_class = if @subject
