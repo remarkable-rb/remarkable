@@ -72,7 +72,7 @@ module Remarkable
             assert_bad_or_good_if_key(:only_integer, valid_value_for_test.to_f, default_message_for(:number))
           end
 
-          # If ActiveRecord, when we supply :even, does not matter the value, it
+          # In ActiveRecord, when we supply :even, does not matter the value, it
           # considers that should even values should be accepted.
           #
           def only_even?
@@ -80,7 +80,7 @@ module Remarkable
             bad?(even_valid_value_for_test + 1, default_message_for(:even))
           end
 
-          # If ActiveRecord, when we supply :odd, does not matter the value, it
+          # In ActiveRecord, when we supply :odd, does not matter the value, it
           # considers that should odd values should be accepted.
           #
           def only_odd?
