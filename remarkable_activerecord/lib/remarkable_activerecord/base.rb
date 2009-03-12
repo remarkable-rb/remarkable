@@ -74,9 +74,9 @@ module Remarkable
         # to be used as default.
         #
         def allow_nil?(message_key=:message) #:nodoc:
-          bool, options = assert_good_or_bad_if_key(:allow_nil, nil, message_key)
+          valid, options = assert_good_or_bad_if_key(:allow_nil, nil, message_key)
 
-          unless bool
+          unless valid
             default = Remarkable.t "remarkable.active_record.allow_nil", default_i18n_options.except(:scope).merge(options)
             return false, options.merge(:default => default)
           end
@@ -91,9 +91,9 @@ module Remarkable
         # to be used as default.
         #
         def allow_blank?(message_key=:message) #:nodoc:
-          bool, options = assert_good_or_bad_if_key(:allow_blank, '', message_key)
+          valid, options = assert_good_or_bad_if_key(:allow_blank, '', message_key)
 
-          unless bool
+          unless valid
             default = Remarkable.t "remarkable.active_record.allow_blank", default_i18n_options.except(:scope).merge(options)
             return false, options.merge(:default => default)
           end

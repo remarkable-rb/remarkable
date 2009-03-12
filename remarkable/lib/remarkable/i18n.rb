@@ -34,7 +34,7 @@ module Remarkable
 end
 
 # Load I18n
-RAILS_I18N = Object.const_defined?('I18n') # Rails >= 2.2
+RAILS_I18N = Object.const_defined?(:I18n) unless Object.const_defined?(:RAILS_I18N) # Rails >= 2.2
 
 unless RAILS_I18N
   begin

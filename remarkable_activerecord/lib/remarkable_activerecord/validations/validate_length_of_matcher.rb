@@ -7,20 +7,17 @@ module Remarkable
         optional :within, :alias => :in
         optional :minimum, :maximum, :is
         optional :allow_nil, :allow_blank, :default => true
-        optional :message, :short_message, :long_message
+        optional :message, :too_short, :too_long, :wrong_length
 
         collection_assertions :less_than_min_length?, :exactly_min_length?, :allow_nil?,
                               :more_than_max_length?, :exactly_max_length?, :allow_blank?
 
-        # Reassign :in to :within
-        after_initialize do
-          @options[:within] ||= @options.delete(:in) if @options.key? :in
-        end
-
         before_assert do
+          # Reassign :in to :within
+          @options[:within] ||= @options.delete(:in) if @options.key? :in
+
           if @options[:is]
-            @min_value, @max_value = @options[:is], nil
-            @options[:message] ||= :wrong_length
+            @min_value, @max_value = @options[:is], @options[:is]
           elsif @options[:within]
             @min_value, @max_value = @options[:within].first, @options[:within].last
           elsif @options[:maximum]
@@ -28,55 +25,59 @@ module Remarkable
           elsif @options[:minimum]
             @min_value, @max_value = @options[:minimum], nil
           end
-
-          # Reassing message to short_message and long_message
-          if @options[:message] && !@options.slice(:is, :maximum, :minimum).empty?
-            @options[:short_message] = @options.delete(:message)
-            @options[:long_message]  = @options[:short_message]
-          end
         end
 
-        default_options :short_message => :too_short, :long_message => :too_long
+        default_options :too_short => :too_short, :too_long => :too_long, :wrong_length => :wrong_length
 
         protected
           def allow_nil?
-            super(:short_message)
+            super(default_message_for(:too_short))
           end
 
           def allow_blank?
-            super(:short_message)
+            super(default_message_for(:too_short))
           end
 
           def less_than_min_length?
             return true if @min_value.nil? || @min_value <= 1 ||
-                           bad?(value_for_length(@min_value - 1), :short_message)
+                           bad?(value_for_length(@min_value - 1), default_message_for(:too_short))
 
             return false, :count => @min_value
           end
 
           def exactly_min_length?
             return true if @min_value.nil? || @min_value <= 0 ||
-                           good?(value_for_length(@min_value), :short_message)
+                           good?(value_for_length(@min_value), default_message_for(:too_short))
 
             return false, :count => @min_value
           end
 
           def more_than_max_length?
             return true if @max_value.nil? ||
-                           bad?(value_for_length(@max_value + 1), :long_message)
+                           bad?(value_for_length(@max_value + 1), default_message_for(:too_long))
 
             return false, :count => @max_value
           end
 
           def exactly_max_length?
             return true if @max_value.nil? || @min_value == @max_value ||
-                           good?(value_for_length(@max_value), :long_message)
+                           good?(value_for_length(@max_value), default_message_for(:too_long))
 
             return false, :count => @max_value
           end
 
           def value_for_length(value)
             "x" * value
+          end
+
+          # Returns the default message for the validation type.
+          # If user supplied :message, it will return it. Otherwise it will return
+          # wrong_length on :is validation and :too_short or :too_long in the other
+          # types.
+          #
+          def default_message_for(validation_type)
+            return :message if @options[:message]
+            @options.key?(:is) ? :wrong_length : validation_type
           end
       end
 

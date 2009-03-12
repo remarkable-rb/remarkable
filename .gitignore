@@ -15,3 +15,4 @@ lib/remarkable-more.rb
 *.DS_Store
 ./gems
 *.diff
+memory

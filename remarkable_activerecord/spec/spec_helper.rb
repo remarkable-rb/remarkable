@@ -1,11 +1,21 @@
 require 'rubygems'
 require 'ruby-debug'
+require 'active_support'
+require 'active_record'
 
+# Configure ActiveRecord connection
+ActiveRecord::Base.establish_connection(
+  :adapter => 'sqlite3',
+  :dbfile  => 'memory'
+)
+
+# Load Remarkable core on place to avoid gem to be loaded
 dir = File.dirname(__FILE__)
-FIXTURE_PATH = File.join(dir, "fixtures")
-require File.join(dir, '..', '..', 'remarkable_rails', 'spec', 'rails_loader_helper')
+require File.join(dir, '..', '..', 'remarkable', 'lib', 'remarkable')
 
-rails_load! do
-  # Load Remarkable ActiveRecord
-  require File.join(dir, '..', 'lib', 'remarkable_activerecord')
-end
+# Load Remarkable ActiveRecord
+require File.join(dir, 'model_builder')
+require File.join(dir, '..', 'lib', 'remarkable_activerecord')
+
+# Include matchers
+Remarkable.include_matchers!(Remarkable::ActiveRecord, Spec::Example::ExampleGroup)

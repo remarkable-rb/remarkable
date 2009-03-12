@@ -55,8 +55,8 @@ en:
         missing:
           only_numeric_values: "allow non-numeric values for {{attribute}}"
           only_integer: "{{not}}allow non-integer values for {{attribute}}"
-          only_even: "{{not}}allow non-even values for {{attribute}}"
-          only_odd: "{{not}}allow non-odd values for {{attribute}}"
+          only_even: "allow non-even values for {{attribute}}"
+          only_odd: "allow non-odd values for {{attribute}}"
           equal_to: "not allow {{attribute}} to be equal to {{count}}"
           more_than_maximum: "allow {{attribute}} to be greater than {{count}}"
           less_than_minimum: "allow {{attribute}} to be less than {{count}}"
