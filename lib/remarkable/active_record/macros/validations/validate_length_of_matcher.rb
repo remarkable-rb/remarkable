@@ -5,21 +5,19 @@ module Remarkable # :nodoc:
         include Remarkable::ActiveRecord::Helpers
 
         arguments :behavior, :range, :attributes
-        optional  :minimum, :maximum, :short_message, :long_message
+        optional  :message, :minimum, :maximum, :too_short, :too_long, :wrong_length
 
         assertions :less_than_min_length?, :exactly_min_length?, :allow_nil?,
                    :more_than_max_length?, :exactly_max_length?, :allow_blank?
 
-        # If message is supplied, reassign it properly to :short_message
-        # and :long_message. This is ActiveRecord default behavior when
-        # the validation is :maximum, :minimum or :is.
-        #
-        def message(message)
-          if [:is, :minimum, :maximum].include? @behavior
-            short_message(message)
-            long_message(message)
-          end
-          self
+        def short_message(message)
+          warn "[DEPRECATION] :short_message is deprecated for validate_length_of, please use :too_short instead"
+          too_short(message)
+        end
+
+        def long_message(message)
+          warn "[DEPRECATION] :long_message is deprecated for validate_length_of, please use :too_long instead"
+          too_long(message)
         end
 
         def within(range)
@@ -51,35 +49,26 @@ module Remarkable # :nodoc:
         private
 
         def default_options
-          if @behavior == :is
-            { :short_message => :wrong_length, :long_message => :wrong_length }
-          else
-            { :short_message => :too_short, :long_message => :too_long }
-          end
+          { :too_long => :too_long, :too_short => :too_short, :wrong_length => :wrong_length }
         end
 
-        # Reassign messages properly
-        def after_initialize
+        def before_assert
           # Set the values, for example:
           # send(:within, 0..10)
           send(@behavior, @range)
-
-          message(@options.delete(:message)) if @options[:message]
-          long_message(@options[:long_message])
-          short_message(@options[:short_message])
         end
 
         def allow_nil?
-          super(:short_message)
+          super(default_message_for(:too_short))
         end
 
         def allow_blank?
-          super(:short_message)
+          super(default_message_for(:too_short))
         end
 
         def less_than_min_length?
           return true if @behavior == :maximum || @options[:minimum] <= 1
-          return true if bad?(value_for_length(@options[:minimum] - 1), :short_message)
+          return true if bad?(value_for_length(@options[:minimum] - 1), default_message_for(:too_short))
 
           @missing = "allow #{@attribute} to be less than #{@options[:minimum]} chars long"
           return false
@@ -87,7 +76,7 @@ module Remarkable # :nodoc:
 
         def exactly_min_length?
           return true if @behavior == :maximum || @options[:minimum] <= 0
-          return true if good?(value_for_length(@options[:minimum]), :short_message)
+          return true if good?(value_for_length(@options[:minimum]), default_message_for(:too_short))
 
           @missing = "not allow #{@attribute} to be exactly #{@options[:minimum]} chars long"
           return false
@@ -95,7 +84,7 @@ module Remarkable # :nodoc:
 
         def more_than_max_length?
           return true if @behavior == :minimum
-          return true if bad?(value_for_length(@options[:maximum] + 1), :long_message)
+          return true if bad?(value_for_length(@options[:maximum] + 1), default_message_for(:too_long))
 
           @missing = "allow #{@attribute} to be more than #{@options[:maximum]} chars long"
           return false
@@ -103,7 +92,7 @@ module Remarkable # :nodoc:
 
         def exactly_max_length?
           return true if @behavior == :minimum || @options[:minimum] == @options[:maximum]
-          return true if good?(value_for_length(@options[:maximum]), :long_message)
+          return true if good?(value_for_length(@options[:maximum]), default_message_for(:too_long))
 
           @missing = "not allow #{@attribute} to be exactly #{@options[:maximum]} chars long"
           return false
@@ -130,6 +119,16 @@ module Remarkable # :nodoc:
         def value_for_length(value)
           "x" * value
         end
+
+        # Returns the default message for the validation type.
+        # If user supplied :message, it will return it. Otherwise it will return
+        # wrong_length on :is validation and :too_short or :too_long in the other
+        # types.
+        #
+        def default_message_for(validation_type)
+          return :message if @options[:message]
+          @options.key?(:is) ? :wrong_length : validation_type
+        end 
       end
 
       # Validates the length of the given attributes. You have also to supply
@@ -150,11 +149,13 @@ module Remarkable # :nodoc:
       # * <tt>:in</tt> - A synonym(or alias) for :within.
       # * <tt>:allow_nil</tt> - when supplied, validates if it allows nil or not.
       # * <tt>:allow_blank</tt> - when supplied, validates if it allows blank or not.
-      # * <tt>:short_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      # * <tt>:too_short</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt> when attribute is too short.
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.too_short') % range.first</tt>
-      # * <tt>:long_message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      # * <tt>:too_long</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt> when attribute is too long.
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.too_long') % range.last</tt>
-      # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt> only when :minimum, :maximum or :is is given.
+      # * <tt>:wrong_length</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt> when attribute is the wrong length.
+      #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.wrong_length') % range.last</tt>
+      # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>. When supplied overwrites :too_short, :too_long and :wrong_length.
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.wrong_length') % value</tt>
       #
       # Example:

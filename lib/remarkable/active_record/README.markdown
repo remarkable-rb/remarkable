@@ -297,11 +297,13 @@ Options:
 * :in - A synonym(or alias) for :within.
 * :allow_nil - when supplied, validates if it allows nil or not.
 * :allow_blank - when supplied, validates if it allows blank or not.
-* :short_message - value the test expects to find in errors.on(:attribute).
+* :too_short - value the test expects to find in errors.on(:attribute) when attribute is too short.
   Regexp, string or symbol. Default = I18n.translate('activerecord.errors.messages.too_short') % range.first
-* :long_message - value the test expects to find in errors.on(:attribute).
+* :too_long - value the test expects to find in errors.on(:attribute) when attribute is too long.
   Regexp, string or symbol. Default = I18n.translate('activerecord.errors.messages.too_long') % range.last
-* :message - value the test expects to find in errors.on(:attribute) only when :minimum, :maximum or :is is given.
+* :wrong_length - value the test expects to find in errors.on(:attribute) when attribute is the wrong length.
+  Regexp, string or symbol. Default = I18n.translate('activerecord.errors.messages.wrong_length') % range.last
+* :message - value the test expects to find in errors.on(:attribute). When supplied overwrites :too_short, :too_long and :wrong_length.
   Regexp, string or symbol. Default = I18n.translate('activerecord.errors.messages.wrong_length') % value
 
 <pre><code>  should_validate_length_of :password, :within => 6..20
