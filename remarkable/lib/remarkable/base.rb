@@ -23,14 +23,8 @@ module Remarkable
         subject_class.respond_to?(:human_name) ? subject_class.human_name : subject_class.name
       end
 
-      # Assert the block given. Used to encapsulate the matcher behavior.
-      def assert_matcher
-        return false unless yield
-        true
-      end
-
-      # Same as <tt>assert_matcher</tt> but actually iterates over the
-      # collection given.
+      # Iterates over the collection given yielding the block and return false
+      # if any of them also returns false.
       def assert_matcher_for(collection)
         collection.each do |item|
           return false unless yield(item)
@@ -49,10 +43,10 @@ module Remarkable
         collection = [collection] unless collection.is_a?(Array)
 
         case x
-        when Regexp
-          collection.detect { |e| e =~ x }
-        else
-          collection.include?(x)
+          when Regexp
+            collection.detect { |e| e =~ x }
+          else
+            collection.include?(x)
         end
       end
 
