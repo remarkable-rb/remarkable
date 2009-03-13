@@ -41,13 +41,37 @@ describe 'assign_to', :type => :controller do
   describe 'matcher' do
     before(:each) { build_response { @user = 'jose' } }
 
-    describe 'success' do
+    it { should assign_to(:user) }
+    it { should assign_to(:user).with('jose') }
+    it { should assign_to(:user).with_kind_of(String) }
 
-    end
+    it { should_not assign_to(:post) }
+    it { should_not assign_to(:user).with('joseph') }
+    it { should_not assign_to(:user).with_kind_of(Fixnum) }
 
-    describe 'failure' do
+    it { should assign_to(:user){ 'jose' } }
+    it { should assign_to(:user, :with => proc{ 'jose' }) }
 
-    end
+    it { should_not assign_to(:user){ 'joseph' } }
+    it { should_not assign_to(:user, :with => proc{ 'joseph' }) }
+  end
+
+  describe 'macro' do
+    before(:each) { build_response { @user = 'jose' } }
+
+    should_assign_to :user
+    should_assign_to :user, :with => 'jose'
+    should_assign_to :user, :with_kind_of => String
+
+    should_not_assign_to :post
+    should_not_assign_to :user, :with => 'joseph'
+    should_not_assign_to :user, :with_kind_of => Fixnum
+
+    should_assign_to(:user){ 'jose' }
+    should_assign_to :user, :with => proc{ 'jose' }
+
+    should_not_assign_to(:user){ 'joseph' }
+    should_not_assign_to :user, :with => proc{ 'joseph' }
   end
 
 end
