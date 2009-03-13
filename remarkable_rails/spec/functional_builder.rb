@@ -4,6 +4,7 @@ module FunctionalBuilder
   def self.included(base)
     base.class_eval do
       base.controller_name 'application'
+      base.integrate_views false
 
       after(:each) do
         if @defined_constants
@@ -24,7 +25,9 @@ module FunctionalBuilder
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
     get :example
-
+  rescue ActionView::MissingTemplate
+    # Do nothing
+  ensure
     self.class.subject { @controller }
   end
 

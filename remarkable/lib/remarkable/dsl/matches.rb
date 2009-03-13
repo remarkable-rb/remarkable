@@ -52,15 +52,38 @@ module Remarkable
         # Overwrites default_i18n_options to provide arguments and collection
         # interpolation.
         #
+        # Optionals are, by default, not available as interpolation options
+        # because they will be automatically appended do descriptions. If you
+        # need them to create an expectation message, you can do it in two ways:
+        #
+        # 1. Overwrite default_i18n_options:
+        #
+        #   def default_i18n_options
+        #     super.update(:real_value => real_value)
+        #   end
+        #
+        # 2. Return a hash from your assertion method:
+        #
+        #   def my_assertion
+        #     return true if real_value == expected_value
+        #     return false, :real_value => real_value
+        #   end
+        #
+        # In both cases, :real_value will be available as interpolation option.
+        #
         def default_i18n_options
-          options = super.merge(collection_interpolation)
+          i18n_options = {}
 
-          # Add arguments to options
+          # Also add arguments as interpolation options.
           self.class.matcher_arguments[:names].each do |name|
-            options[name] = instance_variable_get("@#{name}").inspect
+            i18n_options[name] = instance_variable_get("@#{name}").inspect
           end
 
-          options
+          # Add collection interpolation options.
+          i18n_options.update(collection_interpolation)
+
+          # Add default options (highest priority). They should not be overwritten.
+          i18n_options.update(super)
         end
 
         # Methods that return collection_name and object_name as a Hash for

@@ -1,10 +1,15 @@
 en:
   remarkable:
     action_controller:
-      redirect_to:
-        description: "redirect to {{expected}}"
-        expectation: "redirect to {{expected}}"
-        missing:
-          redirected: "got no redirect"
-          url_match: "redirected to {{actual}}"
+      assign_to:
+        description: "assign {{names}}"
+        expectations:
+          assigned_value: "action to assign {{name}}"
+          is_kind_of: "assign {{name}} to be kind of {{with_kind_of}}, but got a {{assign_class}}"
+          is_equal_value: "assign {{name}} to be equal to {{with}}, but got {{assign_inspect}}"
+        optionals:
+          with:
+            given: "with {{inspect}}"
+          with_kind_of:
+            given: "with kind of {{value}}"
 
