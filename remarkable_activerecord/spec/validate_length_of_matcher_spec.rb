@@ -19,25 +19,25 @@ describe 'validate_length_of' do
   
     it 'should contain a description message' do
       @matcher.within(3..5)
-      @matcher.description.should == 'ensure length of size and within 3..5 characters'
+      @matcher.description.should == 'ensure length of size is within 3..5 characters'
 
       @matcher.within(nil).in(3..5)
-      @matcher.description.should == 'ensure length of size and within 3..5 characters'
+      @matcher.description.should == 'ensure length of size is within 3..5 characters'
 
       @matcher.in(nil).is(3)
-      @matcher.description.should == 'ensure length of size and equals to 3 characters'
+      @matcher.description.should == 'ensure length of size is equal to 3 characters'
 
       @matcher.is(nil).maximum(5)
-      @matcher.description.should == 'ensure length of size and maximum 5 characters'
+      @matcher.description.should == 'ensure length of size is maximum 5 characters'
 
       @matcher.maximum(nil).minimum(3)
-      @matcher.description.should == 'ensure length of size and minimum 3 characters'
+      @matcher.description.should == 'ensure length of size is minimum 3 characters'
 
       @matcher.allow_nil(false)
-      @matcher.description.should == 'ensure length of size, minimum 3 characters, and not allow nil values'
+      @matcher.description.should == 'ensure length of size is minimum 3 characters and not allowing nil values'
 
       @matcher.allow_blank
-      @matcher.description.should == 'ensure length of size, minimum 3 characters, not allow nil values, and allow blank values'
+      @matcher.description.should == 'ensure length of size is minimum 3 characters, not allowing nil values, and allowing blank values'
     end
 
     it 'should contain an expectation message' do
@@ -68,15 +68,13 @@ describe 'validate_length_of' do
     end
 
     it 'should set allow_blank missing message' do
-      @matcher.should_receive(:allow_blank?).and_return([false, {:default => 'allow blank values for size'}])
-      @matcher.within(3..5).matches?(@model)
-      @matcher.instance_variable_get('@missing').should == 'allow blank values for size'
+      @matcher.within(3..5).allow_blank.matches?(@model)
+      @matcher.instance_variable_get('@missing').should == 'not allow blank values for size'
     end
 
     it 'should set allow_nil missing message' do
-      @matcher.should_receive(:allow_nil?).and_return([false, {:default => 'allow nil values for size'}])
-      @matcher.within(3..5).matches?(@model)
-      @matcher.instance_variable_get('@missing').should == 'allow nil values for size'
+      @matcher.within(3..5).allow_nil.matches?(@model)
+      @matcher.instance_variable_get('@missing').should == 'not allow nil values for size'
     end
   end
 

@@ -23,34 +23,37 @@ describe 'validate_numericality_of' do
       matcher.description.should == 'ensure numericality of age'
 
       matcher.allow_nil(false)
-      matcher.description.should == 'ensure numericality of age and not allow nil values'
+      matcher.description.should == 'ensure numericality of age not allowing nil values'
 
       matcher.allow_blank
-      matcher.description.should == 'ensure numericality of age, not allow nil values, and allow blank values'
+      matcher.description.should == 'ensure numericality of age not allowing nil values and allowing blank values'
 
       matcher = validate_numericality_of(:age, :only_integer => true)
-      matcher.description.should == 'ensure numericality of age and allow only integer values'
+      matcher.description.should == 'ensure numericality of age allowing only integer values'
 
       matcher = validate_numericality_of(:age, :even => true)
-      matcher.description.should == 'ensure numericality of age and allow only even values'
+      matcher.description.should == 'ensure numericality of age allowing only even values'
 
       matcher = validate_numericality_of(:age, :odd => true)
-      matcher.description.should == 'ensure numericality of age and allow only odd values'
+      matcher.description.should == 'ensure numericality of age allowing only odd values'
 
       matcher = validate_numericality_of(:age, :equal_to => 10)
-      matcher.description.should == 'ensure numericality of age and equal to 10'
+      matcher.description.should == 'ensure numericality of age is equal to 10'
 
       matcher = validate_numericality_of(:age, :less_than_or_equal_to => 10)
-      matcher.description.should == 'ensure numericality of age and less than or equal to 10'
+      matcher.description.should == 'ensure numericality of age is less than or equal to 10'
 
       matcher = validate_numericality_of(:age, :greater_than_or_equal_to => 10)
-      matcher.description.should == 'ensure numericality of age and greater than or equal to 10'
+      matcher.description.should == 'ensure numericality of age is greater than or equal to 10'
 
       matcher = validate_numericality_of(:age, :less_than => 10)
-      matcher.description.should == 'ensure numericality of age and less than 10'
+      matcher.description.should == 'ensure numericality of age is less than 10'
 
       matcher = validate_numericality_of(:age, :greater_than => 10)
-      matcher.description.should == 'ensure numericality of age and greater than 10'
+      matcher.description.should == 'ensure numericality of age is greater than 10'
+
+      matcher = validate_numericality_of(:age, :greater_than => 10, :less_than => 20)
+      matcher.description.should == 'ensure numericality of age is greater than 10 and is less than 20'
     end
 
     # Expectations and missing messages requires matches? to be called with

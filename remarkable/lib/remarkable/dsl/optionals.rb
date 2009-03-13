@@ -94,14 +94,15 @@ module Remarkable
 
           if @options.key?(optional)
             i18n_key = @options[optional] ? :positive : :negative
-            Remarkable.t i18n_key, :default => :given, :raise => true, :scope => scope, :inspect => @options[optional].inspect
+            Remarkable.t i18n_key, :default => :given, :raise => true, :scope => scope, :inspect => @options[optional].inspect, :value => @options[optional].to_s
           else
             Remarkable.t :not_given, :raise => true, :scope => scope
           end rescue nil
         end.compact
 
-        optionals.unshift(message)
-        array_to_sentence(optionals)
+        message << ' ' << array_to_sentence(optionals)
+        message.strip!
+        message
       end
 
     end

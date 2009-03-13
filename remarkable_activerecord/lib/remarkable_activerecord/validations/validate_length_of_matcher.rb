@@ -2,15 +2,16 @@ module Remarkable
   module ActiveRecord
     module Matchers
       class ValidateLengthOfMatcher < Remarkable::ActiveRecord::Base
-        arguments :collection => :attributes
+        arguments :collection => :attributes, :as => :attribute
 
         optional :within, :alias => :in
         optional :minimum, :maximum, :is
         optional :allow_nil, :allow_blank, :default => true
         optional :message, :too_short, :too_long, :wrong_length
 
-        collection_assertions :less_than_min_length?, :exactly_min_length?, :allow_nil?,
-                              :more_than_max_length?, :exactly_max_length?, :allow_blank?
+        collection_assertions :less_than_min_length?, :exactly_min_length?,
+                              :more_than_max_length?, :exactly_max_length?,
+                              :allow_nil?, :allow_blank?
 
         before_assert do
           # Reassign :in to :within

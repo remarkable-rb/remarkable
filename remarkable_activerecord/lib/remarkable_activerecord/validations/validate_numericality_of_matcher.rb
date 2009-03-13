@@ -6,10 +6,10 @@ module Remarkable
         NUMERIC_COMPARISIONS = [ :equal_to, :less_than, :greater_than,
                                  :less_than_or_equal_to, :greater_than_or_equal_to ]
 
-        arguments :collection => :attributes
+        arguments :collection => :attributes, :as => :attribute
 
-        optional :equal_to, :less_than, :greater_than,
-                 :less_than_or_equal_to, :greater_than_or_equal_to, :message
+        optional :equal_to, :greater_than_or_equal_to, :greater_than,
+                 :less_than_or_equal_to, :less_than, :message
 
         optional :only_integer, :odd, :even, :allow_nil, :allow_blank, :default => true
 

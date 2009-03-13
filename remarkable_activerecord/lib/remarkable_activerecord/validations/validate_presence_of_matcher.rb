@@ -2,7 +2,7 @@ module Remarkable
   module ActiveRecord
     module Matchers
       class ValidatePresenceOfMatcher < Remarkable::ActiveRecord::Base
-        arguments :collection => :attributes
+        arguments :collection => :attributes, :as => :attribute
         optional  :message
 
         collection_assertions :allow_nil?
