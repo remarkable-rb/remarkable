@@ -32,27 +32,35 @@ describe 'redirect_to', :type => :controller do
     end
   end
 
-#    it { should redirect_to(users_url) }
-#    it { should redirect_to{ users_url } }
-#    it { should redirect_to('/users') }
-#    it { should redirect_to('http://test.host/users') }
-#    it { should redirect_to(:action => 'index') }
-#    it { should redirect_to(:controller => 'users') }
-#    it { should redirect_to(:controller => 'users', :action => 'index') }
+#  describe 'matcher' do
+#    before(:each) { build_response { redirect_to 'http://test.host/users' } }
 
-#    # For rspec-rails compatibility
-#    it { response.should redirect_to(users_url) }
-#    it { response.should redirect_to('/users') }
-#    it { response.should redirect_to(:controller => 'users', :action => 'index') }
+#    describe 'success' do
+#      it { should redirect_to(users_url) }
+#      it { should redirect_to{ users_url } }
+#      it { should redirect_to('/users') }
+#      it { should redirect_to('http://test.host/users') }
+#      it { should redirect_to(:action => 'index') }
+#      it { should redirect_to(:controller => 'users') }
+#      it { should redirect_to(:controller => 'users', :action => 'index') }
 
-#    it { should_not redirect_to('/posts') }
-#    it { should_not redirect_to('http://test.host/posts') }
-#    it { should_not redirect_to(:action => 'show') }
-#    it { should_not redirect_to(:controller => 'posts') }
-#    it { should_not redirect_to(:controller => 'users', :action => 'show') }
+#      # For rspec-rails compatibility
+#      it { response.should redirect_to(users_url) }
+#      it { response.should redirect_to('/users') }
+#      it { response.should redirect_to(:controller => 'users', :action => 'index') }
+#    end
 
-#    # For rspec-rails compatibility
-#    it { response.should_not redirect_to('/posts') }
-#    it { response.should_not redirect_to(:controller => 'users', :action => 'show') }
+#    describe 'failure' do
+#      it { should_not redirect_to('/posts') }
+#      it { should_not redirect_to('http://test.host/posts') }
+#      it { should_not redirect_to(:action => 'show') }
+#      it { should_not redirect_to(:controller => 'posts') }
+#      it { should_not redirect_to(:controller => 'users', :action => 'show') }
+
+#      # For rspec-rails compatibility
+#      it { response.should_not redirect_to('/posts') }
+#      it { response.should_not redirect_to(:controller => 'users', :action => 'show') }
+#    end
+#  end
 
 end

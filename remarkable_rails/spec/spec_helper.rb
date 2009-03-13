@@ -20,11 +20,5 @@ $:.unshift(dir)
 require File.join(dir, 'functional_builder')
 require File.join(dir, '..', 'lib', 'remarkable_rails')
 
-# Define routes
-ActionController::Routing::Routes.draw do |map|
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format' 
-end
-
 # Include matchers
 Remarkable.include_matchers!(Remarkable::ActionController, Spec::Example::ExampleGroup)
