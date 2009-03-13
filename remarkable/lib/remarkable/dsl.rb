@@ -6,8 +6,8 @@ require File.join(dir, 'dsl', 'callbacks')
 
 module Remarkable
   module DSL
-    ATTR_READERS = [ :matcher_arguments, :matcher_optionals, :matcher_assertions,
-      :matcher_for_assertions, :before_assert_callbacks, :after_initialize_callbacks
+    ATTR_READERS = [ :matcher_arguments, :matcher_optionals, :matcher_single_assertions,
+      :matcher_collection_assertions, :before_assert_callbacks, :after_initialize_callbacks
     ] unless self.const_defined?(:ATTR_READERS)
 
     def self.extended(base)

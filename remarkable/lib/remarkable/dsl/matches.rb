@@ -34,10 +34,10 @@ module Remarkable
 
         run_before_assert_callbacks
 
-        send_methods_and_generate_message(self.class.matcher_assertions) &&
+        send_methods_and_generate_message(self.class.matcher_single_assertions) &&
         assert_matcher_for(instance_variable_get("@#{self.class.matcher_arguments[:collection]}") || []) do |value|
           instance_variable_set("@#{self.class.matcher_arguments[:as]}", value)
-          send_methods_and_generate_message(self.class.matcher_for_assertions)
+          send_methods_and_generate_message(self.class.matcher_collection_assertions)
         end
       end
 

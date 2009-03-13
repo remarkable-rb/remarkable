@@ -152,7 +152,7 @@ END
         #
         def collection_assertions(*methods, &block)
           define_method methods.last, &block if block_given?
-          @matcher_for_assertions += methods
+          @matcher_collection_assertions += methods
         end
         alias :collection_assertion :collection_assertions
 
@@ -164,7 +164,7 @@ END
         #
         def assertions(*methods, &block)
           define_method methods.last, &block if block_given?
-          @matcher_assertions += methods
+          @matcher_single_assertions += methods
         end
         alias :assertion :assertions
 

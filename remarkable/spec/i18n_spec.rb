@@ -34,8 +34,8 @@ describe Remarkable::I18n do
   end
 
   Remarkable.locale = :"pt-BR"
-  should_contain(1)
-  should_not_contain(4)
-  xshould_not_contain(5)
+  should_collection_contain(1)
+  should_not_collection_contain(4)
+  xshould_not_collection_contain(5)
   Remarkable.locale = :en
 end
