@@ -3,11 +3,9 @@ en:
     specs:
       contain:
         description: "contain the given values"
-        expectation: "the given values are included in {{subject_inspect}} which is a {{subject_name}}"
       single_contain:
         description: "contain {{value}}"
-        expectation: "{{value}} is included in {{subject_inspect}}"
-        optional:
+        optionals:
           allow_nil:
             positive: "allowing nil"
             negative: "not allowing nil"
@@ -16,8 +14,6 @@ en:
             not_given: "not checking for blank"
       collection_contain:
         description: "contain {{values}}"
-        expectation: "{{value}} is included in {{subject_inspect}}"
-        missing:
-          included: "{{more}}{{value}} is not included in {{subject_inspect}}"
-          is_array?: "subject is a {{subject_name}}"
-
+        expectations:
+          included: "{{more}}{{value}} is included in {{subject_inspect}}"
+          is_array?: "subject is a array, but got {{subject_name}}"

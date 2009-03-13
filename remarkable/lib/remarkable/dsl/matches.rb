@@ -15,11 +15,11 @@ module Remarkable
       # return true if it pass or false if it fails. When it fails, it will use
       # I18n API to find the proper failure message:
       #
-      #   missing:
+      #   expectations:
       #     allow_nil?: allowed the value to be nil
       #     allow_blank?: allowed the value to be blank
       #
-      # Or you can set the message in the instance variable @missing in the
+      # Or you can set the message in the instance variable @expectation in the
       # assertion method if you don't want to rely on I18n API.
       #
       # This method also call the methods declared in single_assertions. Which
@@ -83,8 +83,8 @@ module Remarkable
           options
         end
 
-        # Helper that send the methods given and create a missing message if any
-        # returns false. Since most assertion methods ends with an question
+        # Helper that send the methods given and create a expectation message if
+        # any returns false. Since most assertion methods ends with an question
         # mark and it looks strange on I18n yml files, we also search for the
         # assertion method name without the question mark or exclamation mark
         # at the end. So if you have a method called is_valid? on I18n yml file
@@ -95,15 +95,15 @@ module Remarkable
             bool, hash = send(method)
 
             unless bool
-              if @missing.nil?
+              if @expectation.nil?
                 hash = default_i18n_options.merge(hash || {})
 
                 if method.to_s =~ /\?|\!$/
                   hash[:default] = Array(hash[:default])
-                  hash[:default] << :"missing.#{method.to_s.chop}"
+                  hash[:default].unshift(:"expectations.#{method.to_s.chop}")
                 end
 
-                @missing = Remarkable.t "missing.#{method}", hash
+                @expectation = Remarkable.t "expectations.#{method}", hash
               end
 
               return false

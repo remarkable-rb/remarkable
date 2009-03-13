@@ -140,11 +140,11 @@ END
         # Those methods should return true if it pass or false if it fails. When
         # it fails, it will use I18n API to find the proper failure message:
         #
-        #   missing:
-        #     allow_nil?: allowed the value to be nil
-        #     allow_blank?: allowed the value to be blank
+        #   expectations:
+        #     allow_nil: allowed the value to be nil
+        #     allow_blank: allowed the value to be blank
         #
-        # Or you can set the message in the instance variable @missing in the
+        # Or you can set the message in the instance variable @expectation in the
         # assertion method if you don't want to rely on I18n API.
         #
         # As you might have noticed from the examples above, this method is also

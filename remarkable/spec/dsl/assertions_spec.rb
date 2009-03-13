@@ -26,14 +26,9 @@ describe Remarkable::DSL::Assertions do
     @matcher.description.should == 'contain 1, 2, and 3'
   end
 
-  it 'should provide value in expectation' do
-    @matcher.matches?([4])
-    @matcher.expectation.should == '1 is included in [4]'
-  end
-
   it 'should provide value to missing messages' do
     @matcher.matches?([4])
-    @matcher.failure_message.should == 'Expected 1 is included in [4] (ERROR: 1 is not included in [4])'
+    @matcher.failure_message.should == 'Expected that 1 is included in [4]'
   end
 
   it 'should accept blocks as argument' do

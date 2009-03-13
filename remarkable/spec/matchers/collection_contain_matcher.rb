@@ -12,7 +12,7 @@ module Remarkable
         end
 
         collection_assertion :included? do
-          return @subject.include?(@value), :more => 'ERROR: '
+          return @subject.include?(@value), :more => 'that '
         end
 
         after_initialize do

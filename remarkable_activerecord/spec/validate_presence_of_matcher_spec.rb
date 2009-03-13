@@ -15,19 +15,15 @@ describe 'validate_presence_of' do
   describe 'messages' do
     before(:each){ @matcher = define_and_validate }
 
-    it 'should contain a description message' do
+    it 'should contain a description' do
       @matcher.description.should == 'require title and size to be set'
     end
 
-    it 'should contain an expectation message' do
-      @matcher.matches?(@model)
-      @matcher.expectation.should == 'Product requires size to be set'
-    end
-
-    it 'should set allow_nil missing message' do
+    it 'should set allow_nil? missing message' do
       @matcher = validate_presence_of(:category)
       @matcher.matches?(@model)
-      @matcher.instance_variable_get('@missing').should == 'allow nil values for category'
+      @matcher.failure_message.should == 'Expected Product to require category to be set'
+      @matcher.negative_failure_message.should == 'Did not expect Product to require category to be set'
     end
   end
 

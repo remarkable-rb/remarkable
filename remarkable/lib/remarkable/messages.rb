@@ -15,24 +15,16 @@ module Remarkable
       Remarkable.t 'description', options
     end
 
-    # Provides a default expectation message. Overwrite it if needed.
-    # By default it uses default i18n options.
-    #
-    def expectation(options={})
-      options = default_i18n_options.merge(options)
-      Remarkable.t 'expectation', options
-    end
-
     # Provides a default failure message. Overwrite it if needed.
     #
     def failure_message
-      Remarkable.t 'remarkable.core.failure_message', :expectation => expectation, :missing => @missing
+      Remarkable.t 'remarkable.core.failure_message', :expectation => @expectation
     end
 
     # Provides a default negative failure message. Overwrite it if needed.
     #
     def negative_failure_message
-      Remarkable.t 'remarkable.core.negative_failure_message', :expectation => expectation
+      Remarkable.t 'remarkable.core.negative_failure_message', :expectation => @expectation
     end
 
     private

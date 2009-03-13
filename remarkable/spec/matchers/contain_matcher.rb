@@ -18,7 +18,7 @@ module Remarkable
         def included?
           return true if @subject.include?(@value)
 
-          @missing = "#{@value} is not included in #{@subject.inspect}"
+          @expectation = "#{@value} is included in #{@subject.inspect}"
           false
         end
       end

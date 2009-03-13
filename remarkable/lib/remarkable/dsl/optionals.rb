@@ -37,7 +37,7 @@ module Remarkable
           # matcher with the following on your locale file:
           #
           #   description: validate uniqueness of {{attributes}}
-          #   optional:
+          #   optionals:
           #     scope:
           #       given: scoped to {{inspect}}
           #     case_sensitive:
@@ -90,7 +90,7 @@ module Remarkable
         message = super(options)
 
         optionals = self.class.matcher_optionals.map do |optional|
-          scope = matcher_i18n_scope + ".optional.#{optional}"
+          scope = matcher_i18n_scope + ".optionals.#{optional}"
 
           if @options.key?(optional)
             i18n_key = @options[optional] ? :positive : :negative

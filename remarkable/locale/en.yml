@@ -5,7 +5,7 @@ en:
       should: should
       should_not: should not
       example_disabled: Example disabled
-      failure_message: Expected {{expectation}} ({{missing}})
+      failure_message: Expected {{expectation}}
       negative_failure_message: Did not expect {{expectation}}
 
       helpers:

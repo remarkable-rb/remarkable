@@ -18,7 +18,7 @@ describe 'validate_numericality_of' do
     # To tests descriptions, we don't need to use mocks neither stubs.
     # We just need to define a matcher.
     #
-    it 'should contain a description message' do
+    it 'should contain a description' do
       matcher = validate_numericality_of(:age)
       matcher.description.should == 'ensure numericality of age'
 
@@ -56,55 +56,49 @@ describe 'validate_numericality_of' do
       matcher.description.should == 'ensure numericality of age is greater than 10 and is less than 20'
     end
 
-    # Expectations and missing messages requires matches? to be called with
-    # the subject to be validated.
-    it 'should contain an expectation message' do
-      @matcher.matches?(@model)
-      @matcher.expectation.should == 'Product ensures numericality of price'
-    end
-
     # To test missing messages, we need expectations in assertions methods that
     # should return false.
-    it 'should set only numeric values message' do
+    it 'should set only_numeric_values? message' do
       @matcher.should_receive(:only_numeric_values?).and_return(false)
       @matcher.matches?(@model)
-      @matcher.instance_variable_get('@missing').should == 'allow non-numeric values for price'
+      @matcher.failure_message.should == 'Expected Product to allow only numeric values for price'
+      @matcher.negative_failure_message.should == 'Did not expect Product to allow only numeric values for price'
     end
 
-    it 'should set only integer values message' do
+    it 'should set only_integer_values? message' do
       @matcher.should_receive(:only_integer?).and_return([false, { :not => '' }])
       @matcher.matches?(@model)
-      @matcher.instance_variable_get('@missing').should == 'allow non-integer values for price'
+      @matcher.failure_message.should == 'Expected Product to allow only integer values for price'
     end
 
-    it 'should set only odd values message' do
-      @matcher.should_receive(:only_odd?).and_return([false, { :not => '' }])
+    it 'should set only_odd_values? message' do
+      @matcher.should_receive(:only_odd?).and_return(false)
       @matcher.matches?(@model)
-      @matcher.instance_variable_get('@missing').should == 'allow non-odd values for price'
+      @matcher.failure_message.should == 'Expected Product to allow only odd values for price'
     end
 
-    it 'should set only even values message' do
-      @matcher.should_receive(:only_even?).and_return([false, { :not => '' }])
+    it 'should set only_even_values? message' do
+      @matcher.should_receive(:only_even?).and_return(false)
       @matcher.matches?(@model)
-      @matcher.instance_variable_get('@missing').should == 'allow non-even values for price'
+      @matcher.failure_message.should == 'Expected Product to allow only even values for price'
     end
 
-    it 'should set equal to message' do
+    it 'should set equal_to? message' do
       @matcher.should_receive(:equal_to?).and_return([false, { :count => 10 }])
       @matcher.matches?(@model)
-      @matcher.instance_variable_get('@missing').should == 'not allow price to be equal to 10'
+      @matcher.failure_message.should == 'Expected Product to be valid only when price is equal to 10'
     end
 
-    it 'should set less than minimum message' do
+    it 'should set less_than_minimum? message' do
       @matcher.should_receive(:less_than_minimum?).and_return([false, { :count => 10 }])
       @matcher.matches?(@model)
-      @matcher.instance_variable_get('@missing').should == 'allow price to be less than 10'
+      @matcher.failure_message.should == 'Expected Product to be invalid when price is less than 10'
     end
 
-    it 'should set more than maximum message' do
+    it 'should set more_than_maximum? message' do
       @matcher.should_receive(:more_than_maximum?).and_return([false, { :count => 10 }])
       @matcher.matches?(@model)
-      @matcher.instance_variable_get('@missing').should == 'allow price to be greater than 10'
+      @matcher.failure_message.should == 'Expected Product to be invalid when price is greater than 10'
     end
   end
 
