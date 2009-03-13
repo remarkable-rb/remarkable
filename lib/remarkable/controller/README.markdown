@@ -8,20 +8,20 @@ Macro that creates a test asserting that the controller assigned to each of the 
 
 Options:
 
-    * :class - The expected class of the instance variable being checked.
-    * :equals - A string or a proc which is evaluated and compared with the instance variable being checked.
+    * :with - A string or a proc which is evaluated and compared with the instance variable being checked.
+    * :with_kind_of - The expected class of the instance variable being checked.
 
 Example:
 
 <pre><code>  should_assign_to :user, :posts
-  should_assign_to :user, :class => User
-  should_assign_to :user, :equals => proc { @user }
+  should_assign_to :user, :with_kind_of => User
+  should_assign_to :user, :with => proc { @user }
   should_assign_to(:user){ @user }
   should_not_assign_to :user, :posts
 
   it { should assign_to(:user, :posts) }
-  it { should assign_to(:user, :class => User) }
-  it { should assign_to(:user, :equals => @user) }
+  it { should assign_to(:user, :with_kind_of => User) }
+  it { should assign_to(:user, :with => @user) }
   it { should_not assign_to(:user, :posts) }</code></pre>
 
 h2. filter_params

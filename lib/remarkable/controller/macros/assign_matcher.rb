@@ -3,6 +3,8 @@ module Remarkable # :nodoc:
     module Matchers # :nodoc:
       class AssignMatcher < Remarkable::Matcher::Base
         include Remarkable::Controller::Helpers
+
+        optional :with, :with_kind_of
         
         def initialize(*names, &block)
           @options          = names.extract_options!
@@ -10,6 +12,11 @@ module Remarkable # :nodoc:
           @options[:equals] = block if block_given?
 
           warn "[DEPRECATION] Strings given in :equals to should_assign_to won't be evaluated anymore. You can give procs or use blocks instead." if @options[:equals].is_a?(String)
+          warn "[DEPRECATION] :equals option is deprecated in should_assign_to. Please give :with instead."        if @options[:equals]
+          warn "[DEPRECATION] :class option is deprecated in should_assign_to. Please give :with_kind_of instead." if @options[:class]
+
+          @options[:with]         ||= @options.delete(:equals)
+          @options[:with_kind_of] ||= @options.delete(:class)
         end
 
         def matches?(subject)
@@ -25,8 +32,8 @@ module Remarkable # :nodoc:
 
         def description
           description = "assign @#{@names.to_sentence}"
-          description << " as class #{@options[:class]}" if @options[:class]
-          description << " which is equal to #{@options[:equals]}" if @options[:equals]
+          description << " as class #{@options[:with_kind_of]}" if @options[:with_kind_of]
+          description << " which is equal to #{@options[:with]}" if @options[:with]
           description
         end
         
@@ -49,22 +56,22 @@ module Remarkable # :nodoc:
         end
         
         def is_kind_of?
-          return true unless @options[:class]
-          return true if @assigned_value.kind_of?(@options[:class])
+          return true unless @options[:with_kind_of]
+          return true if @assigned_value.kind_of?(@options[:with_kind_of])
           
-          @missing = "@#{@name} is not a kind of #{@options[:class]}"
+          @missing = "@#{@name} is not a kind of #{@options[:with_kind_of]}"
           return false
         end
         
         def is_equals_expected_value?
-          return true unless @options[:equals]
+          return true unless @options[:with]
 
-          expected_value = if @options[:equals].is_a?(String)
-            @spec.instance_eval(@options[:equals]) rescue @options[:equals]
-          elsif @options[:equals].is_a?(Proc)
-            @spec.instance_eval &@options[:equals]
+          expected_value = if @options[:with].is_a?(String)
+            @spec.instance_eval(@options[:with]) rescue @options[:with]
+          elsif @options[:with].is_a?(Proc)
+            @spec.instance_eval &@options[:with]
           else
-            @options[:equals]
+            @options[:with]
           end
           return true if @assigned_value == expected_value
 
@@ -74,8 +81,8 @@ module Remarkable # :nodoc:
         
         def expectation
           expectation = "assign @#{@name}"
-          expectation << " as class #{@options[:class]}" if @options[:class]
-          expectation << " which is equal to #{@options[:equals].inspect}" if @options[:equals] && !@options[:equals].is_a?(Proc)
+          expectation << " as class #{@options[:with_kind_of]}" if @options[:with_kind_of]
+          expectation << " which is equal to #{@options[:with].inspect}" if @options[:with] && !@options[:with].is_a?(Proc)
           expectation
         end
 
