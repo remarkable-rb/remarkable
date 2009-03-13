@@ -3,6 +3,8 @@
 module FunctionalBuilder
   def self.included(base)
     base.class_eval do
+      base.controller_name 'application'
+
       after(:each) do
         if @defined_constants
           @defined_constants.each do |class_name| 
@@ -11,12 +13,6 @@ module FunctionalBuilder
         end
       end
     end
-  end
-
-  def define_controller(class_name, &block)
-    class_name = class_name.to_s
-    class_name << 'Controller' unless class_name =~ /Controller$/
-    define_constant(class_name, ActionController::Base, &block)
   end
 
   def build_response(&block)
@@ -29,7 +25,13 @@ module FunctionalBuilder
     @response   = ActionController::TestResponse.new
     get :example
 
-    @controller
+    self.class.subject { @controller }
+  end
+
+  def define_controller(class_name, &block)
+    class_name = class_name.to_s
+    class_name << 'Controller' unless class_name =~ /Controller$/
+    define_constant(class_name, ApplicationController, &block)
   end
 
   def define_constant(class_name, base, &block)

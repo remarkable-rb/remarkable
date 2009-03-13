@@ -1,36 +1,35 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe 'redirect_to', :type => :controller do
-  controller_name 'application'
-
   include FunctionalBuilder
 
-  before(:each) do
-    @matcher = Remarkable::ActionController::Matchers::RedirectToMatcher.new('http://test.host/posts')
-    @matcher.spec(self)
+  describe 'messages' do
+    before(:each) do
+      @matcher = redirect_to('http://test.host/posts')
+    end
 
-    @controller = build_response { redirect_to 'http://test.host/posts' }
-    @response   = ActionController::TestResponse.new
-    @request    = ActionController::TestRequest.new
-  end
+    it 'should contain a description message' do
+      @matcher.description.should == 'redirect to "http://test.host/posts"'
+    end
 
-  it 'should have a description' do
-    @matcher.description.should == 'redirect to "http://test.host/posts"'
-  end
+    it 'should contain an expectation message' do
+      build_response { redirect_to 'http://test.host/posts' }
 
-  it 'should have an expectation message' do
-    @matcher.matches?(@controller)
-    @matcher.expectation.should == 'redirect to "http://test.host/posts"'
-  end
+      @matcher.matches?(@controller)
+      @matcher.expectation.should == 'redirect to "http://test.host/posts"'
+    end
 
-  it 'should set redirected missing message' do
-    @matcher.matches?(@controller)
-    @matcher.instance_variable_get('@missing').should == 'got no redirect'
-  end
+    it 'should set redirected? missing message' do
+      build_response { render :nothing => true }
+      @matcher.matches?(@controller)
+      @matcher.instance_variable_get('@missing').should == 'got no redirect'
+    end
 
-  xit 'should set url match missing message' do
-    @matcher.matches?(@controller)
-    @matcher.instance_variable_get('@missing').should == 'redirected to "http://test.host/users"'
+    it 'should set url_match? missing message' do
+      build_response { redirect_to 'http://test.host/users' }
+      @matcher.matches?(@controller)
+      @matcher.instance_variable_get('@missing').should == 'redirected to "http://test.host/users"'
+    end
   end
 
 #    it { should redirect_to(users_url) }

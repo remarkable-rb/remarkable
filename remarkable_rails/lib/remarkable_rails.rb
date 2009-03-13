@@ -9,7 +9,20 @@ unless Object.const_defined?('Remarkable')
   end
 end
 
-# Load rspec-rails if rspec is defined.
+# Load Remarkable Rails files
+dir = File.dirname(__FILE__)
+require File.join(dir, 'remarkable_rails', 'active_orm')
+require File.join(dir, 'remarkable_rails', 'base')
+
+# Load matchers
+Dir[File.join(dir, 'remarkable_rails', 'action_*', '*.rb')].each do |file|
+  require file
+end
+
+# Load locale file
+Remarkable.add_locale File.join(dir, '..', 'locale', 'en.yml')
+
+# Load spec/rails and include matchers in spec
 if defined?(Spec)
   begin
     require 'spec/rails'
@@ -18,23 +31,6 @@ if defined?(Spec)
     gem 'rspec-rails'
     require 'spec/rails'
   end
+
+  Remarkable.include_matchers!(Remarkable::ActionController, Spec::Rails::Example::FunctionalExampleGroup)
 end
-
-# Load Remarkable Rails files
-dir = File.dirname(__FILE__)
-require File.join(dir, 'remarkable_rails', 'active_orm')
-require File.join(dir, 'remarkable_rails', 'base')
-
-# Include ActionController matchers
-Dir[File.join(dir, 'remarkable_rails', 'action_controller', '*.rb')].each do |file|
-  require file
-end
-Remarkable.include_matchers!(Remarkable::ActionController, Spec::Rails::Example::FunctionalExampleGroup)
-
-# Include ActionView matchers
-# Dir[File.join(dir, 'remarkable_rails', 'action_view', '*.rb')].each do |file|
-#   require file
-# end
-# Remarkable.include_matchers!(Remarkable::ActionController, Spec::Rails::Example::RailsExampleGroup)
-
-Remarkable.add_locale File.join(dir, '..', 'locale', 'en.yml')
