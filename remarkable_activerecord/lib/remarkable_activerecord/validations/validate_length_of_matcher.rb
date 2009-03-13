@@ -40,35 +40,27 @@ module Remarkable
           end
 
           def less_than_min_length?
-            return true if @min_value.nil? || @min_value <= 1 ||
-                           bad?(value_for_length(@min_value - 1), default_message_for(:too_short))
-
-            return false, :count => @min_value
+            @min_value.nil? || @min_value <= 1 || bad?(value_for_length(@min_value - 1), default_message_for(:too_short))
           end
 
           def exactly_min_length?
-            return true if @min_value.nil? || @min_value <= 0 ||
-                           good?(value_for_length(@min_value), default_message_for(:too_short))
-
-            return false, :count => @min_value
+            @min_value.nil? || @min_value <= 0 || good?(value_for_length(@min_value), default_message_for(:too_short))
           end
 
           def more_than_max_length?
-            return true if @max_value.nil? ||
-                           bad?(value_for_length(@max_value + 1), default_message_for(:too_long))
-
-            return false, :count => @max_value
+            @max_value.nil? || bad?(value_for_length(@max_value + 1), default_message_for(:too_long))
           end
 
           def exactly_max_length?
-            return true if @max_value.nil? || @min_value == @max_value ||
-                           good?(value_for_length(@max_value), default_message_for(:too_long))
-
-            return false, :count => @max_value
+            @max_value.nil? || @min_value == @max_value || good?(value_for_length(@max_value), default_message_for(:too_long))
           end
 
           def value_for_length(value)
             "x" * value
+          end
+
+          def interpolation_options
+            { :minimum => @min_value, :maximum => @max_value }
           end
 
           # Returns the default message for the validation type.

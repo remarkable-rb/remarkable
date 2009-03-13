@@ -49,17 +49,22 @@ module Remarkable
           {}
         end
 
-        # Overwrites default_i18n_options to provide arguments and collection
-        # interpolation.
+        # Overwrites default_i18n_options to provide collection interpolation,
+        # arguments and optionals to interpolation options.
         #
-        # Optionals are, by default, not available as interpolation options
-        # because they will be automatically appended do descriptions. If you
-        # need them to create an expectation message, you can do it in two ways:
+        # Their are appended in the reverse order above. So if you have an optional
+        # with the same name as an argument, the argument overwrites the optional.
         #
-        # 1. Overwrite default_i18n_options:
+        # All values are provided calling inspect, so what you will have in your
+        # I18n available for interpolation is @options[:allow_nil].inspect.
         #
-        #   def default_i18n_options
-        #     super.update(:real_value => real_value)
+        # If you still need to provide more other interpolation options, you can
+        # do that in two ways:
+        #
+        # 1. Overwrite interpolation_options:
+        #
+        #   def interpolation_options
+        #     { :real_value => real_value }
         #   end
         #
         # 2. Return a hash from your assertion method:
@@ -73,6 +78,10 @@ module Remarkable
         #
         def default_i18n_options
           i18n_options = {}
+
+          @options.each do |key, value|
+            i18n_options[key] = value.inspect
+          end if @options
 
           # Also add arguments as interpolation options.
           self.class.matcher_arguments[:names].each do |name|

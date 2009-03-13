@@ -34,11 +34,9 @@ module Remarkable
             @subject.instance_variable_get("@#{@name}")
           end
 
-          # Update default_i18n_options
-          def default_i18n_options
-            options = @options.dup
-            options.update(:assign_inspect => assigned_value.inspect, :assign_class => assigned_value.class.name)
-            options.update(super)
+          # Update interpolation options
+          def interpolation_options
+            { :assign_inspect => assigned_value.inspect, :assign_class => assigned_value.class.name }
           end
 
       end

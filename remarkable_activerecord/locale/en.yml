@@ -6,10 +6,10 @@ en:
       validate_length_of:
         description: "ensure length of {{attributes}}"
         expectations:
-          less_than_min_length: "{{subject_name}} to be invalid when {{attribute}} length is less than {{count}} characters"
-          exactly_min_length: "{{subject_name}} to be valid when {{attribute}} length is {{count}} characters"
-          more_than_max_length: "{{subject_name}} to be invalid when {{attribute}} length is more than {{count}} characters"
-          exactly_max_length: "{{subject_name}} to be valid when {{attribute}} length is {{count}} characters"
+          less_than_min_length: "{{subject_name}} to be invalid when {{attribute}} length is less than {{minimum}} characters"
+          exactly_min_length: "{{subject_name}} to be valid when {{attribute}} length is {{minimum}} characters"
+          more_than_max_length: "{{subject_name}} to be invalid when {{attribute}} length is more than {{maximum}} characters"
+          exactly_max_length: "{{subject_name}} to be valid when {{attribute}} length is {{maximum}} characters"
         optionals:
           within:
             positive: "is within {{inspect}} characters"

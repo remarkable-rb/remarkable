@@ -3,9 +3,6 @@ module Remarkable
     module Matchers
       class ValidateNumericalityOfMatcher < Remarkable::ActiveRecord::Base
 
-        NUMERIC_COMPARISIONS = [ :equal_to, :less_than, :greater_than,
-                                 :less_than_or_equal_to, :greater_than_or_equal_to ]
-
         arguments :collection => :attributes, :as => :attribute
 
         optional :equal_to, :greater_than_or_equal_to, :greater_than,
@@ -16,20 +13,6 @@ module Remarkable
         collection_assertions :only_numeric_values?, :allow_blank?, :allow_nil?,
                               :only_integer?, :only_odd?, :only_even?, :equal_to?,
                               :less_than_minimum?, :more_than_maximum?
-
-        default_options do
-          options = {
-            :odd_message => :odd,
-            :even_message => :even,
-            :number_message => :not_a_number
-          }
-
-          NUMERIC_COMPARISIONS.each do |key|
-            options[:"#{key}_message"] = key
-          end
-
-          options
-        end
 
         # Before assertions, we rearrange the values.
         #
@@ -57,19 +40,19 @@ module Remarkable
         private
 
           def allow_nil?
-            super(default_message_for(:number))
+            super(default_message_for(:not_a_number))
           end
 
           def allow_blank?
-            super(default_message_for(:number))
+            super(default_message_for(:not_a_number))
           end
 
           def only_numeric_values?
-            bad?("abcd", default_message_for(:number))
+            bad?("abcd", default_message_for(:not_a_number))
           end
 
           def only_integer?
-            assert_bad_or_good_if_key(:only_integer, valid_value_for_test.to_f, default_message_for(:number))
+            assert_bad_or_good_if_key(:only_integer, valid_value_for_test.to_f, default_message_for(:not_a_number))
           end
 
           # In ActiveRecord, when we supply :even, does not matter the value, it
@@ -149,12 +132,26 @@ module Remarkable
           end
 
           # Returns the default message for each key (:odd, :even, :equal_to, ...).
+          # If the user provided a message, we use it, otherwise we should use
+          # the given key as message.
+          #
+          # For example, a default_message_for(:odd), if none is provided, will be
+          # :odd. So we have create :odd_message in the options hash, that when
+          # called later, will return :odd.
+          #
+          #
+          # 
           # If the main :message is equal :not_a_number, it means the user changed
           # it so we should use it. Otherwise returns :odd_message, :even_message
           # and so on.
           #
           def default_message_for(key)
-            @options[:message] ? :message : :"#{key}_message"
+            if @options[:message]
+              :message
+            else
+              @options[:"#{key}_message"] = key
+              :"#{key}_message"
+            end
           end
       end
 

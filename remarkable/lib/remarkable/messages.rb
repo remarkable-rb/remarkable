@@ -47,16 +47,24 @@ module Remarkable
                                 downcase
       end
 
-      # Default i18n options used in expectations, failure_message and
+      # Matcher i18n options used in description, failure_message and
       # negative_failure_message. It provides by default the subject_name and
       # the subject_inspect value. But when used with DSL, it provides a whole
-      # bunch of options (check dsl.rb for more information).
+      # bunch of options (check dsl/matches.rb for more information).
       #
       def default_i18n_options
-        { :scope => matcher_i18n_scope,
+        interpolation_options.update(
+          :scope => matcher_i18n_scope,
           :subject_name => subject_name,
           :subject_inspect => @subject.inspect
-        }
+        )
+      end
+
+      # Method to be overwritten if user wants to provide more interpolation
+      # options to I18n.
+      #
+      def interpolation_options
+        {}
       end
 
       # Returns the not word from I18n API.

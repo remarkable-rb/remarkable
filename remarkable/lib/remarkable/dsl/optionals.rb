@@ -55,12 +55,17 @@ module Remarkable
           #   validate_uniqueness_of :project_id, :scope => :company_id, :case_sensitive => false
           #   #=> "validate uniqueness of project_id scoped to company_id and case insensitive"
           #
-          # The options for each optional are:
+          # The interpolation options available are "value" and "inspect". Where
+          # the first is the optional value transformed into a string and the
+          # second is the inspected value.
           #
-          #   * <tt>positive</tt> - When the key is given and it's not false or nil.
-          #   * <tt>negative</tt> - When the key is given and it's false or nil.
-          #   * <tt>given</tt> - When the key is given, doesn't matter the value.
-          #   * <tt>not_given</tt> - When the key is not given.
+          # Four keys are available to be used in I18n files and control how
+          # optionals are appended to your description:
+          #
+          #   * <tt>positive</tt> - When the optional is given and it evaluates to true (everything but false and nil).
+          #   * <tt>negative</tt> - When the optional is given and it evaluates to false (false or nil).
+          #   * <tt>given</tt> - When the optional is given, doesn't matter the value.
+          #   * <tt>not_given</tt> - When the optional is not given.
           #
           def optional(*names)
             options = names.extract_options!
