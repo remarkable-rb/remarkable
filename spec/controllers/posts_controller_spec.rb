@@ -40,6 +40,11 @@ describe PostsController do
       should_not_assign_to :user, :class => User, :equals => 'users(:second)'
       should_not_assign_to :user, :class => User, :equals => proc { users(:second) }
 
+      should_assign_to(:user, :with_kind_of => User, :with => 'users(:first)')
+      should_assign_to(:user, :with_kind_of => User){ users(:first) }
+      should_not_assign_to :user, :with_kind_of => User, :with => 'users(:second)'
+      should_not_assign_to :user, :with_kind_of => User, :with => proc { users(:second) }
+
       should_not_assign_to :user, :class => Post
       should_not_assign_to :user, :equals => 'posts(:first)'
       it { lambda { should_assign_to(:user, :class => Post) }.should raise_error }
@@ -166,6 +171,17 @@ describe PostsController do
       it { should_not assign_to(:user, :equals => 'posts(:first)') }
       it { should assign_to(:posts) }
       it { should_not assign_to(:foo, :bar) }
+
+      it { should assign_to(:some_text) }
+      it { should assign_to(:some_text, :with => "foo bar") }
+      it { should_not assign_to(:some_text, :with => "foo without bar") }
+      it { should assign_to(:user, :with_kind_of => User, :with => 'users(:first)') }
+      it { should assign_to(:user, :with_kind_of => User, :with => users(:first)) }
+      it { should assign_to(:user, :with_kind_of => User){ users(:first) } }
+      it { should_not assign_to(:user, :with_kind_of => User, :with => 'users(:second)') }
+      it { should_not assign_to(:user, :with_kind_of => User, :with => users(:second)) }
+      it { should_not assign_to(:user, :with_kind_of => Post) }
+      it { should_not assign_to(:user, :with => 'posts(:first)') }
 
       # it { should render_page_with_metadata(:title => /index/) }
       # it { should render_page_with_metadata(:description => /Posts/, :title => /index/) }
