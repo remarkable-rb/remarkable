@@ -1,5 +1,6 @@
 # v3.0.0
 
+* Added validate_uniquess_of matcher
 * Added define_model for tests
 * Added validate_numericality_of matcher
 * Added validate_presence_of matcher

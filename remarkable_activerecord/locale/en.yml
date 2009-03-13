@@ -62,4 +62,23 @@ en:
         description: "require {{attributes}} to be set"
         expectations:
           allow_nil: "{{subject_name}} to require {{attribute}} to be set"
+      validate_uniqueness_of:
+        description: "require unique values for {{attributes}}"
+        expectations:
+          respond_to_scope: "{{subject_name}} instance responds to {{method}}"
+          is_unique: "{{subject_name}} to require unique values for {{attribute}}"
+          case_sensitive: "{{subject_name}} to {{not}}be case sensitive on {{attribute}} validation"
+          valid_with_new_scope: "{{subject_name}} to be valid when {{attribute}} scope ({{method}}) change"
+        optionals:
+          scope:
+            given: "scoped to {{inspect}}"
+          case_sensitive:
+            positive: "case sensitive"
+            negative: "case insensitive"
+          allow_nil:
+            positive: "allowing nil values"
+            negative: "not allowing nil values"
+          allow_blank:
+            positive: "allowing blank values"
+            negative: "not allowing blank values"
 

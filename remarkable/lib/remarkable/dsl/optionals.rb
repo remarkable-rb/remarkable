@@ -26,6 +26,7 @@ module Remarkable
           #
           # * <tt>:default</tt> - The default value for this optional
           # * <tt>:alias</tt>  - An alias for this optional
+          # * <tt>:splat</tt>  - Should be true if you expects multiple arguments
           #
           # Examples:
           #
@@ -71,14 +72,17 @@ module Remarkable
             options = names.extract_options!
             @matcher_optionals += names
 
+            splat   = options[:splat]   ? '*' : ''
+            default = options[:default] ? "=#{options[:default].inspect}" : ""
+
             names.each do |name|
-              class_eval <<-END, __FILE__, __LINE__
-  def #{name}(value#{ options[:default] ? "=#{options[:default].inspect}" : "" })
+class_eval <<-END, __FILE__, __LINE__
+  def #{name}(#{splat}value#{default})
     @options ||= {}
     @options[:#{name}] = value
     self
   end
-  END
+END
             end
             class_eval "alias_method(:#{options[:alias]}, :#{names.last})" if options[:alias]
 
