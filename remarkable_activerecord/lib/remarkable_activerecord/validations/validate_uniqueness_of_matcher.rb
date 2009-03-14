@@ -13,7 +13,7 @@ module Remarkable
         default_options :message => :taken
 
         before_assert do
-          @options[:scope] = [*@options[:scope]].compact
+          @options[:scope] = [*@options[:scope]].compact if @options[:scope]
         end
 
         private
@@ -39,7 +39,7 @@ module Remarkable
           # Set subject scope to be equal to the object found.
           #
           def respond_to_scope?
-            @options[:scope].each do |scope|
+            (@options[:scope] || []).each do |scope|
               method = :"#{scope}="
               return false, :method => method unless @subject.respond_to?(method)
 
@@ -71,7 +71,7 @@ module Remarkable
           # Now test that the object is valid when changing the scoped attribute.
           #
           def valid_with_new_scope?
-            @options[:scope].each do |scope|
+            (@options[:scope] || []).each do |scope|
               previous_scope_value = @subject.send(scope)
 
               @subject.send("#{scope}=", new_value_for_scope(scope))

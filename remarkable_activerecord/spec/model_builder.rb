@@ -2,6 +2,8 @@
 #
 module ModelBuilder
   def self.included(base)
+    return unless base.ancestors.include?(Spec::Example::ExampleGroup)
+
     base.class_eval do
       after(:each) do
         if @defined_constants
@@ -67,7 +69,7 @@ module ModelBuilder
     klass    = define_model_class(class_name, &block)
     instance = klass.new
 
-    self.class.subject { instance }
+    self.class.subject { instance } if self.class.respond_to?(:subject)
     instance
   end
 

@@ -1,0 +1,104 @@
+pt-BR:
+  activerecord:
+    models:
+      user: Usuário
+    attributes:
+      user:
+        name: Nome
+
+  remarkable:
+    core:
+      not: não
+      should: deve
+      should_not: não deve
+      example_disabled: Exemplo desativado
+      failure_message: Esperava que {{expectation}}
+      negative_failure_message: Não esperava que {{expectation}}
+
+      helpers:
+        words_connector: ', '
+        two_words_connector: ' e '
+        last_word_connector: ' e '
+
+    active_record:
+      allow_nil: "{{subject_name}} {{not}}permitisse valores nulos para {{attribute}}"
+      allow_blank: "{{subject_name}} {{not}}permitisse valores vazios para {{attribute}}"
+      validate_length_of:
+        description: "garantir tamanho de {{attributes}}"
+        expectations:
+          less_than_min_length: "{{subject_name}} fosse inválido quando o tamanho de {{attribute}} é menor que {{minimum}} caracteres"
+          exactly_min_length: "{{subject_name}} fosse válido quando o tamanho de {{attribute}} é exatamente {{minimum}} caracteres"
+          more_than_max_length: "{{subject_name}} fosse inválido quando o tamanho de {{attribute}} é maopr que {{maximum}} caracteres"
+          exactly_max_length: "{{subject_name}} fosse válido quando o tamanho de {{attribute}} é exatamente {{maximum}} caracteres"
+        optionals:
+          within:
+            positive: "dentro de {{inspect}} caracteres"
+          maximum:
+            positive: "é no máximo {{inspect}} caracteres"
+          minimum:
+            positive: "é no mínimo {{inspect}} caracteres"
+          is:
+            positive: "é igual a {{inspect}} caracteres"
+          allow_nil:
+            positive: "permitindo valores nulos"
+            negative: "não permitindo valores nulos"
+          allow_blank:
+            positive: "permitindo valores vazios"
+            negative: "não permitindo valores vazios"
+      validate_numericality_of:
+        description: "permitir apenas números em {{attributes}}"
+        expectations:
+          only_numeric_values: "{{subject_name}} permitisse apenas números para {{attribute}}"
+          only_integer: "{{subject_name}} {{not}}permitisse apenas números inteiros para {{attribute}}"
+          only_even: "{{subject_name}} permitisse apenas valores pares para {{attribute}}"
+          only_odd: "{{subject_name}} permitisse apenas valores ímpares para {{attribute}}"
+          equal_to: "{{subject_name}} fosse válido apenas quando {{attribute}} é igual a {{count}}"
+          more_than_maximum: "{{subject_name}} fosse inválido quando {{attribute}} é maior que {{count}}"
+          less_than_minimum: "{{subject_name}} fosse inválido quando {{attribute}} é menor que {{count}}"
+        optionals:
+          only_integer:
+            positive: "permitindo apenas valores inteiros"
+          odd:
+            positive: "permitindo apenas valores ímpares"
+          even:
+            positive: "permitindo apenas valores pares"
+          equal_to:
+            given: "com valor igual a {{inspect}}"
+          less_than:
+            given: "com valor menor que {{inspect}}"
+          greater_than:
+            given: "com valor maior que {{inspect}}"
+          less_than_or_equal_to:
+            given: "com valor menor ou igual a {{inspect}}"
+          greater_than_or_equal_to:
+            given: "com valor maior ou igual a {{inspect}}"
+          allow_nil:
+            positive: "permitindo valores nulos"
+            negative: "não permitindo valores nulos"
+          allow_blank:
+            positive: "permitindo valores vazios"
+            negative: "não permitindo valores vazios"
+      validate_presence_of:
+        description: "exigir a presença de {{attributes}}"
+        expectations:
+          allow_nil: "{{subject_name}} garantir a presença de {{attribute}}"
+      validate_uniqueness_of:
+        description: "exigir valores únicos para {{attributes}}"
+        expectations:
+          respond_to_scope: "uma instância de {{subject_name}} respondesse {{method}}"
+          is_unique: "{{subject_name}} exigisse valores únicos para {{attribute}}"
+          case_sensitive: "{{subject_name}} {{not}}fosse case sensitive na validação de {{attribute}}"
+          valid_with_new_scope: "{{subject_name}} fosse válido quando o escopo de {{attribute}} ({{method}}) mudasse"
+        optionals:
+          scope:
+            given: "com escopo em {{inspect}}"
+          case_sensitive:
+            positive: "case sensitive"
+            negative: "case insensitive"
+          allow_nil:
+            positive: "permitindo valores nulos"
+            negative: "não permitindo valores nulos"
+          allow_blank:
+            positive: "permitindo valores vazios"
+            negative: "não permitindo valores vazios"
+
