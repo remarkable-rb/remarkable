@@ -1,6 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe 'assign_to', :type => :controller do
+describe 'assign_to' do
   include FunctionalBuilder
 
   describe 'messages' do

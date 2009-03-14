@@ -3,11 +3,11 @@ require 'ruby-debug'
 
 # Load spec/rails dependencies
 require 'active_support'
+require 'action_controller'
+require 'action_mailer'
 
 gem 'rails'
 require 'rails/version'
-require 'action_controller'
-require 'action_mailer'
 
 # Load Remarkable core on place to avoid gem to be loaded
 dir = File.dirname(__FILE__)
@@ -20,5 +20,6 @@ $:.unshift(dir)
 require File.join(dir, 'functional_builder')
 require File.join(dir, '..', 'lib', 'remarkable_rails')
 
-# Include matchers
-Remarkable.include_matchers!(Remarkable::ActionController, Spec::Example::ExampleGroup)
+# Register folders to example groups
+Spec::Example::ExampleGroupFactory.register(:action_controller, Spec::Rails::Example::ControllerExampleGroup)
+
