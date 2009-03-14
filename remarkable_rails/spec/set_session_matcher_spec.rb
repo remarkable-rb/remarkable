@@ -16,6 +16,13 @@ describe 'set_session', :type => :controller do
       @matcher.description.should == 'set session variable user to 1'
     end
 
+    it 'should set is_not_empty? message' do
+      build_response
+      @matcher = set_session
+      @matcher.matches?(@controller)
+      @matcher.failure_message.should == 'Expected any session variable to be set, but got {}'
+    end
+
     it 'should set assigned_value? message' do
       build_response
       @matcher = set_session(:user)
@@ -33,6 +40,7 @@ describe 'set_session', :type => :controller do
   describe 'matcher' do
     before(:each) { build_response { session[:user] = 'jose' } }
 
+    it { should set_session }
     it { should set_session(:user) }
     it { should set_session(:user).to('jose') }
 
@@ -51,6 +59,7 @@ describe 'set_session', :type => :controller do
   describe 'macro' do
     before(:each) { build_response { session[:user] = 'jose' } }
 
+    should_set_session
     should_set_session :user
     should_set_session :user, :to => 'jose'
 
@@ -64,6 +73,13 @@ describe 'set_session', :type => :controller do
     should_not_set_session :user, :to => nil
     should_not_set_session(:user){ 'joseph' }
     should_not_set_session :user, :to => proc{ 'joseph' }
+  end
+
+  describe 'with no parameter' do
+    before(:each) { build_response }
+
+    should_not_set_session
+    it { should_not set_session }
   end
 
 end

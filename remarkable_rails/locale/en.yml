@@ -15,6 +15,7 @@ en:
       set_session:
         description: "set session variable {{keys}}"
         expectations:
+          is_not_empty: "any session variable to be set, but got {{session_inspect}}"
           assigned_value: "session variable {{key}} to be set, but got {{session_inspect}}"
           is_equal_value: "session variable {{key}} to be set to {{to}}, but got {{session_inspect}}"
         optionals:

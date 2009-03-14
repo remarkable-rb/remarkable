@@ -5,9 +5,21 @@ module Remarkable
         arguments :collection => :keys, :as => :key, :block => :block
 
         optional :to
+
+        assertion :is_not_empty?
         collection_assertions :assigned_value?, :is_equal_value?
 
         private
+
+          # When no keys are given:
+          #
+          #   should set_session
+          #
+          # We check if the session is not empty.
+          #
+          def is_not_empty?
+            !(@keys.empty? && session.empty?)
+          end
 
           def assigned_value?
             !assigned_value.nil? || value_to_compare?
