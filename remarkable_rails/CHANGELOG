@@ -1,3 +1,4 @@
 # Edge
 
+* Added set_session matcher
 * Added assign_to matcher

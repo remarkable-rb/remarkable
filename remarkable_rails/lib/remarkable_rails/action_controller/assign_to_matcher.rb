@@ -10,7 +10,7 @@ module Remarkable
         protected
 
           def assigned_value?
-            !assigned_value.nil?
+            !assigned_value.nil? || value_to_compare?
           end
 
           def is_kind_of?
@@ -18,14 +18,14 @@ module Remarkable
             return assigned_value.kind_of?(@options[:with_kind_of])
           end
 
-          # Return true if no :with is given and no block is given.
+          # Returns true if :with is not given and no block is given.
           # In case :with is a proc or a block is given, we evaluate it in the
           # @spec scope.
           #
           def is_equal_value?
-            value = @options[:with] || @block
-            return true unless value
+            return true unless value_to_compare?
 
+            value = @options[:with] || @block
             value = @spec.instance_eval(&value) if value.is_a?(Proc)
             return assigned_value == value, :with => value.inspect
           end
@@ -33,6 +33,10 @@ module Remarkable
           def assigned_value
             @subject.instance_variable_get("@#{@name}")
           end
+
+          def value_to_compare?
+            @options.key?(:with) || @block
+          end 
 
           # Update interpolation options
           def interpolation_options
@@ -58,8 +62,8 @@ module Remarkable
       #   it { should assign_to(:user, :with => users(:first)) }
       #   it { should assign_to(:user, :with_kind_of => User) }
       #
-      def assign_to(*names, &block)
-        AssignToMatcher.new(*names, &block).spec(self)
+      def assign_to(*args, &block)
+        AssignToMatcher.new(*args, &block).spec(self)
       end
 
     end

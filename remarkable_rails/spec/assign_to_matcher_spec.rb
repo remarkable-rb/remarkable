@@ -21,18 +21,19 @@ describe 'assign_to', :type => :controller do
 
     it 'should set assigned_value? message' do
       build_response { @user = nil }
+      @matcher = assign_to(:user)
       @matcher.matches?(@controller)
       @matcher.failure_message.should == 'Expected action to assign user'
     end
 
     it 'should set is_kind_of? message' do
-      @contrller = build_response { @user = 1 }
+      build_response { @user = 1 }
       @matcher.matches?(@controller)
       @matcher.failure_message.should == 'Expected assign user to be kind of String, but got a Fixnum'
     end
 
     it 'should set is_equal_value? message' do
-      @contrller = build_response { @user = 'joseph' }
+      build_response { @user = 'joseph' }
       @matcher.matches?(@controller)
       @matcher.failure_message.should == 'Expected assign user to be equal to "jose", but got "joseph"'
     end
@@ -49,9 +50,11 @@ describe 'assign_to', :type => :controller do
     it { should_not assign_to(:user).with('joseph') }
     it { should_not assign_to(:user).with_kind_of(Fixnum) }
 
+    it { should assign_to(:post).with(nil) }
     it { should assign_to(:user){ 'jose' } }
     it { should assign_to(:user, :with => proc{ 'jose' }) }
 
+    it { should_not assign_to(:user).with(nil) }
     it { should_not assign_to(:user){ 'joseph' } }
     it { should_not assign_to(:user, :with => proc{ 'joseph' }) }
   end
@@ -67,9 +70,11 @@ describe 'assign_to', :type => :controller do
     should_not_assign_to :user, :with => 'joseph'
     should_not_assign_to :user, :with_kind_of => Fixnum
 
+    should_assign_to :post, :with => nil
     should_assign_to(:user){ 'jose' }
     should_assign_to :user, :with => proc{ 'jose' }
 
+    should_not_assign_to :user, :with => nil
     should_not_assign_to(:user){ 'joseph' }
     should_not_assign_to :user, :with => proc{ 'joseph' }
   end
