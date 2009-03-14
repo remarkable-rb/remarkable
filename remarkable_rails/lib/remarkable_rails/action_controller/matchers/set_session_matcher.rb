@@ -9,6 +9,8 @@ module Remarkable
         assertion :is_not_empty?, :contains_value?
         collection_assertions :assigned_value?, :is_equal_value?
 
+        before_assert :evaluate_expected_value
+
         private
 
           # When no keys are given:
@@ -29,9 +31,7 @@ module Remarkable
           #
           def contains_value?
             return true unless @keys.empty? && value_to_compare?
-
-            value = evaluated_value_to_compare
-            return assert_contains(session.values, value), :to => value.inspect
+            assert_contains(session.values, @options[:to])
           end
 
           def assigned_value?
@@ -44,9 +44,7 @@ module Remarkable
           #
           def is_equal_value?
             return true unless value_to_compare?
-
-            value = evaluated_value_to_compare
-            return assigned_value == value, :to => value.inspect
+            assigned_value == @options[:to]
           end
 
           def session
@@ -57,11 +55,6 @@ module Remarkable
             session[@key]
           end
 
-          def evaluated_value_to_compare
-            value = @options[:to] || @block
-            value.is_a?(Proc) ? @spec.instance_eval(&value) : value
-          end
-
           def value_to_compare?
             @options.key?(:to) || @block
           end
@@ -69,6 +62,16 @@ module Remarkable
           def interpolation_options
             { :session_inspect => session.symbolize_keys!.inspect }
           end
+
+          # Evaluate procs before assert to avoid them appearing in descriptions.
+          def evaluate_expected_value
+            if value_to_compare?
+              value = @options[:to] || @block
+              value = @spec.instance_eval(&value) if value.is_a?(Proc)
+              @options[:to] = value
+            end
+          end
+
       end
 
       # Ensures that a session keys were set.

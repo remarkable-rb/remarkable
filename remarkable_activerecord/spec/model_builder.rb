@@ -2,7 +2,7 @@
 #
 module ModelBuilder
   def self.included(base)
-    return unless base.ancestors.include?(Spec::Example::ExampleGroup)
+    return unless base.name =~ /^Spec/
 
     base.class_eval do
       after(:each) do

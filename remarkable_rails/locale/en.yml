@@ -1,6 +1,7 @@
 en:
   remarkable:
     action_controller:
+      responding: "responding with #{{verb}} {{action}}"
       assign_to:
         description: "assign {{names}}"
         expectations:

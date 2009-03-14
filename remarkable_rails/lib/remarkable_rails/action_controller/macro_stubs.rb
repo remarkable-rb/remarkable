@@ -87,7 +87,7 @@ module Remarkable
 
       def self.included(base)
         base.extend ClassMethods
-        base.class_inheritable_reader :receive_chain, :default_action, :default_mime, :default_verb, :default_params
+        base.class_inheritable_reader :expects_chain, :default_action, :default_mime, :default_verb, :default_params
       end
 
       # Defines :expects, :mime, :params, :get, :post, :put and :delete as class
@@ -96,7 +96,7 @@ module Remarkable
       module ClassMethods
 
         def expects(*args)
-          write_inheritable_array(:receive_chain, [args])
+          write_inheritable_array(:expects_chain, [args])
         end
 
         def mime(mime)
@@ -124,7 +124,8 @@ module Remarkable
           verb    = options.keys & HTTP_VERBS
 
           unless verb.empty?
-            action = options.delete(verb)
+            action = options.delete(verb.first)
+            verb   = verb.first.to_s
 
             description = Remarkable.t 'remarkable.action_controller.responding',
                                         :default => "responding with ##{verb.upcase} #{action}",
@@ -133,12 +134,42 @@ module Remarkable
             args.shift
             args.unshift(description)
 
-            super(*args) do
-              send(verb, action, options)
-              yield
-            end
+            # Creates a new example group with an empty block, send him the new
+            # configuration and then eval the given block.
+            #
+            # We have to do this because the following does not work:
+            #
+            #   super(*args) do
+            #     self.send(verb, action, options)
+            #     yield
+            #   end
+            #
+            # And the reason why we are not doing this:
+            #
+            #   example_group = super(*args, &block)
+            #   example_group.send(verb, action, options)
+            #
+            # Is because we need to set the verb and action BEFORE the block is
+            # evaluated to allow inheritance.
+            #
+            example_group = super(*args, &proc{})
+            example_group.send(verb, action, options)
+            example_group.class_eval(&block)
           else
             super(*args, &block)
+          end
+        end
+
+        # Overwrites method missing to create mocks on the fly.
+        #
+        # Since this is a class method, it just creates procs that will be
+        # evaluated inside the expectation chain.
+        #
+        def method_missing(method, *args)
+          if method.to_s =~ /^mock_/
+            proc { send(method, *args) }
+          else
+            super
           end
         end
 
@@ -146,49 +177,49 @@ module Remarkable
 
       protected
 
-        def evaluate_expectation_chain(evaluate_with_stubs=true)
-          object_to_stub = subject
+        def evaluate_expectation_chain(use_expectations=true)
+          return if self.expects_chain.nil?
 
-          self.receive_chain.each do |method, default_options|
-            options        = default_options.dup
-            object_to_stub = evaluate_value(options.delete(:on)) || object_to_stub
-            return_value   = evaluate_value(options.delete(:returns))
-            with           = evaluate_value(options.delete(:with))
-            times          = options.delete(:times) || 1
+          self.expects_chain.each do |method, default_options|
+            options = default_options.dup
 
-            raise ArgumentError, "You gave me :on equal nil." if object_to_stub.nil?
+            # Those are used both in expectations and stubs
+            object       = evaluate_value(options.delete(:on))
+            return_value = evaluate_value(options.delete(:returns))
+
+            raise ArgumentError, "You have to give me :on option when calling expects." if object.nil?
 
             # Now we actually do the stubbing or expectations
             #
-            chain = object_to_stub
-            if evaluate_with_stubs
-              chain = chain.stub!(method)
-            else
-              chain = chain.should_receive(method)
+            if use_expectations
+              with  = evaluate_value(options.delete(:with))
+              times = options.delete(:times) || 1
+
+              chain = object.should_receive(method)
               chain = chain.with(with) if with
               chain = chain.exactly(times).times
+            else
+              chain = object.stub!(method)
             end
             chain = chain.and_return(return_value)
-
-            object_to_stub = return_value
           end
         end
 
         # Instance method run_stubs! if someone wants to declare additional
         # tests and call the stubs inside of it.
         def run_stubs!
-          evaluate_expectation_chain(true)
+          evaluate_expectation_chain(false)
         end
 
         # Instance method run_expectations! if someone wants to declare
         # additional tests and call the stubs inside of it.
         def run_expectations!
-          evaluate_expectation_chain(false)
+          evaluate_expectation_chain(true)
         end
 
-        def run_action!(stub=true, verb=nil, action=nil, params={}, mime=nil)
+        def run_action!(use_expectations=true, verb=nil, action=nil, params={}, mime=nil)
           # Execute the expectation chain
-          evaluate_expectation_chain(stub)
+          evaluate_expectation_chain(use_expectations)
 
           mime   ||= default_mime
           verb   ||= default_verb
@@ -216,6 +247,27 @@ module Remarkable
           else
             duck
           end
+        end
+
+        # Whenever the user call mock_task and the mock is not defined, we
+        # create a method and then call it.
+        #
+        def method_missing(method, *args)
+          if method.to_s =~ /^mock_(.*)$/
+            create_mock_model_method($1)
+            send(method, *args)
+          else
+            super
+          end
+        end
+
+        # Creates a mock method on the fly
+        def create_mock_model_method(model)
+          self.class_eval <<-METHOD
+            def mock_#{model}(stubs={})
+              @#{model} ||= mock_model(#{model.classify}, stubs)
+            end
+          METHOD
         end
 
     end

@@ -7,6 +7,8 @@ module Remarkable
         optional :with, :with_kind_of
         collection_assertions :assigned_value?, :is_kind_of?, :is_equal_value?
 
+        before_assert :evaluate_expected_value
+
         protected
 
           def assigned_value?
@@ -24,10 +26,7 @@ module Remarkable
           #
           def is_equal_value?
             return true unless value_to_compare?
-
-            value = @options[:with] || @block
-            value = @spec.instance_eval(&value) if value.is_a?(Proc)
-            return assigned_value == value, :with => value.inspect
+            assigned_value == @options[:with]
           end
 
           def assigned_value
@@ -41,6 +40,15 @@ module Remarkable
           # Update interpolation options
           def interpolation_options
             { :assign_inspect => assigned_value.inspect, :assign_class => assigned_value.class.name }
+          end
+
+          # Evaluate procs before assert to avoid them appearing in descriptions.
+          def evaluate_expected_value
+            if value_to_compare?
+              value = @options[:with] || @block
+              value = @spec.instance_eval(&value) if value.is_a?(Proc)
+              @options[:with] = value
+            end
           end
 
       end
