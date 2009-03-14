@@ -23,6 +23,13 @@ describe 'set_session', :type => :controller do
       @matcher.failure_message.should == 'Expected any session variable to be set, but got {}'
     end
 
+    it 'should set contains_value? message' do
+      build_response { session[:user] = 10 }
+      @matcher = set_session.to(1)
+      @matcher.matches?(@controller)
+      @matcher.failure_message.should == 'Expected any session variable to be set to 1, but got {:user=>10}'
+    end
+
     it 'should set assigned_value? message' do
       build_response
       @matcher = set_session(:user)
@@ -41,9 +48,11 @@ describe 'set_session', :type => :controller do
     before(:each) { build_response { session[:user] = 'jose' } }
 
     it { should set_session }
+    it { should set_session.to('jose') }
     it { should set_session(:user) }
     it { should set_session(:user).to('jose') }
 
+    it { should_not set_session.to('joseph') }
     it { should_not set_session(:post) }
     it { should_not set_session(:user).to('joseph') }
 
@@ -60,9 +69,11 @@ describe 'set_session', :type => :controller do
     before(:each) { build_response { session[:user] = 'jose' } }
 
     should_set_session
+    should_set_session :to => 'jose'
     should_set_session :user
     should_set_session :user, :to => 'jose'
 
+    should_not_set_session :to => 'joseph'
     should_not_set_session :post
     should_not_set_session :user, :to => 'joseph'
 

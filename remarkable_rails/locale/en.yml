@@ -16,8 +16,19 @@ en:
         description: "set session variable {{keys}}"
         expectations:
           is_not_empty: "any session variable to be set, but got {{session_inspect}}"
+          contains_value: "any session variable to be set to {{to}}, but got {{session_inspect}}"
           assigned_value: "session variable {{key}} to be set, but got {{session_inspect}}"
           is_equal_value: "session variable {{key}} to be set to {{to}}, but got {{session_inspect}}"
+        optionals:
+          to:
+            given: "to {{inspect}}"
+      set_the_flash:
+        description: "set the flash message {{keys}}"
+        expectations:
+          is_not_empty: "any flash message to be set, but got {{flash_inspect}}"
+          contains_value: "any flash message to be set to {{to}}, but got {{flash_inspect}}"
+          assigned_value: "flash message {{key}} to be set, but got {{flash_inspect}}"
+          is_equal_value: "flash message {{key}} to be set to {{to}}, but got {{flash_inspect}}"
         optionals:
           to:
             given: "to {{inspect}}"

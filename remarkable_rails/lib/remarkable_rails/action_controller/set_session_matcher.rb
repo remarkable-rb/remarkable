@@ -6,7 +6,7 @@ module Remarkable
 
         optional :to
 
-        assertion :is_not_empty?
+        assertion :is_not_empty?, :contains_value?
         collection_assertions :assigned_value?, :is_equal_value?
 
         private
@@ -21,6 +21,19 @@ module Remarkable
             !(@keys.empty? && session.empty?)
           end
 
+          # When no keys are given and a comparision value is given:
+          #
+          #   should set_session.to(1)
+          #
+          # We check if any of the session data contains the given value.
+          #
+          def contains_value?
+            return true unless @keys.empty? && value_to_compare?
+
+            value = evaluated_value_to_compare
+            return assert_contains(session.values, value), :to => value.inspect
+          end
+
           def assigned_value?
             !assigned_value.nil? || value_to_compare?
           end
@@ -32,8 +45,7 @@ module Remarkable
           def is_equal_value?
             return true unless value_to_compare?
 
-            value = @options[:to] || @block
-            value = @spec.instance_eval(&value) if value.is_a?(Proc)
+            value = evaluated_value_to_compare
             return assigned_value == value, :to => value.inspect
           end
 
@@ -43,6 +55,11 @@ module Remarkable
 
           def assigned_value
             session[@key]
+          end
+
+          def evaluated_value_to_compare
+            value = @options[:to] || @block
+            value.is_a?(Proc) ? @spec.instance_eval(&value) : value
           end
 
           def value_to_compare?
