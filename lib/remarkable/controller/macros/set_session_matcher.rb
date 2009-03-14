@@ -10,6 +10,11 @@ module Remarkable # :nodoc:
           @expected = block if block_given?
         end
 
+        def to(value)
+          @expected = value
+          self
+        end
+
         def matches?(subject)
           @subject = subject
 
@@ -34,8 +39,7 @@ module Remarkable # :nodoc:
           expected_value = if @expected.is_a?(Proc)
             @spec.instance_eval &@expected
           else
-            warn "[DEPRECATION] Strings given to should_set_session won't be evaluated anymore. Give a block or a proc instead."
-            @spec.instance_eval(@expected) rescue @expected
+            @expected
           end
           return true if @session[@key] == expected_value
 
@@ -57,6 +61,16 @@ module Remarkable # :nodoc:
       end
 
       def set_session(key, expected=nil, &block)
+        expected = if expected.is_a?(Hash)
+          expected[:to]
+        elsif expected
+          warn "[DEPRECATION] set_session(#{key.inspect}, #{expected.inspect}) is deprecated. " <<
+               "Please use set_session(#{key.inspect}, :to => #{expected.inspect})"
+          expected
+        else
+          expected
+        end
+        
         SetSessionMatcher.new(key, expected, &block)
       end
 

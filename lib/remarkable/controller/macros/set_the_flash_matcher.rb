@@ -1,11 +1,23 @@
 module Remarkable # :nodoc:
   module Controller # :nodoc:
     module Matchers # :nodoc:
-      class SetTheFlashTo < Remarkable::Matcher::Base
+      class SetTheFlash < Remarkable::Matcher::Base
         include Remarkable::Controller::Helpers
         
         def initialize(val)
+          @val = if val.is_a?(Hash)
+            val[:to]
+          elsif val
+            warn "[DEPRECATION] set_the_flash(#{val.inspect}) is deprecated, please use set_the_flash :to => #{val.inspect} instead"
+            val
+          else
+            val
+          end
+        end
+
+        def to(val)
           @val = val
+          self
         end
 
         def matches?(subject)
@@ -36,7 +48,7 @@ module Remarkable # :nodoc:
             return true if assert_contains(@flash.values, @val)
             @missing = "not have #{@val} in the flash"
           else
-            return true if @flash == {}
+            return true if @flash.blank?
             @missing = "flash is not empty"
           end
           return false
@@ -51,10 +63,14 @@ module Remarkable # :nodoc:
         end
       end
 
-      def set_the_flash_to(val = '')
-        SetTheFlashTo.new(val)
+      def set_the_flash(val={:to=>''})
+        SetTheFlash.new(val)
       end
-      alias_method :set_the_flash, :set_the_flash_to
+
+      def set_the_flash_to(val={:to=>''})
+        warn "[DEPRECATION] set_the_flash_to matcher is deprecated, please use set_the_flash instead"
+        SetTheFlash.new(val)
+      end
     end
   end
 end

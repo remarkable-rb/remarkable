@@ -44,7 +44,7 @@ lib/remarkable/controller/macros/respond_with_content_type_matcher.rb
 lib/remarkable/controller/macros/respond_with_matcher.rb
 lib/remarkable/controller/macros/set_session_matcher.rb
 lib/remarkable/controller/macros/route_matcher.rb
-lib/remarkable/controller/macros/set_the_flash_to_matcher.rb
+lib/remarkable/controller/macros/set_the_flash_matcher.rb
 lib/remarkable/dsl.rb
 lib/remarkable/example/example_methods.rb
 lib/remarkable/helpers.rb

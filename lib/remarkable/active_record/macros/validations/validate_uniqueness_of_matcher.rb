@@ -8,8 +8,7 @@ module Remarkable # :nodoc:
         optional :case_sensitive, :default => true
 
         assertions :find_first_object?, :have_attribute?, :case_sensitive?,
-                   :valid_when_changing_scoped_attribute?, :find_nil_object?,
-                   :allow_nil?, :find_blank_object?, :allow_blank?
+                   :valid_when_changing_scoped_attribute?, :allow_nil?, :allow_blank?
 
         def scope(scope)
           @options[:scope] = [*scope].compact
@@ -79,28 +78,6 @@ module Remarkable # :nodoc:
           false
         end
 
-        # Tries to find an object where the given attribute is nil.
-        # This is required to test if the validation allows nil.
-        #
-        def find_nil_object?
-          return true unless @options.key? :allow_nil
-          return true if subject_class.find(:first, :conditions => "#{@attribute} IS NULL")
-
-          @missing = "can't find #{subject_class} with #{@attribute} nil"
-          false
-        end
-
-        # Tries to find an object where the given attribute is blank.
-        # This is required to test if the validation allows blank.
-        #
-        def find_blank_object?
-          return true unless @options.key? :allow_blank
-          return true if subject_class.find(:first, :conditions => "#{@attribute} = ''")
-
-          @missing = "can't find #{subject_class} with #{@attribute} blank"
-          false
-        end
-
         # Check if the attribute given is valid and if the validation fails
         # for equal values.
         #
@@ -162,6 +139,20 @@ module Remarkable # :nodoc:
           (@existing.send(scope) || 999).next
         end
 
+        # Change the existing object attribute to nil to run allow nil validation.
+        #
+        def allow_nil?
+          @existing.update_attribute(@attribute, nil)
+          super
+        end
+
+        # Change the existing object attribute to blank to run allow blank validation.
+        #
+        def allow_blank?
+          @existing.update_attribute(@attribute, '')
+          super
+        end
+
         def expectation
           message = "that the #{subject_name} can be saved if "
 
@@ -180,8 +171,7 @@ module Remarkable # :nodoc:
       #
       # Requires an existing record in the database. If you supply :allow_nil as
       # option, you need to have in the database a record with the given attribute
-      # nil and another with the given attribute not nil. The same is required for
-      # allow_blank option.
+      # not nil. The same is required for allow_blank option.
       #
       # If an instance variable has been created in the setup named after the
       # model being tested, then this method will use that.  Otherwise, it will

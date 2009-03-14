@@ -74,6 +74,7 @@ describe PostsController do
       should_not_redirect_to "user_url(@post.user)"
       should_not_redirect_to { user_url(@post.user) }
       should_set_the_flash_to /created/i
+      should_set_the_flash :to => /created/i
     end
 
     describe "viewing posts for a user with rss format" do
@@ -86,14 +87,15 @@ describe PostsController do
       should_respond_with_content_type :rss
       should_respond_with_content_type /rss/
 
-      should_return_from_session :special, "'$2 off your next purchase'"
-      should_return_from_session :special_user_id, '@user.id'
-      should_not_return_from_session(:monkey, "'fat'")
-
-      should_set_session :special, "'$2 off your next purchase'"
+      should_set_session :special, "$2 off your next purchase"
       should_set_session :special_user_id, proc { @user.id }
       should_set_session(:special_user_id){ @user.id }
       should_not_set_session :monkey, "fat"
+
+      should_set_session :special, :to => "$2 off your next purchase"
+      should_set_session :special_user_id, :to => proc { @user.id }
+      should_set_session(:special_user_id){ @user.id }
+      should_not_set_session :monkey, :to => "fat"
 
       should_assign_to :user, :posts
       should_not_assign_to :foo, :bar
@@ -202,7 +204,11 @@ describe PostsController do
       it { should redirect_to(user_post_url(@post.user, @post)) }
       it { should_not redirect_to(user_url(@post.user)) }
       it { should set_the_flash_to(/created/i) }
+      it { should set_the_flash.to(/created/i) }
+      it { should set_the_flash(:to => /created/i) }
       it { should_not set_the_flash_to(/foo/i) }
+      it { should_not set_the_flash.to(/foo/i) }
+      it { should_not set_the_flash(:to => /foo/i) }
     end
 
     describe "viewing posts for a user with rss format" do
@@ -215,14 +221,15 @@ describe PostsController do
       it { should respond_with_content_type(:rss) }
       it { should respond_with_content_type(/rss/) }
 
-      it { should return_from_session(:special, "'$2 off your next purchase'") }
-      it { should return_from_session(:special_user_id, '@user.id') }
-      it { should_not return_from_session(:monkey, "'fat'") }
-
-      it { should set_session(:special, "'$2 off your next purchase'") }
+      it { should set_session(:special, "$2 off your next purchase") }
       it { should set_session(:special_user_id, proc{ @user.id }) }
       it { should set_session(:special_user_id){ @user.id } }
-      it { should_not set_session(:monkey, "'fat'") }
+      it { should_not set_session(:monkey, "fat") }
+
+      it { should set_session(:special, :to => "$2 off your next purchase") }
+      it { should set_session(:special_user_id, :to => proc{ @user.id }) }
+      it { should set_session(:special_user_id){ @user.id } }
+      it { should_not set_session(:monkey, :to => "fat") }
 
       it { should assign_to(:user, :posts) }
       it { should_not assign_to(:foo, :bar) }
