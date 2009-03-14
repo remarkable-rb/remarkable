@@ -2,7 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe 'MacroStubs' do
   controller_name 'tasks'
-  subject { controller }
 
   def current_id; '37'; end
 
@@ -87,6 +86,27 @@ describe 'MacroStubs' do
   describe :delete => :destroy, :id => 37 do
     expects :find,    :on => Task,     :with => '37', :returns => mock_task
     expects :destroy, :on => mock_task
+
+    subject { controller }
+
+    should_assign_to :task
+    should_assign_to :task, :with => mock_task
+    should_assign_to :task, :with_kind_of => Task
+
+    should_set_the_flash
+    should_set_the_flash :notice
+    should_set_the_flash :notice, :to => 'Task deleted.'
+
+    should_set_session
+    should_set_session :last_action
+    should_set_session :last_action, :to => [ 'tasks', 'destroy' ]
+  end
+
+  describe 'responding with #DELETE destroy' do
+    expects :find,    :on => Task,     :with => '37', :returns => mock_task
+    expects :destroy, :on => mock_task
+
+    delete :destroy, :id => 37
 
     it 'should run action declared in describe' do
       @controller.send(:performed?).should_not be_true

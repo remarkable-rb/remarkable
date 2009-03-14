@@ -24,6 +24,9 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     @task.destroy
 
+    flash[:notice]        = 'Task deleted.'
+    session[:last_action] = [controller_name, action_name]
+
     respond_to do |format|
      format.html { redirect_to project_tasks_url(10) }
      format.xml  { head :ok }
