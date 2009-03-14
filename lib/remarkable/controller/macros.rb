@@ -22,8 +22,7 @@ module Remarkable # :nodoc:
           elsif url.is_a?(Proc)
             self.instance_eval &url
           else
-            warn "[DEPRECATION] Strings given to should_redirect_to won't be evaluated anymore. Give a proc or a block instead." if url.is_a?(String)
-            self.instance_eval(url) rescue url
+            url
           end
 
           response.should redirect_to(redirect_url)
@@ -37,8 +36,7 @@ module Remarkable # :nodoc:
           elsif url.is_a?(Proc)
             self.instance_eval &url
           else
-            warn "[DEPRECATION] Strings given to should_not_redirect_to won't be evaluated anymore. Give a proc or a block instead." if url.is_a?(String)
-            self.instance_eval(url) rescue url
+            url
           end
 
           response.should_not redirect_to(redirect_url)

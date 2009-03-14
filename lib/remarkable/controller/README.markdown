@@ -94,11 +94,15 @@ h2. set_session
 
 Macro that creates a test asserting that a value returned from the session is correct. You can given a string to compare to or a proc which will be evaluated.
 
+Options:
+
+    * :to - A string or a proc which is evaluated and compared with the retrieved session variable.
+
 Example:
 
-  should_set_session(:user_id, proc { @user.id })
+  should_set_session(:user_id, :to => proc { @user.id })
   should_set_session(:user_id){ @user.id }
-  it { should set_session(:message, 'Free stuff') }
+  it { should set_session(:message, :to => 'Free stuff') }
 
 h2. route
 
@@ -119,18 +123,22 @@ Examples:
   it { should route(:get, "/users/1/posts/1",
     :controller => :posts, :action => :show, :id => 1, :user_id => 1) }</code></pre>
 
-h2. set_the_flash_to
+h2. set_the_flash
 
 Macro that creates a test asserting that the flash contains the given value. val can be a String, a Regex, or nil (indicating that the flash should not be set).
 
+Options:
+
+    * :to - A value to check if it exists in flash or not.
+
 Example:
 
-<pre><code>  should_set_the_flash_to "Thank you for placing this order."
-  should_set_the_flash_to /created/i
+<pre><code>  should_set_the_flash :to => "Thank you for placing this order."
+  should_set_the_flash :to => /created/i
   should_not set_the_flash
 
-  it { should set_the_flash_to("Thank you for placing this order.") }
-  it { should set_the_flash_to(/created/i) }
+  it { should set_the_flash.to("Thank you for placing this order.") }
+  it { should set_the_flash.to(/created/i) }
   it { should_not set_the_flash }</code></pre>
 
 h2. redirect_to

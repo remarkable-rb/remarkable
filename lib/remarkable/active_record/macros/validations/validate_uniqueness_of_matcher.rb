@@ -15,13 +15,6 @@ module Remarkable # :nodoc:
           self
         end
 
-        # TODO Deprecate this
-        #
-        def scoped_to(scoped)
-          warn "[DEPRECATION] scoped_to is deprecated. Use only scope instead."
-          scope(scoped)
-        end
-
         def description
           message = "require unique "
 
@@ -48,12 +41,7 @@ module Remarkable # :nodoc:
         end
 
         def after_initialize
-          if @options[:scoped_to] # TODO Deprecate scoped_to
-            warn "[DEPRECATION] :scoped_to is deprecated in should_validate_uniqueness_of. Use :scope instead."
-            @options[:scope] = [*@options.delete(:scoped_to)].compact
-          else
-            @options[:scope] = [*@options[:scope]].compact
-          end
+          @options[:scope] = [*@options[:scope]].compact
         end
 
         # Tries to find an object in the database.
@@ -195,13 +183,6 @@ module Remarkable # :nodoc:
       #
       def validate_uniqueness_of(*attributes)
         ValidateUniquenessOfMatcher.new(*attributes)
-      end
-      
-      #TODO Deprecate this alias, the deprecation warning is the matcher
-      def require_unique_attributes(*attributes)
-        warn "[DEPRECATION] should_require_unique_attributes is deprecated. " <<
-             "Use should_validate_uniqueness_of instead."
-        validate_uniqueness_of(*attributes)
       end
     end
   end

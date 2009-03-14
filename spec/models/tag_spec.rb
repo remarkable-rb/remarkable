@@ -8,9 +8,6 @@ describe Tag do
   it { should validate_length_of(:name, :minimum => 1) }
   it { should validate_length_of(:name, :minimum => 1).allow_blank }
   
-  it { should protect_attributes(:secret) }
-  it { should_not protect_attributes(:name) }
-
   it { should allow_mass_assignment_of(:name) }
   it { should_not allow_mass_assignment_of(:secret) }
 end
@@ -22,5 +19,6 @@ describe Tag do
   should_validate_length_of :name, :minimum => 1
   should_validate_length_of :name, :minimum => 1, :allow_blank => true
 
-  should_protect_attributes :secret
+  should_allow_mass_assignment_of :name
+  should_not_allow_mass_assignment_of :secret
 end

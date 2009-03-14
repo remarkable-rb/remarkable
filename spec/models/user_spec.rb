@@ -69,12 +69,6 @@ describe User do
   it { should validate_confirmation_of(:username, :email) }
   it { should_not validate_confirmation_of(:ssn) }
   
-  it { should ensure_length_in_range(:email, 2..100) }
-  it { should_not ensure_length_in_range(:email, 1..100) }
-  it { should_not ensure_length_in_range(:email, 2..101) }
-  it { should_not ensure_length_in_range(:email, 3..100) }
-  it { should_not ensure_length_in_range(:email, 2..99) }
-
   it { should validate_size_of(:email, :minimum => 2) }
   it { should validate_size_of(:email, :maximum => 100) }
   it { should validate_length_of(:email, :in => 2..100) }
@@ -83,19 +77,19 @@ describe User do
 
   it { should_not validate_length_of(:email, :is => 2) }
   it { should_not validate_length_of(:email, :is => 100) }
-  it { should_not validate_length_of(:email, :within => 0..200) }
+  it { should_not validate_length_of(:email, :within => 1..100) }
+  it { should_not validate_length_of(:email, :within => 2..101) }
+  it { should_not validate_length_of(:email, :within => 3..100) }
+  it { should_not validate_length_of(:email, :within => 2..99) }
   it { should_not validate_length_of(:email, :in => 2..100, :allow_nil => true) }
   it { should_not validate_length_of(:email, :in => 2..100, :allow_blank => true) }
 
-  it { should ensure_value_in_range(:age, 2..100) }
-  it { should_not ensure_value_in_range(:age, 1..100) }
-  it { should_not ensure_value_in_range(:age, 2..101) }
-  it { should_not ensure_value_in_range(:age, 3..100) }
-  it { should_not ensure_value_in_range(:age, 2..99) }
+  it { should validate_inclusion_of(:age, :in => 2..100) }
+  it { should_not validate_inclusion_of(:age, :in => 1..100) }
+  it { should_not validate_inclusion_of(:age, :in => 2..101) }
+  it { should_not validate_inclusion_of(:age, :in => 3..100) }
+  it { should_not validate_inclusion_of(:age, :in => 2..99) }
   
-  it { should protect_attributes(:password) }
-  it { should_not protect_attributes(:name, :age) }
-
   it { should allow_mass_assignment_of(:name, :age) }
   it { should_not allow_mass_assignment_of(:password) }
 
@@ -144,8 +138,6 @@ describe User do
   it { should have_db_column(:email,  :type => "string",  :default => nil,    :precision => nil,  :limit => 255,
                                       :null => true,      :primary => false,  :scale => nil,      :sql_type => 'varchar(255)') }
 
-  it { should require_acceptance_of(:eula) }
-  it { should_not require_acceptance_of(:name) }
   it { should_not validate_acceptance_of(:name) }
 
   it { should validate_acceptance_of(:eula) }
@@ -161,19 +153,13 @@ describe User do
    proc{ should validate_acceptance_of(:terms).allow_nil.allow_blank }.should raise_error(NoMethodError)
   end
 
-  it { should validate_uniqueness_of(:email, :scoped_to => :name) }
-  it { should require_unique_attributes(:email, :scoped_to => :name) }
-
-  it { should ensure_length_is(:ssn, 9, :message => "Social Security Number is not the right length") }
-  it { should ensure_length_is(:ssn, 9).message("Social Security Number is not the right length") }
-  it { should_not ensure_length_is(:ssn, 9) }
-  it { should_not ensure_length_is(:ssn, 8).message("Social Security Number is not the right length") }
-  it { should_not ensure_length_is(:ssn, 10).message("Social Security Number is not the right length") }
+  it { should validate_uniqueness_of(:email, :scope => :name) }
 
   it { should validate_length_of(:ssn, :is => 9).message("Social Security Number is not the right length") }
   it { should validate_length_of(:ssn, :is => 9, :message => "Social Security Number is not the right length") }
-
-  it { should only_allow_numeric_values_for(:ssn, :message => 'Bad SSN') }
+  it { should_not validate_length_of(:ssn, :is => 9) }
+  it { should_not validate_length_of(:ssn, :is => 8, :message => "Social Security Number is not the right length") }
+  it { should_not validate_length_of(:ssn, :is => 10, :message => "Social Security Number is not the right length") }
 
   it { should validate_numericality_of(:ssn).message('Bad SSN') }
   it { should validate_numericality_of(:ssn).equal_to(123456789).message('Bad SSN') }
@@ -232,15 +218,12 @@ describe User do
   
   should_not_allow_values_for :email, "blah", "b lah"
   should_allow_values_for :email, "a@b.com", "asdf@asdf.com"
-  should_ensure_value_in_range :age, 2..100
-  should_protect_attributes :password
+  should_validate_inclusion_of :age, :in => 2..100
   should_have_class_methods :find, :destroy
   should_have_instance_methods :email, :age, :email=, :valid?
 
   should_allow_mass_assignment_of :email
   should_not_allow_mass_assignment_of :password
-
-  should_ensure_length_in_range :email, 2..100
 
   should_validate_size_of :email, :minimum => 2
   should_validate_size_of :email, :maximum => 100
@@ -265,7 +248,6 @@ describe User do
   should_have_db_column :email, :type => "string",  :default => nil,    :precision => nil,  :limit => 255,
                                 :null => true,      :primary => false,  :scale => nil,      :sql_type => 'varchar(255)'
 
-  should_require_acceptance_of :eula
   should_validate_acceptance_of :eula
   should_validate_acceptance_of :eula, :allow_nil => true
   should_not_validate_acceptance_of :eula, :allow_nil => false
@@ -277,13 +259,10 @@ describe User do
   should_not_validate_acceptance_of :terms, :accept => false
 
   should_not_validate_acceptance_of :name
-  should_not_require_acceptance_of :name
 
-  should_validate_uniqueness_of :email, :scoped_to => :name
-  should_require_unique_attributes :email, :scoped_to => :name
+  should_validate_uniqueness_of :email, :scope => :name
 
-  should_ensure_length_is :ssn, 9, :message => "Social Security Number is not the right length"
-  should_only_allow_numeric_values_for :ssn, :message => 'Bad SSN'
+  should_validate_size_of :ssn, :is => 9, :message => "Social Security Number is not the right length"
 
   should_validate_numericality_of :ssn, :message => 'Bad SSN'
   should_validate_numericality_of :ssn, :equal_to => 123456789, :message => 'Bad SSN'

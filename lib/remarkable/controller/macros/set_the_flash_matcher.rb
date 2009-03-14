@@ -8,7 +8,7 @@ module Remarkable # :nodoc:
           @val = if val.is_a?(Hash)
             val[:to]
           elsif val
-            warn "[DEPRECATION] set_the_flash(#{val.inspect}) is deprecated, please use set_the_flash :to => #{val.inspect} instead"
+            warn "[DEPRECATION] set_the_flash(#{val.inspect}) is deprecated, please use set_the_flash(:to => #{val.inspect}) instead"
             val
           else
             val

@@ -35,20 +35,14 @@ describe PostsController do
         get :index, :user_id => users(:first)
       end
       should_respond_with 200
-      should_assign_to(:user, :class => User, :equals => 'users(:first)')
       should_assign_to(:user, :class => User){ users(:first) }
-      should_not_assign_to :user, :class => User, :equals => 'users(:second)'
       should_not_assign_to :user, :class => User, :equals => proc { users(:second) }
 
-      should_assign_to(:user, :with_kind_of => User, :with => 'users(:first)')
       should_assign_to(:user, :with_kind_of => User){ users(:first) }
-      should_not_assign_to :user, :with_kind_of => User, :with => 'users(:second)'
       should_not_assign_to :user, :with_kind_of => User, :with => proc { users(:second) }
 
       should_not_assign_to :user, :class => Post
-      should_not_assign_to :user, :equals => 'posts(:first)'
-      it { lambda { should_assign_to(:user, :class => Post) }.should raise_error }
-      it { lambda { should_assign_to(:user, :equals => 'posts(:first)') }.should raise_error }
+      should_not_assign_to :user, :equals => proc { posts(:first) }
 
       should_assign_to :posts
       should_not_assign_to :foo, :bar
@@ -69,9 +63,7 @@ describe PostsController do
       should_respond_with 302
       should_not_respond_with :success
 
-      should_redirect_to "user_post_url(@post.user, @post)"
       should_redirect_to { user_post_url(@post.user, @post) }
-      should_not_redirect_to "user_url(@post.user)"
       should_not_redirect_to { user_url(@post.user) }
       should_set_the_flash_to /created/i
       should_set_the_flash :to => /created/i
@@ -164,23 +156,19 @@ describe PostsController do
       it { should assign_to(:some_text) }
       it { should assign_to(:some_text, :equals => "foo bar") }
       it { should_not assign_to(:some_text, :equals => "foo without bar") }
-      it { should assign_to(:user, :class => User, :equals => 'users(:first)') }
       it { should assign_to(:user, :class => User, :equals => users(:first)) }
       it { should assign_to(:user, :class => User){ users(:first) } }
-      it { should_not assign_to(:user, :class => User, :equals => 'users(:second)') }
       it { should_not assign_to(:user, :class => User, :equals => users(:second)) }
       it { should_not assign_to(:user, :class => Post) }
-      it { should_not assign_to(:user, :equals => 'posts(:first)') }
+      it { should_not assign_to(:user, :equals => posts(:first)) }
       it { should assign_to(:posts) }
       it { should_not assign_to(:foo, :bar) }
 
       it { should assign_to(:some_text) }
       it { should assign_to(:some_text, :with => "foo bar") }
       it { should_not assign_to(:some_text, :with => "foo without bar") }
-      it { should assign_to(:user, :with_kind_of => User, :with => 'users(:first)') }
       it { should assign_to(:user, :with_kind_of => User, :with => users(:first)) }
       it { should assign_to(:user, :with_kind_of => User){ users(:first) } }
-      it { should_not assign_to(:user, :with_kind_of => User, :with => 'users(:second)') }
       it { should_not assign_to(:user, :with_kind_of => User, :with => users(:second)) }
       it { should_not assign_to(:user, :with_kind_of => Post) }
       it { should_not assign_to(:user, :with => 'posts(:first)') }

@@ -73,11 +73,6 @@ module Remarkable # :nodoc:
         
         SetSessionMatcher.new(key, expected, &block)
       end
-
-      def return_from_session(*args, &block)
-        warn "[DEPRECATION] should_return_from_session is deprecated. Use should_set_session instead."
-        set_session(*args, &block)
-      end
     end
   end
 end

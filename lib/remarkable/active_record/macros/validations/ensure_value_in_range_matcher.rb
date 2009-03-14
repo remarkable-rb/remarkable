@@ -6,26 +6,8 @@ module Remarkable # :nodoc:
 
         arguments :attribute, :behavior, :ranges
 
-        def low_message(message)
-          warn "[DEPRECATION] should_ensure_value_in_range.low_message is deprecated. " <<
-               "Use should_validate_inclusion_of.message instead."
-          @options[:low_message] = message
-          self
-        end
-
-        def high_message(message)
-          warn "[DEPRECATION] should_ensure_value_in_range.high_message is deprecated. " <<
-               "Use should_validate_inclusion_of.message instead."
-          @options[:high_message] = message
-          self
-        end
-
-        # TODO Low message and High message should be deprecated (not supported by
-        # Rails API). In this while, we have to hack message.
         def message(message)
-          @options[:high_message] = message
-          @options[:low_message]  = message
-          @options[:message]      = message
+          @options[:message] = message
           self
         end
 
@@ -55,7 +37,7 @@ module Remarkable # :nodoc:
 
         def less_than_minimum?
           return true unless @behavior == :inclusion
-          return true if bad?(@range.first - 1, :low_message)
+          return true if bad?(@range.first - 1)
 
           @missing = "allow #{@attribute} to be less than #{@range.first}"
           return false
@@ -63,7 +45,7 @@ module Remarkable # :nodoc:
 
         def more_than_maximum?
           return true unless @behavior == :inclusion
-          return true if bad?(@range.last + 1, :high_message)
+          return true if bad?(@range.last + 1)
           
           @missing = "allow #{@attribute} to be more than #{@range.last}"
           return false
@@ -71,7 +53,7 @@ module Remarkable # :nodoc:
 
         def less_than_maximum?
           return true unless @behavior == :exclusion
-          return true if bad?(@range.last - 1, :low_message)
+          return true if bad?(@range.last - 1)
 
           @missing = "allow #{@attribute} to be less than #{@range.last}"
           return false
@@ -79,21 +61,21 @@ module Remarkable # :nodoc:
 
         def more_than_minimum?
           return true unless @behavior == :exclusion
-          return true if bad?(@range.first + 1, :high_message)
+          return true if bad?(@range.first + 1)
           
           @missing = "allow #{@attribute} to be more than #{@range.first}"
           return false
         end
 
         def accepts_minimum?
-          return true if boundary?(@range.first, :low_message)
+          return true if boundary?(@range.first)
 
           @missing = create_boundary_message("allow #{@attribute} to be #{@range.first}")
           return false
         end
 
         def accepts_maximum?
-          return true if boundary?(@range.last, :high_message)
+          return true if boundary?(@range.last)
 
           @missing = create_boundary_message("allow #{@attribute} to be #{@range.last}")
           return false
@@ -125,35 +107,17 @@ module Remarkable # :nodoc:
           end
         end
 
-        def boundary?(value, message_sym)
+        def boundary?(value)
           if @behavior == :exclusion
-            bad?(value, message_sym)
+            bad?(value, :message)
           else
-            good?(value, message_sym)
+            good?(value, :message)
           end
         end
 
         def default_options
-          { :low_message  => @behavior,
-            :high_message => @behavior,
-            :message      => @behavior }
+          { :message => @behavior }
         end
-      end
-
-      # TODO Deprecate this method, but not the matcher.
-      def ensure_value_in_range(attribute, range, *options) #:nodoc:
-        hash_options = options.extract_options!
-
-        warn "[DEPRECATION] should_ensure_value_in_range with :low_message is deprecated. " <<
-             "Use should_validate_inclusion_of with :message instead." if hash_options[:low_message]
-
-        warn "[DEPRECATION] should_ensure_value_in_range with :high_message is deprecated. " <<
-             "Use should_validate_inclusion_of with :message instead." if hash_options[:high_message]
-
-        warn "[DEPRECATION] should_ensure_value_in_range is deprecated. " <<
-             "Use should_validate_inclusion_of instead." if hash_options[:low_message].blank? && hash_options[:high_message].blank?
-
-        EnsureValueInRangeMatcher.new(attribute, :inclusion, range, *options)
       end
     end
   end

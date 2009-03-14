@@ -28,12 +28,12 @@ module Remarkable # :nodoc:
       #   should_validate_inclusion_of :age, :in => 18..100
       #
       def validate_inclusion_of(attribute, *good_values)
-        # TODO Remove this until the next comment
         options = good_values.extract_options!
 
+        # TODO Remove this until the next comment
         unless options.key?(:in) || good_values.empty?
-          warn "[DEPRECATION] Please use validate_inclusion_of #{attribute.inspect}, :in => #{good_values[0..-2].inspect} " <<
-               "instead of validate_inclusion_of #{attribute.inspect}, #{good_values[0..-2].inspect[1..-2]}."
+          warn "[DEPRECATION] Please use validate_inclusion_of(#{attribute.inspect}, :in => #{good_values.inspect}) " <<
+               "instead of validate_inclusion_of(#{attribute.inspect}, #{good_values.inspect[1..-2]})."
         end
 
         options[:in] ||= good_values

@@ -184,34 +184,6 @@ module Remarkable # :nodoc:
         matcher
       end
       alias :validate_size_of :validate_length_of
-
-      # TODO This one is for shoulda compatibility. Deprecate it?
-      def ensure_length_of(*attributes) #:nodoc:
-        warn "[DEPRECATION] should_ensure_length_of is deprecated. " <<
-             "Use should_validate_length_of instead."
-        validate_length_of(*attributes)
-      end
-
-      # TODO Deprecate me
-      def ensure_length_in_range(attribute, range, options = {}) #:nodoc:
-        warn "[DEPRECATION] should_ensure_length_in_range is deprecated. " <<
-             "Use should_validate_length_of(#{attribute.inspect}, :in => #{range.inspect}) instead."
-        ValidateLengthOfMatcher.new(:within, range, attribute, options)
-      end
-
-      # TODO Deprecate me
-      def ensure_length_at_least(attribute, range, options = {}) #:nodoc:
-        warn "[DEPRECATION] should_ensure_length_at_least is deprecated. " <<
-             "Use should_validate_length_of(#{attribute.inspect}, :minimum => #{range.inspect}) instead."
-        ValidateLengthOfMatcher.new(:minimum, range, attribute, options)
-      end
-
-      # TODO Deprecate me
-      def ensure_length_is(attribute, range, options = {}) #:nodoc:
-        warn "[DEPRECATION] should_ensure_length_is is deprecated. " <<
-             "Use should_validate_length_of(#{attribute.inspect}, :is => #{range.inspect}) instead."
-        ValidateLengthOfMatcher.new(:is, range, attribute, options)
-      end
     end
   end
 end

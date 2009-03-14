@@ -42,13 +42,6 @@ module Remarkable # :nodoc:
         ValidatePresenceOfMatcher.new(*attributes)
       end
 
-      # TODO Deprecate me
-      def require_attributes(*attributes) #:nodoc:
-        warn "[DEPRECATION] should_require_attributes is deprecated. " <<
-             "Use should_validate_presence_of instead."
-        ValidatePresenceOfMatcher.new(*attributes)
-      end
-
     end
   end
 end

@@ -11,7 +11,6 @@ module Remarkable # :nodoc:
           @names            = names
           @options[:equals] = block if block_given?
 
-          warn "[DEPRECATION] Strings given in :equals to should_assign_to won't be evaluated anymore. You can give procs or use blocks instead." if @options[:equals].is_a?(String)
           warn "[DEPRECATION] :equals option is deprecated in should_assign_to. Please give :with instead."        if @options[:equals]
           warn "[DEPRECATION] :class option is deprecated in should_assign_to. Please give :with_kind_of instead." if @options[:class]
 
@@ -66,9 +65,7 @@ module Remarkable # :nodoc:
         def is_equals_expected_value?
           return true unless @options[:with]
 
-          expected_value = if @options[:with].is_a?(String)
-            @spec.instance_eval(@options[:with]) rescue @options[:with]
-          elsif @options[:with].is_a?(Proc)
+          expected_value = if @options[:with].is_a?(Proc)
             @spec.instance_eval &@options[:with]
           else
             @options[:with]

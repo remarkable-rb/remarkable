@@ -37,7 +37,10 @@ end
 
 def define_model_class(class_name, &block)
   klass = Class.new(ActiveRecord::Base)
-  Object.const_set(class_name, klass)
+
+  silence_warnings do
+    Object.const_set(class_name, klass)
+  end
 
   klass.class_eval(&block) if block_given?
 
