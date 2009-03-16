@@ -127,7 +127,7 @@ module Remarkable # :nodoc:
         #
         def default_message_for(validation_type)
           return :message if @options[:message]
-          @options.key?(:is) ? :wrong_length : validation_type
+          @behavior == :is ? :wrong_length : validation_type
         end 
       end
 

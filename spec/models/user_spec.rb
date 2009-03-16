@@ -161,6 +161,8 @@ describe User do
   it { should_not validate_length_of(:ssn, :is => 8, :message => "Social Security Number is not the right length") }
   it { should_not validate_length_of(:ssn, :is => 10, :message => "Social Security Number is not the right length") }
 
+  it { should validate_length_of(:username, :is => 8) }
+
   it { should validate_numericality_of(:ssn).message('Bad SSN') }
   it { should validate_numericality_of(:ssn).equal_to(123456789).message('Bad SSN') }
   it { should_not validate_numericality_of(:ssn, :equal_to => 123456780, :message => 'Bad SSN') }
@@ -262,6 +264,7 @@ describe User do
 
   should_validate_uniqueness_of :email, :scope => :name
 
+  should_validate_size_of :username, :is => 8
   should_validate_size_of :ssn, :is => 9, :message => "Social Security Number is not the right length"
 
   should_validate_numericality_of :ssn, :message => 'Bad SSN'
