@@ -20,27 +20,27 @@ describe 'set_the_flash' do
       build_response
       @matcher = set_the_flash
       @matcher.matches?(@controller)
-      @matcher.failure_message.should == 'Expected any flash message to be set, but got {}'
+      @matcher.failure_message.should == 'Expected any flash message to be set, got {}'
     end
 
     it 'should set contains_value? message' do
       build_response { flash[:notice] = 'bye' }
       @matcher = set_the_flash.to('hi')
       @matcher.matches?(@controller)
-      @matcher.failure_message.should == 'Expected any flash message to be set to "hi", but got {:notice=>"bye"}'
+      @matcher.failure_message.should == 'Expected any flash message to be set to "hi", got {:notice=>"bye"}'
     end
 
     it 'should set assigned_value? message' do
       build_response
       @matcher = set_the_flash(:notice)
       @matcher.matches?(@controller)
-      @matcher.failure_message.should == 'Expected flash message notice to be set, but got {}'
+      @matcher.failure_message.should == 'Expected flash message notice to be set, got {}'
     end
 
     it 'should set is_equal_value? message' do
       build_response { flash[:notice] = 'bye' }
       @matcher.matches?(@controller)
-      @matcher.failure_message.should == 'Expected flash message notice to be set to "hi", but got {:notice=>"bye"}'
+      @matcher.failure_message.should == 'Expected flash message notice to be set to "hi", got {:notice=>"bye"}'
     end
   end
 

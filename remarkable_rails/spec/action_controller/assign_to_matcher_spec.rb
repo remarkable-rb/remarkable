@@ -29,13 +29,13 @@ describe 'assign_to' do
     it 'should set is_kind_of? message' do
       build_response { @user = 1 }
       @matcher.matches?(@controller)
-      @matcher.failure_message.should == 'Expected assign user to be kind of String, but got a Fixnum'
+      @matcher.failure_message.should == 'Expected assign user to be kind of String, got a Fixnum'
     end
 
     it 'should set is_equal_value? message' do
       build_response { @user = 'joseph' }
       @matcher.matches?(@controller)
-      @matcher.failure_message.should == 'Expected assign user to be equal to "jose", but got "joseph"'
+      @matcher.failure_message.should == 'Expected assign user to be equal to "jose", got "joseph"'
     end
   end
 

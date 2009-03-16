@@ -20,27 +20,27 @@ describe 'set_session' do
       build_response
       @matcher = set_session
       @matcher.matches?(@controller)
-      @matcher.failure_message.should == 'Expected any session variable to be set, but got {}'
+      @matcher.failure_message.should == 'Expected any session variable to be set, got {}'
     end
 
     it 'should set contains_value? message' do
       build_response { session[:user] = 10 }
       @matcher = set_session.to(1)
       @matcher.matches?(@controller)
-      @matcher.failure_message.should == 'Expected any session variable to be set to 1, but got {:user=>10}'
+      @matcher.failure_message.should == 'Expected any session variable to be set to 1, got {:user=>10}'
     end
 
     it 'should set assigned_value? message' do
       build_response
       @matcher = set_session(:user)
       @matcher.matches?(@controller)
-      @matcher.failure_message.should == 'Expected session variable user to be set, but got {}'
+      @matcher.failure_message.should == 'Expected session variable user to be set, got {}'
     end
 
     it 'should set is_equal_value? message' do
       build_response { session[:user] = 2 }
       @matcher.matches?(@controller)
-      @matcher.failure_message.should == 'Expected session variable user to be set to 1, but got {:user=>2}'
+      @matcher.failure_message.should == 'Expected session variable user to be set to 1, got {:user=>2}'
     end
   end
 

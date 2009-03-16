@@ -19,7 +19,7 @@ module FunctionalBuilder
   end
 
   def build_response(&block)
-    klass = define_controller('Examples')
+    klass = defined?(ExamplesController) ? ExamplesController : define_controller('Examples')
     block ||= lambda { render :nothing => true }
     klass.class_eval { define_method(:example, &block) }
 

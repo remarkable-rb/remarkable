@@ -6,30 +6,39 @@ en:
         description: "assign {{names}}"
         expectations:
           assigned_value: "action to assign {{name}}"
-          is_kind_of: "assign {{name}} to be kind of {{with_kind_of}}, but got a {{assign_class}}"
-          is_equal_value: "assign {{name}} to be equal to {{with}}, but got {{assign_inspect}}"
+          is_kind_of: "assign {{name}} to be kind of {{with_kind_of}}, got a {{assign_class}}"
+          is_equal_value: "assign {{name}} to be equal to {{with}}, got {{assign_inspect}}"
         optionals:
           with:
             given: "with {{inspect}}"
           with_kind_of:
             given: "with kind of {{value}}"
+      redirect_to:
+        description: "redirect to {{expected}}"
+        expectations:
+          redirect: "redirect to {{expected}}, got no redirect"
+          status_match: "redirect to {{expected}} with status {{with}}, got status {{status}}"
+          url_match: "redirect to {{expected}}, got redirect to {{actual}}"
+        optionals:
+          with:
+            given: "with status {{inspect}}"
       set_session:
         description: "set session variable {{keys}}"
         expectations:
-          is_not_empty: "any session variable to be set, but got {{session_inspect}}"
-          contains_value: "any session variable to be set to {{to}}, but got {{session_inspect}}"
-          assigned_value: "session variable {{key}} to be set, but got {{session_inspect}}"
-          is_equal_value: "session variable {{key}} to be set to {{to}}, but got {{session_inspect}}"
+          is_not_empty: "any session variable to be set, got {{session_inspect}}"
+          contains_value: "any session variable to be set to {{to}}, got {{session_inspect}}"
+          assigned_value: "session variable {{key}} to be set, got {{session_inspect}}"
+          is_equal_value: "session variable {{key}} to be set to {{to}}, got {{session_inspect}}"
         optionals:
           to:
             given: "to {{inspect}}"
       set_the_flash:
         description: "set the flash message {{keys}}"
         expectations:
-          is_not_empty: "any flash message to be set, but got {{flash_inspect}}"
-          contains_value: "any flash message to be set to {{to}}, but got {{flash_inspect}}"
-          assigned_value: "flash message {{key}} to be set, but got {{flash_inspect}}"
-          is_equal_value: "flash message {{key}} to be set to {{to}}, but got {{flash_inspect}}"
+          is_not_empty: "any flash message to be set, got {{flash_inspect}}"
+          contains_value: "any flash message to be set to {{to}}, got {{flash_inspect}}"
+          assigned_value: "flash message {{key}} to be set, got {{flash_inspect}}"
+          is_equal_value: "flash message {{key}} to be set to {{to}}, got {{flash_inspect}}"
         optionals:
           to:
             given: "to {{inspect}}"
