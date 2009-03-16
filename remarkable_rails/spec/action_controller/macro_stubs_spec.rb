@@ -83,6 +83,23 @@ describe 'MacroStubs' do
     end
   end
 
+  describe 'responding with #DELETE destroy' do
+    expects :find,    :on => Task,     :with => '37', :returns => mock_task
+    expects :destroy, :on => mock_task
+
+    delete :destroy, :id => 37
+
+    it 'should run action declared in describe' do
+      @controller.send(:performed?).should_not be_true
+
+      run_action!
+
+      @controller.action_name.should == 'destroy'
+      @controller.request.method.should == :delete
+      @controller.send(:performed?).should be_true
+    end
+  end
+
   describe :delete => :destroy, :id => 37 do
     expects :find,    :on => Task,     :with => '37', :returns => mock_task
     expects :destroy, :on => mock_task
@@ -100,22 +117,8 @@ describe 'MacroStubs' do
     should_set_session
     should_set_session :last_action
     should_set_session :last_action, :to => [ 'tasks', 'destroy' ]
-  end
 
-  describe 'responding with #DELETE destroy' do
-    expects :find,    :on => Task,     :with => '37', :returns => mock_task
-    expects :destroy, :on => mock_task
-
-    delete :destroy, :id => 37
-
-    it 'should run action declared in describe' do
-      @controller.send(:performed?).should_not be_true
-
-      run_action!
-
-      @controller.action_name.should == 'destroy'
-      @controller.request.method.should == :delete
-      @controller.send(:performed?).should be_true
-    end
+    should_redirect_to{ project_tasks_url(10) }
+    should_redirect_to proc{ project_tasks_url(10) }, :with => 302
   end
 end
