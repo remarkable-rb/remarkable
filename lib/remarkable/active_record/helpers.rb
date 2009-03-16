@@ -38,7 +38,8 @@ module Remarkable # :nodoc:
           object = @spec ? @spec.instance_variable_get("@#{instance_variable_name_for(klass)}") : nil
           object ||= klass.new
         else
-          object_or_klass
+          object = @spec ? @spec.instance_variable_get("@#{instance_variable_name_for(object_or_klass.class)}") : nil
+          object || object_or_klass
         end
       end
 

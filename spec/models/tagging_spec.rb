@@ -21,6 +21,7 @@ describe Tagging do
     # This means that even the association :post is not valid, :tagging will be valid.
     # Then the association is not validated.
     @tagging = Tagging.new
+    @tagging.id = 1000
     @tagging.stub!(:save).and_return(true)
     should_not validate_associated(:post)
   end
