@@ -1,5 +1,24 @@
 # v3.0.0
 
+* Removed the get_instance_of from before_assert. So we should target only rspec
+  versions that supports subjects.
+
+  This will also remove a feature that automatically gets the instance from the
+  @spec binding. Previously, when we are doing this:
+
+     describe Product
+       before(:each){ @product = Product.new(:tangible => true) }
+       should_validate_presence_of :size
+     end
+
+  It was validating the @product instance variable. However this too magic. The
+  right way to do that (with the addiction of subject) is:
+
+     describe Product
+       subject{ Product.new(:tangible => true) }
+       should_validate_presence_of :size
+     end
+
 * Added validate_uniquess_of matcher
 * Added define_model for tests
 * Added validate_numericality_of matcher
