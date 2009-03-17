@@ -20,7 +20,6 @@ lib/remarkable/active_record/macros/validations/have_class_methods_matcher.rb
 lib/remarkable/active_record/macros/validations/have_instance_methods_matcher.rb
 lib/remarkable/active_record/macros/validations/have_named_scope_matcher.rb
 lib/remarkable/active_record/macros/validations/have_readonly_attributes_matcher.rb
-lib/remarkable/active_record/macros/validations/protect_attributes_matcher.rb
 lib/remarkable/active_record/macros/validations/validate_acceptance_of_matcher.rb
 lib/remarkable/active_record/macros/validations/validate_associated_matcher.rb
 lib/remarkable/active_record/macros/validations/validate_confirmation_of_matcher.rb
@@ -58,4 +57,4 @@ remarkable.gemspec
 script/console
 script/destroy
 script/generate
-tasks/rspec.rake
+
