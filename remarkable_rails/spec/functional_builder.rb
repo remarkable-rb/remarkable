@@ -27,9 +27,7 @@ module FunctionalBuilder
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
     get :example
-  rescue ActionView::MissingTemplate
-    # Do nothing
-  ensure
+
     self.class.subject { @controller }
   end
 

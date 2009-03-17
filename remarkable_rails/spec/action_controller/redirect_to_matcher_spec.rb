@@ -53,6 +53,16 @@ describe 'redirect_to' do
         it { should_not redirect_to(project_tasks_path(2)) }
         it { should_not redirect_to(:controller => 'tasks', :action => 'index', :project_id => 2) }
         it { should_not redirect_to(:controller => 'tasks', :action => 'index', :project_id => 1).with(301) }
+
+        it { response.should redirect_to(project_tasks_url(1)) }
+        it { response.should redirect_to(project_tasks_path(1)) }
+        it { response.should redirect_to(:controller => 'tasks', :action => 'index', :project_id => 1) }
+        it { response.should redirect_to(:controller => 'tasks', :action => 'index', :project_id => 1).with(302) }
+
+        it { response.should_not redirect_to(project_tasks_url(2)) }
+        it { response.should_not redirect_to(project_tasks_path(2)) }
+        it { response.should_not redirect_to(:controller => 'tasks', :action => 'index', :project_id => 2) }
+        it { response.should_not redirect_to(:controller => 'tasks', :action => 'index', :project_id => 1).with(301) }
       end
     end
 

@@ -13,12 +13,7 @@ module Remarkable
         # binding.
         #
         def perform_action_with_macro_stubs
-          controller = if @subject.class.ancestors.include?(ActionController::Base)
-            @subject
-          elsif @spec.instance_variable_get('@controller')
-            @spec.instance_variable_get('@controller')
-          end
-
+          controller = @spec.instance_variable_get('@controller')
           @spec.send(:run_action!) unless controller && controller.send(:performed?)
         rescue Exception => e
           nil

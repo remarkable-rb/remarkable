@@ -45,7 +45,7 @@ describe 'set_session' do
   end
 
   describe 'matcher' do
-    before(:each) { build_response { session[:user] = 'jose' } }
+    before(:each) { build_response { session[:user] = 'jose'; session[:address] = 'Avenue' } }
 
     it { should set_session }
     it { should set_session.to('jose') }
@@ -66,7 +66,7 @@ describe 'set_session' do
   end
 
   describe 'macro' do
-    before(:each) { build_response { session[:user] = 'jose' } }
+    before(:each) { build_response { session[:user] = 'jose'; session[:address] = 'Avenue' } }
 
     should_set_session
     should_set_session :to => 'jose'

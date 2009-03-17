@@ -22,8 +22,8 @@ require 'rails/version'
 RAILS_ROOT = dir = File.dirname(__FILE__)
 require File.join(dir, '..', '..', 'remarkable', 'lib', 'remarkable')
 
-# Add current path on the load path for application.rb to be loaded
-$:.unshift(dir)
+# Add spec/application to load path and set view_paths
+$:.unshift(ActionController::Base.view_paths = File.join(dir, 'application'))
 
 # Load Remarkable Rails
 require File.join(dir, 'functional_builder')
