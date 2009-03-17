@@ -263,7 +263,7 @@ module Remarkable
 
         # Creates a mock method on the fly
         def create_mock_model_method(model)
-          self.class_eval <<-METHOD
+          self.instance_eval <<-METHOD
             def mock_#{model}(stubs={})
               @#{model} ||= mock_model(#{model.classify}, stubs)
             end

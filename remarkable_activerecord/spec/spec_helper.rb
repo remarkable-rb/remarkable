@@ -1,8 +1,7 @@
 require 'rubygems'
-require 'spec'
 require 'ruby-debug'
 
-RAILS_VERSION = '=2.2.2'
+RAILS_VERSION = ENV['RAILS_VERSION'] || '=2.2.2'
 
 gem 'activesupport', RAILS_VERSION
 require 'active_support'

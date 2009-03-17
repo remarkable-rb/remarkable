@@ -1,8 +1,9 @@
 require 'rubygems'
 require 'ruby-debug'
 
-RAILS_VERSION = '=2.2.2'
-RSPEC_VERSION = '=1.1.12'
+RAILS_ENV     = 'test'
+RAILS_VERSION = ENV['RAILS_VERSION'] || '=2.2.2'
+RSPEC_VERSION = ENV['RSPEC_VERSION'] || '=1.1.12'
 
 # Load Rails
 gem 'activesupport', RAILS_VERSION
