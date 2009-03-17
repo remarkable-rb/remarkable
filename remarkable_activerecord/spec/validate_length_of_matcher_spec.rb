@@ -83,8 +83,14 @@ describe 'validate_length_of' do
     end
 
     describe "with message option" do
-      it { should define_and_validate(:message => 'not valid').within(3..5).message('not valid') }
-      it { should_not define_and_validate(:message => 'not valid').within(3..5).message('valid') }
+
+      if RAILS_VERSION =~ /^2.3/
+        it { should define_and_validate(:message => 'not valid').within(3..5).message('not valid') }
+        it { should_not define_and_validate(:message => 'not valid').within(3..5).message('valid') }
+      else
+        it { should define_and_validate(:too_short => 'not valid', :too_long => 'not valid').within(3..5).message('not valid') }
+        it { should_not define_and_validate(:too_short => 'not valid', :too_long => 'not valid').within(3..5).message('valid') }
+      end
 
       it { should define_and_validate(:is => 4, :message => 'not valid').is(4).message('not valid') }
       it { should_not define_and_validate(:is => 4, :message => 'not valid').is(4).message('valid') }

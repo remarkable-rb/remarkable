@@ -48,6 +48,10 @@ module Remarkable
           end
 
           def session
+            raw_session.with_indifferent_access.except(:flash)
+          end
+
+          def raw_session
             @subject ? @subject.response.session.data : {}
           end
 
@@ -60,7 +64,7 @@ module Remarkable
           end
 
           def interpolation_options
-            { :session_inspect => session.symbolize_keys!.inspect }
+            { :session_inspect => raw_session.except('flash').symbolize_keys!.inspect }
           end
 
           # Evaluate procs before assert to avoid them appearing in descriptions.

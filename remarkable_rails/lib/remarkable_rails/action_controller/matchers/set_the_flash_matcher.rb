@@ -5,8 +5,7 @@ module Remarkable
 
         protected
           def session
-            flash = @subject ? @subject.response.session['flash'] : {}
-            flash || {}
+            @subject ? (@subject.response.session['flash'] || {}) : {}
           end
 
           def interpolation_options

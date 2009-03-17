@@ -98,8 +98,14 @@ module Remarkable
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.too_long') % range.last</tt>
       # * <tt>:wrong_length</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt> when attribute is the wrong length.
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.wrong_length') % range.last</tt>
-      # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>. When supplied overwrites :too_short, :too_long and :wrong_length.
+      # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.wrong_length') % value</tt>
+      #
+      # == Gotcha
+      #
+      # In Rails 2.3.x, when :message is supplied, it overwrites the messages
+      # supplied in :wrong_length, :too_short and :too_long. However, in earlier
+      # versions, Rails ignores the :message option.
       #
       # == Examples
       #

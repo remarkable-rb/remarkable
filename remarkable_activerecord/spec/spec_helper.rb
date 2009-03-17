@@ -1,7 +1,13 @@
 require 'rubygems'
 require 'spec'
 require 'ruby-debug'
+
+RAILS_VERSION = '=2.2.2'
+
+gem 'activesupport', RAILS_VERSION
 require 'active_support'
+
+gem 'activerecord', RAILS_VERSION
 require 'active_record'
 
 # Configure ActiveRecord connection
