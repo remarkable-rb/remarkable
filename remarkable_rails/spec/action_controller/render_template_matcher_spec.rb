@@ -23,6 +23,15 @@ describe 'render_template' do
       @matcher.with_layout(nil)
       @matcher.description.should == 'render template "edit" with no layout'
 
+      @matcher.with_content_type(:xml).matches?(@controller)
+      @matcher.description.should == 'render template "edit" with no layout and with content type "application/xml"'
+
+      @matcher.with_content_type(/xml/).matches?(@controller)
+      @matcher.description.should == 'render template "edit" with no layout and with content type /xml/'
+
+      @matcher.with_content_type(Mime::XML).matches?(@controller)
+      @matcher.description.should == 'render template "edit" with no layout and with content type "application/xml"'
+
       # Now description when @expected is nil
       @matcher = render_template
 
@@ -31,6 +40,15 @@ describe 'render_template' do
 
       @matcher.with_layout(nil)
       @matcher.description.should == 'render template  with no layout'
+
+      @matcher.with_content_type(:xml).matches?(@controller)
+      @matcher.description.should == 'render template  with no layout and with content type "application/xml"'
+
+      @matcher.with_content_type(/xml/).matches?(@controller)
+      @matcher.description.should == 'render template  with no layout and with content type /xml/'
+
+      @matcher.with_content_type(Mime::XML).matches?(@controller)
+      @matcher.description.should == 'render template  with no layout and with content type "application/xml"'
     end
 
     it 'should set render? message' do
@@ -146,11 +164,59 @@ describe 'render_template' do
       it { should render_and_validate(:layout => 'examples').with_layout('examples') }
       it { should_not render_and_validate(:layout => 'examples').with_layout('users') }
       it { should_not render_and_validate(:layout => 'examples').with_layout(nil) }
+    end
 
-      it { render_and_validate; should render_without_layout }
-      it { render_and_validate(:layout => 'examples'); should render_with_layout('examples') }
-      it { render_and_validate(:layout => 'examples'); should_not render_with_layout('users') }
-      it { render_and_validate(:layout => 'examples'); should_not render_with_layout(nil) }
+    describe 'render_with_layout' do
+      before(:each){ render_and_validate(:layout => 'examples') }
+
+      it { should render_with_layout('examples') }
+      it { should_not render_with_layout('users') }
+      it { should_not render_with_layout(nil) }
+
+      it do
+        render_and_validate
+        should render_without_layout
+      end
+    end
+
+    describe 'with with_content_type as option' do
+      describe 'and Mime::HTML' do
+        before(:each){ build_response }
+
+        it { should render_template.with_content_type(:html) }
+        it { should render_template.with_content_type(/html/) }
+        it { should render_template.with_content_type(Mime::HTML) }
+        it { should render_template.with_content_type('text/html') }
+
+        it { should_not render_template.with_content_type(:xml) }
+        it { should_not render_template.with_content_type(/xml/) }
+        it { should_not render_template.with_content_type(Mime::XML) }
+        it { should_not render_template.with_content_type('application/xml') }
+
+        it { should respond_with_content_type(:html) }
+        it { should respond_with_content_type(/html/) }
+        it { should respond_with_content_type(Mime::HTML) }
+        it { should respond_with_content_type('text/html') }
+
+        it { should_not respond_with_content_type(:xml) }
+        it { should_not respond_with_content_type(/xml/) }
+        it { should_not respond_with_content_type(Mime::XML) }
+        it { should_not respond_with_content_type('application/xml') }
+      end
+
+      describe 'and Mime::XML' do
+        before(:each) { build_response { respond_to{ |format| format.xml } } }
+
+        it { should render_template.with_content_type(:xml) }
+        it { should render_template.with_content_type(/xml/) }
+        it { should render_template.with_content_type(Mime::XML) }
+        it { should render_template.with_content_type('application/xml') }
+
+        it { should_not render_template.with_content_type(:html) }
+        it { should_not render_template.with_content_type(/html/) }
+        it { should_not render_template.with_content_type(Mime::HTML) }
+        it { should_not render_template.with_content_type('text/html') }
+      end
     end
 
   end
@@ -221,6 +287,42 @@ describe 'render_template' do
       should_not_render_template 'examples/example'
       should_not_render_template 'examples/example.html'
       should_not_render_template 'examples/example.html.erb'
+    end
+
+    describe 'with with_layout option' do
+      before(:each){ render_and_validate(:layout => 'examples') }
+
+      should_render_template :with_layout => 'examples'
+      should_not_render_template :with_layout => 'users'
+      should_not_render_template :with_layout => nil
+
+      should_render_with_layout 'examples'
+      should_not_render_with_layout 'users'
+      should_not_render_with_layout nil
+    end
+
+    describe 'with with_content_type as option' do
+      before(:each){ build_response }
+
+      should_render_template :with_content_type => :html
+      should_render_template :with_content_type => /html/
+      should_render_template :with_content_type => Mime::HTML
+      should_render_template :with_content_type => 'text/html'
+
+      should_not_render_template :with_content_type => :xml
+      should_not_render_template :with_content_type => /xml/
+      should_not_render_template :with_content_type => Mime::XML
+      should_not_render_template :with_content_type => 'application/xml'
+
+      should_respond_with_content_type :html
+      should_respond_with_content_type /html/
+      should_respond_with_content_type Mime::HTML
+      should_respond_with_content_type 'text/html'
+
+      should_not_respond_with_content_type :xml
+      should_not_respond_with_content_type /xml/
+      should_not_respond_with_content_type Mime::XML
+      should_not_respond_with_content_type 'application/xml'
     end
 
   end

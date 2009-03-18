@@ -5,14 +5,16 @@ module Remarkable
 
         arguments :expected
 
-        optional :with_layout
+        optional :with_layout, :with_content_type
 
         before_assert do
           @response   = @subject.respond_to?(:response) ? @subject.response : @subject
           @controller = @spec.instance_variable_get('@controller')
         end
 
-        assertions :rendered?, :expected_match?, :layout_match?
+        before_assert :evaluate_content_type
+
+        assertions :rendered?, :expected_match?, :layout_match?, :content_type_match?
 
         protected
 
@@ -60,18 +62,26 @@ module Remarkable
 
           def layout_match?
             return true unless @options.key?(:with_layout)
-
-            response_layout = if @response.layout.blank?
-              ''
-            else
-              @response.layout.split('/').last
-            end
-
-            return response_layout == @options[:with_layout].to_s, :layout => @response.layout.inspect
+            @response.layout.to_s.split('/').last.to_s == @options[:with_layout].to_s
           end
 
-          def interpolation_options
-            { :expected => @expected ? @expected.inspect : '', :actual => @actual.inspect }
+          def content_type_match?
+            return true unless @options.key?(:with_content_type)
+            assert_contains(@response.content_type, @options[:with_content_type])
+          end
+
+          # Evaluate content_type before assertions to have nice descriptions
+          def evaluate_content_type
+            return unless @options.key?(:with_content_type)
+
+            @options[:with_content_type] = case @options[:with_content_type]
+              when Symbol
+                Mime::Type.lookup_by_extension(@options[:with_content_type].to_s).to_s
+              when Regexp
+                @options[:with_content_type]
+              else
+                @options[:with_content_type].to_s
+            end
           end
 
           def path_and_file(path)
@@ -79,6 +89,16 @@ module Remarkable
             file = parts.pop
             controller = parts.empty? ? @controller.controller_path : parts.join('/')
             return controller, file
+          end
+
+          def interpolation_options
+            options = { :expected => @expected ? @expected.inspect : '', :actual => @actual.inspect }
+
+            if @response
+              options.merge!(:layout => @response.layout.inspect, :content_type => @response.content_type.inspect)
+            else
+              options
+            end
           end
 
       end
@@ -92,29 +112,47 @@ module Remarkable
       #
       # Note that partials must be spelled with the preceding underscore.
       #
+      # == Options
+      #
+      # * <tt>:with_layout</tt>       - The layout used when rendering the template.
+      # * <tt>:with_content_type</tt> - The content type of the response.
+      #   It accepts strings ('application/rss+xml'), mime constants (Mime::RSS), symbols (:rss) and regular expressions /rss/.
+      #
       # == Examples
       #
-      #   should render_template('list')
-      #   should render_template('same_controller/list')
-      #   should render_template('other_controller/list')
+      #   should_render_template 'list'
+      #   should_render_template 'same_controller/list'
+      #   should_render_template 'other_controller/list'
       #
       # # with extensions
-      #   should render_template('list.rjs')
-      #   should render_template('list.haml')
-      #   should render_template('same_controller/list.rjs')
-      #   should render_template('other_controller/list.rjs')
+      #   should_render_template 'list.rjs'
+      #   should_render_template 'list.haml'
+      #   should_render_template 'same_controller/list.rjs'
+      #   should_render_template 'other_controller/list.rjs'
       #
       # # partials
-      #   should render_template('_a_partial')
-      #   should render_template('same_controller/_a_partial')
-      #   should render_template('other_controller/_a_partial')
+      #   should_render_template '_a_partial'
+      #   should_render_template 'same_controller/_a_partial'
+      #   should_render_template 'other_controller/_a_partial'
+      #
+      # # with options
+      #   should_render_template 'list', :with_layout => 'users'
+      #   should_render_template 'list', :with_content_type => :xml
+      #   should_render_template 'list', :with_content_type => /xml/
+      #   should_render_template 'list', :with_content_type => Mime::XML
+      #
+      #   it { should render_template('list').with_layout('users') }
+      #   it { should render_template('list').with_content_type(:xml) }
+      #   it { should render_template('list').with_content_type(/xml/) }
+      #   it { should render_template('list').with_content_type(Mime::XML) }
       #
       # == Gotcha
       #
       # Extensions check does not work in Rails 2.1.x.
       #
-      def render_template(expected=nil, options={}, &block)
-        RenderTemplateMatcher.new(expected, options, &block).spec(self)
+      def render_template(*args, &block)
+        options = args.extract_options!
+        RenderTemplateMatcher.new(args.first, options, &block).spec(self)
       end
 
       # This is for Shoulda compatibility. It just calls render_template. So
@@ -129,6 +167,13 @@ module Remarkable
       #
       def render_without_layout
         render_template(nil, :with_layout => nil)
+      end
+
+      # This is for Shoulda compatibility. It just calls render_template. So
+      # check render_template for more information.
+      #
+      def respond_with_content_type(content_type)
+        render_template(nil, :with_content_type => content_type)
       end
 
     end

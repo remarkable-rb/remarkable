@@ -1,14 +1,14 @@
 en:
   remarkable:
     core:
-      not: not
-      should: should
-      should_not: should not
-      example_disabled: Example disabled
-      failure_message: Expected {{expectation}}
-      negative_failure_message: Did not expect {{expectation}}
+      not: "not"
+      should: "should"
+      should_not: "should not"
+      example_disabled: "Example disabled"
+      failure_message: "Expected {{expectation}}"
+      negative_failure_message: "Did not expect {{expectation}}"
 
       helpers:
-        words_connector: ', '
-        two_words_connector: ' and '
-        last_word_connector: ', and '
+        words_connector: ", "
+        two_words_connector: " and "
+        last_word_connector: ", and "

@@ -94,7 +94,10 @@ module Remarkable
       end
 
       # Passes if the response is a redirect to the url, action or controller/action.
-      # Useful in controller specs (integration or isolation mode).
+      #
+      # == Options
+      #
+      # * <tt>:with</tt> - The status 30X used when redirecting.
       #
       # == Examples
       #
