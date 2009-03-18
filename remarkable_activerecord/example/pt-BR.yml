@@ -6,6 +6,7 @@ pt-BR:
       user:
         name: Nome
         email: E-mail
+        age: Idade
 
   remarkable:
     core:

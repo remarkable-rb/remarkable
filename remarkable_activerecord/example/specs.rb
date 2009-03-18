@@ -40,6 +40,8 @@ User.create!(:name => 'José', :email => 'jose.valim@gmail.com')
 
 # Declaring specs
 describe User do
+  xshould_validate_presence_of :age
+
   should_validate_presence_of :name, :email
   should_validate_length_of :name, :within => 3..40
 
