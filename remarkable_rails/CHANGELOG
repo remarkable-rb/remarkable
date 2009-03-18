@@ -1,4 +1,10 @@
-# Edge
+# v3.0.0
 
+* Added respond_with_content_type and render_with_layout matchers as part of
+  render_template matcher, so we can use :with_layout and :with_content_type
+  all inside render template
+* Added render_template matcher
+* Added redirect_to matcher
+* Added macro stubs
 * Added set_session matcher
 * Added assign_to matcher

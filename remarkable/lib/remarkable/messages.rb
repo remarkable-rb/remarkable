@@ -18,14 +18,14 @@ module Remarkable
     # Provides a default failure message. Overwrite it if needed.
     #
     def failure_message_for_should
-      Remarkable.t 'remarkable.core.failure_message', :expectation => @expectation
+      Remarkable.t 'remarkable.core.failure_message_for_should', :expectation => @expectation
     end
     alias :failure_message :failure_message_for_should
 
     # Provides a default negative failure message. Overwrite it if needed.
     #
     def failure_message_for_should_not
-      Remarkable.t 'remarkable.core.negative_failure_message', :expectation => @expectation
+      Remarkable.t 'remarkable.core.failure_message_for_should_not', :expectation => @expectation
     end
     alias :negative_failure_message :failure_message_for_should_not
 

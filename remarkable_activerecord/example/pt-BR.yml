@@ -5,6 +5,7 @@ pt-BR:
     attributes:
       user:
         name: Nome
+        email: E-mail
 
   remarkable:
     core:
@@ -12,8 +13,8 @@ pt-BR:
       should: deve
       should_not: não deve
       example_disabled: Exemplo desativado
-      failure_message: Esperava que {{expectation}}
-      negative_failure_message: Não esperava que {{expectation}}
+      failure_message_for_should: Esperava que {{expectation}}
+      failure_message_for_should_not: Não esperava que {{expectation}}
 
       helpers:
         words_connector: ', '

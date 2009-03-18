@@ -5,7 +5,7 @@ if defined?(Spec)
 
         # This allows "describe User" to use the I18n human name of User.
         #
-        def self.description_text(*args)
+        def self.build_description_with_i18n(*args)
           args.inject("") do |description, arg|
             arg = if RAILS_I18N && arg.respond_to?(:human_name)
               arg.human_name(:locale => Remarkable.locale)
@@ -16,6 +16,19 @@ if defined?(Spec)
             description << " " unless (description == "" || arg =~ /^(\s|\.|#)/)
             description << arg
           end
+        end
+
+        # This is for rspec <= 1.1.12.
+        #
+        def self.description_text(*args)
+          self.build_description_with_i18n(*args)
+        end
+
+        # This is for rspec >= 1.2.0.
+        #
+        def build_description_from(*args)
+          text = ExampleGroupMethods.build_description_with_i18n(*args)
+          text == "" ? nil : text
         end
 
       end
