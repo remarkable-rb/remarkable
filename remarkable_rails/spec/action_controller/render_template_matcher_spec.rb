@@ -3,6 +3,11 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe 'render_template' do
   include FunctionalBuilder
 
+  def render_and_validate(options={})
+    build_response { render options }
+    render_template(options.delete(:action))
+  end
+
   describe 'messages' do
     before(:each) do
       build_response { render :action => 'new' }
@@ -11,6 +16,21 @@ describe 'render_template' do
 
     it 'should contain a description message' do
       @matcher.description.should == 'render template "edit"'
+
+      @matcher.with_layout('application')
+      @matcher.description.should == 'render template "edit" with layout "application"'
+
+      @matcher.with_layout(nil)
+      @matcher.description.should == 'render template "edit" with no layout'
+
+      # Now description when @expected is nil
+      @matcher = render_template
+
+      @matcher.with_layout('application')
+      @matcher.description.should == 'render template  with layout "application"'
+
+      @matcher.with_layout(nil)
+      @matcher.description.should == 'render template  with no layout'
     end
 
     it 'should set render? message' do
@@ -25,15 +45,19 @@ describe 'render_template' do
       it 'should set expected_match? message' do
         @matcher.matches?(@controller)
         @matcher.failure_message.should == 'Expected template "edit" to be rendered, got "examples/new.html.erb"'
-        @matcher.negative_failure_message.should == 'Did not expect template "edit" to be rendered, got "examples/new.html.erb"'
       end
+    end
+
+    it 'should set layout_match? message' do
+      @matcher = render_template('new')
+      @matcher.with_layout('users').matches?(@controller)
+      @matcher.failure_message.should == 'Expected template to be rendered with layout "users", got nil'
     end
   end
 
   describe 'matcher' do
 
     [ :controller, :response ].each do |subject_name|
-
       describe "with #{subject_name} subject" do
 
         describe 'rendering a template' do
@@ -115,7 +139,18 @@ describe 'render_template' do
         end
 
       end
+    end
 
+    describe 'with with_layout option' do
+      it { should render_and_validate.with_layout(nil) }
+      it { should render_and_validate(:layout => 'examples').with_layout('examples') }
+      it { should_not render_and_validate(:layout => 'examples').with_layout('users') }
+      it { should_not render_and_validate(:layout => 'examples').with_layout(nil) }
+
+      it { render_and_validate; should render_without_layout }
+      it { render_and_validate(:layout => 'examples'); should render_with_layout('examples') }
+      it { render_and_validate(:layout => 'examples'); should_not render_with_layout('users') }
+      it { render_and_validate(:layout => 'examples'); should_not render_with_layout(nil) }
     end
 
   end

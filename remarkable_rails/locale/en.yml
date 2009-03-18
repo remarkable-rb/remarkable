@@ -27,6 +27,11 @@ en:
         expectations:
           rendered: "template {{expected}} to be rendered, got no render"
           expected_match: "template {{expected}} to be rendered, got {{actual}}"
+          layout_match: "template to be rendered with layout {{with_layout}}, got {{layout}}"
+        optionals:
+          with_layout:
+            positive: "with layout {{inspect}}"
+            negative: "with no layout"
       set_session:
         description: "set session variable {{keys}}"
         expectations:

@@ -23,7 +23,7 @@ module Remarkable
           end
 
           def status_match?
-            return true unless @options[:with]
+            return true unless @options.key?(:with)
 
             actual_status   = interpret_status(@response.code.to_i)
             expected_status = interpret_status(@options[:with])

@@ -5,15 +5,20 @@ module Remarkable
 
         arguments :expected
 
+        optional :with_layout
+
         before_assert do
           @response   = @subject.respond_to?(:response) ? @subject.response : @subject
           @controller = @spec.instance_variable_get('@controller')
         end
 
-        assertions :rendered?, :expected_match?
+        assertions :rendered?, :expected_match?, :layout_match?
 
         protected
+
           def rendered?
+            return true unless @expected
+
             @actual = if @response.respond_to?(:rendered_file)
               @response.rendered_file
             elsif @response.respond_to?(:rendered)
@@ -35,6 +40,8 @@ module Remarkable
           end
 
           def expected_match?
+            return true unless @expected
+
             actual_controller_path, actual_file     = path_and_file(@actual.to_s)
             expected_controller_path, expected_file = path_and_file(@expected.to_s)
 
@@ -51,8 +58,20 @@ module Remarkable
             actual_controller_path == expected_controller_path 
           end
 
+          def layout_match?
+            return true unless @options.key?(:with_layout)
+
+            response_layout = if @response.layout.blank?
+              ''
+            else
+              @response.layout.split('/').last
+            end
+
+            return response_layout == @options[:with_layout].to_s, :layout => @response.layout.inspect
+          end
+
           def interpolation_options
-            { :expected => @expected.inspect, :actual => @actual.inspect }
+            { :expected => @expected ? @expected.inspect : '', :actual => @actual.inspect }
           end
 
           def path_and_file(path)
@@ -94,8 +113,22 @@ module Remarkable
       #
       # Extensions check does not work in Rails 2.1.x.
       #
-      def render_template(*args, &block)
-        RenderTemplateMatcher.new(*args, &block).spec(self)
+      def render_template(expected=nil, options={}, &block)
+        RenderTemplateMatcher.new(expected, options, &block).spec(self)
+      end
+
+      # This is for Shoulda compatibility. It just calls render_template. So
+      # check render_template for more information.
+      #
+      def render_with_layout(layout)
+        render_template(nil, :with_layout => layout)
+      end
+
+      # This is for Shoulda compatibility. It just calls render_template. So
+      # check render_template for more information.
+      #
+      def render_without_layout
+        render_template(nil, :with_layout => nil)
       end
 
     end
