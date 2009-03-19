@@ -25,10 +25,10 @@ module Remarkable
           def status_match?
             return true unless @options.key?(:with)
 
-            actual_status   = interpret_status(@response.code.to_i)
+            actual_status   = interpret_status(@response.response_code)
             expected_status = interpret_status(@options[:with])
 
-            return actual_status == expected_status, :status => @response.code.to_i
+            return actual_status == expected_status, :status => @response.response_code.inspect
           end
 
           def url_match?

@@ -35,6 +35,10 @@ en:
             negative: "with no layout"
           with_content_type:
             given: "with content type {{inspect}}"
+      respond_with:
+        description: "respond with {{expected}}"
+        expectations:
+          status_match: "to respond with {{expected}}, got {{actual}}"
       set_session:
         description: "set session variable {{keys}}"
         expectations:

@@ -150,9 +150,9 @@ module Remarkable
       #
       # Extensions check does not work in Rails 2.1.x.
       #
-      def render_template(*args, &block)
+      def render_template(*args)
         options = args.extract_options!
-        RenderTemplateMatcher.new(args.first, options, &block).spec(self)
+        RenderTemplateMatcher.new(args.first, options).spec(self)
       end
 
       # This is for Shoulda compatibility. It just calls render_template. So
