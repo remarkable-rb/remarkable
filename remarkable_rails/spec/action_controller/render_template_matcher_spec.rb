@@ -327,4 +327,5 @@ describe 'render_template' do
 
   end
 
+  generate_macro_stubs_specs_for(:render_template, 'new')
 end

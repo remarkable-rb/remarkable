@@ -11,6 +11,9 @@ class TasksController < ApplicationController
     render :text => 'index'
   end
 
+  def new
+  end
+
   def show
     @task = Task.find(params[:id])
 

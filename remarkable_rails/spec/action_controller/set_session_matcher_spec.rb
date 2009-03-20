@@ -93,4 +93,5 @@ describe 'set_session' do
     it { should_not set_session }
   end
 
+  generate_macro_stubs_specs_for(:set_session)
 end

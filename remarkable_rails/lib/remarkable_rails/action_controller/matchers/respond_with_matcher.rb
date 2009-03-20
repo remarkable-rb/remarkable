@@ -51,8 +51,8 @@ module Remarkable
       #   it { should respond_with(301) }
       #   it { should respond_with(300..399) }
       #
-      def respond_with(status)
-        RespondWithMatcher.new(status).spec(self)
+      def respond_with(status, options={})
+        RespondWithMatcher.new(status, options).spec(self)
       end
 
     end

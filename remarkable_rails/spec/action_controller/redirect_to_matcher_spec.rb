@@ -98,4 +98,5 @@ describe 'redirect_to' do
 
   end
 
+  generate_macro_stubs_specs_for(:redirect_to, 'http://google.com/')
 end

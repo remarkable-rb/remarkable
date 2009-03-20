@@ -23,10 +23,10 @@ will know how to deal with properly. A TasksController could have your specs for
 a destroy action rewritten like this:
 
   describe :delete => :destroy, :id => 37 do
-    expects :find, :on => Task, :with => '37', :returns => mock_task
+    expects :find, :on => Task, :with => '37', :returns => proc { mock_task }
     expects :destroy, :on => mock_task
 
-    should_assign_to :task, :equal => mock_task
+    should_assign_to :task, :equal => proc { mock_task }
     should_redirect_to { tasks_url }
   end
 
@@ -42,33 +42,41 @@ call delete :destroy with params :id => 37 before asserting values. The
     # ...
   end
 
-By default, should_assign_to will evaluate the expects using expectations, in
-other words, doing Task.should_receive(:find).with('37').and_return(mock_task).
-All others matcher, they evaluate it as stubs: Task.stub!(:find).and_return(mock_task).
+By default, should_assign_to will evaluate your macro stubs using expectations:
 
-Finally, model mocks are also generated on the fly using method missing. expects
-accepts four options: :on, :with, :returns and :times. The first three accepts
-procs that are evaluated within the spec instance binding. When you are calling:
+  Task.should_receive(:find).with('37').and_return(mock_task)
+
+All others matcher, they evaluate it as stubs:
+
+  Task.stub!(:find).and_return(mock_task)
+
+You can change this suppling an option, :with_stubs or :with_expectations:
+
+  should_assign_to :user, :with_stubs => true
+  should_redirect_to(:with_expectations => true){ users_url }
+
+  it { should assign_to(:user).with_stubs }
+  it { should redirect_to(users_url).with_expectations }
+
+Finally, you don't need to play with procs all the time when creating mocks.
+You can call mock_project as a class method and it will create a proc for you,
+which will reference the mock. So you can rewrite:
 
   expects :find, :on => Task, :with => '37', :returns => mock_task
+  should_assign_to :task, :equal => mock_task
 
 mock_task simply returns a proc that will call mock_task later. So you cannot do:
 
-  expects :find, :on => Task, :with => '37', :returns => mock_task.id
+  expects :find_id, :on => Task, :returns => mock_task.id
+  should_assign_to :task_id, :equal => mock_task.id
 
 The proper way to do that would be:
 
-  expects :find, :on => Task, :with => '37', :returns => proc { mock_task.id }
+  expects :find_id, :on => Task, :returns => proc { mock_task.id }
+  should_assign_to :task_id, :equal => proc { mock_task.id }
 
-However, depending on the feedback, we might add support for it soon. The same
-happens with should_assign_to:
+If you don't like passing proc all around, you might like to the rspec way:
 
-  should_assign_to :task, :with => mock_task
+  it { should assign_to(:task_id, :with => mock_task.id) }
 
-mock_task in this case is also a proc. if you need the mock_task id, you can do:
-
-  should_assign_to :task_id, :with => proc { mock_task.id }
-
-Or rewrite the macro in rspec style:
-
-  it { should_assign_to(:task_id, :with => mock_task.id) }
+Finally, expects currently support four options: on, with, returns and times.

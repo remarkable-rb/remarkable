@@ -110,4 +110,6 @@ describe 'respond_with' do
     end
 
   end
+
+  generate_macro_stubs_specs_for(:respond_with, 200)
 end

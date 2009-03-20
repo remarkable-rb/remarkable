@@ -36,8 +36,9 @@
 #
 # Going back to our example, the second thing you have to know is that you
 # don't have to play with proc all the time. You can call mock_project and it
-# will generate a mock for you on the fly:
-##   expects :find, :on => Project, :with => '37', :returns => mock_project
+# will create a proc for you, which will call mock_project later:
+#
+#   expects :find, :on => Project, :with => '37', :returns => mock_project
 #
 # The last bit of customization is possible giving the action parameters to
 # the describe block:
@@ -66,11 +67,12 @@
 #   describe TasksController do
 #     params :project_id => '42' #=> define params for all requests
 #
-#     expects :find_by_title, :on => Project, :with => '42', :returns => :mock_project
+#     # The two expectations below get inherited
+#     expects :find_by_title, :on => Project, :with => '42', :returns => mock_project
 #     expects :tasks, :and_return => Task
 #
 #     describe :get => :show, :id => '37' do
-#       expects :find, :with => '37', :and_return => :mock_task
+#       expects :find, :with => '37', :and_return => mock_task
 #
 #       should_assign_to :project, :task
 #       should_render_template 'show'
@@ -78,7 +80,10 @@
 #   end
 #
 # As you noticed, expectations and stubs are inherited. You can including define
-# parameter that will be available to all requests, using the method <tt>params</tt>
+# parameter that will be available to all requests, using the method <tt>params</tt>.
+#
+# If you defined your macro stubs and need to run then inside another spec, you
+# have three methods: run_stubs!, run_expectations! and run_action!
 #
 module Remarkable
   module ActionController

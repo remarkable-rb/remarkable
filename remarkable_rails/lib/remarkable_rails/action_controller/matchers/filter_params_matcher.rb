@@ -1,7 +1,8 @@
 module Remarkable
   module ActionController
     module Matchers
-      class FilterParamsMatcher < Remarkable::ActionController::Base #:nodoc:
+      # Do not inherit from ActionController::Base since it don't need all macro stubs behavior.
+      class FilterParamsMatcher < Remarkable::Base #:nodoc:
         arguments :collection => :params, :as => :param
 
         assertions :respond_to_filter_params?

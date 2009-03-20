@@ -93,4 +93,5 @@ describe 'set_the_flash' do
     it { should_not set_the_flash }
   end
 
+  generate_macro_stubs_specs_for(:set_the_flash)
 end
