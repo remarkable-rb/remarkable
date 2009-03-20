@@ -76,13 +76,13 @@ module Remarkable
             default = options[:default] ? "=#{options[:default].inspect}" : ""
 
             names.each do |name|
-class_eval <<-END, __FILE__, __LINE__
-  def #{name}(#{splat}value#{default})
-    @options ||= {}
-    @options[:#{name}] = value
-    self
-  end
-END
+              class_eval <<-END, __FILE__, __LINE__
+                def #{name}(#{splat}value#{default})
+                  @options ||= {}
+                  @options[:#{name}] = value
+                  self
+                end
+              END
             end
             class_eval "alias_method(:#{options[:alias]}, :#{names.last})" if options[:alias]
 
@@ -97,6 +97,7 @@ END
       #
       def description(options={})
         message = super(options)
+        message.strip!
 
         optionals = self.class.matcher_optionals.map do |optional|
           scope = matcher_i18n_scope + ".optionals.#{optional}"

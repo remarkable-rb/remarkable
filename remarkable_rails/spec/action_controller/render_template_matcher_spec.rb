@@ -36,19 +36,19 @@ describe 'render_template' do
       @matcher = render_template
 
       @matcher.with_layout('application')
-      @matcher.description.should == 'render template  with layout "application"'
+      @matcher.description.should == 'render template with layout "application"'
 
       @matcher.with_layout(nil)
-      @matcher.description.should == 'render template  with no layout'
+      @matcher.description.should == 'render template with no layout'
 
       @matcher.with_content_type(:xml).matches?(@controller)
-      @matcher.description.should == 'render template  with no layout and with content type "application/xml"'
+      @matcher.description.should == 'render template with no layout and with content type "application/xml"'
 
       @matcher.with_content_type(/xml/).matches?(@controller)
-      @matcher.description.should == 'render template  with no layout and with content type /xml/'
+      @matcher.description.should == 'render template with no layout and with content type /xml/'
 
       @matcher.with_content_type(Mime::XML).matches?(@controller)
-      @matcher.description.should == 'render template  with no layout and with content type "application/xml"'
+      @matcher.description.should == 'render template with no layout and with content type "application/xml"'
     end
 
     it 'should set render? message' do
