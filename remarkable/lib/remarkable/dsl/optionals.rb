@@ -2,11 +2,14 @@ module Remarkable
   module DSL
     module Optionals
 
+      OPTIONAL_KEYS = [ :given, :positive, :negative, :not_given ]
+
       def self.included(base)
         base.extend ClassMethods
       end
 
       module ClassMethods
+
         protected
 
           # Creates optional handlers for matchers dynamically. The following
@@ -103,8 +106,16 @@ module Remarkable
           scope = matcher_i18n_scope + ".optionals.#{optional}"
 
           if @options.key?(optional)
-            i18n_key = @options[optional] ? :positive : :negative
-            Remarkable.t i18n_key, :default => :given, :raise => true, :scope => scope, :inspect => @options[optional].inspect, :value => @options[optional].to_s
+            defaults = [ :given ]
+
+            value = @options[optional]
+            defaults.unshift(value ? :positive : :negative)
+
+            # If optional is a symbol and it's not any to any of the reserved symbols, search for it also
+            defaults.unshift(value) if value.is_a?(Symbol) && !OPTIONAL_KEYS.include?(value)
+
+            Remarkable.t defaults.shift, :default => defaults, :raise => true, :scope => scope,
+                                         :inspect => value.inspect, :value => value.to_s
           else
             Remarkable.t :not_given, :raise => true, :scope => scope
           end rescue nil
