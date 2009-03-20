@@ -26,22 +26,33 @@ en:
           with:
             given: "with status {{inspect}}"
       render_template:
-        description: "render template {{expected}}"
+        description: "render"
         expectations:
-          rendered: "template {{expected}} to be rendered, got no render"
-          expected_match: "template {{expected}} to be rendered, got {{actual}}"
-          layout_match: "template to be rendered with layout {{with_layout}}, got {{layout}}"
-          content_type_match: "template to be rendered with content type {{with_content_type}}, got {{content_type}}"
+          rendered: "template {{with_template}} to be rendered, got no render"
+          template_match: "template {{with_template}} to be rendered, got {{template}}"
+          status_match: "to render with {{with}}, got {{status}}"
+          layout_match: "to render with layout {{with_layout}}, got {{layout}}"
+          content_type_match: "to render with content type {{with_content_type}}, got {{content_type}}"
         optionals:
+          with_template:
+            given: "template {{inspect}}"
+          with:
+            given: "with {{value}}"
           with_layout:
             positive: "with layout {{inspect}}"
             negative: "with no layout"
           with_content_type:
             given: "with content type {{inspect}}"
       respond_with:
-        description: "respond with {{expected}}"
+        description: "respond"
         expectations:
-          status_match: "to respond with {{expected}}, got {{actual}}"
+          status_match: "to respond with {{with}}, got {{status}}"
+          content_type_match: "to respond with content type {{with_content_type}}, got {{content_type}}"
+        optionals:
+          with:
+            given: "with {{value}}"
+          with_content_type:
+            given: "with content type {{inspect}}"
       set_session:
         description: "set session variable {{keys}}"
         expectations:

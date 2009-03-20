@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), 'set_session_matcher') 
+
 module Remarkable
   module ActionController
     module Matchers

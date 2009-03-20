@@ -1,25 +1,18 @@
+require File.join(File.dirname(__FILE__), 'respond_with_matcher') 
+
 module Remarkable
   module ActionController
     module Matchers
-      class RenderTemplateMatcher < Remarkable::ActionController::Base #:nodoc:
+      class RenderTemplateMatcher < RespondWithMatcher #:nodoc:
 
-        arguments :expected
+        prepend_optional :with_template, :with_layout
 
-        optional :with_layout, :with_content_type
-
-        before_assert do
-          @response   = @subject.respond_to?(:response) ? @subject.response : @subject
-          @controller = @spec.instance_variable_get('@controller')
-        end
-
-        before_assert :evaluate_content_type
-
-        assertions :rendered?, :expected_match?, :layout_match?, :content_type_match?
+        assertions :rendered?, :template_match?, :layout_match?
 
         protected
 
           def rendered?
-            return true unless @expected
+            return true unless @options.key?(:with_template)
 
             @actual = if @response.respond_to?(:rendered_file)
               @response.rendered_file
@@ -41,11 +34,11 @@ module Remarkable
             !@actual.blank?
           end
 
-          def expected_match?
-            return true unless @expected
+          def template_match?
+            return true unless @options[:with_template] # only continue if not nil
 
             actual_controller_path, actual_file     = path_and_file(@actual.to_s)
-            expected_controller_path, expected_file = path_and_file(@expected.to_s)
+            expected_controller_path, expected_file = path_and_file(@options[:with_template].to_s)
 
             # Test if each given slice matches. Actual always return the full
             # file name (new.html.erb), on the other hand, the user might supply
@@ -65,25 +58,6 @@ module Remarkable
             @response.layout.to_s.split('/').last.to_s == @options[:with_layout].to_s
           end
 
-          def content_type_match?
-            return true unless @options.key?(:with_content_type)
-            assert_contains(@response.content_type, @options[:with_content_type])
-          end
-
-          # Evaluate content_type before assertions to have nice descriptions
-          def evaluate_content_type
-            return unless @options.key?(:with_content_type)
-
-            @options[:with_content_type] = case @options[:with_content_type]
-              when Symbol
-                Mime::Type.lookup_by_extension(@options[:with_content_type].to_s).to_s
-              when Regexp
-                @options[:with_content_type]
-              else
-                @options[:with_content_type].to_s
-            end
-          end
-
           def path_and_file(path)
             parts = path.split('/')
             file = parts.pop
@@ -92,12 +66,10 @@ module Remarkable
           end
 
           def interpolation_options
-            options = { :expected => @expected ? @expected.inspect : '', :actual => @actual.inspect }
-
             if @response
-              options.merge!(:layout => @response.layout.inspect, :content_type => @response.content_type.inspect)
+              super.merge!(:layout => @response.layout.inspect, :template => @actual.inspect)
             else
-              options
+              super.merge!(:template => @actual.inspect)
             end
           end
 
@@ -152,28 +124,22 @@ module Remarkable
       #
       def render_template(*args)
         options = args.extract_options!
-        RenderTemplateMatcher.new(args.first, options).spec(self)
+        RenderTemplateMatcher.new(options.merge(:with_template => args.first)).spec(self)
       end
 
       # This is for Shoulda compatibility. It just calls render_template. So
       # check render_template for more information.
       #
-      def render_with_layout(layout)
-        render_template(nil, :with_layout => layout)
+      def render_with_layout(*args)
+        options = args.extract_options!
+        RenderTemplateMatcher.new(options.merge(:with_layout => args.first)).spec(self)
       end
 
       # This is for Shoulda compatibility. It just calls render_template. So
       # check render_template for more information.
       #
-      def render_without_layout
-        render_template(nil, :with_layout => nil)
-      end
-
-      # This is for Shoulda compatibility. It just calls render_template. So
-      # check render_template for more information.
-      #
-      def respond_with_content_type(content_type)
-        render_template(nil, :with_content_type => content_type)
+      def render_without_layout(options={})
+        RenderTemplateMatcher.new(options.merge(:with_layout => nil)).spec(self)
       end
 
     end

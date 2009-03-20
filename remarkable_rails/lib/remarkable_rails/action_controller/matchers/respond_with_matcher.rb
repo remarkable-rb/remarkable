@@ -2,56 +2,102 @@ module Remarkable
   module ActionController
     module Matchers
       class RespondWithMatcher < Remarkable::ActionController::Base #:nodoc:
-        arguments :expected
 
-        assertions :status_match?
+        arguments
+
+        optional :with, :with_content_type
 
         before_assert do
-          @response = @subject.respond_to?(:response) ? @subject.response : @subject
+          @response   = @subject.respond_to?(:response) ? @subject.response : @subject
+          @controller = @spec.instance_variable_get('@controller')
         end
+
+        before_assert :evaluate_content_type
+
+        assertions :status_match?, :content_type_match?
 
         protected
 
           def status_match?
-            case @expected
+            return true unless @options[:with] # only continue if not nil
+
+            case @options[:with]
               when :success, :missing, :redirect, :error
-                @response.send("#{@expected}?")
+                @response.send("#{@options[:with]}?")
               when Fixnum
-                @response.response_code == @expected
+                @response.response_code == @options[:with]
               when Symbol, String
-                @response.response_code == ::ActionController::StatusCodes::SYMBOL_TO_STATUS_CODE[@expected.to_sym]
+                @response.response_code == ::ActionController::StatusCodes::SYMBOL_TO_STATUS_CODE[@options[:with].to_sym]
               when Range
-                @expected.include?(@response.response_code)
+                @options[:with].include?(@response.response_code)
               else
-                raise ArgumentError, "I don't know how to interpret respond_with(#{@expected.inspect}), " <<
-                                     "with a #{@expected.class.name} as argument."
+                raise ArgumentError, "I don't know how to interpret status #{@options[:with].inspect}, " <<
+                                      "please give me a Fixnum, Symbol, String or Range."
+            end
+          end
+
+          def content_type_match?
+            return true unless @options.key?(:with_content_type)
+            assert_contains(@response.content_type, @options[:with_content_type])
+          end
+
+          # Evaluate content_type before assertions to have nice descriptions
+          def evaluate_content_type
+            return unless @options.key?(:with_content_type)
+
+            @options[:with_content_type] = case @options[:with_content_type]
+              when Symbol
+                Mime::Type.lookup_by_extension(@options[:with_content_type].to_s).to_s
+              when Regexp
+                @options[:with_content_type]
+              else
+                @options[:with_content_type].to_s
             end
           end
 
           def interpolation_options
-            { :expected => @expected.to_s, :actual => (@response ? @response.response_code.inspect : '') }
+            if @response
+              { :status => @response.response_code.inspect, :content_type => @response.content_type.inspect }
+            else
+              { }
+            end
           end
 
       end
 
-      # Passes if the response has the given status. Status can be a Symbol like
-      # :success, :missing, :redirect and :error. Can be also a Fixnum, Range or
+      # Passes if the response has the given status. Status can be a Symbol lik
+      # :success, :missing, :redirect and :error. Can be also a Fixnum, Range o
       # any other symbol which matches to any of Rails status codes. 
+      #
+      # == Options
+      #
+      # * <tt>:with_content_type</tt> - The content type of the response.
+      #   It accepts strings ('application/rss+xml'), mime constants (Mime::RSS),
+      #   symbols (:rss) and regular expressions /rss/.
       #
       # == Examples
       #
       #   should_respond_with :success
       #   should_respond_with :error
-      #   should_respond_with 301
-      #   should_respond_with 300..399
+      #   should_respond_with 301,       :with_content_type => Mime::XML
+      #   should_respond_with 300..399, :with_content_type => Mime::XML
       #
       #   it { should respond_with(:success) }
       #   it { should respond_with(:error) }
-      #   it { should respond_with(301) }
-      #   it { should respond_with(300..399) }
+      #   it { should respond_with(301).with_content_type(Mime::XML) }
+      #   it { should respond_with(300..399).with_content_type(Mime::XML) }
       #
-      def respond_with(status, options={})
-        RespondWithMatcher.new(status, options).spec(self)
+      def respond_with(*args)
+        options = args.extract_options!
+        RespondWithMatcher.new(options.merge(:with => args.first)).spec(self)
+      end
+
+      # This is for Shoulda compatibility. It just calls respond_with. So
+      # check respond_with for more information.
+      #
+      def respond_with_content_type(*args)
+        options = args.extract_options!
+        RespondWithMatcher.new(options.merge(:with_content_type => args.first)).spec(self)
       end
 
     end

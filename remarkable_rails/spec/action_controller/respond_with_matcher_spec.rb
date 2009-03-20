@@ -5,6 +5,7 @@ describe 'respond_with' do
 
   describe 'messages' do
     before(:each) do
+      build_response
       @matcher = respond_with(:error)
     end
 
@@ -15,9 +16,14 @@ describe 'respond_with' do
     end
 
     it 'should set status_match? message' do
-      build_response
       @matcher.matches?(@controller)
-      @matcher.failure_message.should == 'Expected to respond with error, got 200'
+      @matcher.failure_message.should == 'Expected to respond with :error, got 200'
+    end
+
+    it 'should set content_type_match? message' do
+      @matcher = respond_with(:success)
+      @matcher.with_content_type(Mime::XML).matches?(@controller)
+      @matcher.failure_message.should == 'Expected to respond with content type "application/xml", got "text/html"'
     end
   end
 
@@ -30,6 +36,11 @@ describe 'respond_with' do
       it { should respond_with(:ok) }
       it { should respond_with(:success) }
       it { should respond_with(200..299) }
+
+      it { should respond_with(200, :with_content_type => Mime::HTML) }
+      it { should respond_with(:ok, :with_content_type => Mime::HTML) }
+      it { should respond_with(:success, :with_content_type => Mime::HTML) }
+      it { should respond_with(200..299, :with_content_type => Mime::HTML) }
 
       it { should_not respond_with(404) }
       it { should_not respond_with(:not_found) }
@@ -64,6 +75,36 @@ describe 'respond_with' do
       it { should_not respond_with(200..299) }
     end
 
+    describe 'respond_with_content_type' do
+      describe 'and Mime::HTML' do
+        before(:each){ build_response { render :action => :new } }
+
+        it { should respond_with_content_type(:html) }
+        it { should respond_with_content_type(/html/) }
+        it { should respond_with_content_type(Mime::HTML) }
+        it { should respond_with_content_type('text/html') }
+
+        it { should_not respond_with_content_type(:xml) }
+        it { should_not respond_with_content_type(/xml/) }
+        it { should_not respond_with_content_type(Mime::XML) }
+        it { should_not respond_with_content_type('application/xml') }
+      end
+
+      describe 'and Mime::XML' do
+        before(:each) { build_response { respond_to{ |format| format.xml } } }
+
+        it { should respond_with_content_type(:xml) }
+        it { should respond_with_content_type(/xml/) }
+        it { should respond_with_content_type(Mime::XML) }
+        it { should respond_with_content_type('application/xml') }
+
+        it { should_not respond_with_content_type(:html) }
+        it { should_not respond_with_content_type(/html/) }
+        it { should_not respond_with_content_type(Mime::HTML) }
+        it { should_not respond_with_content_type('text/html') }
+      end
+    end
+
   end
 
   describe 'macro' do
@@ -75,6 +116,11 @@ describe 'respond_with' do
       should_respond_with :ok
       should_respond_with :success
       should_respond_with 200..299
+
+      should_respond_with 200, :with_content_type => Mime::HTML
+      should_respond_with :ok, :with_content_type => Mime::HTML
+      should_respond_with :success, :with_content_type => Mime::HTML
+      should_respond_with 200..299, :with_content_type => Mime::HTML
 
       should_not_respond_with 404
       should_not_respond_with :not_found
@@ -109,7 +155,38 @@ describe 'respond_with' do
       should_not_respond_with 200..299
     end
 
+    describe 'respond_with_content_type' do
+      describe 'and Mime::HTML' do
+        before(:each){ build_response { render :action => :new } }
+
+        should_respond_with_content_type :html
+        should_respond_with_content_type /html/
+        should_respond_with_content_type Mime::HTML
+        should_respond_with_content_type 'text/html'
+
+        should_not_respond_with_content_type :xml
+        should_not_respond_with_content_type /xml/
+        should_not_respond_with_content_type Mime::XML
+        should_not_respond_with_content_type 'application/xml'
+      end
+
+      describe 'and Mime::XML' do
+        before(:each) { build_response { respond_to{ |format| format.xml } } }
+
+        should_respond_with_content_type :xml
+        should_respond_with_content_type /xml/
+        should_respond_with_content_type Mime::XML
+        should_respond_with_content_type 'application/xml'
+
+        should_not_respond_with_content_type :html
+        should_not_respond_with_content_type /html/
+        should_not_respond_with_content_type Mime::HTML
+        should_not_respond_with_content_type 'text/html'
+      end
+    end
+
   end
 
   generate_macro_stubs_specs_for(:respond_with, 200)
+  generate_macro_stubs_specs_for(:respond_with_content_type, Mime::HTML)
 end
