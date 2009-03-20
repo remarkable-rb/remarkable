@@ -34,7 +34,7 @@ module Remarkable
         #
         # Is declared as:
         #
-        #   arguments :attribute, :collection => :good_values
+        #   arguments :attribute, :collection => :good_values, :as => :good_value
         #
         # And this is the same as:
         #
@@ -49,11 +49,6 @@ module Remarkable
         # Now, the collection is @good_values. In each assertion method we will
         # have a @good_value variable (in singular) instantiated with the value
         # to assert.
-        #
-        # If ActiveSupport is not loaded, we cannot singularize a string and
-        # an error will be raised unless you give :as as option:
-        #
-        #   arguments :collection => :attributes, :as => :attribute
         #
         # Finally, if your matcher deals with blocks, you can also set them as
         # option:
@@ -70,7 +65,12 @@ module Remarkable
 
           if collection = options.delete(:collection)
             @matcher_arguments[:collection] = collection
-            @matcher_arguments[:as]         = singularize!(@matcher_arguments[:collection].to_s, options.delete(:as))
+
+            if options[:as]
+              @matcher_arguments[:as] = options.delete(:as)
+            else
+              raise ArgumentError, 'You gave me :collection as option but have not give me :as as well'
+            end
 
             args          << "*#{collection}"
             get_options    = "#{collection}.extract_options!"
@@ -176,21 +176,6 @@ END
             define_method :default_options, &block
           else
             class_eval "def default_options; #{hash.inspect}; end"
-          end
-        end
-
-      private
-
-        # Helper that deals with string singularization. If a default is not given
-        # delegates to String#singularize if available or raise an error if not.
-        #
-        def singularize!(string, default=nil)
-          return default if default
-
-          if string.respond_to? :singularize
-            string.singularize
-          else
-            raise ArgumentError, "String does not respond to singularize. Please give :as as option in arguments."
           end
         end
 
