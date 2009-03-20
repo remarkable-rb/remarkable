@@ -9,12 +9,10 @@ en:
           is_kind_of: "assign {{name}} to be kind of {{with_kind_of}}, got a {{assign_class}}"
           is_equal_value: "assign {{name}} to be equal to {{with}}, got {{assign_inspect}}"
         optionals:
-          with:
-            given: "with {{inspect}}"
           with_kind_of:
             given: "with kind of {{value}}"
       filter_params:
-        description: "filter parameters {{params}} from log"
+        description: "filter {{params}} parameters from log"
         expectations:
           respond_to_filter_params: "controller to respond to filter_parameters (controller is not filtering any parameter)"
           is_filtered: "{{param}} to be filtered"

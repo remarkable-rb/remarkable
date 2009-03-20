@@ -5,37 +5,6 @@ class ApplicationController < ActionController::Base
 end
 
 class Task; end
-class TasksController < ApplicationController
-  def index
-    @tasks = Task.find(:all)
-    render :text => 'index'
-  end
-
-  def new
-  end
-
-  def show
-    @task = Task.find(params[:id])
-
-    respond_to do |format|
-      format.html { render :text => 'show' }
-      format.xml  { render :xml => @task.to_xml }
-    end
-  end
-
-  def destroy
-    @task = Task.find(params[:id])
-    @task.destroy
-
-    flash[:notice]        = 'Task deleted.'
-    session[:last_action] = [controller_name, action_name]
-
-    respond_to do |format|
-     format.html { redirect_to project_tasks_url(10) }
-     format.xml  { head :ok }
-    end
-  end
-end
 
 # Define routes
 ActionController::Routing::Routes.draw do |map|

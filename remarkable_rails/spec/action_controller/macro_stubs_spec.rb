@@ -115,8 +115,8 @@ describe 'MacroStubs' do
     should_set_the_flash :notice, :to => 'Task deleted.'
 
     should_set_session
-    should_set_session :last_action
-    should_set_session :last_action, :to => [ 'tasks', 'destroy' ]
+    should_set_session :last_task_id
+    should_set_session :last_task_id, :to => 37
 
     should_redirect_to{ project_tasks_url(10) }
     should_redirect_to proc{ project_tasks_url(10) }, :with => 302

@@ -29,8 +29,7 @@ module Remarkable
           end
 
           def interpolation_options
-            { :expected => (@expected.is_a?(Symbol) ? @expected.to_s : @expected).inspect,
-              :actual   => (@response ? @response.response_code.inspect : '') }
+            { :expected => @expected.to_s, :actual => (@response ? @response.response_code.inspect : '') }
           end
 
       end

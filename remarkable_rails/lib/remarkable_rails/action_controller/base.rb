@@ -18,7 +18,7 @@ module Remarkable
         def perform_action_with_macro_stubs
           controller = @spec.instance_variable_get('@controller')
           @spec.send(:run_action!, run_with_expectations?) unless controller && controller.send(:performed?)
-        rescue Exception => e
+        rescue Remarkable::ActionController::MacroStubsError
           nil
         end
 

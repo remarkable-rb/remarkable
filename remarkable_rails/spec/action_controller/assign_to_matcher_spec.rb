@@ -12,11 +12,8 @@ describe 'assign_to' do
       @matcher = assign_to(:user)
       @matcher.description.should == 'assign user'
 
-      @matcher.with(1..2)
-      @matcher.description.should == 'assign user with 1..2'
-
       @matcher.with_kind_of(String)
-      @matcher.description.should == 'assign user with 1..2 and with kind of String'
+      @matcher.description.should == 'assign user with kind of String'
     end
 
     it 'should set assigned_value? message' do

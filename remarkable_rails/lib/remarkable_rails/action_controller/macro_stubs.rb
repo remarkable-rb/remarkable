@@ -87,6 +87,10 @@
 #
 module Remarkable
   module ActionController
+
+    # Define error classes, so we only catch them in matchers
+    class MacroStubsError < ::ArgumentError; end
+
     module MacroStubs
       HTTP_VERBS = [ :get, :post, :put, :delete ]
 
@@ -192,7 +196,7 @@ module Remarkable
             object       = evaluate_value(options.delete(:on))
             return_value = evaluate_value(options.delete(:returns))
 
-            raise ArgumentError, "You have to give me :on option when calling expects." if object.nil?
+            raise MacroStubsError, "You have to give me :on option when calling expects." if object.nil?
 
             # Now we actually do the stubbing or expectations
             #
@@ -231,8 +235,8 @@ module Remarkable
           action ||= default_action
           params   = (default_params || {}).merge(params)
 
-          raise ScriptError, 'You have to declare if I should do a :get, :post, :put or :delete' unless verb
-          raise ScriptError, 'You have to say which action I should call'                        unless action
+          raise MacroStubsError, 'You have to declare if I should do a :get, :post, :put or :delete' unless verb
+          raise MacroStubsError, 'You have to say which action I should call'                        unless action
 
           # Set the mime type
           request.env["HTTP_ACCEPT"] ||= mime.to_s if mime

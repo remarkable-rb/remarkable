@@ -1,0 +1,78 @@
+pt-BR:
+  remarkable:
+    core:
+      not: não
+      should: deve
+      should_not: não deve
+      example_disabled: Exemplo desativado
+      failure_message_for_should: Esperava que {{expectation}}
+      failure_message_for_should_not: Não esperava que {{expectation}}
+
+      helpers:
+        words_connector: ', '
+        two_words_connector: ' e '
+        last_word_connector: ' e '
+
+    action_controller:
+      responding: "respondendo a #{{verb}} {{action}}"
+      assign_to:
+        description: "assinalar {{names}}"
+        expectations:
+          assigned_value: "ação assinalasse {{name}}"
+          is_kind_of: "valor assinalado a {{name}} fosse um tipo de {{with_kind_of}}, obtive {{assign_class}}"
+          is_equal_value: "valor assinalado a {{name}} fosse um tipo de {{with}}, obtive {{assign_inspect}}"
+        optionals:
+          with_kind_of:
+            given: "com um tipo de {{value}}"
+      filter_params:
+        description: "filtrar {{params}} parâmetros do log"
+        expectations:
+          respond_to_filter_params: "que o controllador respondesse a filter_parameters (controlador não está filtrando nenhum parâmetro)"
+          is_filtered: "{{param}} fosse filtrado"
+      redirect_to:
+        description: "redirecionar para {{expected}}"
+        expectations:
+          redirect: "redirecionar para {{expected}}, não fui redirecionado a lugar algum"
+          status_match: "redirecionar para {{expected}} com status {{with}}, obtive status {{status}}"
+          url_match: "redirecionar para {{expected}}, fui redirecionado para {{actual}}"
+        optionals:
+          with:
+            given: "com status {{inspect}}"
+      render_template:
+        description: "renderizar template {{expected}}"
+        expectations:
+          rendered: "template {{expected}} fosse renderizado, nada foi renderizado"
+          expected_match: "template {{expected}} fosse renderizado, obtive {{actual}}"
+          layout_match: "template fosse renderizado com {{with_layout}}, obtive {{layout}}"
+          content_type_match: "template fosse renderizado com content-type {{with_content_type}}, obtive {{content_type}}"
+        optionals:
+          with_layout:
+            positive: "com layout {{inspect}}"
+            negative: "sem layout"
+          with_content_type:
+            given: "com content-type {{inspect}}"
+      respond_with:
+        description: "responder com {{expected}}"
+        expectations:
+          status_match: "responder com {{expected}}, obtive {{actual}}"
+      set_session:
+        description: "setar {{keys}} na sessão"
+        expectations:
+          is_not_empty: "que qualquer variável fosse setada, obtive {{session_inspect}}"
+          contains_value: "que qualquer variável fosse setada em {{to}}, obtive {{session_inspect}}"
+          assigned_value: "a variável {{key}} fosse setada, obtive {{session_inspect}}"
+          is_equal_value: "a variável {{key}} fosse setada para {{to}}, obtive {{session_inspect}}"
+        optionals:
+          to:
+            given: "para {{inspect}}"
+      set_the_flash:
+        description: "setar uma mensagem flash {{keys}}"
+        expectations:
+          is_not_empty: "que qualquer mensagem flash fosse setada, obtive {{flash_inspect}}"
+          contains_value: "que qualquer mensagem flash fosse setada para {{to}}, obtive {{flash_inspect}}"
+          assigned_value: "que a mensagem flash {{key}} fosse setada, obtive {{flash_inspect}}"
+          is_equal_value: "que a mensagem flash {{key}} fosse setada para {{to}}, obtive {{flash_inspect}}"
+        optionals:
+          to:
+            given: "para {{inspect}}"
+

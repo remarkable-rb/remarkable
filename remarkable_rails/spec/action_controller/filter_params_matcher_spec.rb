@@ -13,7 +13,7 @@ describe 'filter_params' do
     end
 
     it 'should contain a description message' do
-      @matcher.description.should == 'filter parameters user from log'
+      @matcher.description.should == 'filter user parameters from log'
     end
 
     it 'should set respond_to_filter_params? message' do

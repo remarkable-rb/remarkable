@@ -3,7 +3,7 @@ require 'ruby-debug'
 
 RAILS_ENV     = 'test'
 RAILS_VERSION = ENV['RAILS_VERSION'] || '=2.2.2'
-RSPEC_VERSION = ENV['RSPEC_VERSION'] || '=1.1.12'
+RSPEC_VERSION = ENV['RSPEC_VERSION'] || '=1.2.0'
 
 # Load Rails
 gem 'activesupport', RAILS_VERSION
@@ -19,11 +19,16 @@ gem 'rails', RAILS_VERSION
 require 'rails/version'
 
 # Load Remarkable core on place to avoid gem to be loaded
-RAILS_ROOT = dir = File.dirname(__FILE__)
+dir = File.dirname(__FILE__)
 require File.join(dir, '..', '..', 'remarkable', 'lib', 'remarkable')
 
 # Add spec/application to load path and set view_paths
-$:.unshift(ActionController::Base.view_paths = File.join(dir, 'application'))
+RAILS_ROOT = File.join(dir, 'application')
+$:.unshift(RAILS_ROOT)
+
+ActionController::Base.view_paths = RAILS_ROOT
+require File.join(RAILS_ROOT, 'application')
+require File.join(RAILS_ROOT, 'tasks_controller')
 
 # Load Remarkable Rails
 require File.join(dir, 'functional_builder')

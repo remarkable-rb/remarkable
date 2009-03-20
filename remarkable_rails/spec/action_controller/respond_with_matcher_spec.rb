@@ -10,14 +10,14 @@ describe 'respond_with' do
 
     it 'should contain a description message' do
       respond_with(404).description.should == 'respond with 404'
-      respond_with(:error).description.should == 'respond with "error"'
+      respond_with(:error).description.should == 'respond with error'
       respond_with(500..599).description.should == 'respond with 500..599'
     end
 
     it 'should set status_match? message' do
       build_response
       @matcher.matches?(@controller)
-      @matcher.failure_message.should == 'Expected to respond with "error", got 200'
+      @matcher.failure_message.should == 'Expected to respond with error, got 200'
     end
   end
 
