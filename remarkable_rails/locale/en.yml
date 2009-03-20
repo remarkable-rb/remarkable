@@ -13,6 +13,11 @@ en:
             given: "with {{inspect}}"
           with_kind_of:
             given: "with kind of {{value}}"
+      filter_params:
+        description: "filter parameters {{params}} from log"
+        expectations:
+          respond_to_filter_params: "controller to respond to filter_parameters (controller is not filtering any parameter)"
+          is_filtered: "{{param}} to be filtered"
       redirect_to:
         description: "redirect to {{expected}}"
         expectations:

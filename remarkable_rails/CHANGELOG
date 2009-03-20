@@ -1,10 +1,74 @@
+[TODO] Port views matchers from rspec to Remarkable to provide I18n.
+
 # v3.0.0
 
-* Added respond_with_content_type and render_with_layout matchers as part of
-  render_template matcher, so we can use :with_layout and :with_content_type
-  all inside render template
-* Added render_template matcher
-* Added redirect_to matcher
-* Added macro stubs
-* Added set_session matcher
-* Added assign_to matcher
+[COMPATIBILITY] Removed route matcher. Rspec already provides two methods to
+test your routes and they should be apart from controller specs. We might add
+functionalities to routes son.
+
+All others matchers :assign_to, :filter_params, :respond_with, :set_session and
+:set_the_flash are kept.
+
+redirect_to and render_template were ported from rspec-rails to remarkable to
+provide I18n. The second was also extended to deal with :with_layout and
+:with_content_type as options. render_with_layout, render_without_layout and
+respond_with_content_type all delegate their logic to render_template matcher.
+
+:set_the_flash was also redesign to match with :set_session, providing a
+consistent API.
+
+Finally, remarkable_rails now ships with a new feature, called macro stubs. This
+allows you to declare just once your mocks and/or expectations, and each matcher
+will know how to deal with properly. A TasksController could have your specs for
+a destroy action rewritten like this:
+
+  describe :delete => :destroy, :id => 37 do
+    expects :find, :on => Task, :with => '37', :returns => mock_task
+    expects :destroy, :on => mock_task
+
+    should_assign_to :task, :equal => mock_task
+    should_redirect_to { tasks_url }
+  end
+
+This will generate two tests, the first one will assert the assignment of
+:task and the second will assert if the action is redirecting to tasks_url.
+Based on describe and expects, each macro evaluates the expectation chain and
+call delete :destroy with params :id => 37 before asserting values. The 
+"describe :delete => :destroy, :id => 37" is a shortcut for:
+
+  describe 'responding with #DELETE destroy' do
+    delete :destroy, :id => 37
+
+    # ...
+  end
+
+By default, should_assign_to will evaluate the expects using expectations, in
+other words, doing Task.should_receive(:find).with('37').and_return(mock_task).
+All others matcher, they evaluate it as stubs: Task.stub!(:find).and_return(mock_task).
+
+Finally, model mocks are also generated on the fly using method missing. expects
+accepts four options: :on, :with, :returns and :times. The first three accepts
+procs that are evaluated within the spec instance binding. When you are calling:
+
+  expects :find, :on => Task, :with => '37', :returns => mock_task
+
+mock_task simply returns a proc that will call mock_task later. So you cannot do:
+
+  expects :find, :on => Task, :with => '37', :returns => mock_task.id
+
+The proper way to do that would be:
+
+  expects :find, :on => Task, :with => '37', :returns => proc { mock_task.id }
+
+However, depending on the feedback, we might add support for it soon. The same
+happens with should_assign_to:
+
+  should_assign_to :task, :with => mock_task
+
+mock_task in this case is also a proc. if you need the mock_task id, you can do:
+
+  should_assign_to :task_id, :with => proc { mock_task.id }
+
+Or rewrite the macro in rspec style:
+
+  it { should_assign_to(:task_id, :with => mock_task.id) }
