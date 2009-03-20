@@ -71,7 +71,7 @@ module Remarkable
           #   * <tt>given</tt> - When the optional is given, doesn't matter the value.
           #   * <tt>not_given</tt> - When the optional is not given.
           #
-          def optional(*names)
+          def optionals(*names)
             options = names.extract_options!
             @matcher_optionals += names
 
@@ -92,6 +92,20 @@ module Remarkable
             # Call unique to avoid duplicate optionals.
             @matcher_optionals.uniq!
           end
+          alias :optional :optionals
+
+          # Instead of appending, prepend optionals to the beginning of optionals
+          # array. This is important because this decide how the description
+          # message is generated.
+          #
+          def prepend_optionals(*names)
+            current_optionals  = @matcher_optionals.dup
+            @matcher_optionals = []
+            optional(*names)
+            @matcher_optionals += current_optionals
+            @matcher_optionals.uniq!
+          end
+          alias :prepend_optional :prepend_optionals
 
       end
 
