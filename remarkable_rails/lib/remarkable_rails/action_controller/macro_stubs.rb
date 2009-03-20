@@ -64,13 +64,13 @@
 # expectations and stubs, right? Not anymore! Check this out:
 #
 #   describe TasksController do
+#     params :project_id => '42' #=> define params for all requests
+#
 #     expects :find_by_title, :on => Project, :with => '42', :returns => :mock_project
 #     expects :tasks, :and_return => Task
 #
-#     params :project_id => '42' #=> define params for all requests
-#
 #     describe :get => :show, :id => '37' do
-#       receives :find, :with => '37', :and_return => :mock_task
+#       expects :find, :with => '37', :and_return => :mock_task
 #
 #       should_assign_to :project, :task
 #       should_render_template 'show'

@@ -9,6 +9,8 @@ module Remarkable
 
         before_assert :evaluate_expected_value
 
+        default_options :with_expectations => true
+
         protected
 
           def assigned_value?

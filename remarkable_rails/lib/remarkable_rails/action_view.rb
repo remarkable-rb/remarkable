@@ -3,9 +3,8 @@ module Remarkable
   end
 end
 
-
 dir = File.dirname(__FILE__)
-#require File.join(dir, 'action_view', 'base')
+require File.join(dir, 'action_view', 'base')
 
 # Load matchers
 Dir[File.join(dir, 'action_view', 'matchers', '*.rb')].each do |file|

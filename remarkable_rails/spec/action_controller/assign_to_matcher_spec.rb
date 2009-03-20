@@ -79,4 +79,25 @@ describe 'assign_to' do
     should_not_assign_to :user, :with => proc{ 'joseph' }
   end
 
+  describe 'macro stubs' do
+    expects :new, :on => String, :with => 'ola', :returns => 'ola'
+
+    it 'should run expectations by default' do
+      String.should_receive(:should_receive).with(:new).and_return(@mock=mock('chain'))
+      @mock.should_receive(:with).with('ola').and_return(@mock)
+      @mock.should_receive(:exactly).with(1).and_return(@mock)
+      @mock.should_receive(:times).and_return(@mock)
+      @mock.should_receive(:and_return).with('ola').and_return('ola')
+
+      assign_to(:user).matches?(@controller)
+    end
+
+    it 'should run stubs' do
+      String.should_receive(:stub!).with(:new).and_return(@mock=mock('chain'))
+      @mock.should_receive(:and_return).with('ola').and_return('ola')
+
+      assign_to(:user, :with_stubs => true).matches?(@controller)
+    end
+
+  end
 end

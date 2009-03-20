@@ -3,7 +3,6 @@ module Remarkable
   end
 end
 
-
 dir = File.dirname(__FILE__)
 require File.join(dir, 'action_controller', 'base')
 require File.join(dir, 'action_controller', 'macro_stubs')

@@ -4,6 +4,9 @@ module Remarkable
 
       before_assert :perform_action_with_macro_stubs
 
+      optional :with_expectations, :default => true
+      optional :with_stubs,        :default => true
+
       protected
 
         # Before assertions, check if the controller already performed an action.
@@ -14,9 +17,19 @@ module Remarkable
         #
         def perform_action_with_macro_stubs
           controller = @spec.instance_variable_get('@controller')
-          @spec.send(:run_action!) unless controller && controller.send(:performed?)
+          @spec.send(:run_action!, run_with_expectations?) unless controller && controller.send(:performed?)
         rescue Exception => e
           nil
+        end
+
+        def run_with_expectations?
+          if @options.key?(:with_stubs)
+            !@options[:with_stubs]
+          elsif @options.key?(:with_expectations)
+            @options[:with_expectations]
+          else
+            false
+          end
         end
 
     end
