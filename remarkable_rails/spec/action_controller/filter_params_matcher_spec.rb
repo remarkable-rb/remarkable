@@ -5,7 +5,7 @@ describe 'filter_params' do
 
   describe 'messages' do
     before(:each) do
-      @controller = define_controller :Projects do
+      @controller = define_controller :Posts do
         filter_parameter_logging :password
       end.new
 
@@ -17,7 +17,7 @@ describe 'filter_params' do
     end
 
     it 'should set respond_to_filter_params? message' do
-      @controller.class_eval "undef_method :filter_parameters"
+      @controller = define_controller(:Comments).new
       @matcher.matches?(@controller)
       @matcher.failure_message.should == 'Expected controller to respond to filter_parameters (controller is not filtering any parameter)'
     end
@@ -30,7 +30,7 @@ describe 'filter_params' do
 
   describe 'filtering parameter' do
     before(:each) do 
-      @controller = define_controller :Projects do
+      @controller = define_controller :Comments do
         filter_parameter_logging :password
       end.new
 
@@ -48,8 +48,7 @@ describe 'filter_params' do
 
   describe 'not filtering parameter' do
     before(:each) do 
-      @controller = define_controller(:Projects).new
-
+      @controller = define_controller(:Comments).new
       self.class.subject { @controller }
     end
 
