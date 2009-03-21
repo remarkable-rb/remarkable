@@ -10,14 +10,14 @@ All others matchers :assign_to, :filter_params, :respond_with, :set_session and
 :set_the_flash are kept.
 
 redirect_to and render_template were ported from rspec-rails to remarkable to
-provide I18n. The second was also extended to deal with :with, :with_layout and
-:with_content_type as options.
+provide I18n. The second was also extended to deal with :with, :layout and
+:content_type as options.
 
 render_with_layout, render_without_layout delegate their logic to render_template
 so they share the same options.
 
-respond_with_content_type delegate its logic to respond_with matcher, so they
-also share the same options.
+respond_with_content_type and respond_wity body delegate their logic to respond_with
+matcher, so they also share the same options.
 
 :set_the_flash was also redesign to inherit from :set_session, providing a
 consistent API.

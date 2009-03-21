@@ -5,14 +5,14 @@ module Remarkable
     module Matchers
       class RenderTemplateMatcher < RespondWithMatcher #:nodoc:
 
-        prepend_optional :with_template, :with_layout
+        prepend_optional :template, :layout
 
         assertions :rendered?, :template_match?, :layout_match?
 
         protected
 
           def rendered?
-            return true unless @options.key?(:with_template)
+            return true unless @options.key?(:template)
 
             @actual = if @response.respond_to?(:rendered_file)
               @response.rendered_file
@@ -35,10 +35,10 @@ module Remarkable
           end
 
           def template_match?
-            return true unless @options[:with_template] # only continue if not nil
+            return true unless @options[:template] # only continue if not nil
 
             actual_controller_path, actual_file     = path_and_file(@actual.to_s)
-            expected_controller_path, expected_file = path_and_file(@options[:with_template].to_s)
+            expected_controller_path, expected_file = path_and_file(@options[:template].to_s)
 
             # Test if each given slice matches. Actual always return the full
             # file name (new.html.erb), on the other hand, the user might supply
@@ -54,8 +54,8 @@ module Remarkable
           end
 
           def layout_match?
-            return true unless @options.key?(:with_layout)
-            @response.layout.to_s.split('/').last.to_s == @options[:with_layout].to_s
+            return true unless @options.key?(:layout)
+            @response.layout.to_s.split('/').last.to_s == @options[:layout].to_s
           end
 
           def path_and_file(path)
@@ -67,9 +67,9 @@ module Remarkable
 
           def interpolation_options
             if @response
-              super.merge!(:layout => @response.layout.inspect, :template => @actual.inspect)
+              super.merge!(:actual_layout => @response.layout.inspect, :actual_template => @actual.inspect)
             else
-              super.merge!(:template => @actual.inspect)
+              super.merge!(:actual_template => @actual.inspect)
             end
           end
 
@@ -86,9 +86,9 @@ module Remarkable
       #
       # == Options
       #
-      # * <tt>:with_layout</tt>       - The layout used when rendering the template.
-      # * <tt>:with_content_type</tt> - The content type of the response.
-      #   It accepts strings ('application/rss+xml'), mime constants (Mime::RSS), symbols (:rss) and regular expressions /rss/.
+      # * <tt>:layout</tt> - The layout used when rendering the template.
+      #
+      # All other options in <tt>respond_with</tt> are also available.
       #
       # == Examples
       #
@@ -108,15 +108,15 @@ module Remarkable
       #   should_render_template 'other_controller/_a_partial'
       #
       # # with options
-      #   should_render_template 'list', :with_layout => 'users'
-      #   should_render_template 'list', :with_content_type => :xml
-      #   should_render_template 'list', :with_content_type => /xml/
-      #   should_render_template 'list', :with_content_type => Mime::XML
+      #   should_render_template 'list', :layout => 'users'
+      #   should_render_template 'list', :content_type => :xml
+      #   should_render_template 'list', :content_type => /xml/
+      #   should_render_template 'list', :content_type => Mime::XML
       #
-      #   it { should render_template('list').with_layout('users') }
-      #   it { should render_template('list').with_content_type(:xml) }
-      #   it { should render_template('list').with_content_type(/xml/) }
-      #   it { should render_template('list').with_content_type(Mime::XML) }
+      #   it { should render_template('list').layout('users') }
+      #   it { should render_template('list').content_type(:xml) }
+      #   it { should render_template('list').content_type(/xml/) }
+      #   it { should render_template('list').content_type(Mime::XML) }
       #
       # == Gotcha
       #
@@ -124,22 +124,22 @@ module Remarkable
       #
       def render_template(*args)
         options = args.extract_options!
-        RenderTemplateMatcher.new(options.merge(:with_template => args.first)).spec(self)
+        RenderTemplateMatcher.new(options.merge(:template => args.first)).spec(self)
       end
 
-      # This is just a shortcut for render_template :with_layout. It's also
+      # This is just a shortcut for render_template :layout => layout. It's also
       # used for Shoulda compatibility. Check render_template for more information.
       #
       def render_with_layout(*args)
         options = args.extract_options!
-        RenderTemplateMatcher.new(options.merge(:with_layout => args.first)).spec(self)
+        RenderTemplateMatcher.new(options.merge(:layout => args.first)).spec(self)
       end
 
-      # This is just a shortcut for render_template :with_layout => nil. It's also
+      # This is just a shortcut for render_template :layout => nil. It's also
       # used for Shoulda compatibility. Check render_template for more information.
       #
       def render_without_layout(options={})
-        RenderTemplateMatcher.new(options.merge(:with_layout => nil)).spec(self)
+        RenderTemplateMatcher.new(options.merge(:layout => nil)).spec(self)
       end
 
     end

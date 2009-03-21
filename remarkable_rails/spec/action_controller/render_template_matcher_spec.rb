@@ -12,19 +12,13 @@ describe 'render_template' do
     it 'should contain a description message' do
       @matcher.description.should == 'render template "edit"'
 
-      @matcher.with_layout('application')
+      @matcher.layout('application')
       @matcher.description.should == 'render template "edit" and with layout "application"'
 
-      @matcher.with_layout(nil)
+      @matcher.layout(nil)
       @matcher.description.should == 'render template "edit" and with no layout'
 
-      @matcher.with_content_type(:xml).matches?(@controller)
-      @matcher.description.should == 'render template "edit", with no layout, and with content type "application/xml"'
-
-      @matcher.with_content_type(/xml/).matches?(@controller)
-      @matcher.description.should == 'render template "edit", with no layout, and with content type /xml/'
-
-      @matcher.with_content_type(Mime::XML).matches?(@controller)
+      @matcher.content_type(Mime::XML).matches?(@controller)
       @matcher.description.should == 'render template "edit", with no layout, and with content type "application/xml"'
     end
 
@@ -45,7 +39,7 @@ describe 'render_template' do
 
     it 'should set layout_match? message' do
       @matcher = render_template('new')
-      @matcher.with_layout('users').matches?(@controller)
+      @matcher.layout('users').matches?(@controller)
       @matcher.failure_message.should == 'Expected to render with layout "users", got nil'
     end
   end
@@ -142,10 +136,11 @@ describe 'render_template' do
       it { should render_with_layout('examples') }
       it { should_not render_with_layout('users') }
       it { should_not render_with_layout(nil) }
+      it { should_not render_without_layout }
 
-      it { should render_template.with_layout('examples') }
-      it { should_not render_template.with_layout('users') }
-      it { should_not render_template.with_layout(nil) }
+      it { should render_template.layout('examples') }
+      it { should_not render_template.layout('users') }
+      it { should_not render_template.layout(nil) }
     end
 
     describe 'render_without_layout' do
@@ -234,9 +229,9 @@ describe 'render_template' do
       should_not_render_with_layout 'users'
       should_not_render_with_layout nil
 
-      should_render_template :with_layout => 'examples'
-      should_not_render_template :with_layout => 'users'
-      should_not_render_template :with_layout => nil
+      should_render_template :layout => 'examples'
+      should_not_render_template :layout => 'users'
+      should_not_render_template :layout => nil
     end
 
     describe 'render_without_layout' do

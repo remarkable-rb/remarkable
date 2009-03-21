@@ -13,6 +13,12 @@ describe 'respond_with' do
       respond_with(404).description.should == 'respond with 404'
       respond_with(:error).description.should == 'respond with error'
       respond_with(500..599).description.should == 'respond with 500..599'
+
+      @matcher.body(/anything/)
+      @matcher.description.should == 'respond with error and with body /anything/'
+
+      @matcher.content_type(Mime::XML).matches?(@controller)
+      @matcher.description.should == 'respond with error, with body /anything/, and with content type "application/xml"'
     end
 
     it 'should set status_match? message' do
@@ -28,7 +34,7 @@ describe 'respond_with' do
 
     it 'should set content_type_match? message' do
       @matcher = respond_with(:success)
-      @matcher.with_content_type(Mime::XML).matches?(@controller)
+      @matcher.content_type(Mime::XML).matches?(@controller)
       @matcher.failure_message.should == 'Expected to respond with content type "application/xml", got "text/html"'
     end
   end
@@ -43,10 +49,10 @@ describe 'respond_with' do
       it { should respond_with(:success) }
       it { should respond_with(200..299) }
 
-      it { should respond_with(200, :with_content_type => Mime::HTML) }
-      it { should respond_with(:ok, :with_content_type => Mime::HTML) }
-      it { should respond_with(:success, :with_content_type => Mime::HTML) }
-      it { should respond_with(200..299, :with_content_type => Mime::HTML) }
+      it { should respond_with(200, :content_type => Mime::HTML) }
+      it { should respond_with(:ok, :content_type => Mime::HTML) }
+      it { should respond_with(:success, :content_type => Mime::HTML) }
+      it { should respond_with(200..299, :content_type => Mime::HTML) }
 
       it { should_not respond_with(404) }
       it { should_not respond_with(:not_found) }
@@ -132,10 +138,10 @@ describe 'respond_with' do
       should_respond_with :success
       should_respond_with 200..299
 
-      should_respond_with 200, :with_content_type => Mime::HTML
-      should_respond_with :ok, :with_content_type => Mime::HTML
-      should_respond_with :success, :with_content_type => Mime::HTML
-      should_respond_with 200..299, :with_content_type => Mime::HTML
+      should_respond_with 200, :content_type => Mime::HTML
+      should_respond_with :ok, :content_type => Mime::HTML
+      should_respond_with :success, :content_type => Mime::HTML
+      should_respond_with 200..299, :content_type => Mime::HTML
 
       should_not_respond_with 404
       should_not_respond_with :not_found
