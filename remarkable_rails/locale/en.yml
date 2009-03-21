@@ -30,27 +30,33 @@ en:
         expectations:
           rendered: "template {{with_template}} to be rendered, got no render"
           template_match: "template {{with_template}} to be rendered, got {{template}}"
-          status_match: "to render with {{with}}, got {{status}}"
           layout_match: "to render with layout {{with_layout}}, got {{layout}}"
+          status_match: "to render with {{with}}, got {{status}}"
+          body_match: "to render with body equals to {{body}}, got {{current_body}}"
           content_type_match: "to render with content type {{with_content_type}}, got {{content_type}}"
         optionals:
           with_template:
             given: "template {{inspect}}"
-          with:
-            given: "with {{value}}"
           with_layout:
             positive: "with layout {{inspect}}"
             negative: "with no layout"
+          with:
+            given: "with {{value}}"
+          body:
+            given: "with body equals to {{inspect}}"
           with_content_type:
             given: "with content type {{inspect}}"
       respond_with:
         description: "respond"
         expectations:
           status_match: "to respond with {{with}}, got {{status}}"
+          body_match: "to respond with body equals to {{body}}, got {{current_body}}"
           content_type_match: "to respond with content type {{with_content_type}}, got {{content_type}}"
         optionals:
           with:
             given: "with {{value}}"
+          body:
+            given: "with body equals to {{inspect}}"
           with_content_type:
             given: "with content type {{inspect}}"
       set_session:

@@ -5,7 +5,7 @@ module Remarkable
 
         arguments
 
-        optional :with, :with_content_type
+        optional :with, :body, :with_content_type
 
         before_assert do
           @response   = @subject.respond_to?(:response) ? @subject.response : @subject
@@ -14,7 +14,7 @@ module Remarkable
 
         before_assert :evaluate_content_type
 
-        assertions :status_match?, :content_type_match?
+        assertions :status_match?, :body_match?, :content_type_match?
 
         protected
 
@@ -34,6 +34,11 @@ module Remarkable
                 raise ArgumentError, "I don't know how to interpret status #{@options[:with].inspect}, " <<
                                       "please give me a Fixnum, Symbol, String or Range."
             end
+          end
+
+          def body_match?
+            return true unless @options.key?(:body)
+            assert_contains(@response.body, @options[:body])
           end
 
           def content_type_match?
@@ -57,7 +62,9 @@ module Remarkable
 
           def interpolation_options
             if @response
-              { :status => @response.response_code.inspect, :content_type => @response.content_type.inspect }
+              { :current_body => @response.body.inspect,
+                :status => @response.response_code.inspect,
+                :content_type => @response.content_type.inspect }
             else
               { }
             end
@@ -71,6 +78,10 @@ module Remarkable
       #
       # == Options
       #
+      # * <tt>:body</tt> - The body of the response. It accepts strings and or
+      #   regular expressions. Altought you might be running your tests without
+      #   integrating your views, this is useful when rendering :xml or :text.
+      #
       # * <tt>:with_content_type</tt> - The content type of the response.
       #   It accepts strings ('application/rss+xml'), mime constants (Mime::RSS),
       #   symbols (:rss) and regular expressions /rss/.
@@ -78,13 +89,13 @@ module Remarkable
       # == Examples
       #
       #   should_respond_with :success
-      #   should_respond_with :error
-      #   should_respond_with 301,       :with_content_type => Mime::XML
+      #   should_respond_with :error,   :body => /System error/
+      #   should_respond_with 301,      :with_content_type => Mime::XML
       #   should_respond_with 300..399, :with_content_type => Mime::XML
       #
-      #   it { should respond_with(:success) }
-      #   it { should respond_with(:error) }
-      #   it { should respond_with(301).with_content_type(Mime::XML) }
+      #   it { should respond_with(:success)                              }
+      #   it { should respond_with(:error).body(/System error/)           }
+      #   it { should respond_with(301).with_content_type(Mime::XML)      }
       #   it { should respond_with(300..399).with_content_type(Mime::XML) }
       #
       def respond_with(*args)
@@ -92,12 +103,20 @@ module Remarkable
         RespondWithMatcher.new(options.merge(:with => args.first)).spec(self)
       end
 
-      # This is for Shoulda compatibility. It just calls respond_with. So
-      # check respond_with for more information.
+      # This is just a shortcut for respond_with :with_content_type. It's also
+      # used for Shoulda compatibility. Check respond_with for more information.
       #
       def respond_with_content_type(*args)
         options = args.extract_options!
         RespondWithMatcher.new(options.merge(:with_content_type => args.first)).spec(self)
+      end
+
+      # This is just a shortcut for respond_with :body. Check respond_with for
+      # more information.
+      #
+      def respond_with_body(*args)
+        options = args.extract_options!
+        RespondWithMatcher.new(options.merge(:body => args.first)).spec(self)
       end
 
     end

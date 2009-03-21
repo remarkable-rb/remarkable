@@ -22,6 +22,12 @@ describe 'respond_with' do
 
     it 'should set content_type_match? message' do
       @matcher = respond_with(:success)
+      @matcher.body(/anything/).matches?(@controller)
+      @matcher.failure_message.should == 'Expected to respond with body equals to /anything/, got " "'
+    end
+
+    it 'should set content_type_match? message' do
+      @matcher = respond_with(:success)
       @matcher.with_content_type(Mime::XML).matches?(@controller)
       @matcher.failure_message.should == 'Expected to respond with content type "application/xml", got "text/html"'
     end
@@ -59,6 +65,15 @@ describe 'respond_with' do
       it { should_not respond_with(:found) }
       it { should_not respond_with(:redirect) }
       it { should_not respond_with(300..305) }
+    end
+
+    describe 'respond_with_body' do
+      before(:each) { build_response { respond_to{ |format| format.xml { render :xml => [].to_xml } } } }
+
+      it { should respond_with_body(%{<?xml version="1.0" encoding="UTF-8"?>\n<nil-classes type="array"/>\n}) }
+      it { should respond_with_body(/xml/)       }
+      it { should_not respond_with_body('html')  }
+      it { should_not respond_with_body(/html/)  }
     end
 
     describe 'on redirect' do
@@ -155,6 +170,15 @@ describe 'respond_with' do
       should_not_respond_with 200..299
     end
 
+    describe 'respond_with_body' do
+      before(:each) { build_response { respond_to{ |format| format.xml { render :xml => [].to_xml } } } }
+
+      should_respond_with_body %{<?xml version="1.0" encoding="UTF-8"?>\n<nil-classes type="array"/>\n}
+      should_respond_with_body /xml/
+      should_not_respond_with_body 'html'
+      should_not_respond_with_body /html/
+    end
+
     describe 'respond_with_content_type' do
       describe 'and Mime::HTML' do
         before(:each){ build_response { render :action => :new } }
@@ -188,5 +212,6 @@ describe 'respond_with' do
   end
 
   generate_macro_stubs_specs_for(:respond_with, 200)
+  generate_macro_stubs_specs_for(:respond_with_body, /xml/)
   generate_macro_stubs_specs_for(:respond_with_content_type, Mime::HTML)
 end

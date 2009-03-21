@@ -127,16 +127,16 @@ module Remarkable
         RenderTemplateMatcher.new(options.merge(:with_template => args.first)).spec(self)
       end
 
-      # This is for Shoulda compatibility. It just calls render_template. So
-      # check render_template for more information.
+      # This is just a shortcut for render_template :with_layout. It's also
+      # used for Shoulda compatibility. Check render_template for more information.
       #
       def render_with_layout(*args)
         options = args.extract_options!
         RenderTemplateMatcher.new(options.merge(:with_layout => args.first)).spec(self)
       end
 
-      # This is for Shoulda compatibility. It just calls render_template. So
-      # check render_template for more information.
+      # This is just a shortcut for render_template :with_layout => nil. It's also
+      # used for Shoulda compatibility. Check render_template for more information.
       #
       def render_without_layout(options={})
         RenderTemplateMatcher.new(options.merge(:with_layout => nil)).spec(self)
