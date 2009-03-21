@@ -41,32 +41,38 @@ pt-BR:
       render_template:
         description: "renderizar"
         expectations:
-          rendered: "template {{with_template}} fosse renderizado, nada foi renderizado"
-          template_match: "template {{with_template}} fosse renderizado, obtive {{actual}}"
-          layout_match: "renderizar com layout {{with_layout}}, obtive {{layout}}"
-          status_match: "renderizar com {{with}}, obtive {{status}}"
-          content_type_match: "template fosse renderizado com content type {{with_content_type}}, obtive {{content_type}}"
+          rendered: "template {{template}} fosse renderizado, nada foi renderizado"
+          template_match: "template {{template}} fosse renderizado, obtive {{actual_template}}"
+          layout_match: "renderizar com layout {{layout}}, obtive {{actual_layout}}"
+          status_match: "renderizar com {{with}}, obtive {{actual_status}}"
+          body_match: "renderizar com corpo {{body}}, obtive {{actual_body}}"
+          content_type_match: "renderizar com content type {{content_type}}, obtive {{actual_content_type}}"
         optionals:
-          with_template:
+          template:
             given: "template {{inspect}}"
+          layout:
+            positive: "com layout {{inspect}}"
+            negative: "sem layout"
           with:
             given: "com status {{value}}"
             success: "com sucesso"
-          with_layout:
-            positive: "com layout {{inspect}}"
-            negative: "sem layout"
-          with_content_type:
+          body:
+            given: "com corpo {{inspect}}"
+          content_type:
             given: "com content-type {{inspect}}"
       respond_with:
         description: "responder"
         expectations:
-          status_match: "responder com {{expected}}, obtive {{actual}}"
-          content_type_match: "responder com content type {{with_content_type}}, obtive {{content_type}}"
+          status_match: "responder com {{with}}, obtive {{actual_status}}"
+          body_match: "responder com corpo {{body}}, obtive {{actual_body}}"
+          content_type_match: "responder com content type {{content_type}}, obtive {{actual_content_type}}"
         optionals:
           with:
             given: "com {{value}}"
             success: "com sucesso"
-          with_content_type:
+          body:
+            given: "com corpo {{inspect}}"
+          content_type:
             given: "com content-type {{inspect}}"
       set_session:
         description: "setar {{keys}} na sessão"
