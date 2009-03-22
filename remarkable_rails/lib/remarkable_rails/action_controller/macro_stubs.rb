@@ -130,43 +130,54 @@ module Remarkable
         #
         def describe(*args, &block)
           options = args.first.is_a?(Hash) ? args.first : {}
-          verb    = options.keys & HTTP_VERBS
+          verb    = (options.keys & HTTP_VERBS).first
 
-          unless verb.empty?
-            action = options.delete(verb.first)
-            verb   = verb.first.to_s
+          if verb
+            action = options.delete(verb)
+            verb   = verb.to_s
 
             description = Remarkable.t 'remarkable.action_controller.responding',
-                                        :default => "responding with ##{verb.upcase} #{action}",
+                                        :default => "responding to ##{verb.upcase} #{action}",
                                         :verb => verb.upcase, :action => action
 
-            args.shift
-            args.unshift(description)
+            send_args = [ verb, action, options ]
+          elsif defined?(Mime::Type) && args.first.is_a?(Mime::Type)
+            mime = args.first
 
-            # Creates a new example group with an empty block, send him the new
-            # configuration and then eval the given block.
-            #
-            # We have to do this because the following does not work:
-            #
-            #   super(*args) do
-            #     self.send(verb, action, options)
-            #     yield
-            #   end
-            #
-            # And the reason why we are not doing this:
-            #
-            #   example_group = super(*args, &block)
-            #   example_group.send(verb, action, options)
-            #
-            # Is because we need to set the verb and action BEFORE the block is
-            # evaluated to allow inheritance.
-            #
-            example_group = super(*args, &proc{})
-            example_group.send(verb, action, options)
-            example_group.class_eval(&block)
-          else
-            super(*args, &block)
+            description = Remarkable.t 'remarkable.action_controller.mime_type',
+                                        :default => "with #{mime.to_sym}",
+                                        :format => mime.to_sym, :content_type => mime.to_s
+
+            send_args = [ :mime, mime ]
+          else # return if no special type was found
+            return super(*args, &block)
           end
+
+          # Discard first argument, attach description
+          args.shift
+          args.unshift(description)
+
+          # Creates a new example group with an empty block, send him the new
+          # configuration and then eval the given block.
+          #
+          # We have to do this because the following does not work:
+          #
+          #   super(*args) do
+          #     self.send(verb, action, options)
+          #     yield
+          #   end
+          #
+          # And the reason why we are not doing this:
+          #
+          #   example_group = super(*args, &block)
+          #   example_group.send(verb, action, options)
+          #
+          # Is because we need to set the verb and action BEFORE the block is
+          # evaluated to allow inheritance.
+          #
+          example_group = super(*args, &proc{})
+          example_group.send(*send_args)
+          example_group.class_eval(&block)
         end
 
         # Overwrites method missing to create mocks on the fly.

@@ -33,9 +33,8 @@ describe TasksController, :type => :controller do
 
     should_assign_to :task, :with => mock_task, :with_kind_of => Task
 
-    describe 'mime XML' do
+    describe Mime::XML do
       expects :to_xml, :on => mock_task, :returns => 'generated xml'
-      mime Mime::XML
 
       should_assign_to :task, :with => mock_task, :with_kind_of => Task
       should_respond_with :success, :body => /generated xml/

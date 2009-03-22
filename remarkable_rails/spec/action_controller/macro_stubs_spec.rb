@@ -28,8 +28,12 @@ describe 'MacroStubs' do
     self.respond_to?(:mock_task).should be_true
   end
 
-  describe :get => :show, :id => 37 do
+  describe 'describe group methods' do
     expects :find, :on => Task, :with => proc{ current_id }, :returns => mock_task
+
+    get :show, :id => 37
+    params :special_task_id => 42
+    mime Mime::HTML
 
     it 'should run action declared in describe' do
       @controller.send(:performed?).should_not be_true
@@ -66,9 +70,24 @@ describe 'MacroStubs' do
       @controller.send(:performed?).should_not be_true
     end
 
-    describe 'with mime type XML' do
+    it 'should use parameters given in params on request' do
+      self.should_receive(:current_id).once.and_return('37')
+      run_action!
+      @request.parameters[:special_task_id].should == '42'
+    end
+
+    it 'should respond with the supplied mime type' do
+      self.should_receive(:current_id).once.and_return('37')
+      run_action!
+      @response.content_type.should == Mime::HTML.to_s
+    end
+
+    describe Mime::XML do
       expects :to_xml, :on => mock_task, :returns => 'XML'
-      mime Mime::XML
+
+      it 'should provide a description based on the mime given in describe' do
+        self.class.description.should =~ /with xml$/
+      end
 
       it 'should run action based on inherited declarations' do
         @controller.send(:performed?).should_not be_true
@@ -79,46 +98,48 @@ describe 'MacroStubs' do
         @controller.request.method.should == :get
         @controller.send(:performed?).should be_true
         @controller.response.body.should == 'XML'
+        @request.parameters[:special_task_id].should == '42'
       end
     end
   end
 
-  describe 'responding with #DELETE destroy' do
-    expects :find,    :on => Task,     :with => '37', :returns => mock_task
-    expects :destroy, :on => mock_task
+  describe 'with matcher macros' do
 
-    delete :destroy, :id => 37
+    describe :delete => :destroy, :id => 37 do
+      expects :find,    :on => Task,     :with => '37', :returns => mock_task
+      expects :destroy, :on => mock_task
 
-    it 'should run action declared in describe' do
-      @controller.send(:performed?).should_not be_true
+      subject { controller }
 
-      run_action!
+      should_assign_to :task
+      should_assign_to :task, :with => mock_task
+      should_assign_to :task, :with_kind_of => Task
 
-      @controller.action_name.should == 'destroy'
-      @controller.request.method.should == :delete
-      @controller.send(:performed?).should be_true
+      should_set_the_flash
+      should_set_the_flash :notice
+      should_set_the_flash :notice, :to => 'Task deleted.'
+
+      should_set_session
+      should_set_session :last_task_id
+      should_set_session :last_task_id, :to => 37
+
+      should_redirect_to{ project_tasks_url(10) }
+      should_redirect_to proc{ project_tasks_url(10) }, :with => 302
+
+      it 'should run action declared in describe' do
+        @controller.send(:performed?).should_not be_true
+
+        run_action!
+
+        @controller.action_name.should == 'destroy'
+        @controller.request.method.should == :delete
+        @controller.send(:performed?).should be_true
+      end
+
+      it 'should provide a description based on parameters given in describe' do
+        self.class.description.should =~ /responding to #DELETE destroy$/
+      end
     end
-  end
 
-  describe :delete => :destroy, :id => 37 do
-    expects :find,    :on => Task,     :with => '37', :returns => mock_task
-    expects :destroy, :on => mock_task
-
-    subject { controller }
-
-    should_assign_to :task
-    should_assign_to :task, :with => mock_task
-    should_assign_to :task, :with_kind_of => Task
-
-    should_set_the_flash
-    should_set_the_flash :notice
-    should_set_the_flash :notice, :to => 'Task deleted.'
-
-    should_set_session
-    should_set_session :last_task_id
-    should_set_session :last_task_id, :to => 37
-
-    should_redirect_to{ project_tasks_url(10) }
-    should_redirect_to proc{ project_tasks_url(10) }, :with => 302
   end
 end

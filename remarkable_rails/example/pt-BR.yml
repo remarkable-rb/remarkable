@@ -15,6 +15,7 @@ pt-BR:
 
     action_controller:
       responding: "respondendo a #{{verb}} {{action}}"
+      mime_type: "com {{format}}"
       assign_to:
         description: "assinalar {{names}}"
         expectations:
