@@ -100,23 +100,22 @@ module Remarkable
           # database and tries to return a new value which does not belong to it.
           #
           def new_value_for_scope(scope)
-            new_scope = (@existing.send(scope) || 999).next
+            new_scope = (@existing.send(scope) || 999).next.to_s
 
             # Generate a range of values to search in the database
             values = 100.times.inject([new_scope]) {|v,i| v << v.last.next }
             conditions = { scope => values, @attribute => @value }
 
-            # Get values from the database. If I get more than 20 records back,
-            # means I could find a new value for scope, so we raise an error.
-            db_values = subject_class.find(:all, :conditions => conditions).map(&scope.to_sym)
-            raise ScriptError, "Tried to find an unique scope value for #{scope} but I could not. " << 
-                               "The conditions hash was #{conditions.inspect} and it returned all records." if db_values.size > 100
+            # Get values from the database, get the scope attribute and map them to string.
+            db_values = subject_class.find(:all, :conditions => conditions, :select => scope)
+            db_values.map!{ |r| r.send(scope).to_s }
 
-            # Map values to strings
-            values.map!(&:to_s)
-            db_values.map!(&:to_s)
-
-            (values - db_values).first
+            if value_to_return = (values - db_values).first
+              value_to_return
+            else
+              raise ScriptError, "Tried to find an unique scope value for #{scope} but I could not. " << 
+                                 "The conditions hash was #{conditions.inspect} and it returned all records."
+            end
           end
       end
 

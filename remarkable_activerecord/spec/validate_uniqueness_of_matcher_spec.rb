@@ -117,12 +117,22 @@ describe 'validate_uniqueness_of' do
     it 'should raise an error if cannot find a new scope value' do
       @matcher = define_and_validate(:scope => :email).scope(:email)
 
-      1000.upto(1100).each do |i|
-        User.create!(:username => 'jose', :email => i)
+      User.stub!(:find).and_return do |many, conditions|
+        if many == :all
+          1000.upto(1100).map{|i| User.new(:email => i) }
+        else
+          User.new(:username => 'jose')
+        end
       end
       proc { @matcher.matches?(@model) }.should raise_error(ScriptError)
 
-      User.find_by_email('1050').destroy
+      User.stub!(:find).and_return do |many, conditions|
+        if many == :all
+          1000.upto(1099).map{|i| User.new(:email => i) }
+        else
+          User.new(:username => 'jose')
+        end
+      end
       proc { @matcher.matches?(@model) }.should_not raise_error(ScriptError)
     end
   end
