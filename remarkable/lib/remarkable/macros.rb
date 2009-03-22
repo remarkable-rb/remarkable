@@ -18,29 +18,23 @@ module Remarkable
 
     private
 
-      def should_not_method_missing(method, *args, &block)
-        matcher = find_and_configure_matcher(method, *args, &block)
-        it { should_not matcher.spec(self) }
+      def should_method_missing(method, *args, &block)
+        it { should send(method, *args, &block) }
       end
 
-      def should_method_missing(method, *args, &block)
-        matcher = find_and_configure_matcher(method, *args, &block)
-        it { should matcher.spec(self) }
+      def should_not_method_missing(method, *args, &block)
+        it { should_not send(method, *args, &block) }
       end
 
       def pending_method_missing(method, negative, *args, &block)
-        matcher = find_and_configure_matcher(method, *args, &block)
+        # Create an example group instance and get the matcher.
+        matcher = self.new('pending_method_missing_group').send(method, *args, &block)
         description = matcher.description
 
         verb = Remarkable.t(negative ? 'remarkable.core.should_not' : 'remarkable.core.should')
         xit "#{verb} #{description}"
       rescue
         xit "should #{'not ' if negative}#{method.to_s.gsub('_',' ')}"
-      end
-
-      # Overwrite this to extend macros behavior
-      def find_and_configure_matcher(method, *args, &block)
-        send(method, *args, &block)
       end
 
   end

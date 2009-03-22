@@ -93,7 +93,8 @@ module Remarkable
 
       end
 
-      # Passes if the response is a redirect to the url, action or controller/action.
+      # Passes if the response redirects to the given url. The url can be a string,
+      # a hash or can be supplied as a block (see examples below).
       #
       # == Options
       #

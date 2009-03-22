@@ -82,7 +82,8 @@ module Remarkable
       #
       # == Options
       #
-      # * <tt>:to</tt> - The value to compare the session key. It accepts procs and be also given as a block (see examples below)
+      # * <tt>:to</tt> - The value to compare the session key.
+      #   It accepts procs and be also given as a block (see examples below).
       #
       # == Examples
       #

@@ -59,7 +59,9 @@ module Remarkable
       #
       # == Options
       #
-      # * <tt>:with</tt>         - The value to compare the assign. It can be also given as a Proc (see examples below)
+      # * <tt>:with</tt> - The value to compare the assign.
+      #   It can be also be supplied as proc or as a block (see examples below)
+      #
       # * <tt>:with_kind_of</tt> - The expected class of the assign.
       #
       # == Examples

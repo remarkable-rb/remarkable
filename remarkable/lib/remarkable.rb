@@ -6,9 +6,8 @@ module Remarkable
     # Add Remarkable core modules
     klass.send :extend,  Remarkable::Macros
 
-    klass.send :include, base::Matchers if defined?(base::Matchers)
-    klass.send :extend,  base::Matchers if defined?(base::Matchers)
     klass.send :extend,  base::Macros   if defined?(base::Macros)
+    klass.send :include, base::Matchers if defined?(base::Matchers)
   end
 end
 

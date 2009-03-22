@@ -26,7 +26,7 @@ pt-BR:
           with_kind_of:
             given: "com um tipo de {{value}}"
       filter_params:
-        description: "filtrar {{params}} parâmetros do log"
+        description: "filtrar parâmetros com {{params}} do log"
         expectations:
           respond_to_filter_params: "que o controllador respondesse a filter_parameters (controlador não está filtrando nenhum parâmetro)"
           is_filtered: "{{param}} fosse filtrado"
