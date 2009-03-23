@@ -157,10 +157,6 @@ module Remarkable
 
       # Ensures that the given attributes accepts only numbers.
       #
-      # If an instance variable has been created in the setup named after the
-      # model being tested, then this method will use that. Otherwise, it will
-      # create a new instance to test against.
-      #
       # == Options
       #
       # * <tt>:only_integer</tt> - when supplied, checks if it accepts only integers or not

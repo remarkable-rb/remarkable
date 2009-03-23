@@ -11,10 +11,6 @@ module Remarkable
 
       # Ensures that the model cannot be saved if one of the attributes listed is not present.
       #
-      # If an instance variable has been created in the setup named after the
-      # model being tested, then this method will use that.  Otherwise, it will
-      # create a new instance to test against.
-      #
       # == Options
       #
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.

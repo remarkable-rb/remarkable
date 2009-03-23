@@ -12,7 +12,7 @@
      end
 
   It was validating the @product instance variable. However this too magic. The
-  right way to do that (with the addiction of subject) is:
+  right way to do that (with subjects) is:
 
      describe Product
        subject{ Product.new(:tangible => true) }
