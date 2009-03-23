@@ -17,9 +17,6 @@ describe 'validate_confirmation_of' do
 
     it 'should contain a description' do
       @matcher.description.should == 'require name and email to be confirmed'
-
-      @matcher.allow_nil
-      @matcher.description.should == 'require name and email to be confirmed allowing nil values'
     end
 
     it 'should set respond_to_confirmation? message' do
@@ -46,10 +43,6 @@ describe 'validate_confirmation_of' do
       it { should validate_confirmation_of(:name, :email) }
       it { should_not validate_confirmation_of(:name, :age) }
     end
-
-    # Those are macros to test optionals which accept only boolean values
-    create_optional_boolean_specs(:allow_nil, self)
-    create_optional_boolean_specs(:allow_blank, self)
   end
 
   describe 'macros' do

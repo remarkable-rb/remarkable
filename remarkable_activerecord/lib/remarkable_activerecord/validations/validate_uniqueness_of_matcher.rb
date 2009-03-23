@@ -143,7 +143,7 @@ module Remarkable
       #   it { should validate_uniqueness_of(:address, :scope => [:first_name, :last_name]) }
       #
       def validate_uniqueness_of(*attributes)
-        ValidateUniquenessOfMatcher.new(*attributes)
+        ValidateUniquenessOfMatcher.new(*attributes).spec(self)
       end
     end
   end
