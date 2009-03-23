@@ -29,7 +29,7 @@ describe 'validate_confirmation_of' do
     end
 
     it 'should set confirm? message' do
-      @model.class_eval{ attr_accessor :age_confirmation }
+      @model.instance_eval{ def age_confirmation=(*args); end }
       @matcher = validate_confirmation_of(:age)
       @matcher.matches?(@model)
       @matcher.failure_message.should == 'Expected User to be valid only when age is confirmed'

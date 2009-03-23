@@ -137,4 +137,12 @@ describe 'validate_uniqueness_of' do
     end
   end
 
+  describe 'macros' do
+    before(:each){ define_and_validate(:scope => :email) }
+
+    should_validate_uniqueness_of :username
+    should_validate_uniqueness_of :username, :scope => :email
+    should_not_validate_uniqueness_of :email
+    should_not_validate_uniqueness_of :username, :scope => :access_code
+  end
 end
