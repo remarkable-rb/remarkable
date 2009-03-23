@@ -7,12 +7,12 @@ module Remarkable # :nodoc:
           @scope_call = scope_call.to_s
           @args       = args
         end
-
+        
         def matches?(subject)
           @subject = subject
-
+          
           assert_matcher do
-            @scope = eval("#{subject_class}.#{@scope_call}")
+            @scope = @spec.instance_eval("#{subject_class}.#{@scope_call}")
             return_scope_object? && scope_itself_to_options?
           end
         end

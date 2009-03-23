@@ -46,12 +46,12 @@ describe User do
   it { should_not have_named_scope('recent(1)', :limit => 2) }
   it { should have_named_scope('recent_via_method(7)', :limit => 7) }
   it { should_not have_named_scope('recent_via_method(7)', :limit => 8) }
-  
   describe "when given an instance variable" do
     before(:each) do
       @count = 2
     end
     it { should have_named_scope("recent(#{@count})", :limit => 2) }
+    it { should have_named_scope("recent(@count)", :limit => 2) }
     it { should_not have_named_scope("recent(#{@count})", :limit => 1) }
   end
   
@@ -210,7 +210,7 @@ describe User do
     before(:each) do
       @count = 2
     end
-    # should_have_named_scope "recent(@count)", :limit => 2
+    should_have_named_scope "recent(@count)", :limit => 2
   end
 
   should_have_after_create_callback(:send_welcome_email)
