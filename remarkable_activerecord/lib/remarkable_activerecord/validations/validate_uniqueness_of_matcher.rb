@@ -126,7 +126,7 @@ module Remarkable
       # option, you need to have in the database a record which is not nil in the
       # given attributes. The same is required for allow_blank option.
       #
-      # Options:
+      # == Options
       #
       # * <tt>:scope</tt> - field(s) to scope the uniqueness to.
       # * <tt>:case_sensitive</tt> - the matcher look for an exact match.
@@ -135,7 +135,7 @@ module Remarkable
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
       #   Regexp, string or symbol.  Default = <tt>I18n.translate('activerecord.errors.messages.taken')</tt>
       #
-      # Examples:
+      # == Examples
       #
       #   it { should validate_uniqueness_of(:keyword, :username) }
       #   it { should validate_uniqueness_of(:name, :message => "O NOES! SOMEONE STOELED YER NAME!") }

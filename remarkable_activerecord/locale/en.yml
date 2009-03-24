@@ -14,6 +14,10 @@ en:
           allow_nil:
             positive: "allowing nil values"
             negative: "not allowing nil values"
+      validate_associated:
+        description: "require associated {{associations}} to be valid"
+        expectations:
+          is_valid: "{{subject_name}} to be invalid when {{association}} is invalid"
       validate_confirmation_of:
         description: "require {{attributes}} to be confirmed"
         expectations:
