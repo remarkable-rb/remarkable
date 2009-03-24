@@ -17,13 +17,13 @@ describe 'validate_exclusion_of' do
   describe 'messages' do
     it 'should contain a description' do
       @matcher = define_and_validate('X', 'Y', 'Z', :in => ['X', 'Y', 'Z'])
-      @matcher.description.should == 'validate exclusion of X, Y, and Z in title and size'
+      @matcher.description.should == 'validate exclusion of "X", "Y", and "Z" in title and size'
     end
 
     it 'should set is_valid? missing message' do
       @matcher = define_and_validate('X', 'Y', 'Z', :in => ['X', 'Z'])
       @matcher.matches?(@model)
-      @matcher.failure_message.should == 'Expected Product to validate exclusion of Y in title'
+      @matcher.failure_message.should == 'Expected Product to validate exclusion of "Y" in title'
     end
 
     it 'should set allow_nil? missing message' do
@@ -55,6 +55,7 @@ describe 'validate_exclusion_of' do
     should_validate_exclusion_of :title, :in => ['X']
     should_validate_exclusion_of :title, :size, :in => ['X']
     should_not_validate_exclusion_of :title, :size, :in => ['Y']
+    should_not_validate_exclusion_of :category, :in => ['X']
   end
 end
 

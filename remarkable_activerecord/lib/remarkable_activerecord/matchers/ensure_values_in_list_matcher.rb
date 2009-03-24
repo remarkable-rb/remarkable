@@ -19,9 +19,9 @@ module Remarkable
           def is_valid?
             @options[:in].each do |value|
               if @behavior == :exclusion
-                return false, :value => value unless bad?(value)
+                return false, :value => value.inspect unless bad?(value)
               else
-                return false, :value => value unless good?(value)
+                return false, :value => value.inspect unless good?(value)
               end
             end
 
@@ -29,7 +29,7 @@ module Remarkable
           end
 
           def interpolation_options
-            { :in => @options[:in].to_sentence, :behavior => @behavior.to_s }
+            { :in => @options[:in].map(&:inspect).to_sentence, :behavior => @behavior.to_s }
           end
 
       end

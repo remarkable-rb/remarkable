@@ -35,9 +35,9 @@ en:
           respond_to_confirmation: "{{subject_name}} instance responds to {{attribute}}_confirmation"
           confirm: "{{subject_name}} to be valid only when {{attribute}} is confirmed"
       validate_format_of:
-        description: "allow values {{in}} for {{attributes}}"
+        description: "allow {{in}} as values for {{attributes}}"
         expectations:
-          is_valid: "{{subject_name}} to allow value {{value}} for {{attribute}}"
+          is_valid: "{{subject_name}} to allow {{value}} as value for {{attribute}}"
         optionals:
           allow_nil:
             positive: "allowing nil values"

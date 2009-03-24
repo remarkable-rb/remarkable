@@ -17,13 +17,13 @@ describe 'validate_inclusion_of' do
   describe 'messages' do
     it 'should contain a description' do
       @matcher = define_and_validate('X', 'Y', 'Z', :in => ['X', 'Y', 'Z'])
-      @matcher.description.should == 'validate inclusion of X, Y, and Z in title and size'
+      @matcher.description.should == 'validate inclusion of "X", "Y", and "Z" in title and size'
     end
 
     it 'should set is_valid? missing message' do
       @matcher = define_and_validate('X', 'Y', 'Z', :in => ['X', 'Z'])
       @matcher.matches?(@model)
-      @matcher.failure_message.should == 'Expected Product to validate inclusion of Y in title'
+      @matcher.failure_message.should == 'Expected Product to validate inclusion of "Y" in title'
     end
 
     it 'should set allow_nil? missing message' do
