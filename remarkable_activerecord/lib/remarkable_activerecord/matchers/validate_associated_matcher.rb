@@ -36,6 +36,10 @@ module Remarkable
             return false if @subject.valid?
 
             error_message_to_expect = error_message_from_model(@subject, :base, @options[:message])
+
+            # In Rails 2.1.2, the error on association returns a symbol (:invalid)
+            # instead of the message, so we check this case here.
+            @subject.errors.on(@association) == @options[:message] ||
             assert_contains(@subject.errors.on(@association), error_message_to_expect)
           end
       end
