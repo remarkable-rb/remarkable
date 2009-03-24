@@ -85,3 +85,8 @@ If you don't like passing proc all around, you might like to the rspec way:
   it { should assign_to(:task_id, :with => mock_task.id) }
 
 Finally, expects currently support four options: on, with, returns and times.
+
+# v2.x
+
+Added assign_to, filter_params, render_with_layout, respond_with_content_type,
+respond_with, set_session and set_the_flash matchers.
