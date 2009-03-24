@@ -1,16 +1,24 @@
 module Remarkable
   module ActiveRecord
     module Matchers
+      class ValidateExclusionOfMatcher < AllowValuesForMatcher
+
+        default_options :message => :exclusion
+
+        protected
+
+          def valid_values
+            @in_range ? [ @options[:in].first, @options[:in].last ] : []
+          end
+
+          def invalid_values
+            @options[:in]
+          end
+
+      end
 
       # Ensures that given values are not valid for the attribute. If a range
       # is given, ensures that the attribute is not valid in the given range.
-      #
-      # This matcher has to now before hand if it's working with lists or ranges.
-      # So you can not do:
-      #
-      #   validate_exclusion_of(:size).in("S", "M", "L", "XL")
-      #
-      # This is a limitation craeted to gain performance in tests.
       #
       # == Options
       #
@@ -29,14 +37,7 @@ module Remarkable
       #   should_validate_exclusion_of :age, :in => 30..60
       #
       def validate_exclusion_of(*args)
-        raise ArgumentError, 'You have to give me the values to test exclusion in ' <<
-                             'validate_exclusion_of' unless args.last.is_a?(Hash)
-
-        if args.last[:in].is_a?(Range)
-          EnsureValuesInRangeMatcher.new(:exclusion, *args).spec(self)
-        else
-          EnsureValuesInListMatcher.new(:exclusion, *args).spec(self)
-        end
+        ValidateExclusionOfMatcher.new(*args).spec(self)
       end
 
     end

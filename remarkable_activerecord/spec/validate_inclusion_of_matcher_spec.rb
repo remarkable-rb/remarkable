@@ -11,19 +11,19 @@ describe 'validate_inclusion_of' do
       validates_inclusion_of :title, :size, options
     end
 
-    validate_inclusion_of(:title, :size, :in => values)
+    validate_inclusion_of(:title, :size, :in => (values.size == 1 ? values.first : values))
   end
 
   describe 'messages' do
     it 'should contain a description' do
       @matcher = define_and_validate('X', 'Y', 'Z', :in => ['X', 'Y', 'Z'])
-      @matcher.description.should == 'validate inclusion of "X", "Y", and "Z" in title and size'
+      @matcher.description.should == 'ensure inclusion of title and size in "X", "Y", and "Z"'
     end
 
     it 'should set is_valid? missing message' do
       @matcher = define_and_validate('X', 'Y', 'Z', :in => ['X', 'Z'])
       @matcher.matches?(@model)
-      @matcher.failure_message.should == 'Expected Product to validate inclusion of "Y" in title'
+      @matcher.failure_message.should == 'Expected Product to be valid when title is set to "Y"'
     end
 
     it 'should set allow_nil? missing message' do

@@ -3,10 +3,11 @@ en:
     active_record:
       allow_nil: "{{subject_name}} to {{not}}allow nil values for {{attribute}}"
       allow_blank: "{{subject_name}} to {{not}}allow blank values for {{attribute}}"
-      ensure_values_in_list:
-        description: "validate {{behavior}} of {{in}} in {{attributes}}"
+
+      allow_values_for:
+        description: "allow {{in}} as values for {{attributes}}"
         expectations:
-          is_valid: "{{subject_name}} to validate {{behavior}} of {{value}} in {{attribute}}"
+          valid: "{{subject_name}} to be valid when {{attribute}} is set to {{value}}"
         optionals:
           allow_nil:
             positive: "allowing nil values"
@@ -14,6 +15,7 @@ en:
           allow_blank:
             positive: "allowing blank values"
             negative: "not allowing blank values"
+
       validate_acceptance_of:
         description: "require {{attributes}} to be accepted"
         expectations:
@@ -25,19 +27,23 @@ en:
           allow_nil:
             positive: "allowing nil values"
             negative: "not allowing nil values"
+
       validate_associated:
         description: "require associated {{associations}} to be valid"
         expectations:
           is_valid: "{{subject_name}} to be invalid when {{association}} is invalid"
+
       validate_confirmation_of:
         description: "require {{attributes}} to be confirmed"
         expectations:
           respond_to_confirmation: "{{subject_name}} instance responds to {{attribute}}_confirmation"
           confirm: "{{subject_name}} to be valid only when {{attribute}} is confirmed"
-      validate_format_of:
-        description: "allow {{in}} as values for {{attributes}}"
+
+      validate_exclusion_of:
+        description: "ensure exclusion of {{attributes}} in {{in}}"
         expectations:
-          is_valid: "{{subject_name}} to allow {{value}} as value for {{attribute}}"
+          valid: "{{subject_name}} to be valid when {{attribute}} is set to {{value}}"
+          invalid: "{{subject_name}} to be invalid when {{attribute}} is set to {{value}}"
         optionals:
           allow_nil:
             positive: "allowing nil values"
@@ -45,6 +51,20 @@ en:
           allow_blank:
             positive: "allowing blank values"
             negative: "not allowing blank values"
+
+      validate_inclusion_of:
+        description: "ensure inclusion of {{attributes}} in {{in}}"
+        expectations:
+          valid: "{{subject_name}} to be valid when {{attribute}} is set to {{value}}"
+          invalid: "{{subject_name}} to be invalid when {{attribute}} is set to {{value}}"
+        optionals:
+          allow_nil:
+            positive: "allowing nil values"
+            negative: "not allowing nil values"
+          allow_blank:
+            positive: "allowing blank values"
+            negative: "not allowing blank values"
+
       validate_length_of:
         description: "ensure length of {{attributes}}"
         expectations:
@@ -67,6 +87,7 @@ en:
           allow_blank:
             positive: "allowing blank values"
             negative: "not allowing blank values"
+
       validate_numericality_of:
         description: "ensure numericality of {{attributes}}"
         expectations:
@@ -100,10 +121,12 @@ en:
           allow_blank:
             positive: "allowing blank values"
             negative: "not allowing blank values"
+
       validate_presence_of:
         description: "require {{attributes}} to be set"
         expectations:
           allow_nil: "{{subject_name}} to require {{attribute}} to be set"
+
       validate_uniqueness_of:
         description: "require unique values for {{attributes}}"
         expectations:

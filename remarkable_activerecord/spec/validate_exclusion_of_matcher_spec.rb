@@ -11,19 +11,19 @@ describe 'validate_exclusion_of' do
       validates_exclusion_of :title, :size, options
     end
 
-    validate_exclusion_of(:title, :size, :in => values)
+    validate_exclusion_of(:title, :size, :in => (values.size == 1 ? values.first : values))
   end
 
   describe 'messages' do
     it 'should contain a description' do
       @matcher = define_and_validate('X', 'Y', 'Z', :in => ['X', 'Y', 'Z'])
-      @matcher.description.should == 'validate exclusion of "X", "Y", and "Z" in title and size'
+      @matcher.description.should == 'ensure exclusion of title and size in "X", "Y", and "Z"'
     end
 
     it 'should set is_valid? missing message' do
       @matcher = define_and_validate('X', 'Y', 'Z', :in => ['X', 'Z'])
       @matcher.matches?(@model)
-      @matcher.failure_message.should == 'Expected Product to validate exclusion of "Y" in title'
+      @matcher.failure_message.should == 'Expected Product to be invalid when title is set to "Y"'
     end
 
     it 'should set allow_nil? missing message' do

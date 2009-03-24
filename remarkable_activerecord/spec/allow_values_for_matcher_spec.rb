@@ -24,7 +24,7 @@ describe 'validate_format_of' do
     it 'should set is_valid? missing message' do
       @matcher = define_and_validate('X', 'Y', 'Z', :in => ['X', 'Z'])
       @matcher.matches?(@model)
-      @matcher.failure_message.should == 'Expected Product to allow "Y" as value for title'
+      @matcher.failure_message.should == 'Expected Product to be valid when title is set to "Y"'
     end
 
     it 'should set allow_nil? missing message' do

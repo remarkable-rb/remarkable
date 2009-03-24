@@ -1,16 +1,24 @@
 module Remarkable
   module ActiveRecord
     module Matchers
+      class ValidateInclusionOfMatcher < AllowValuesForMatcher
+
+        default_options :message => :inclusion
+
+        protected
+
+          def valid_values
+            @options[:in]
+          end
+
+          def invalid_values
+            @in_range ? [ @options[:in].first, @options[:in].last ] : []
+          end
+
+      end
 
       # Ensures that given values are valid for the attribute. If a range
       # is given, ensures that the attribute is valid in the given range.
-      #
-      # This matcher has to now before hand if it's working with lists or ranges.
-      # So you can not do:
-      #
-      #   validate_inclusion_of(:size).in("S", "M", "L", "XL")
-      #
-      # This is a limitation created to gain performance in tests.
       #
       # == Options
       #
@@ -29,14 +37,7 @@ module Remarkable
       #   it { should validate_inclusion_of(:age, :in => 18..100) }
       #
       def validate_inclusion_of(*args)
-        raise ArgumentError, 'You have to give me the values to test inclusion in ' <<
-                             'validate_inclusion_of' unless args.last.is_a?(Hash)
-
-        if args.last[:in].is_a?(Range)
-          EnsureValuesInRangeMatcher.new(:inclusion, *args).spec(self)
-        else
-          EnsureValuesInListMatcher.new(:inclusion, *args).spec(self)
-        end
+        ValidateInclusionOfMatcher.new(*args).spec(self)
       end
 
     end
