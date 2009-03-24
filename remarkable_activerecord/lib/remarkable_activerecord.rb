@@ -18,10 +18,8 @@ require File.join(dir, 'remarkable_activerecord', 'human_names')
 Remarkable.add_locale File.join(dir, '..', 'locale', 'en.yml')
 
 # Add matchers
-%w( database associations validations callbacks ).each do |folder|
-  Dir[File.join(dir, 'remarkable_activerecord', folder, '*.rb')].each do |file|
-    require file
-  end
+Dir[File.join(dir, 'remarkable_activerecord', 'matchers', '*.rb')].each do |file|
+  require file
 end
 
 # By default, ActiveRecord matchers are not included in any example group.
