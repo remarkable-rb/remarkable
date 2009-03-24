@@ -5,6 +5,7 @@ module Remarkable
 
         arguments :collection => :attributes, :as => :attribute
 
+        optional :message
         collection_assertions :respond_to_confirmation?, :confirm?
 
         default_options :message => :confirmation

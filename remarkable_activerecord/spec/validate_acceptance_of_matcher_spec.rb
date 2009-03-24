@@ -53,6 +53,7 @@ describe 'validate_acceptance_of' do
       it { should_not define_and_validate(:accept => 'another_value').accept('a_value') }
     end
 
+    create_message_specs(self)
     create_optional_boolean_specs(:allow_nil, self)
   end
 

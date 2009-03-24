@@ -78,12 +78,19 @@ module ModelBuilder
     # and :allow_blank. This macro tests all scenarios. The specs must have a
     # define_and_validate method defined.
     #
-    def create_optional_boolean_specs(optional, base)
+    def create_optional_boolean_specs(optional, base, options={})
       base.describe "with #{optional} option" do
-        it { should define_and_validate(optional => true).send(optional)            }
-        it { should define_and_validate(optional => false).send(optional, false)    }
-        it { should_not define_and_validate(optional => true).send(optional, false) }
-        it { should_not define_and_validate(optional => false).send(optional)       }
+        it { should define_and_validate(options.merge(optional => true)).send(optional)            }
+        it { should define_and_validate(options.merge(optional => false)).send(optional, false)    }
+        it { should_not define_and_validate(options.merge(optional => true)).send(optional, false) }
+        it { should_not define_and_validate(options.merge(optional => false)).send(optional)       }
+      end
+    end
+
+    def create_message_specs(base)
+      base.describe "with message option" do
+        it { should define_and_validate(:message => 'valid_message').message('valid_message') }
+        it { should_not define_and_validate(:message => 'not_valid').message('valid_message') }
       end
     end
   end

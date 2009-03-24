@@ -152,16 +152,14 @@ describe 'validate_numericality_of' do
       it { should_not define_and_validate.odd(true)     }
     end
 
-    describe "with message option" do
-      it { should define_and_validate(:message => 'not valid').message('not valid') }
-      it { should_not define_and_validate(:message => 'not valid').message('valid') }
-    end
-
     describe "with several options" do
       it { should define_and_validate(:less_than => 100, :greater_than => 10).less_than(100).greater_than(10) }
       it { should define_and_validate(:less_than => 100, :message => 'not valid').less_than(100).message('not valid') }
       it { should define_and_validate(:less_than_or_equal_to => 100, :greater_than => 1).less_than_or_equal_to(100).greater_than(1) }
     end
+
+    # A macro to spec messages
+    create_message_specs(self)
 
     # Those are macros to test optionals which accept only boolean values
     create_optional_boolean_specs(:allow_nil, self)

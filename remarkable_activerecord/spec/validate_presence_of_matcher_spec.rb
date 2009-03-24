@@ -37,10 +37,7 @@ describe 'validate_presence_of' do
       it { should_not validate_presence_of(:category) }
     end
 
-    describe 'with message option' do
-      it { should define_and_validate(:message => 'not_valid').message('not_valid') }
-      it { should_not define_and_validate(:message => 'not_valid').message('valid') }
-    end
+    create_message_specs(self)
   end
 
   describe 'macros' do

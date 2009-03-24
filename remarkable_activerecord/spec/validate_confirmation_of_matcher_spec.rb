@@ -43,6 +43,8 @@ describe 'validate_confirmation_of' do
       it { should validate_confirmation_of(:name, :email) }
       it { should_not validate_confirmation_of(:name, :age) }
     end
+
+    create_message_specs(self)
   end
 
   describe 'macros' do

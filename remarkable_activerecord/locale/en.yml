@@ -3,6 +3,17 @@ en:
     active_record:
       allow_nil: "{{subject_name}} to {{not}}allow nil values for {{attribute}}"
       allow_blank: "{{subject_name}} to {{not}}allow blank values for {{attribute}}"
+      ensure_values_in_list:
+        description: "validate {{behavior}} of {{in}} in {{attributes}}"
+        expectations:
+          is_valid: "{{subject_name}} to validate {{behavior}} of {{value}} in {{attribute}}"
+        optionals:
+          allow_nil:
+            positive: "allowing nil values"
+            negative: "not allowing nil values"
+          allow_blank:
+            positive: "allowing blank values"
+            negative: "not allowing blank values"
       validate_acceptance_of:
         description: "require {{attributes}} to be accepted"
         expectations:
@@ -23,6 +34,17 @@ en:
         expectations:
           respond_to_confirmation: "{{subject_name}} instance responds to {{attribute}}_confirmation"
           confirm: "{{subject_name}} to be valid only when {{attribute}} is confirmed"
+      validate_format_of:
+        description: "allow values {{in}} for {{attributes}}"
+        expectations:
+          is_valid: "{{subject_name}} to allow value {{value}} for {{attribute}}"
+        optionals:
+          allow_nil:
+            positive: "allowing nil values"
+            negative: "not allowing nil values"
+          allow_blank:
+            positive: "allowing blank values"
+            negative: "not allowing blank values"
       validate_length_of:
         description: "ensure length of {{attributes}}"
         expectations:

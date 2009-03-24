@@ -78,6 +78,8 @@ describe 'validate_uniqueness_of' do
       it { should_not define_and_validate(:scope => :email).scope(:access_code) }
     end
 
+    create_message_specs(self)
+
     # Those are macros to test optionals which accept only boolean values
     create_optional_boolean_specs(:allow_nil, self)
     create_optional_boolean_specs(:allow_blank, self)

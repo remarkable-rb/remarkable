@@ -13,9 +13,11 @@ describe 'validate_associated' do
       end
     end
 
+    options[:message] ||= :invalid
+
     @model = define_model :project do
-      send(macro, association, :validate => false) unless options[:skip_association]
-      validates_associated association             unless options[:skip_validation]
+      send(macro, association, :validate => false)              unless options[:skip_association]
+      validates_associated association, options.slice(:message) unless options[:skip_validation]
     end
 
     validate_associated association
@@ -93,6 +95,11 @@ describe 'validate_associated' do
     it { should_not define_and_validate(:has_one, :manager, :skip_validation => true) }
     it { should_not define_and_validate(:has_many, :tasks, :skip_validation => true) }
     it { should_not define_and_validate(:has_and_belongs_to_many, :tags, :skip_validation => true) }
+
+    describe "with message option" do
+      it { should define_and_validate(:belongs_to, :company, :message => 'valid_message').message('valid_message') }
+      it { should_not define_and_validate(:belongs_to, :company, :message => 'not_valid').message('valid_message') }
+    end
   end
 
   describe 'macros' do

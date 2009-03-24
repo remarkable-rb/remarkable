@@ -5,7 +5,7 @@ module Remarkable
 
         arguments :collection => :attributes, :as => :attribute
 
-        optional :accept
+        optional :accept, :message
         optional :allow_nil, :default => true
 
         collection_assertions :require_acceptance?, :accept_is_valid?, :allow_nil?

@@ -4,6 +4,7 @@ module Remarkable
       class ValidateUniquenessOfMatcher < Remarkable::ActiveRecord::Base
         arguments :collection => :attributes, :as => :attribute
 
+        optional :message
         optional :scope, :splat => true
         optional :case_sensitive, :allow_nil, :allow_blank, :default => true
 
