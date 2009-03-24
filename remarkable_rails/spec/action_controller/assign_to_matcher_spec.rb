@@ -17,7 +17,7 @@ describe 'assign_to' do
     end
 
     it 'should set assigned_value? message' do
-      build_response { @user = nil }
+      build_response
       @matcher = assign_to(:user)
       @matcher.matches?(@controller)
       @matcher.failure_message.should == 'Expected action to assign user'
@@ -37,7 +37,14 @@ describe 'assign_to' do
   end
 
   describe 'matcher' do
-    before(:each) { build_response { @user = 'jose' } }
+    before(:each) do
+      build_response {
+        @user  = 'jose'
+        @true  = true
+        @false = false
+        @nil   = nil
+      }
+    end
 
     it { should assign_to(:user) }
     it { should assign_to(:user).with('jose') }
@@ -47,17 +54,35 @@ describe 'assign_to' do
     it { should_not assign_to(:user).with('joseph') }
     it { should_not assign_to(:user).with_kind_of(Fixnum) }
 
-    it { should assign_to(:post).with(nil) }
     it { should assign_to(:user){ 'jose' } }
     it { should assign_to(:user, :with => proc{ 'jose' }) }
 
     it { should_not assign_to(:user).with(nil) }
     it { should_not assign_to(:user){ 'joseph' } }
     it { should_not assign_to(:user, :with => proc{ 'joseph' }) }
+
+    it { should assign_to(:true) }
+    it { should assign_to(:true).with(true) }
+    it { should_not assign_to(:true).with(false) }
+
+    it { should assign_to(:false) }
+    it { should assign_to(:false).with(false) }
+    it { should_not assign_to(:false).with(true) }
+
+    it { should assign_to(:nil) }
+    it { should assign_to(:nil).with(nil) }
+    it { should_not assign_to(:nil).with(true) }
   end
 
   describe 'macro' do
-    before(:each) { build_response { @user = 'jose' } }
+    before(:each) do
+      build_response {
+        @user  = 'jose'
+        @true  = true
+        @false = false
+        @nil   = nil
+      }
+    end
 
     should_assign_to :user
     should_assign_to :user, :with => 'jose'
@@ -67,17 +92,35 @@ describe 'assign_to' do
     should_not_assign_to :user, :with => 'joseph'
     should_not_assign_to :user, :with_kind_of => Fixnum
 
-    should_assign_to :post, :with => nil
     should_assign_to(:user){ 'jose' }
     should_assign_to :user, :with => proc{ 'jose' }
 
     should_not_assign_to :user, :with => nil
     should_not_assign_to(:user){ 'joseph' }
     should_not_assign_to :user, :with => proc{ 'joseph' }
+
+    should_assign_to :true
+    should_assign_to :true, :with => true
+    should_not_assign_to :true, :with => false
+
+    should_assign_to :false
+    should_assign_to :false, :with => false
+    should_not_assign_to :false, :with => true
+
+    should_assign_to :nil
+    should_assign_to :nil, :with => nil
+    should_not_assign_to :nil, :with => true
   end
 
   describe 'macro stubs' do
+    before(:each) do
+      @controller = TasksController.new
+      @request    = ActionController::TestRequest.new
+      @response   = ActionController::TestResponse.new
+    end
+
     expects :new, :on => String, :with => 'ola', :returns => 'ola'
+    get :new
 
     it 'should run expectations by default' do
       String.should_receive(:should_receive).with(:new).and_return(@mock=mock('chain'))

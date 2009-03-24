@@ -14,12 +14,12 @@ module Remarkable
         protected
 
           def assigned_value?
-            !assigned_value.nil? || value_to_compare?
+            assigns.key?(@name)
           end
 
           def is_kind_of?
             return true unless @options[:with_kind_of]
-            return assigned_value.kind_of?(@options[:with_kind_of])
+            return assigns[@name].kind_of?(@options[:with_kind_of])
           end
 
           # Returns true if :with is not given and no block is given.
@@ -28,11 +28,11 @@ module Remarkable
           #
           def is_equal_value?
             return true unless value_to_compare?
-            assigned_value == @options[:with]
+            assigns[@name] == @options[:with]
           end
 
-          def assigned_value
-            @subject.instance_variable_get("@#{@name}")
+          def assigns
+            @subject.response.template.assigns.with_indifferent_access
           end
 
           def value_to_compare?
@@ -41,13 +41,17 @@ module Remarkable
 
           # Update interpolation options
           def interpolation_options
-            { :assign_inspect => assigned_value.inspect, :assign_class => assigned_value.class.name }
+            if @subject && @subject.response
+              { :assign_inspect => assigns[@name].inspect, :assign_class => assigns[@name].class.name }
+            else
+              { }
+            end
           end
 
           # Evaluate procs before assert to avoid them appearing in descriptions.
           def evaluate_expected_value
             if value_to_compare?
-              value = @options[:with] || @block
+              value = @options.key?(:with) ? @options[:with] : @block
               value = @spec.instance_eval(&value) if value.is_a?(Proc)
               @options[:with] = value
             end
@@ -55,7 +59,14 @@ module Remarkable
 
       end
 
-      # Checks if the controller assigned the variables given by name.
+      # Checks if the controller assigned the variables given by name. If you
+      # want to check that a variable is not being assigned, please do:
+      #
+      #   should_not_assign_to(:user)
+      #
+      # If you want to assure that a variable is being assigned to nil, do instead:
+      #
+      #   should_assign_to(:user).with(nil)
       #
       # == Options
       #

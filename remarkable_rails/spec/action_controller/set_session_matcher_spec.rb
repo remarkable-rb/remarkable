@@ -45,7 +45,15 @@ describe 'set_session' do
   end
 
   describe 'matcher' do
-    before(:each) { build_response { session[:user] = 'jose'; session[:address] = 'Avenue' } }
+    before(:each) do
+     build_response {
+        session[:user]    = 'jose'
+        session[:address] = 'Avenue'
+        session[:true]    = true
+        session[:false]   = false
+        session[:nil]     = nil
+      }
+    end
 
     it { should set_session }
     it { should set_session.to('jose') }
@@ -56,17 +64,36 @@ describe 'set_session' do
     it { should_not set_session(:post) }
     it { should_not set_session(:user).to('joseph') }
 
-    it { should set_session(:post).to(nil) }
     it { should set_session(:user){ 'jose' } }
     it { should set_session(:user, :to => proc{ 'jose' }) }
 
     it { should_not set_session(:user).to(nil) }
     it { should_not set_session(:user){ 'joseph' } }
     it { should_not set_session(:user, :to => proc{ 'joseph' }) }
+
+    it { should set_session(:true) }
+    it { should set_session(:true).to(true) }
+    it { should_not set_session(:true).to(false) }
+
+    it { should set_session(:false) }
+    it { should set_session(:false).to(false) }
+    it { should_not set_session(:false).to(true) }
+
+    it { should set_session(:nil) }
+    it { should set_session(:nil).to(nil) }
+    it { should_not set_session(:nil).to(true) }
   end
 
   describe 'macro' do
-    before(:each) { build_response { session[:user] = 'jose'; session[:address] = 'Avenue' } }
+    before(:each) do
+     build_response {
+        session[:user]    = 'jose'
+        session[:address] = 'Avenue'
+        session[:true]    = true
+        session[:false]   = false
+        session[:nil]     = nil
+      }
+    end
 
     should_set_session
     should_set_session :to => 'jose'
@@ -77,13 +104,24 @@ describe 'set_session' do
     should_not_set_session :post
     should_not_set_session :user, :to => 'joseph'
 
-    should_set_session :post, :to => nil
     should_set_session(:user){ 'jose' }
     should_set_session :user, :to => proc{ 'jose' }
 
     should_not_set_session :user, :to => nil
     should_not_set_session(:user){ 'joseph' }
     should_not_set_session :user, :to => proc{ 'joseph' }
+
+    should_set_session :true
+    should_set_session :true, :to => true
+    should_not_set_session :true, :to => false
+
+    should_set_session :false
+    should_set_session :false, :to => false
+    should_not_set_session :false, :to => true
+
+    should_set_session :nil
+    should_set_session :nil, :to => nil
+    should_not_set_session :nil, :to => true
   end
 
   describe 'with no parameter' do

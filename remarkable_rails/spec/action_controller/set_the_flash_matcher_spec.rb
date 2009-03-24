@@ -56,7 +56,6 @@ describe 'set_the_flash' do
     it { should_not set_the_flash(:error) }
     it { should_not set_the_flash(:notice).to('joseph') }
 
-    it { should set_the_flash(:error).to(nil) }
     it { should set_the_flash(:notice){ 'jose' } }
     it { should set_the_flash(:notice, :to => proc{ 'jose' }) }
 
@@ -77,7 +76,6 @@ describe 'set_the_flash' do
     should_not_set_the_flash :error
     should_not_set_the_flash :notice, :to => 'joseph'
 
-    should_set_the_flash :error, :to => nil
     should_set_the_flash(:notice){ 'jose' }
     should_set_the_flash :notice, :to => proc{ 'jose' }
 

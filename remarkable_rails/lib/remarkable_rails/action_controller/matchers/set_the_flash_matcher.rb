@@ -16,7 +16,14 @@ module Remarkable
 
       end
 
-      # Ensures that a session keys were set.
+      # Ensures that a session keys were set. If you want to check that a flash
+      # is not being set, please do:
+      #
+      #   should_not_set_the_flash(:user)
+      #
+      # If you want to assure that a flash is being set to nil, do instead:
+      #
+      #   should_set_the_flash(:user).to(nil)
       #
       # == Options
       #

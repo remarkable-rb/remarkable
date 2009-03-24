@@ -35,7 +35,7 @@ module Remarkable
           end
 
           def assigned_value?
-            !assigned_value.nil? || value_to_compare?
+            session.key?(@key)
           end
 
           # Returns true if :to is not given and no block is given.
@@ -44,7 +44,7 @@ module Remarkable
           #
           def is_equal_value?
             return true unless value_to_compare?
-            assigned_value == @options[:to]
+            session[@key] == @options[:to]
           end
 
           def session
@@ -53,10 +53,6 @@ module Remarkable
 
           def raw_session
             @subject ? @subject.response.session.data : {}
-          end
-
-          def assigned_value
-            session[@key]
           end
 
           def value_to_compare?
@@ -70,7 +66,7 @@ module Remarkable
           # Evaluate procs before assert to avoid them appearing in descriptions.
           def evaluate_expected_value
             if value_to_compare?
-              value = @options[:to] || @block
+              value = @options.key?(:to) ? @options[:to] : @block
               value = @spec.instance_eval(&value) if value.is_a?(Proc)
               @options[:to] = value
             end
@@ -78,7 +74,14 @@ module Remarkable
 
       end
 
-      # Ensures that a session keys were set.
+      # Ensures that a session keys were set. If you want to check that a variable
+      # is not being set, please do:
+      #
+      #   should_not_set_session(:user)
+      #
+      # If you want to assure that a variable is being set to nil, do instead:
+      #
+      #   should_set_session(:user).to(nil)
       #
       # == Options
       #
