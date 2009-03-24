@@ -4,7 +4,8 @@ module Remarkable
       class AllowValuesForMatcher < Remarkable::ActiveRecord::Base
         arguments :collection => :attributes, :as => :attribute
 
-        optional :in, :message
+        optional :message
+        optional :in, :splat => true
         optional :allow_nil, :allow_blank, :default => true
 
         collection_assertions :valid?, :invalid?, :allow_nil?, :allow_blank?
@@ -16,7 +17,7 @@ module Remarkable
           @in_range = first_value.is_a?(Range)
 
           @options[:in] = if @in_range
-            @options[:in][0,2] + @options[:in][-2,2]
+            first_value.to_a[0,2] + first_value.to_a[-2,2]
           else
             [*@options[:in]].compact
           end
@@ -51,8 +52,10 @@ module Remarkable
           def interpolation_options
             options = if @in_range
               { :in => (@options[:in].first..@options[:in].last).inspect }
-            else
+            elsif @options[:in].is_a?(Array)
               { :in => @options[:in].map(&:inspect).to_sentence }
+            else
+              { :in => @options[:in].inspect }
             end
 
             options.merge!(:behavior => @behavior.to_s)

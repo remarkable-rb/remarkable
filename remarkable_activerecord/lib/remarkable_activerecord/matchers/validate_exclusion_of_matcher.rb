@@ -8,7 +8,7 @@ module Remarkable
         protected
 
           def valid_values
-            @in_range ? [ @options[:in].first, @options[:in].last ] : []
+            @in_range ? [ @options[:in].first - 1, @options[:in].last + 1 ] : []
           end
 
           def invalid_values

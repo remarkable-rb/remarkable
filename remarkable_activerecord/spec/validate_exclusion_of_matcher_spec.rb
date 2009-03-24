@@ -4,58 +4,85 @@ describe 'validate_exclusion_of' do
   include ModelBuilder
 
   # Defines a model, create a validation and returns a raw matcher
-  def define_and_validate(*values)
-    options = values.extract_options!
-
-    @model = define_model :product, :title => :string, :size => :string, :category => :string do
+  def define_and_validate(options={})
+    @model = define_model :product, :title => :string, :size => :string do
       validates_exclusion_of :title, :size, options
     end
 
-    validate_exclusion_of(:title, :size, :in => (values.size == 1 ? values.first : values))
+    validate_exclusion_of(:title, :size)
   end
 
   describe 'messages' do
+
     it 'should contain a description' do
-      @matcher = define_and_validate('X', 'Y', 'Z', :in => ['X', 'Y', 'Z'])
+      @matcher = define_and_validate(:in => 2..10)
+      @matcher.in(2..10)
+      @matcher.description.should == 'ensure exclusion of title and size in 2..10'
+
+      @matcher = validate_exclusion_of(:title, :size).in('X', 'Y', 'Z')
       @matcher.description.should == 'ensure exclusion of title and size in "X", "Y", and "Z"'
     end
 
-    it 'should set is_valid? missing message' do
-      @matcher = define_and_validate('X', 'Y', 'Z', :in => ['X', 'Z'])
-      @matcher.matches?(@model)
-      @matcher.failure_message.should == 'Expected Product to be invalid when title is set to "Y"'
+    it 'should set invalid? missing message' do
+      @matcher = define_and_validate(:in => 2..10)
+      @matcher.in(1..10).matches?(@model)
+      @matcher.failure_message.should == 'Expected Product to be invalid when title is set to 1'
+    end
+
+    it 'should set valid? missing message' do
+      @matcher = define_and_validate(:in => 2..10)
+      @matcher.in(3..10).matches?(@model)
+      @matcher.failure_message.should == 'Expected Product to be valid when title is set to 2'
     end
 
     it 'should set allow_nil? missing message' do
-      @matcher = define_and_validate('X', 'Y', 'Z', :in => ['X', 'Y', 'Z', nil])
+      @matcher = define_and_validate(:in => [nil])
       @matcher.allow_nil.matches?(@model)
       @matcher.failure_message.should == 'Expected Product to allow nil values for title'
     end
 
     it 'should set allow_blank? missing message' do
-      @matcher = define_and_validate('X', 'Y', 'Z', :in => ['X', 'Y', 'Z', ''])
+      @matcher = define_and_validate(:in => [''])
       @matcher.allow_blank.matches?(@model)
       @matcher.failure_message.should == 'Expected Product to allow blank values for title'
     end
   end
 
   describe 'matchers' do
-    it { should define_and_validate('X', :in => ['X']) }
-    it { should_not define_and_validate('X', 'Y', :in => ['X']) }
+    it { should define_and_validate(:in => ['X', 'Y', 'Z']).in('X', 'Y', 'Z') }
+    it { should_not define_and_validate(:in => ['X', 'Y', 'Z']).in('A') }
 
-    it { should define_and_validate('X', :message => 'valid_message', :in => ['X']).message('valid_message') }
+    it { should define_and_validate(:in => 2..3).in(2..3) }
+    it { should define_and_validate(:in => 2..20).in(2..20) }
+    it { should_not define_and_validate(:in => 2..20).in(1..20) }
+    it { should_not define_and_validate(:in => 2..20).in(3..20) }
+    it { should_not define_and_validate(:in => 2..20).in(2..19) }
+    it { should_not define_and_validate(:in => 2..20).in(2..21) }
 
-    create_optional_boolean_specs(:allow_nil, self, :in => ['X', nil])
-    create_optional_boolean_specs(:allow_blank, self, :in => ['X', ''])
+    it { should define_and_validate(:in => ['X', 'Y', 'Z'], :message => 'valid').in('X', 'Y', 'Z').message('valid') }
+
+    create_optional_boolean_specs(:allow_nil, self, :in => [nil])
+    create_optional_boolean_specs(:allow_blank, self, :in => [''])
   end
 
   describe 'macros' do
-    before(:each){ define_and_validate('X', :in => ['X']) }
+    describe 'with array' do
+      before(:each){ define_and_validate(:in => ['X', 'Y', 'Z']) }
 
-    should_validate_exclusion_of :title, :in => ['X']
-    should_validate_exclusion_of :title, :size, :in => ['X']
-    should_not_validate_exclusion_of :title, :size, :in => ['Y']
-    should_not_validate_exclusion_of :category, :in => ['X']
+      should_validate_exclusion_of :title, :in => ['X']
+      should_validate_exclusion_of :title, :size, :in => ['X']
+      should_not_validate_exclusion_of :title, :size, :in => ['A']
+    end
+
+    describe 'with range' do
+      before(:each){ define_and_validate(:in => 2..20) }
+
+      should_validate_exclusion_of :title, :in => 2..20
+      should_not_validate_exclusion_of :title, :in => 1..20
+      should_not_validate_exclusion_of :title, :in => 3..20
+      should_not_validate_exclusion_of :title, :in => 2..19
+      should_not_validate_exclusion_of :title, :in => 2..21
+    end
   end
 end
 
