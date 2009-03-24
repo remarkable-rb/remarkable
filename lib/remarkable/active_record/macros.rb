@@ -21,14 +21,14 @@ module Remarkable # :nodoc:
       def should_not_method_missing(method, *args)
         matcher = create_and_configure_matcher(method, *args)
         it "should not #{matcher.description}" do
-          assert_rejects(matcher.negative.spec(self), subject_class)
+          should_not matcher.negative.spec(self)
         end
       end
 
       def should_method_missing(method, *args)
         matcher = create_and_configure_matcher(method, *args)
         it "should #{matcher.description}" do
-          assert_accepts(matcher.spec(self), subject_class)
+          should matcher.spec(self)
         end
       end
 
