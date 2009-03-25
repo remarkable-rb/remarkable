@@ -5,11 +5,11 @@ module Remarkable # :nodoc:
 
       def method_missing_with_remarkable(method_id, *args, &block)
         if method_id.to_s =~ /^should_not_(.*)/
-          should_not_method_missing($1, *args)
+          should_not_method_missing($1, caller, *args, &block)
         elsif method_id.to_s =~ /^should_(.*)/
-          should_method_missing($1, *args)
+          should_method_missing($1, caller, *args, &block)
         elsif method_id.to_s =~ /^xshould_(not_)?(.*)/
-          pending_method_missing($2, $1, *args)
+          pending_method_missing($2, $1, *args, &block)
         else
           method_missing_without_remarkable(method_id, *args, &block)
         end
@@ -18,22 +18,36 @@ module Remarkable # :nodoc:
 
       private
 
-      def should_not_method_missing(method, *args)
-        matcher = create_and_configure_matcher(method, *args)
+      def should_not_method_missing(method, caller, *args, &block)
+        matcher = create_and_configure_matcher(method, *args, &block)
         it "should not #{matcher.description}" do
-          should_not matcher.negative.spec(self)
+          begin
+            should_not matcher.negative.spec(self)
+          rescue Exception => e
+            backtrace = e.backtrace.to_a + caller
+            backtrace.uniq!
+            e.set_backtrace(backtrace)
+            raise e
+          end
         end
       end
 
-      def should_method_missing(method, *args)
-        matcher = create_and_configure_matcher(method, *args)
+      def should_method_missing(method, caller, *args, &block)
+        matcher = create_and_configure_matcher(method, *args, &block)
         it "should #{matcher.description}" do
-          should matcher.spec(self)
+          begin
+            should matcher.spec(self)
+          rescue Exception => e
+            backtrace = e.backtrace.to_a + caller
+            backtrace.uniq!
+            e.set_backtrace(backtrace)
+            raise e
+          end
         end
       end
 
-      def pending_method_missing(method, negative, *args)
-        matcher = create_and_configure_matcher(method, *args)
+      def pending_method_missing(method, negative, *args, &block)
+        matcher = create_and_configure_matcher(method, *args, &block)
         matcher.negative if negative
         description = matcher.description
         xit "should #{'not ' if negative}#{description}"
@@ -41,8 +55,8 @@ module Remarkable # :nodoc:
         xit "should #{'not ' if negative}#{method.to_s.gsub('_',' ')}"
       end
 
-      def create_and_configure_matcher(method, *args)
-        matcher = send(method, *args)
+      def create_and_configure_matcher(method, *args, &block)
+        matcher = send(method, *args, &block)
         matcher.table_name = self.described_type.table_name if matcher.respond_to?('table_name=')
         matcher
       end
