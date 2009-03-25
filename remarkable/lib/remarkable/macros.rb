@@ -1,32 +1,32 @@
 module Remarkable
   module Macros
 
-    def method_missing_with_remarkable(method_id, *args, &block)
-      if method_id.to_s =~ /^should_not_(.*)/
-        should_not_method_missing($1, *args, &block)
-      elsif method_id.to_s =~ /^should_(.*)/
-        should_method_missing($1, *args, &block)
-      elsif method_id.to_s =~ /^xshould_(not_)?(.*)/
-        pending_method_missing($2, $1, *args, &block)
+    def method_missing(method_id, *args, &block)
+      if method_id.to_s =~ /^(should_not|should)_(.+)/
+        should_or_should_not_method_missing($1, $2, caller, *args, &block)
+      elsif method_id.to_s =~ /^xshould_(not_)?(.+)/
+        pending_method_missing($1, $2, *args, &block)
       else
-        method_missing_without_remarkable(method_id, *args, &block)
+        super(method_id, *args, &block)
       end
     end
 
-    alias_method :method_missing_without_remarkable, :method_missing
-    alias_method :method_missing, :method_missing_with_remarkable
-
     private
 
-      def should_method_missing(method, *args, &block)
-        it { should send(method, *args, &block) }
+      def should_or_should_not_method_missing(should_or_should_not, method, calltrace, *args, &block)
+        it do
+          begin
+            send(should_or_should_not, send(method, *args, &block))
+          rescue Exception => e
+            backtrace = e.backtrace.to_a + calltrace.to_a
+            backtrace.uniq!
+            e.set_backtrace(backtrace)
+            raise e
+          end
+        end
       end
 
-      def should_not_method_missing(method, *args, &block)
-        it { should_not send(method, *args, &block) }
-      end
-
-      def pending_method_missing(method, negative, *args, &block)
+      def pending_method_missing(negative, method, *args, &block)
         # Create an example group instance and get the matcher.
         matcher = self.new('pending_method_missing_group').send(method, *args, &block)
         description = matcher.description
