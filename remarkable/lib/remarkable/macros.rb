@@ -14,16 +14,14 @@ module Remarkable
     private
 
       def should_or_should_not_method_missing(should_or_should_not, method, calltrace, *args, &block)
-        it do
+        it {
           begin
             send(should_or_should_not, send(method, *args, &block))
           rescue Exception => e
-            backtrace = e.backtrace.to_a + calltrace.to_a
-            backtrace.uniq!
-            e.set_backtrace(backtrace)
+            e.set_backtrace(calltrace.to_a)
             raise e
           end
-        end
+        }
       end
 
       def pending_method_missing(negative, method, *args, &block)
