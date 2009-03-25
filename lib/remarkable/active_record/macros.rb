@@ -24,7 +24,7 @@ module Remarkable # :nodoc:
           begin
             should_not matcher.negative.spec(self)
           rescue Exception => e
-            backtrace = e.backtrace.to_a + caller
+            backtrace = e.backtrace.to_a + caller.to_a
             backtrace.uniq!
             e.set_backtrace(backtrace)
             raise e
@@ -38,7 +38,7 @@ module Remarkable # :nodoc:
           begin
             should matcher.spec(self)
           rescue Exception => e
-            backtrace = e.backtrace.to_a + caller
+            backtrace = e.backtrace.to_a + caller.to_a
             backtrace.uniq!
             e.set_backtrace(backtrace)
             raise e

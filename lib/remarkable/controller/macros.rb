@@ -44,7 +44,7 @@ module Remarkable # :nodoc:
       end
 
       def should_not_set_the_flash
-        should_method_missing :set_the_flash_to, nil
+        should_method_missing :set_the_flash_to, caller, nil
       end
 
       def method_missing_with_remarkable(method_id, *args, &block)
@@ -68,7 +68,7 @@ module Remarkable # :nodoc:
           begin
             should matcher.spec(self)
           rescue Exception => e
-            backtrace = e.backtrace.to_a + caller
+            backtrace = e.backtrace.to_a + caller.to_a
             backtrace.uniq!
             e.set_backtrace(backtrace)
             raise e
@@ -82,7 +82,8 @@ module Remarkable # :nodoc:
           begin
             should_not matcher.negative.spec(self)
           rescue Exception => e
-            backtrace = e.backtrace.to_a + caller
+          debugger
+            backtrace = e.backtrace.to_a + caller.to_a
             backtrace.uniq!
             e.set_backtrace(backtrace)
             raise e
