@@ -4,6 +4,7 @@ describe Address do
   fixtures :all
 
   it { should belong_to(:addressable) }
+  it { should allow_mass_assignment_of(:title, :zip) }
   
   it { should validate_uniqueness_of(:title, :scope => [:addressable_id, :addressable_type]) }
   it { should validate_uniqueness_of(:title).scope([:addressable_id, :addressable_type]) }
@@ -32,6 +33,7 @@ describe Address do
   fixtures :all
 
   should_belong_to :addressable
+  should_allow_mass_assignment_of :title, :zip
 
   should_validate_uniqueness_of :title, :scope => [:addressable_id, :addressable_type]
   should_not_validate_uniqueness_of :zip
