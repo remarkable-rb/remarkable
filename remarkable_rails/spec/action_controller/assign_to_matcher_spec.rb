@@ -20,7 +20,7 @@ describe 'assign_to' do
       build_response
       @matcher = assign_to(:user)
       @matcher.matches?(@controller)
-      @matcher.failure_message.should == 'Expected action to assign user'
+      @matcher.failure_message.should == 'Expected action to assign user, got no assignment'
     end
 
     it 'should set is_kind_of? message' do

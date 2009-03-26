@@ -24,7 +24,7 @@ describe 'filter_params' do
 
     it 'should set is_filtered? message' do
       @matcher.matches?(@controller)
-      @matcher.failure_message.should == 'Expected user to be filtered'
+      @matcher.failure_message.should == 'Expected user to be filtered, got no filtering'
     end
   end
 

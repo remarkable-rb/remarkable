@@ -6,17 +6,17 @@ en:
       assign_to:
         description: "assign {{names}}"
         expectations:
-          assigned_value: "action to assign {{name}}"
+          assigned_value: "action to assign {{name}}, got no assignment"
           is_kind_of: "assign {{name}} to be kind of {{with_kind_of}}, got a {{assign_class}}"
           is_equal_value: "assign {{name}} to be equal to {{with}}, got {{assign_inspect}}"
         optionals:
           with_kind_of:
-            given: "with kind of {{value}}"
+            positive: "with kind of {{value}}"
       filter_params:
         description: "filter {{params}} parameters from log"
         expectations:
           respond_to_filter_params: "controller to respond to filter_parameters (controller is not filtering any parameter)"
-          is_filtered: "{{param}} to be filtered"
+          is_filtered: "{{param}} to be filtered, got no filtering"
       redirect_to:
         description: "redirect to {{expected}}"
         expectations:
@@ -25,7 +25,7 @@ en:
           url_matches: "redirect to {{expected}}, got redirect to {{actual}}"
         optionals:
           with:
-            given: "with status {{inspect}}"
+            positive: "with status {{inspect}}"
       render_template:
         description: "render"
         expectations:
@@ -37,16 +37,16 @@ en:
           content_type_matches: "to render with content type {{content_type}}, got {{actual_content_type}}"
         optionals:
           template:
-            given: "template {{inspect}}"
+            positive: "template {{inspect}}"
           layout:
             positive: "with layout {{inspect}}"
             negative: "with no layout"
           with:
-            given: "with {{value}}"
+            positive: "with {{value}}"
           body:
-            given: "with body {{inspect}}"
+            positive: "with body {{inspect}}"
           content_type:
-            given: "with content type {{inspect}}"
+            positive: "with content type {{inspect}}"
       respond_with:
         description: "respond"
         expectations:
@@ -55,11 +55,11 @@ en:
           content_type_matches: "to respond with content type {{content_type}}, got {{actual_content_type}}"
         optionals:
           with:
-            given: "with {{value}}"
+            positive: "with {{value}}"
           body:
-            given: "with body {{inspect}}"
+            positive: "with body {{inspect}}"
           content_type:
-            given: "with content type {{inspect}}"
+            positive: "with content type {{inspect}}"
       set_session:
         description: "set session variable {{keys}}"
         expectations:
@@ -69,7 +69,7 @@ en:
           is_equal_value: "session variable {{key}} to be set to {{to}}, got {{session_inspect}}"
         optionals:
           to:
-            given: "to {{inspect}}"
+            positive: "to {{inspect}}"
       set_the_flash:
         description: "set the flash message {{keys}}"
         expectations:
@@ -79,4 +79,4 @@ en:
           is_equal_value: "flash message {{key}} to be set to {{to}}, got {{flash_inspect}}"
         optionals:
           to:
-            given: "to {{inspect}}"
+            positive: "to {{inspect}}"

@@ -4,12 +4,13 @@ module Remarkable
 
       class AssociationMatcher < Remarkable::Base
         ASSOCIATION_OPTIONS = [ :through, :class_name, :foreign_key, :dependent, :join_table,
-                                :uniq, :readonly, :validate, :autosave, :counter_cache, :polymorphic ]
+                                :uniq, :readonly, :validate, :autosave, :polymorphic, :as, :counter_cache ]
 
         arguments :macro, :collection => :associations, :as => :association
 
         collection_assertions :association_exists?, :macro_matches?, :through_exists?,
-                              :join_table_exists?, :foreign_key_exists?, :counter_cache_exists?
+                              :join_table_exists?, :foreign_key_exists?, :polymorphic_exists?,
+                              :counter_cache_exists?
 
         protected
 
@@ -31,25 +32,18 @@ module Remarkable
             ::ActiveRecord::Base.connection.tables.include?(join_table)
           end
 
-          # In cases a join table exists (has_and_belongs_to_many and through
-          # associations), we check the foreign key in the join table.
-          #
-          # On belongs to, the foreign_key is in the subject class table and in
-          # other cases it's on the reflection class table.
-          #
           def foreign_key_exists?
-            if has_join_table?
-              table_has_foreign_key?(join_table)
-            elsif reflection.belongs_to?
-              table_has_foreign_key?(subject_class.table_name)
-            else
-              table_has_foreign_key?(reflection.klass.table_name)
-            end
+            table_has_column(foreign_key_table, foreign_key)
+          end
+
+          def polymorphic_exists?
+            return true unless @options[:polymorphic]
+            table_has_column?(subject_class.table_name, foreign_key.sub(/_id$/, '_type'))
           end
 
           def counter_cache_exists?
             return true unless @options[:counter_cache]
-            table_has_column?(subject_class.table_name, reflection.counter_cache_column)
+            table_has_column?(reflection.klass.table_name, reflection.counter_cache_column)
           end
 
           ASSOCIATION_OPTIONS.each do |option|
@@ -67,14 +61,6 @@ module Remarkable
           end
 
         private
-
-          def table_has_foreign_key?(table_name)
-            table_has_column?(table_name, foreign_key)
-          end
-
-          def table_has_column?(table_name, column)
-            ::ActiveRecord::Base.connection.columns(table_name, 'Remarkable column retrieval').include?(column)
-          end
 
           def reflection
             @reflection ||= subject_class.reflect_on_association(@association)
@@ -96,17 +82,43 @@ module Remarkable
             (reflection.options[:join_table] || reflection.options[:through]).to_s
           end
 
+          def table_has_column?(table_name, column)
+            ::ActiveRecord::Base.connection.columns(table_name, 'Remarkable column retrieval').include?(column)
+          end
+
+          # In cases a join table exists (has_and_belongs_to_many and through
+          # associations), we check the foreign key in the join table.
+          #
+          # On belongs to, the foreign_key is in the subject class table and in
+          # other cases it's on the reflection class table.
+          #
+          def foreign_key_table
+            if has_join_table?
+              join_table
+            elsif reflection.belongs_to?
+              subject_class.table_name
+            else
+              reflection.klass.table_name
+            end
+          end
+
           def interpolation_options
             options = { :macro => Remarkable.t(@macro, :scope => matcher_i18n_scope, :default => @macro.to_s) }
 
             if reflection
+              options.merge!(
+                :actual_macro         => Remarkable.t(reflection.macro, :scope => matcher_i18n_scope, :default => reflection.macro.to_s),
+                :subject_table        => subject_class.table_name.inspect,
+                :reflection_table     => reflection.klass.table_name.inspect,
+                :foreign_key_table    => foreign_key_table.inspect,
+                :polymorphic_column   => foreign_key.sub(/_id$/, '_type').inspect,
+                :counter_cache_column => reflection.counter_cache_column.inspect
+              )
+
               ASSOCIATION_OPTIONS.each do |option|
-                value_to_compare = respond_to?(option) ? option : reflection.options[option].to_s
+                value_to_compare = respond_to?(option) ? send(option) : reflection.options[option].to_s
                 options[:"actual_#{option}"] = value_to_compare.inspect
               end
-
-              options[:actual_macro] = Remarkable.t(reflection.macro, :scope => matcher_i18n_scope, :default => reflection.macro.to_s).inspect
-              options[:actual_counter_cache] = reflection.counter_cache_column.inspect
             end
 
             options
@@ -115,19 +127,20 @@ module Remarkable
       end
 
       # Ensure that the belongs_to relationship exists. Will also test that the
-      # subject table has the required columns.
+      # subject table has the association_id column.
       #
       # == Options
       #
       # * <tt>:class_name</tt> - the expected associted class name.
       # * <tt>:foreign_key</tt> - the expected foreign key in the subject table.
       # * <tt>:dependent</tt> - the expected dependent value for the association.
-      # * <tt>:polymorphic</tt> - if the association should be polymorphic or not.
       # * <tt>:readonly</tt> - checks wether readonly is true or false.
       # * <tt>:validate</tt> - checks wether validate is true or false.
       # * <tt>:autosave</tt> - checks wether autosave is true or false.
       # * <tt>:counter_cache</tt> - the expected dependent value for the association.
       #   It also checks if the column actually exists in the table.
+      # * <tt>:polymorphic</tt> - if the association should be polymorphic or not.
+      #   When true it also checks for the association_type column in the subject table.
       #
       # == Examples
       #

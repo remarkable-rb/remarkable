@@ -16,6 +16,64 @@ en:
             positive: "allowing blank values"
             negative: "not allowing blank values"
 
+      association:
+        belongs_to: belong to
+        has_many: have many
+        has_and_belongs_to_many: have and belong to many
+        has_one: have one
+        description: "{{macro}} {{associations}}"
+        expectations:
+          association_exists: "{{subject_name}} {{macro}} {{association}}, got no association"
+          macro_matches: "{{subject_name}} {{macro}} {{association}}, got that {{subject_name}} {{actual_macro}} {{association}}"
+          through_exists: "{{subject_name}} {{macro}} {{association}} through {{through}}, through association does not exist"
+          join_table_exists: "join table {{actual_join_table}} to exist, but does not"
+          foreign_key_exists: "foreign key {{actual_foreign_key}} to exist on {{foreign_key_table}}, but does not"
+          polymorphic_exists: "{{subject_table}} to have {{polymorphic_column}} as column, but does not"
+          counter_cache_exists: "{{reflection_table}} to have {{counter_cache_column}} as column, but does not"
+
+          through_matches: "{{association}} through {{through}}, got {{actual_through}}"
+          class_name_matches: "{{association}} with class name {{class_name}}, got {{actual_class_name}}"
+          foreign_key_matches: "{{association}} with foreign key {{foreign_key}}, got {{actual_foreign_key}}"
+          dependent_matches: "{{association}} with dependent {{dependent}}, got {{actual_dependent}}"
+          join_table_matches: "{{association}} with join table {{join_table}}, got {{actual_join_table}}"
+          uniq_matches: "{{association}} with uniq equals to {{uniq}}, got {{actual_uniq}}"
+          readonly_matches: "{{association}} with readonly equals to {{readonly}}, got {{actual_readonly}}"
+          validate_matches: "{{association}} with validate equals to {{validate}}, got {{actual_validate}}"
+          autosave_matches: "{{association}} with autosave equals to {{autosave}}, got {{actual_autosave}}"
+          polymorphic_matches: "{{association}} with polymorphic equals to {{polymorphic}}, got {{actual_polymorphic}}"
+          as_matches: "{{association}} with polymorphic interface {{as}}, got {{actual_as}}"
+          counter_cache_matches: "{{association}} with counter cache {{counter_cache}}, got {{actual_counter_cache}}"
+        optionals:
+          through:
+            positive: "through {{value}}"
+          class_name:
+            positive: "with class name {{inspect}}"
+          foreign_key:
+            positive: "with foreign key {{inspect}}"
+          dependent:
+            positive: "with dependent {{inspect}}"
+          join_table:
+            positive: "with join table {{inspect}}"
+          uniq:
+            positive: "with unique records"
+            negative: "without unique records"
+          readonly:
+            positive: "with readonly records"
+            negative: "without readonly records"
+          validate:
+            positive: "validating associated records"
+            negative: "not validating associated records"
+          autosave:
+            positive: "autosaving associated records"
+            negative: "not autosaving associated records"
+          polymorphic:
+            positive: "through a polymorphic interface"
+          as:
+            positive: "through a polymorphic {{inspect}}"
+          counter_cache:
+            positive: "with counter cache {{inspect}}"
+            negative: "without counter cache"
+
       validate_acceptance_of:
         description: "require {{attributes}} to be accepted"
         expectations:
@@ -106,15 +164,15 @@ en:
           even:
             positive: "allowing only even values"
           equal_to:
-            given: "is equal to {{inspect}}"
+            positive: "is equal to {{inspect}}"
           less_than:
-            given: "is less than {{inspect}}"
+            positive: "is less than {{inspect}}"
           greater_than:
-            given: "is greater than {{inspect}}"
+            positive: "is greater than {{inspect}}"
           less_than_or_equal_to:
-            given: "is less than or equal to {{inspect}}"
+            positive: "is less than or equal to {{inspect}}"
           greater_than_or_equal_to:
-            given: "is greater than or equal to {{inspect}}"
+            positive: "is greater than or equal to {{inspect}}"
           allow_nil:
             positive: "allowing nil values"
             negative: "not allowing nil values"
@@ -136,7 +194,7 @@ en:
           valid_with_new_scope: "{{subject_name}} to be valid when {{attribute}} scope ({{method}}) change"
         optionals:
           scope:
-            given: "scoped to {{inspect}}"
+            positive: "scoped to {{inspect}}"
           case_sensitive:
             positive: "case sensitive"
             negative: "case insensitive"

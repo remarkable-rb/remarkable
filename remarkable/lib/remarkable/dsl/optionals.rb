@@ -2,7 +2,7 @@ module Remarkable
   module DSL
     module Optionals
 
-      OPTIONAL_KEYS = [ :given, :positive, :negative, :not_given ]
+      OPTIONAL_KEYS = [ :positive, :negative, :not_given ]
 
       def self.included(base)
         base.extend ClassMethods
@@ -43,7 +43,7 @@ module Remarkable
           #   description: validate uniqueness of {{attributes}}
           #   optionals:
           #     scope:
-          #       given: scoped to {{inspect}}
+          #       positive: scoped to {{value}}
           #     case_sensitive:
           #       positive: case sensitive
           #       negative: case insensitive
@@ -63,12 +63,11 @@ module Remarkable
           # the first is the optional value transformed into a string and the
           # second is the inspected value.
           #
-          # Four keys are available to be used in I18n files and control how
+          # Three keys are available to be used in I18n files and control how
           # optionals are appended to your description:
           #
           #   * <tt>positive</tt> - When the optional is given and it evaluates to true (everything but false and nil).
           #   * <tt>negative</tt> - When the optional is given and it evaluates to false (false or nil).
-          #   * <tt>given</tt> - When the optional is given, doesn't matter the value.
           #   * <tt>not_given</tt> - When the optional is not given.
           #
           def optionals(*names)
@@ -120,10 +119,8 @@ module Remarkable
           scope = matcher_i18n_scope + ".optionals.#{optional}"
 
           if @options.key?(optional)
-            defaults = [ :given ]
-
             value = @options[optional]
-            defaults.unshift(value ? :positive : :negative)
+            defaults = [ (value ? :positive : :negative) ]
 
             # If optional is a symbol and it's not any to any of the reserved symbols, search for it also
             defaults.unshift(value) if value.is_a?(Symbol) && !OPTIONAL_KEYS.include?(value)

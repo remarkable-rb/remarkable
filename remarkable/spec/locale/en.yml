@@ -10,7 +10,7 @@ en:
             positive: "allowing nil"
             negative: "not allowing nil"
           allow_blank:
-            given: "with blank equal {{inspect}}"
+            positive: "with blank equal {{inspect}}"
             not_given: "not checking for blank"
       collection_contain:
         description: "contain {{values}}"
