@@ -7,7 +7,7 @@ module Remarkable
 
         prepend_optional :template, :layout
 
-        assertions :rendered?, :template_match?, :layout_match?
+        assertions :rendered?, :template_matches?, :layout_matches?
 
         protected
 
@@ -34,7 +34,7 @@ module Remarkable
             !@actual.blank?
           end
 
-          def template_match?
+          def template_matches?
             return true unless @options[:template] # only continue if not nil
 
             actual_controller_path, actual_file     = path_and_file(@actual.to_s)
@@ -53,7 +53,7 @@ module Remarkable
             actual_controller_path == expected_controller_path 
           end
 
-          def layout_match?
+          def layout_matches?
             return true unless @options.key?(:layout)
             @response.layout.to_s.split('/').last.to_s == @options[:layout].to_s
           end

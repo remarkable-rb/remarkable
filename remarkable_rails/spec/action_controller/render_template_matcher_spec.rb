@@ -22,7 +22,7 @@ describe 'render_template' do
       @matcher.description.should == 'render template "edit", with no layout, and with content type "application/xml"'
     end
 
-    it 'should set render? message' do
+    it 'should set rendered? message' do
       build_response
       @matcher.matches?(@controller)
       @matcher.failure_message.should == 'Expected template "edit" to be rendered, got no render'
@@ -31,13 +31,13 @@ describe 'render_template' do
 
     # Is not possible to check extensions on Rails 2.1
     unless RAILS_VERSION =~ /^2.1/
-      it 'should set template_match? message' do
+      it 'should set template_matches? message' do
         @matcher.matches?(@controller)
         @matcher.failure_message.should == 'Expected template "edit" to be rendered, got "examples/new.html.erb"'
       end
     end
 
-    it 'should set layout_match? message' do
+    it 'should set layout_matches? message' do
       @matcher = render_template('new')
       @matcher.layout('users').matches?(@controller)
       @matcher.failure_message.should == 'Expected to render with layout "users", got nil'

@@ -40,7 +40,7 @@ describe 'validate_uniqueness_of' do
       @matcher.description.should == 'require unique values for username scoped to [:email, :access_code], case insensitive, allowing nil values, and not allowing blank values'
     end
 
-    it 'should set respond_to_scope? message' do
+    it 'should set responds_to_scope? message' do
       @matcher.scope(:title).matches?(@model)
       @matcher.failure_message.should == 'Expected User instance responds to title='
     end

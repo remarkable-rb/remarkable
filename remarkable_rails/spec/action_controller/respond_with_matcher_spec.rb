@@ -21,18 +21,18 @@ describe 'respond_with' do
       @matcher.description.should == 'respond with error, with body /anything/, and with content type "application/xml"'
     end
 
-    it 'should set status_match? message' do
+    it 'should set status_matches? message' do
       @matcher.matches?(@controller)
       @matcher.failure_message.should == 'Expected to respond with :error, got 200'
     end
 
-    it 'should set content_type_match? message' do
+    it 'should set content_type_matches? message' do
       @matcher = respond_with(:success)
       @matcher.body(/anything/).matches?(@controller)
       @matcher.failure_message.should == 'Expected to respond with body equals to /anything/, got " "'
     end
 
-    it 'should set content_type_match? message' do
+    it 'should set content_type_matches? message' do
       @matcher = respond_with(:success)
       @matcher.content_type(Mime::XML).matches?(@controller)
       @matcher.failure_message.should == 'Expected to respond with content type "application/xml", got "text/html"'

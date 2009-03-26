@@ -17,18 +17,18 @@ describe 'redirect_to' do
       @matcher.description.should == 'redirect to "http://test.host/projects/1/tasks" with status 301'
     end
 
-    it 'should set redirect? message' do
+    it 'should set redirected? message' do
       build_response
       @matcher.matches?(@controller)
       @matcher.failure_message.should == 'Expected redirect to "http://test.host/projects/1/tasks", got no redirect'
     end
 
-    it 'should set status_match? message' do
+    it 'should set status_matches? message' do
       @matcher.with(200).matches?(@controller)
       @matcher.failure_message.should == 'Expected redirect to "http://test.host/projects/1/tasks" with status 200, got status 302'
     end
 
-    it 'should set url_match? message' do
+    it 'should set url_matches? message' do
       @matcher.matches?(@controller)
       @matcher.failure_message.should == 'Expected redirect to "http://test.host/projects/1/tasks", got redirect to "http://test.host/projects"'
     end

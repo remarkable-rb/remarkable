@@ -7,7 +7,7 @@ module Remarkable
         arguments :expected, :block => :block
         optional :with
 
-        assertions :redirect?, :status_match?, :url_match?
+        assertions :redirected?, :status_matches?, :url_matches?
 
         before_assert :evaluate_expected_value
 
@@ -18,11 +18,11 @@ module Remarkable
 
         protected
 
-          def redirect?
+          def redirected?
             @response.redirect?
           end
 
-          def status_match?
+          def status_matches?
             return true unless @options.key?(:with)
 
             actual_status   = interpret_status(@response.response_code)
@@ -31,7 +31,7 @@ module Remarkable
             return actual_status == expected_status, :status => @response.response_code.inspect
           end
 
-          def url_match?
+          def url_matches?
             @actual = @response.redirect_url
 
             if @expected.instance_of?(Hash)

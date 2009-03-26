@@ -83,8 +83,8 @@ describe 'validate_numericality_of' do
       @matcher.failure_message.should == 'Expected Product to allow only even values for price'
     end
 
-    it 'should set equal_to? message' do
-      @matcher.should_receive(:equal_to?).and_return([false, { :count => 10 }])
+    it 'should set equals_to? message' do
+      @matcher.should_receive(:equals_to?).and_return([false, { :count => 10 }])
       @matcher.matches?(@model)
       @matcher.failure_message.should == 'Expected Product to be valid only when price is equal to 10'
     end

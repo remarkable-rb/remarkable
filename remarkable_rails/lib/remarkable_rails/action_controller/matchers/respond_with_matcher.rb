@@ -14,11 +14,11 @@ module Remarkable
 
         before_assert :evaluate_content_type
 
-        assertions :status_match?, :body_match?, :content_type_match?
+        assertions :status_matches?, :body_matches?, :content_type_matches?
 
         protected
 
-          def status_match?
+          def status_matches?
             return true unless @options[:with] # only continue if not nil
 
             case @options[:with]
@@ -36,12 +36,12 @@ module Remarkable
             end
           end
 
-          def body_match?
+          def body_matches?
             return true unless @options.key?(:body)
             assert_contains(@response.body, @options[:body])
           end
 
-          def content_type_match?
+          def content_type_matches?
             return true unless @options.key?(:content_type)
             assert_contains(@response.content_type, @options[:content_type])
           end

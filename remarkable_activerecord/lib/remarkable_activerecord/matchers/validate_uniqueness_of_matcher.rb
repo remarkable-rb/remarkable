@@ -8,7 +8,7 @@ module Remarkable
         optional :scope, :splat => true
         optional :case_sensitive, :allow_nil, :allow_blank, :default => true
 
-        collection_assertions :find_first_object?, :respond_to_scope?, :is_unique?, :case_sensitive?,
+        collection_assertions :find_first_object?, :responds_to_scope?, :is_unique?, :case_sensitive?,
                               :valid_with_new_scope?, :allow_nil?, :allow_blank?
 
         default_options :message => :taken
@@ -39,7 +39,7 @@ module Remarkable
 
           # Set subject scope to be equal to the object found.
           #
-          def respond_to_scope?
+          def responds_to_scope?
             (@options[:scope] || []).each do |scope|
               method = :"#{scope}="
               return false, :method => method unless @subject.respond_to?(method)

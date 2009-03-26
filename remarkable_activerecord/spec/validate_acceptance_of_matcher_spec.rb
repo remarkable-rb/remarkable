@@ -25,7 +25,7 @@ describe 'validate_acceptance_of' do
       @matcher.description.should == 'require eula and terms to be accepted with value "true" and allowing nil values'
     end
 
-    it 'should set require_acceptance? message' do
+    it 'should set requires_acceptance? message' do
       @matcher = validate_acceptance_of(:name)
       @matcher.matches?(@model)
       @matcher.failure_message.should == 'Expected User to be invalid if name is not accepted'

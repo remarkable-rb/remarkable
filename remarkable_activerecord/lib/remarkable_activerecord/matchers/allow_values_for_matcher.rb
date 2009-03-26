@@ -8,7 +8,7 @@ module Remarkable
         optional :in, :splat => true
         optional :allow_nil, :allow_blank, :default => true
 
-        collection_assertions :valid?, :invalid?, :allow_nil?, :allow_blank?
+        collection_assertions :is_valid?, :is_invalid?, :allow_nil?, :allow_blank?
 
         default_options :message => :invalid
 
@@ -27,14 +27,14 @@ module Remarkable
 
         protected
 
-          def valid?
+          def is_valid?
             valid_values.each do |value|
               return false, :value => value.inspect unless good?(value)
             end
             true
           end
 
-          def invalid?
+          def is_invalid?
             invalid_values.each do |value|
               return false, :value => value.inspect unless bad?(value)
             end

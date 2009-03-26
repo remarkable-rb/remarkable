@@ -11,7 +11,7 @@ module Remarkable
         optional :only_integer, :odd, :even, :allow_nil, :allow_blank, :default => true
 
         collection_assertions :only_numeric_values?, :allow_blank?, :allow_nil?,
-                              :only_integer?, :only_odd?, :only_even?, :equal_to?,
+                              :only_integer?, :only_odd?, :only_even?, :equals_to?,
                               :less_than_minimum?, :more_than_maximum?
 
         # Before assertions, we rearrange the values.
@@ -73,7 +73,7 @@ module Remarkable
 
           # Check equal_to for all registered values.
           #
-          def equal_to?
+          def equals_to?
             values = {}
             @maximum_values.each { |k, v| values[k] = v }
             @minimum_values.each { |k, v| values[k] = v }

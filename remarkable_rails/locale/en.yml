@@ -20,9 +20,9 @@ en:
       redirect_to:
         description: "redirect to {{expected}}"
         expectations:
-          redirect: "redirect to {{expected}}, got no redirect"
-          status_match: "redirect to {{expected}} with status {{with}}, got status {{status}}"
-          url_match: "redirect to {{expected}}, got redirect to {{actual}}"
+          redirected: "redirect to {{expected}}, got no redirect"
+          status_matches: "redirect to {{expected}} with status {{with}}, got status {{status}}"
+          url_matches: "redirect to {{expected}}, got redirect to {{actual}}"
         optionals:
           with:
             given: "with status {{inspect}}"
@@ -30,11 +30,11 @@ en:
         description: "render"
         expectations:
           rendered: "template {{template}} to be rendered, got no render"
-          template_match: "template {{template}} to be rendered, got {{actual_template}}"
-          layout_match: "to render with layout {{layout}}, got {{actual_layout}}"
-          status_match: "to render with {{with}}, got {{actual_status}}"
-          body_match: "to render with body equals to {{body}}, got {{actual_body}}"
-          content_type_match: "to render with content type {{content_type}}, got {{actual_content_type}}"
+          template_matches: "template {{template}} to be rendered, got {{actual_template}}"
+          layout_matches: "to render with layout {{layout}}, got {{actual_layout}}"
+          status_matches: "to render with {{with}}, got {{actual_status}}"
+          body_matches: "to render with body equals to {{body}}, got {{actual_body}}"
+          content_type_matches: "to render with content type {{content_type}}, got {{actual_content_type}}"
         optionals:
           template:
             given: "template {{inspect}}"
@@ -50,9 +50,9 @@ en:
       respond_with:
         description: "respond"
         expectations:
-          status_match: "to respond with {{with}}, got {{actual_status}}"
-          body_match: "to respond with body equals to {{body}}, got {{actual_body}}"
-          content_type_match: "to respond with content type {{content_type}}, got {{actual_content_type}}"
+          status_matches: "to respond with {{with}}, got {{actual_status}}"
+          body_matches: "to respond with body equals to {{body}}, got {{actual_body}}"
+          content_type_matches: "to respond with content type {{content_type}}, got {{actual_content_type}}"
         optionals:
           with:
             given: "with {{value}}"

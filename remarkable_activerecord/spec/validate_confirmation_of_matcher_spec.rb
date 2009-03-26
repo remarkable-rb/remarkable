@@ -19,13 +19,13 @@ describe 'validate_confirmation_of' do
       @matcher.description.should == 'require name and email to be confirmed'
     end
 
-    it 'should set respond_to_confirmation? message' do
+    it 'should set responds_to_confirmation? message' do
       @matcher = validate_confirmation_of(:age)
       @matcher.matches?(@model)
       @matcher.failure_message.should == 'Expected User instance responds to age_confirmation'
     end
 
-    it 'should set confirm? message' do
+    it 'should set confirms? message' do
       @model.instance_eval{ def age_confirmation=(*args); end }
       @matcher = validate_confirmation_of(:age)
       @matcher.matches?(@model)

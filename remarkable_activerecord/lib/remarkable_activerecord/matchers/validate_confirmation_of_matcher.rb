@@ -6,17 +6,17 @@ module Remarkable
         arguments :collection => :attributes, :as => :attribute
 
         optional :message
-        collection_assertions :respond_to_confirmation?, :confirm?
+        collection_assertions :responds_to_confirmation?, :confirms?
 
         default_options :message => :confirmation
 
         protected
 
-          def respond_to_confirmation?
+          def responds_to_confirmation?
             @subject.respond_to?(:"#{@attribute}_confirmation=")
           end
 
-          def confirm?
+          def confirms?
             @subject.send(:"#{@attribute}_confirmation=", 'something')
             bad?('different')
           end
