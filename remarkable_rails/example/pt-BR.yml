@@ -24,57 +24,57 @@ pt-BR:
           is_equal_value: "valor assinalado a {{name}} fosse um tipo de {{with}}, obtive {{assign_inspect}}"
         optionals:
           with_kind_of:
-            given: "com um tipo de {{value}}"
+            positive: "com um tipo de {{value}}"
       filter_params:
         description: "filtrar parâmetros com {{params}} do log"
         expectations:
-          respond_to_filter_params: "que o controllador respondesse a filter_parameters (controlador não está filtrando nenhum parâmetro)"
+          responds_to_filter_params: "que o controllador respondesse a filter_parameters (controlador não está filtrando nenhum parâmetro)"
           is_filtered: "{{param}} fosse filtrado"
       redirect_to:
         description: "redirecionar para {{expected}}"
         expectations:
-          redirect: "redirecionar para {{expected}}, não fui redirecionado a lugar algum"
-          status_match: "redirecionar para {{expected}} com status {{with}}, obtive status {{status}}"
-          url_match: "redirecionar para {{expected}}, fui redirecionado para {{actual}}"
+          redirected: "redirecionar para {{expected}}, não fui redirecionado a lugar algum"
+          status_matches: "redirecionar para {{expected}} com status {{with}}, obtive status {{status}}"
+          url_matches: "redirecionar para {{expected}}, fui redirecionado para {{actual}}"
         optionals:
           with:
-            given: "com status {{inspect}}"
+            positive: "com status {{inspect}}"
       render_template:
         description: "renderizar"
         expectations:
           rendered: "template {{template}} fosse renderizado, nada foi renderizado"
-          template_match: "template {{template}} fosse renderizado, obtive {{actual_template}}"
-          layout_match: "renderizar com layout {{layout}}, obtive {{actual_layout}}"
-          status_match: "renderizar com {{with}}, obtive {{actual_status}}"
-          body_match: "renderizar com corpo {{body}}, obtive {{actual_body}}"
-          content_type_match: "renderizar com content type {{content_type}}, obtive {{actual_content_type}}"
+          template_matches: "template {{template}} fosse renderizado, obtive {{actual_template}}"
+          layout_matches: "renderizar com layout {{layout}}, obtive {{actual_layout}}"
+          status_matches: "renderizar com {{with}}, obtive {{actual_status}}"
+          body_matches: "renderizar com corpo {{body}}, obtive {{actual_body}}"
+          content_type_matches: "renderizar com content type {{content_type}}, obtive {{actual_content_type}}"
         optionals:
           template:
-            given: "template {{inspect}}"
+            positive: "template {{inspect}}"
           layout:
             positive: "com layout {{inspect}}"
             negative: "sem layout"
           with:
-            given: "com status {{value}}"
+            positive: "com status {{value}}"
             success: "com sucesso"
           body:
-            given: "com corpo {{inspect}}"
+            positive: "com corpo {{inspect}}"
           content_type:
-            given: "com content-type {{inspect}}"
+            positive: "com content-type {{inspect}}"
       respond_with:
         description: "responder"
         expectations:
-          status_match: "responder com {{with}}, obtive {{actual_status}}"
-          body_match: "responder com corpo {{body}}, obtive {{actual_body}}"
-          content_type_match: "responder com content type {{content_type}}, obtive {{actual_content_type}}"
+          status_matches: "responder com {{with}}, obtive {{actual_status}}"
+          body_matches: "responder com corpo {{body}}, obtive {{actual_body}}"
+          content_type_matches: "responder com content type {{content_type}}, obtive {{actual_content_type}}"
         optionals:
           with:
-            given: "com {{value}}"
+            positive: "com {{value}}"
             success: "com sucesso"
           body:
-            given: "com corpo {{inspect}}"
+            positive: "com corpo {{inspect}}"
           content_type:
-            given: "com content-type {{inspect}}"
+            positive: "com content-type {{inspect}}"
       set_session:
         description: "setar {{keys}} na sessão"
         expectations:
@@ -84,7 +84,7 @@ pt-BR:
           is_equal_value: "a variável {{key}} fosse setada para {{to}}, obtive {{session_inspect}}"
         optionals:
           to:
-            given: "para {{inspect}}"
+            positive: "para {{inspect}}"
       set_the_flash:
         description: "setar uma mensagem flash {{keys}}"
         expectations:
@@ -94,5 +94,5 @@ pt-BR:
           is_equal_value: "que a mensagem flash {{key}} fosse setada para {{to}}, obtive {{flash_inspect}}"
         optionals:
           to:
-            given: "para {{inspect}}"
+            positive: "para {{inspect}}"
 
