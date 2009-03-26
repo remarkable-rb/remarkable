@@ -116,28 +116,20 @@ module Remarkable
         end
 
         # Helper that send the methods given and create a expectation message if
-        # any returns false. Since most assertion methods ends with an question
-        # mark and it looks strange on I18n yml files, we also search for the
-        # assertion method name without the question mark or exclamation mark
-        # at the end. So if you have a method called is_valid? on I18n yml file
-        # we will check for a key :is_valid? and :is_valid.
+        # any returns false.
+        #
+        # Since most assertion methods ends with an question mark and it's not
+        # readable in yml files, we remove question and exclation marks at the
+        # end of the method name before translating it. So if you have a method
+        # called is_valid? on I18n yml file we will check for a key :is_valid.
         #
         def send_methods_and_generate_message(methods)
           methods.each do |method|
             bool, hash = send(method)
 
             unless bool
-              if @expectation.nil?
-                hash = default_i18n_options.merge(hash || {})
-
-                if method.to_s =~ /\?|\!$/
-                  hash[:default] = Array(hash[:default])
-                  hash[:default].unshift(:"expectations.#{method.to_s.chop}")
-                end
-
-                @expectation = Remarkable.t "expectations.#{method}", hash
-              end
-
+              @expectation ||= Remarkable.t "expectations.#{method.to_s.gsub(/(\?|\!)$/, '')}",
+                                            default_i18n_options.merge(hash || {})
               return false
             end
           end

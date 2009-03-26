@@ -139,12 +139,6 @@ module Remarkable
           # :odd. So we have create :odd_message in the options hash, that when
           # called later, will return :odd.
           #
-          #
-          # 
-          # If the main :message is equal :not_a_number, it means the user changed
-          # it so we should use it. Otherwise returns :odd_message, :even_message
-          # and so on.
-          #
           def default_message_for(key)
             if @options[:message]
               :message

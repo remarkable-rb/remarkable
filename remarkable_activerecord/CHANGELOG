@@ -1,22 +1,28 @@
 # v3.0.0
 
+[ENHANCEMENT] Added more options to association_matcher. Previously it was
+handling just :dependent and :through options. Now it deals with:
+
+  :through, :class_name, :foreign_key, :dependent, :join_table, :uniq,
+  :readonly, :validate, :autosave, :counter_cache, :polymorphic
+
 [COMPATIBILITY] Removed callback, have_instance_method and have_class_method
 matchers. They don't lead to a good TDD since you should test they behavior
 and not wether they exist or not.
 
-[COMPATIBILITY] Removed the get_instance_of from before_assert. So we should
-target only rspec versions that supports subjects.
+[COMPATIBILITY] ActiveRecord matches does not pick the instance variable from
+the spec environment. So we should target only rspec versions that supports
+subjects (>= 1.1.12).
 
-This will also remove a feature that automatically gets the instance from the
-@spec binding. Previously, when we are doing this:
+Previously, when we are doing this:
 
    describe Product
      before(:each){ @product = Product.new(:tangible => true) }
      should_validate_presence_of :size
    end
 
-It was validating the @product instance variable. However this too magic. The
-right way to do that (with subjects) is:
+It was validating the @product instance variable. However this might be not
+clear. The right way to do that (with subjects) is:
 
    describe Product
      subject{ Product.new(:tangible => true) }
@@ -25,9 +31,10 @@ right way to do that (with subjects) is:
 
 # v2.x
 
-Added associations, allow_mass_assignment, allow_values_for, have_db_column,
-have_index, have_named_scope, have_readonly_attributes, validate_acceptance_of,
-validate_associate, validate_confirmation_of, validate_exclusion_of,
-validate_inclusion_of, validate_length_of, validate_numericality_of,
-validate_presence_of and validate_uniqueness_of matchers.
+[ENHANCEMENT] Added associations, allow_mass_assignment, allow_values_for,
+have_db_column, have_index, have_named_scope, have_readonly_attributes,
+validate_acceptance_of, validate_associate, validate_confirmation_of,
+validate_exclusion_of, validate_inclusion_of, validate_length_of,
+validate_numericality_of, validate_presence_of and validate_uniqueness_of
+matchers.
 

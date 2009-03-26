@@ -9,23 +9,23 @@ functionalities to routes son.
 All others matchers :assign_to, :filter_params, :respond_with, :set_session and
 :set_the_flash are kept.
 
-redirect_to and render_template were ported from rspec-rails to remarkable to
-provide I18n. The second was also extended to deal with :with, :layout and
-:content_type as options.
+[ENHANCEMENT] redirect_to and render_template were ported from rspec-rails to
+remarkable to provide I18n. The second was also extended to deal with :with,
+:layout and :content_type as options.
 
 render_with_layout, render_without_layout delegate their logic to render_template
 so they share the same options.
 
-respond_with_content_type and respond_wity body delegate their logic to respond_with
-matcher, so they also share the same options.
+respond_with_content_type and respond_wity_body delegate their logic to
+respond_with matcher, so they also share the same options.
 
 :set_the_flash was also redesign to inherit from :set_session, providing a
 consistent API.
 
-Finally, remarkable_rails now ships with a new feature, called macro stubs. This
-allows you to declare just once your mocks and/or expectations, and each matcher
-will know how to deal with properly. A TasksController could have your specs for
-a destroy action rewritten like this:
+[ENHANCEMENT] remarkable_rails now ships with a new feature, called macro stubs.
+This allows you to declare just once your mocks and/or expectations, and each
+matcher will know how to deal with properly. A TasksController could have your
+specs for a destroy action rewritten like this:
 
   describe :delete => :destroy, :id => 37 do
     expects :find, :on => Task, :with => '37', :returns => proc { mock_task }
@@ -88,5 +88,5 @@ Finally, expects currently support four options: on, with, returns and times.
 
 # v2.x
 
-Added assign_to, filter_params, render_with_layout, respond_with_content_type,
-respond_with, set_session and set_the_flash matchers.
+[ENHANCMENT] Added assign_to, filter_params, render_with_layout, respond_with
+respond_with_content_type, set_session and set_the_flash matchers.
