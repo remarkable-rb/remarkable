@@ -1,18 +1,18 @@
-require "rake/clean"
-require "rake/gempackagetask"
-require 'fileutils'
+require "rubygems"
+require "fileutils"
+
 include FileUtils
 
-remarkable_more_gem_paths = %w[]
-remarkable_gem_paths = %w[remarkable] + remarkable_more_gem_paths
-# remarkable-core remarkable-activerecord
+desc "Run the pre_commit tasks in all remarkable folders"
+task :pre_commit do
+  dir     = File.dirname(__FILE__)
+  folders = [ File.join(dir, 'remarkable') ] + Dir[ File.join(dir, 'remarkable_*') ]
 
-desc "Run spec examples for Remarkable More gems, one by one."
-task :spec do
-  remarkable_gem_paths.each do |gem|
-    Dir.chdir(gem) { sh "#{Gem.ruby} -S rake spec" }
+  folders.each do |folder|
+    puts
+    cd folder
+    system "rake pre_commit"
   end
 end
 
-desc 'Default: run spec examples for all the gems.'
-task :default => 'spec'
+task :default => [:pre_commit]
