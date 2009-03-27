@@ -1,12 +1,14 @@
 module Remarkable
   module ActiveRecord
     module Matchers
-
       class AssociationMatcher < Remarkable::Base
-        ASSOCIATION_OPTIONS = [ :through, :class_name, :foreign_key, :dependent, :join_table,
-                                :uniq, :readonly, :validate, :autosave, :polymorphic, :as, :counter_cache ]
-
         arguments :macro, :collection => :associations, :as => :association
+
+        optionals :through, :class_name, :foreign_key, :dependent, :join_table, :as
+        optionals :uniq, :readonly, :validate, :autosave, :polymorphic, :counter_cache, :default => true
+
+        # Stores optionals declared above in a CONSTANT to generate assertions
+        ASSOCIATION_OPTIONS = self.matcher_optionals
 
         collection_assertions :association_exists?, :macro_matches?, :through_exists?,
                               :join_table_exists?, :foreign_key_exists?, :polymorphic_exists?,
@@ -29,31 +31,30 @@ module Remarkable
 
           def join_table_exists?
             return true unless has_join_table?
-            ::ActiveRecord::Base.connection.tables.include?(join_table)
+            ::ActiveRecord::Base.connection.tables.include?(reflection_join_table)
           end
 
           def foreign_key_exists?
-            table_has_column(foreign_key_table, foreign_key)
+            table_has_column?(foreign_key_table, reflection_foreign_key)
           end
 
           def polymorphic_exists?
             return true unless @options[:polymorphic]
-            table_has_column?(subject_class.table_name, foreign_key.sub(/_id$/, '_type'))
+            table_has_column?(subject_class.table_name, reflection_foreign_key.sub(/_id$/, '_type'))
           end
 
           def counter_cache_exists?
             return true unless @options[:counter_cache]
-            table_has_column?(reflection.klass.table_name, reflection.counter_cache_column)
+            table_has_column?(reflection.klass.table_name, reflection.counter_cache_column.to_s)
           end
 
           ASSOCIATION_OPTIONS.each do |option|
-            optional             option, :default => true
             collection_assertion :"#{option}_matches?"
 
             class_eval <<-METHOD, __FILE__, __LINE__
               def #{option}_matches?
                 return true unless @options.key?(#{option.inspect})
-                actual_value = respond_to?(#{option.inspect}) ? #{option} : reflection.options[#{option.inspect}].to_s
+                actual_value = respond_to?(:reflection_#{option}, true) ? reflection_#{option} : reflection.options[#{option.inspect}].to_s
 
                 return true if @options[#{option.inspect}].to_s == actual_value
               end
@@ -63,27 +64,27 @@ module Remarkable
         private
 
           def reflection
-            @reflection ||= subject_class.reflect_on_association(@association)
+            @reflection ||= subject_class.reflect_on_association(@association.to_sym) if @subject
           end
 
-          def class_name
+          def reflection_class_name
             reflection.class_name.to_s
           end
 
-          def foreign_key
+          def reflection_foreign_key
             reflection.primary_key_name.to_s
+          end
+
+          def reflection_join_table
+            (reflection.options[:join_table] || reflection.options[:through]).to_s
           end
 
           def has_join_table?
             @options.key?(:through) || @macro == :has_and_belongs_to_many
           end
 
-          def join_table
-            (reflection.options[:join_table] || reflection.options[:through]).to_s
-          end
-
           def table_has_column?(table_name, column)
-            ::ActiveRecord::Base.connection.columns(table_name, 'Remarkable column retrieval').include?(column)
+            ::ActiveRecord::Base.connection.columns(table_name, 'Remarkable column retrieval').any?{|c| c.name == column }
           end
 
           # In cases a join table exists (has_and_belongs_to_many and through
@@ -94,8 +95,8 @@ module Remarkable
           #
           def foreign_key_table
             if has_join_table?
-              join_table
-            elsif reflection.belongs_to?
+              reflection_join_table
+            elsif reflection.macro == :belongs_to
               subject_class.table_name
             else
               reflection.klass.table_name
@@ -111,19 +112,19 @@ module Remarkable
                 :subject_table        => subject_class.table_name.inspect,
                 :reflection_table     => reflection.klass.table_name.inspect,
                 :foreign_key_table    => foreign_key_table.inspect,
-                :polymorphic_column   => foreign_key.sub(/_id$/, '_type').inspect,
-                :counter_cache_column => reflection.counter_cache_column.inspect
-              )
+                :polymorphic_column   => reflection_foreign_key.sub(/_id$/, '_type').inspect,
+                :counter_cache_column => reflection.counter_cache_column.to_s.inspect
+              ) rescue nil # rescue to allow specs to run properly
 
               ASSOCIATION_OPTIONS.each do |option|
-                value_to_compare = respond_to?(option) ? send(option) : reflection.options[option].to_s
+                value_to_compare = respond_to?(:"reflection_#{option}", true) ? send(:"reflection_#{option}") : reflection.options[option].to_s
                 options[:"actual_#{option}"] = value_to_compare.inspect
               end
+
             end
 
             options
           end
-
       end
 
       # Ensure that the belongs_to relationship exists. Will also test that the
