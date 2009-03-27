@@ -5,37 +5,51 @@ describe 'MacroStubs' do
 
   def current_id; '37'; end
 
-  it 'should create mocks methods dynamically' do
-    self.instance_variable_get('@task').should be_nil
-    self.respond_to?(:mock_task).should be_false
+  describe 'when generating mocks' do
+    mock_models :user
 
-    mock_task
+    before(:each) do
+      self.class.send(:undef_method, :mock_task) if self.respond_to?(:mock_task)  
+    end
 
-    self.instance_variable_get('@task').should_not be_nil
-    self.respond_to?(:mock_task).should be_true
+    it 'should generate mock methods explicitely' do
+      self.respond_to?(:mock_user).should be_true
+    end
+
+    it 'should create mock dynamically with class methods' do
+      self.respond_to?(:mock_task).should be_false
+      self.class.mock_task
+      self.respond_to?(:mock_task).should be_true
+    end
+
+    it 'should create mock dynamically with instance methods' do
+      self.instance_variable_get('@task').should be_nil
+      self.respond_to?(:mock_task).should be_false
+
+      mock_task
+
+      self.instance_variable_get('@task').should_not be_nil
+      self.respond_to?(:mock_task).should be_true
+    end
+
+    it 'should create procs which evals to mocks dynamically' do
+      proc = self.class.mock_task
+      proc.should be_kind_of(Proc)
+
+      self.instance_variable_get('@task').should be_nil
+      instance_eval &proc
+      self.instance_variable_get('@task').should_not be_nil
+    end
   end
 
-  it 'should create procs which evals to mocks dynamically' do
-    proc = self.class.mock_task
-    proc.should be_kind_of(Proc)
-
-    self.instance_variable_get('@task').should be_nil
-    self.respond_to?(:mock_task).should be_false
-
-    instance_eval &proc
-
-    self.instance_variable_get('@task').should_not be_nil
-    self.respond_to?(:mock_task).should be_true
-  end
-
-  describe 'describe group methods' do
+  describe 'when extending describe group behavior' do
     expects :find, :on => Task, :with => proc{ current_id }, :returns => mock_task
 
     get :show, :id => 37
     params :special_task_id => 42
     mime Mime::HTML
 
-    it 'should run action declared in describe' do
+    it 'should run action declared in a class method' do
       @controller.send(:performed?).should_not be_true
 
       run_action!(false)
@@ -43,6 +57,18 @@ describe 'MacroStubs' do
       @controller.action_name.should == 'show'
       @controller.request.method.should == :get
       @controller.send(:performed?).should be_true
+    end
+
+    it 'should use parameters given in params on request' do
+      self.should_receive(:current_id).once.and_return('37')
+      run_action!
+      @request.parameters[:special_task_id].should == '42'
+    end
+
+    it 'should respond with the supplied mime type' do
+      self.should_receive(:current_id).once.and_return('37')
+      run_action!
+      @response.content_type.should == Mime::HTML.to_s
     end
 
     it 'should run action with expectations' do
@@ -68,18 +94,6 @@ describe 'MacroStubs' do
       self.should_receive(:current_id).never
       run_stubs!
       @controller.send(:performed?).should_not be_true
-    end
-
-    it 'should use parameters given in params on request' do
-      self.should_receive(:current_id).once.and_return('37')
-      run_action!
-      @request.parameters[:special_task_id].should == '42'
-    end
-
-    it 'should respond with the supplied mime type' do
-      self.should_receive(:current_id).once.and_return('37')
-      run_action!
-      @response.content_type.should == Mime::HTML.to_s
     end
 
     describe Mime::XML do

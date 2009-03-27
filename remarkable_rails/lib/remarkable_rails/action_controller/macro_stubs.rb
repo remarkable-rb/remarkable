@@ -1,11 +1,13 @@
-# Adds a DSL to controller specs to make stub and expectations easier and DRY.
+# Macro stubs makes stubs and expectations easier, more readable and DRY.
 #
-# Let's start with an example:
+# == Example
+#
+# Let's jump off to an example:
 #
 #   describe ProjectsController do
 #     describe "responding to GET show" do
 #       expects :find, :on => Project, :with => '37', :returns => proc { mock_project }
-#       get     :show, :id => '37'
+#       get     :show, :id => 37
 #
 #       should_assign_to :project
 #       should_render_template 'show'
@@ -19,55 +21,116 @@
 #     end
 #   end
 #
-# The receive method declare that a Project will receive :find with '37' as
-# argument and return the value of the proc.
+# See how the spec is readable: a ProjectsController responding to get show
+# expects :find on Project which returns a proc with mock project, request the
+# action show with id 37 and then should assign to project and render template
+# 'show' (it will get even better soon).
 #
-# The first thing you should know is that the proc given is evaluated inside
-# the "it" example.
+# == Understanding it
 #
-# Before each macro run, it will convert such information into a stub or into a
-# expectation. Using stubs and expectations in controllers tests is important
-# because you will be sure that your controller tests will run isolated from
-# your models and from your views.
+# The <tt>expects</tt> method declares that a Project will receive :find with
+# '37' as argument and return the value of the proc. Next, we declare we should
+# perform a GET on action show with params { :id => '37' }.
+# 
+# Then we have two Remarkable macros: should_assign_to and should_render_template.
+# Each macro before asserting will check if an action was already performed and
+# if not, it runs the expectations and call the action.
 #
-# For more information, check this article from David Chelimsky:
+# In other words, should assign to macro is basically doing:
 #
-#   http://blog.davidchelimsky.net/2008/12/11/a-case-against-a-case-against-mocking-and-stubbing
-#
-# Going back to our example, the second thing you have to know is that you
-# don't have to play with proc all the time. You can call mock_project and it
-# will create a proc for you, which will call mock_project later:
-#
-#   expects :find, :on => Project, :with => '37', :returns => mock_project
-#
-# The last bit of customization is possible giving the action parameters to
-# the describe block:
-#
-#   describe :get => :show, :id => '37' do
-#     expects :find, :on => Project, :with => '37', :returns => proc { mock_project }
-#
-#     should_assign_to :project
-#     should_render_template 'show'
+#   it 'should assign to project' do
+#     Project.should_receive(:find).with('37').and_return(mock_project)
+#     get :show, :id => '37'
+#     assigns(:project).should == mock_project
 #   end
 #
-# This will automatically generate a description:
+# On the other hand, should render template is doing something like this:
 #
-#   describe 'responding to GET show'
+#   it 'should render template show' do
+#     Project.stub!(:find).and_return(mock_project)
+#     get :show, :id => '37'
+#     response.should render_template('show')
+#   end
 #
-# That can even be localized.
+# Now comes the first question: how each macro knows if they should perform
+# expectations or stubs?
+#
+# By default, only should_assign_to macro performs expectations. You can change
+# this behavior sending :with_stubs or :with_expectations as options:
+#
+#   should_assign_to       :project, :with_stubs => true
+#   should_render_template 'show', :with_expectations => true
+#
+# This also works in the rspec way:
+#
+#   it { should assign_to(:project).with_stubs            }
+#   it { should render_tempalte('show').with_expectations }
+#
+# == Readability
+#
+# Previously, you probably noticed that the readibility was not a 100%:
+#
+#  " A ProjectsController responding to get show expects :find on Project
+#    which returns a proc with mock project, request the action show with
+#    id 37 and then should assign to project and render template 'show'   "
+#
+# This is because we are reading get action show twice and there is a proc in
+# the middle of the description. But, we can make it even better:
+#
+#   describe ProjectsController do
+#     describe :get => :show, :id => 37 do
+#       expects :find, :on => Project, :with => '37', :returns => mock_project
+#
+#       should_assign_to :project
+#       should_render_template 'show'
+#
+#       describe Mime::XML do
+#         should_assign_to :project
+#         should_respond_with_content_type Mime::XML
+#       end
+#     end
+#   end
+#
+# You might have notices two changes:
+#
+#   1. We moved the "get :show, :id => 37" to the describe method. Don't worry
+#      in your spec output, you will still see: "responding to GET show". Which
+#      is also localized, as all Remarkable macro and matchers.
+#
+#   2. proc is gone. You can call the class method mock_project that will just
+#      create the proc for you. But remember, mock_project will return a proc,
+#      so you can actually do:
+#
+#        expects :find_id, :on => Project, :returns => mock_project.id
+#
+#      The proper way to do that would be:
+#
+#        expects :find_id, :on => Project, :returns => proc { mock_project.id }
+#
+#      You also don't need to define the instance method mock_project as well.
+#      The first time you call a mock_project method, it's caught by method
+#      missing which generates and cache mock_project on the fly. If you are
+#      worried with performance, you can do:
+#
+#        describe ProjectsController do
+#          mock_models :project
+#        end
+#
+#      And this will create the mock methods for you:
+#
+#        def mock_project(stubs={})
+#          @project ||= mock_model(Project, stubs)
+#        end
 #
 # = Give me more!
 #
 # Things start to get even better when we start to talk about nested resources.
-# After our ProjectsController is created, we want to create a TasksController.
-#
-# You do the scaffold and have to go through all that pain of changing your
-# expectations and stubs, right? Not anymore! Check this out:
+# After our ProjectsController is created, we want to create a TasksController:
 #
 #   describe TasksController do
 #     params :project_id => '42' #=> define params for all requests
 #
-#     # The two expectations below get inherited
+#     # Those two expectations get inherited in all describe groups below
 #     expects :find_by_title, :on => Project, :with => '42', :returns => mock_project
 #     expects :tasks, :and_return => Task
 #
@@ -79,11 +142,21 @@
 #     end
 #   end
 #
-# As you noticed, expectations and stubs are inherited. You can including define
-# parameter that will be available to all requests, using the method <tt>params</tt>.
+# As you noticed, you can define parameters that will be available to all requests,
+# using the method <tt>params</tt>.
 #
-# If you defined your macro stubs and need to run then inside another spec, you
-# have three methods: run_stubs!, run_expectations! and run_action!
+# Finally, if you used expects chain like above, but need to write a spec by
+# hand. You can invoke the action and expectations with run_expectations!,
+# run_stubs! and run_action!. Examples:
+#
+#   describe :get => :new do
+#     expects :new, :on => Project, :returns => mock_project
+#
+#     it "should do something different" do
+#       run_action!
+#       # do you assertions here
+#     end
+#   end
 #
 module Remarkable
   module ActionController
@@ -99,19 +172,57 @@ module Remarkable
         base.class_inheritable_reader :expects_chain, :default_action, :default_mime, :default_verb, :default_params
       end
 
-      # Defines :expects, :mime, :params, :get, :post, :put and :delete as class
-      # methods.
-      #
       module ClassMethods
 
+        # Creates a chain that will be evaluated as stub or expectation. The
+        # first parameter is the method expected.
+        #
+        # == Options
+        #
+        # * <tt>:on</tt> - Tell which object will receive the expected method.
+        #   This option is always required.
+        #
+        # * <tt>:with</tt> - Tell each parameters will be sent with the expected
+        #   method. This option is used only in expectations and is optional.
+        #
+        # * <tt>:returns</tt> - Tell what the expectations should return. Not
+        #   required as well.
+        #
+        # * <tt>:times</tt> - The number of times the object will receive the
+        #   method. Used only in expectations and when not given, defaults to 1.
+        #
+        # == Example
+        #
+        #   expects :new, :on => Project, :returns => :mock_project, :times => 2
+        #
         def expects(*args)
           write_inheritable_array(:expects_chain, [args])
         end
 
+        # The mime type of the request. The value given will be called transformed
+        # into a string and set in the @request.env['HTTP_ACCEPT'] variable.
+        #
+        # == Examples
+        #
+        #   mime Mime::XML
+        #   mime 'application/xml+rss'
+        #
         def mime(mime)
           write_inheritable_attribute(:default_mime, mime.to_s)
         end
 
+        # The params used for the request. Calls are always nested:
+        #
+        # == Examples
+        #
+        #   describe TasksController do
+        #     params :project_id => 42
+        #
+        #     describe :get => :show, :id => 37 do
+        #       # will request with params {:id => 37, :project_id => 42}
+        #     end
+        #   end
+        #
         def params(params)
           write_inheritable_hash(:default_params, params)
         end
@@ -127,6 +238,36 @@ module Remarkable
         end
 
         # Overwrites describe to provide quick action description with I18n.
+        #
+        # You can now do:
+        #
+        #   describe :get => :show, :id => 37
+        #
+        # Which is the same as:
+        #
+        #   describe 'responding to #GET show' do
+        #     get :show, :id => 37
+        #
+        # And do this:
+        #
+        #   describe Mime::XML
+        #
+        # Which is the same as:
+        #
+        #   describe 'with xml' do
+        #     mime Mime::XML
+        #
+        # The string can be localized using I18n. An example yml file is:
+        #
+        #   locale:
+        #     remarkable:
+        #       action_controller:
+        #         responding: "responding to #{{verb}} {{action}}"
+        #         mime_type: "with {{format}} ({{content_type}})"
+        #
+        # And load the locale file with:
+        #
+        #   Remarkable.add_locale locale_path
         #
         def describe(*args, &block)
           options = args.first.is_a?(Hash) ? args.first : {}
@@ -180,24 +321,59 @@ module Remarkable
           example_group.class_eval(&block)
         end
 
-        # Overwrites method missing to create mocks on the fly.
-        #
-        # Since this is a class method, it just creates procs that will be
-        # evaluated inside the expectation chain.
-        #
-        def method_missing(method, *args)
-          if method.to_s =~ /^mock_/
-            proc { send(method, *args) }
-          else
-            super
+        protected
+
+          # Overwrites method missing to create mocks on the fly.
+          #
+          # It creates the instance method and returns a proc that will call it
+          # further.
+          #
+          def method_missing(method, *args) #:nodoc:
+            if method.to_s =~ /^mock_(.*)$/
+              create_mock_model_method($1)
+              proc { send(method, *args) }
+            else
+              super
+            end
           end
-        end
+
+          # Creates mock methods automatically.
+          #
+          # == Examples
+          #
+          # Doing this:
+          #
+          #   describe ProjectsController do
+          #     mock_models :project
+          #   end
+          #
+          # Will create the mock method for you:
+          #
+          #   def mock_project(stubs={})
+          #     @project ||= mock_model(Project, stubs)
+          #   end
+          #
+          def mock_models(*models)
+            models.each{ |m| create_mock_model_method(m.to_s) }
+          end
+
+          # Creates a mock method on the fly, as described in <tt>mock_models</tt>.
+          #
+          def create_mock_model_method(model) #:nodoc:
+            self.class_eval <<-METHOD
+              def mock_#{model}(stubs={})
+                @#{model} ||= mock_model(#{model.classify}, stubs)
+              end
+            METHOD
+          end
 
       end
 
       protected
 
-        def evaluate_expectation_chain(use_expectations=true)
+        # Evaluates the expectation chain as stub or expectations.
+        #
+        def evaluate_expectation_chain(use_expectations=true) #:nodoc:
           return if self.expects_chain.nil?
 
           self.expects_chain.each do |method, default_options|
@@ -227,16 +403,23 @@ module Remarkable
 
         # Instance method run_stubs! if someone wants to declare additional
         # tests and call the stubs inside of it.
+        #
         def run_stubs!
           evaluate_expectation_chain(false)
         end
 
         # Instance method run_expectations! if someone wants to declare
         # additional tests and call the stubs inside of it.
+        #
         def run_expectations!
           evaluate_expectation_chain(true)
         end
 
+        # Run the action declared in the describe group. The first parameter
+        # is if you want to run expectations or stubs. You can also supply
+        # the verb (get, post, put or delete), which action to call, parameters
+        # and the mime type.
+        #
         def run_action!(use_expectations=true, verb=nil, action=nil, params={}, mime=nil)
           # Execute the expectation chain
           evaluate_expectation_chain(use_expectations)
@@ -261,7 +444,7 @@ module Remarkable
         # This allows procs to be given to the receive chain and they will be
         # evaluated in the instance binding.
         #
-        def evaluate_value(duck)
+        def evaluate_value(duck) #:nodoc:
           if duck.is_a? Proc
             self.instance_eval &duck
           else
@@ -272,22 +455,13 @@ module Remarkable
         # Whenever the user call mock_task and the mock is not defined, we
         # create a method and then call it.
         #
-        def method_missing(method, *args)
+        def method_missing(method, *args) #:nodoc:
           if method.to_s =~ /^mock_(.*)$/
-            create_mock_model_method($1)
-            send(method, *args)
+            self.class.send(:create_mock_model_method, $1)
+            self.send(method, *args)
           else
             super
           end
-        end
-
-        # Creates a mock method on the fly
-        def create_mock_model_method(model)
-          self.instance_eval <<-METHOD
-            def mock_#{model}(stubs={})
-              @#{model} ||= mock_model(#{model.classify}, stubs)
-            end
-          METHOD
         end
 
     end
