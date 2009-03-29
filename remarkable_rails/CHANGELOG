@@ -2,13 +2,6 @@
 
 # v3.0.0
 
-[COMPATIBILITY] Removed route matcher. Rspec already provides two methods to
-test your routes and they should be apart from controller specs. We might add
-functionalities to routes son.
-
-All others matchers :assign_to, :filter_params, :respond_with, :set_session and
-:set_the_flash are kept.
-
 [ENHANCEMENT] redirect_to and render_template were ported from rspec-rails to
 remarkable to provide I18n. The second was also extended to deal with :with,
 :layout and :content_type as options.
