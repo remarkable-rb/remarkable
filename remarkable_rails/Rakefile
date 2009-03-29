@@ -1,4 +1,6 @@
 require 'rubygems'
+
+gem 'rspec', ENV['RSPEC_VERSION'] || '1.2.2'
 require 'spec/rake/spectask'
 
 RAILS_VERSIONS = ['2.1.2', '2.2.2', '2.3.2']

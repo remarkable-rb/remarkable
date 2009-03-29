@@ -27,7 +27,11 @@ Remarkable.locale = locale
 # Declaring specs
 describe TasksController, :type => :controller do
   should_filter_params :password
-  xshould_filter_params :admin
+  should_not_filter_params :username
+
+  pending('Adicionar admin no sistema') do
+    should_filter_params :admin_password
+  end
 
   describe :get => :show, :id => 37 do
     expects :find, :on => Task, :with => '37', :returns => mock_task
@@ -36,6 +40,8 @@ describe TasksController, :type => :controller do
 
     describe Mime::XML do
       expects :to_xml, :on => mock_task, :returns => 'generated xml'
+
+      xshould_assign_to :project
 
       should_assign_to :task, :with => mock_task, :with_kind_of => Task
       should_respond_with :success, :body => /generated xml/

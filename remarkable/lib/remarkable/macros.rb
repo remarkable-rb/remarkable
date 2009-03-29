@@ -1,17 +1,30 @@
 module Remarkable
   module Macros
+    @@_pending_examples, @@_pending_examples_description = false, nil
 
-    def method_missing(method_id, *args, &block)
-      if method_id.to_s =~ /^(should_not|should)_(.+)/
-        should_or_should_not_method_missing($1, $2, caller, *args, &block)
-      elsif method_id.to_s =~ /^xshould_(not_)?(.+)/
-        pending_method_missing($1, $2, *args, &block)
-      else
-        super(method_id, *args, &block)
+    protected
+
+      def pending(description=nil)
+        @@_pending_examples, @@_pending_examples_description = true, description
+        yield
+        @@_pending_examples, @@_pending_examples_description = false, nil
       end
-    end
 
-    private
+      def method_missing(method_id, *args, &block)
+        if method_id.to_s =~ /^(should_not|should)_(.+)/
+          if @@_pending_examples
+            pending_method_missing(@@_pending_examples_description, $1, $2, caller, *args, &block)
+          else
+            should_or_should_not_method_missing($1, $2, caller, *args, &block)
+          end
+        elsif method_id.to_s =~ /^p(should_not|should)_(.+)/
+          pending_method_missing(nil, $1, $2, caller, *args, &block)
+        elsif method_id.to_s =~ /^x(should_not|should)_(.+)/
+          disabled_method_missing($1, $2, *args, &block)
+        else
+          super(method_id, *args, &block)
+        end
+      end
 
       def should_or_should_not_method_missing(should_or_should_not, method, calltrace, *args, &block)
         it {
@@ -24,15 +37,33 @@ module Remarkable
         }
       end
 
-      def pending_method_missing(negative, method, *args, &block)
-        # Create an example group instance and get the matcher.
-        matcher = Remarkable::Matchers.send(method, *args, &block)
-        description = matcher.description
+      def disabled_method_missing(should_or_should_not, method, *args, &block)
+        description = get_description_from_matcher(should_or_should_not, method, *args, &block)
+        xexample(description)
+      end
 
-        verb = Remarkable.t(negative ? 'remarkable.core.should_not' : 'remarkable.core.should')
-        xit "#{verb} #{description}"
+      def pending_method_missing(pending_text, should_or_should_not, method, calltrace, *args, &block)
+        description   = get_description_from_matcher(should_or_should_not, method, *args, &block)
+        method_caller = calltrace.detect{ |c| c !~ /method_missing/ }
+
+        example(description) do
+          raise Spec::Example::ExamplePendingError.new(pending_text || 'TODO', method_caller)
+        end
+      end
+
+      # Try to get the description from the matcher. If an error is raised, we
+      # deduct the description from the matcher name, but it will be shown in
+      # english.
+      #
+      def get_description_from_matcher(should_or_should_not, method, *args, &block)
+        verb = should_or_should_not.to_s.gsub('_', ' ')
+
+        desc = Remarkable::Matchers.send(method, *args, &block).description
+        verb = Remarkable.t("remarkable.core.#{should_or_should_not}", :default => verb)
       rescue
-        xit "should #{'not ' if negative}#{method.to_s.gsub('_',' ')}"
+        desc = method.to_s.gsub('_', ' ')
+      ensure
+        verb << ' ' << desc
       end
 
   end

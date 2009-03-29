@@ -1,4 +1,6 @@
 require 'rubygems'
+
+gem 'rspec', ENV['RSPEC_VERSION'] || '1.2.2'
 require 'spec/rake/spectask'
 
 desc "Run the specs under spec"
