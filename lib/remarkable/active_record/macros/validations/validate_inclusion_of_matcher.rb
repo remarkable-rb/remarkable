@@ -30,15 +30,6 @@ module Remarkable # :nodoc:
       def validate_inclusion_of(attribute, *good_values)
         options = good_values.extract_options!
 
-        # TODO Remove this until the next comment
-        unless options.key?(:in) || good_values.empty?
-          warn "[DEPRECATION] Please use validate_inclusion_of(#{attribute.inspect}, :in => #{good_values.inspect}) " <<
-               "instead of validate_inclusion_of(#{attribute.inspect}, #{good_values.inspect[1..-2]})."
-        end
-
-        options[:in] ||= good_values
-
-        # From now on is what should be the actual method.
         good_values = [options.delete(:in)].flatten.compact
         good_values << options
 
@@ -47,13 +38,6 @@ module Remarkable # :nodoc:
         else
           EnsureValueInListMatcher.new(attribute, :inclusion, *good_values)
         end
-      end
-
-      # TODO This one is for shoulda compatibility. Deprecate it?
-      def ensure_inclusion_of(attribute, *good_values) #:nodoc:
-        warn "[DEPRECATION] should_ensure_inclusion_of is deprecated. " <<
-             "Use should_validate_inclusion_of instead."
-        validate_inclusion_of(attribute, *good_values)
       end
 
     end

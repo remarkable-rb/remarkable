@@ -4,16 +4,9 @@ module Remarkable # :nodoc:
 
       class ColumnMatcher < Remarkable::Matcher::Base
         arguments :columns
-        
+
         optional  :type, :default, :precision, :limit, :scale, :sql_type
         optional  :primary, :null, :default => true
-
-        # TODO: remove it
-        def of_type(type)
-          warn "[DEPRECATION] option of_type is deprecated in have_db_column. Use type instead."
-          @options[:type] = type
-          self
-        end
 
         # Method used to load all options via hash.
         # (:type, :default, :precision, :limit, :scale, :sql_type, :primary, :null)

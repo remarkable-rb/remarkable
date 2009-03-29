@@ -9,13 +9,7 @@ module Remarkable # :nodoc:
         def initialize(*names, &block)
           @options          = names.extract_options!
           @names            = names
-          @options[:equals] = block if block_given?
-
-          warn "[DEPRECATION] :equals option is deprecated in should_assign_to. Please give :with instead."        if @options[:equals]
-          warn "[DEPRECATION] :class option is deprecated in should_assign_to. Please give :with_kind_of instead." if @options[:class]
-
-          @options[:with]         ||= @options.delete(:equals)
-          @options[:with_kind_of] ||= @options.delete(:class)
+          @options[:with] ||= block if block_given?
         end
 
         def matches?(subject)

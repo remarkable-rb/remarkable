@@ -44,7 +44,7 @@ module Remarkable # :nodoc:
       end
 
       def should_not_set_the_flash
-        should_method_missing :set_the_flash_to, caller, nil
+        should_method_missing :set_the_flash, caller, nil
       end
 
       def method_missing_with_remarkable(method_id, *args, &block)

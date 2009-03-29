@@ -7,11 +7,8 @@ module Remarkable # :nodoc:
         def initialize(val)
           @val = if val.is_a?(Hash)
             val[:to]
-          elsif val
-            warn "[DEPRECATION] set_the_flash(#{val.inspect}) is deprecated, please use set_the_flash(:to => #{val.inspect}) instead"
-            val
           else
-            val
+            nil
           end
         end
 
@@ -64,11 +61,6 @@ module Remarkable # :nodoc:
       end
 
       def set_the_flash(val={:to=>''})
-        SetTheFlash.new(val)
-      end
-
-      def set_the_flash_to(val={:to=>''})
-        warn "[DEPRECATION] set_the_flash_to matcher is deprecated, please use set_the_flash instead"
         SetTheFlash.new(val)
       end
     end

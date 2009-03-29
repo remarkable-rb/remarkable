@@ -10,16 +10,6 @@ module Remarkable # :nodoc:
         assertions :less_than_min_length?, :exactly_min_length?, :allow_nil?,
                    :more_than_max_length?, :exactly_max_length?, :allow_blank?
 
-        def short_message(message)
-          warn "[DEPRECATION] :short_message is deprecated for validate_length_of, please use :too_short instead"
-          too_short(message)
-        end
-
-        def long_message(message)
-          warn "[DEPRECATION] :long_message is deprecated for validate_length_of, please use :too_long instead"
-          too_long(message)
-        end
-
         def within(range)
           @behavior = :within
           @options[:minimum] = range.first

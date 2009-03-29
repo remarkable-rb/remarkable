@@ -63,12 +63,8 @@ module Remarkable # :nodoc:
       def set_session(key, expected=nil, &block)
         expected = if expected.is_a?(Hash)
           expected[:to]
-        elsif expected
-          warn "[DEPRECATION] set_session(#{key.inspect}, #{expected.inspect}) is deprecated. " <<
-               "Please use set_session(#{key.inspect}, :to => #{expected.inspect})"
-          expected
         else
-          expected
+          nil
         end
         
         SetSessionMatcher.new(key, expected, &block)

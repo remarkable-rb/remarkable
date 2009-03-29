@@ -35,23 +35,15 @@ describe PostsController do
         get :index, :user_id => users(:first)
       end
       should_respond_with 200
-      should_assign_to(:user, :class => User){ users(:first) }
-      should_not_assign_to :user, :class => User, :equals => proc { users(:second) }
 
       should_assign_to(:user, :with_kind_of => User){ users(:first) }
       should_not_assign_to :user, :with_kind_of => User, :with => proc { users(:second) }
 
-      should_not_assign_to :user, :class => Post
-      should_not_assign_to :user, :equals => proc { posts(:first) }
+      should_not_assign_to :user, :with_kind_of => Post
+      should_not_assign_to :user, :with => proc { posts(:first) }
 
       should_assign_to :posts
       should_not_assign_to :foo, :bar
-
-      # should_render_page_with_metadata :title => /index/
-      # should_render_page_with_metadata :description => /Posts/, :title => /index/
-      # should_render_page_with_metadata :keywords => "posts"
-      # should_not_render_page_with_metadata :description => "user"
-      # should_not_render_page_with_metadata :foo => "bar"
     end
 
     describe "on POST to :create" do
@@ -65,7 +57,6 @@ describe PostsController do
 
       should_redirect_to { user_post_url(@post.user, @post) }
       should_not_redirect_to { user_url(@post.user) }
-      should_set_the_flash_to /created/i
       should_set_the_flash :to => /created/i
     end
 
@@ -78,11 +69,6 @@ describe PostsController do
       should_respond_with_content_type 'application/rss+xml'
       should_respond_with_content_type :rss
       should_respond_with_content_type /rss/
-
-      should_set_session :special, "$2 off your next purchase"
-      should_set_session :special_user_id, proc { @user.id }
-      should_set_session(:special_user_id){ @user.id }
-      should_not_set_session :monkey, "fat"
 
       should_set_session :special, :to => "$2 off your next purchase"
       should_set_session :special_user_id, :to => proc { @user.id }
@@ -153,31 +139,19 @@ describe PostsController do
       end
       it { should respond_with(200) }
 
-      it { should assign_to(:some_text) }
-      it { should assign_to(:some_text, :equals => "foo bar") }
-      it { should_not assign_to(:some_text, :equals => "foo without bar") }
-      it { should assign_to(:user, :class => User, :equals => users(:first)) }
-      it { should assign_to(:user, :class => User){ users(:first) } }
-      it { should_not assign_to(:user, :class => User, :equals => users(:second)) }
-      it { should_not assign_to(:user, :class => Post) }
-      it { should_not assign_to(:user, :equals => posts(:first)) }
       it { should assign_to(:posts) }
       it { should_not assign_to(:foo, :bar) }
 
       it { should assign_to(:some_text) }
       it { should assign_to(:some_text, :with => "foo bar") }
       it { should_not assign_to(:some_text, :with => "foo without bar") }
+
       it { should assign_to(:user, :with_kind_of => User, :with => users(:first)) }
       it { should assign_to(:user, :with_kind_of => User){ users(:first) } }
+
       it { should_not assign_to(:user, :with_kind_of => User, :with => users(:second)) }
       it { should_not assign_to(:user, :with_kind_of => Post) }
       it { should_not assign_to(:user, :with => 'posts(:first)') }
-
-      # it { should render_page_with_metadata(:title => /index/) }
-      # it { should render_page_with_metadata(:description => /Posts/, :title => /index/) }
-      # it { should render_page_with_metadata(:keywords => "posts") }
-      # it { should_not render_page_with_metadata(:description => "user") }
-      # it { should_not render_page_with_metadata(:foo => "bar") }
     end
 
     describe "on POST to :create" do
@@ -191,10 +165,8 @@ describe PostsController do
 
       it { should redirect_to(user_post_url(@post.user, @post)) }
       it { should_not redirect_to(user_url(@post.user)) }
-      it { should set_the_flash_to(/created/i) }
       it { should set_the_flash.to(/created/i) }
       it { should set_the_flash(:to => /created/i) }
-      it { should_not set_the_flash_to(/foo/i) }
       it { should_not set_the_flash.to(/foo/i) }
       it { should_not set_the_flash(:to => /foo/i) }
     end
@@ -208,11 +180,6 @@ describe PostsController do
       it { should respond_with_content_type('application/rss+xml') }
       it { should respond_with_content_type(:rss) }
       it { should respond_with_content_type(/rss/) }
-
-      it { should set_session(:special, "$2 off your next purchase") }
-      it { should set_session(:special_user_id, proc{ @user.id }) }
-      it { should set_session(:special_user_id){ @user.id } }
-      it { should_not set_session(:monkey, "fat") }
 
       it { should set_session(:special, :to => "$2 off your next purchase") }
       it { should set_session(:special_user_id, :to => proc{ @user.id }) }
