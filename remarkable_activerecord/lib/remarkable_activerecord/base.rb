@@ -197,6 +197,37 @@ module Remarkable
           !assert_contains(collection, x)
         end
 
+        # Changes how collection are interpolated to provide localized names
+        # whenever is possible.
+        #
+        def collection_interpolation
+          described_class = if @subject
+            subject_class
+          elsif @spec
+            @spec.send(:described_class)
+          end
+
+          if RAILS_I18N && described_class.respond_to?(:human_attribute_name) && self.class.matcher_arguments[:collection]
+            options = {}
+
+            collection_name = self.class.matcher_arguments[:collection].to_sym
+            if collection = instance_variable_get("@#{collection_name}")
+              collection.map!{|attr| described_class.human_attribute_name(attr.to_s, :locale => Remarkable.locale).downcase }
+              options[collection_name] = array_to_sentence(collection)
+            end
+
+            object_name = self.class.matcher_arguments[:as]
+            if object = instance_variable_get("@#{object_name}")
+              object = described_class.human_attribute_name(object.to_s, :locale => Remarkable.locale).downcase
+              options[object_name] = object
+            end
+
+            options
+          else
+            super
+          end
+        end
+
     end
   end
 end

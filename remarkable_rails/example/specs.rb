@@ -7,7 +7,7 @@
 #   ruby example/specs.rb -fs pt-BR
 #   ruby example/specs.rb -fs en
 #
-# You need rspec >= 1.2.0, activerecord >= 2.1.2 and sqlite3.
+# You need rspec >= 1.2.0, rails >= 2.1.2 and sqlite3.
 
 # Get given locale
 locale = ARGV.pop

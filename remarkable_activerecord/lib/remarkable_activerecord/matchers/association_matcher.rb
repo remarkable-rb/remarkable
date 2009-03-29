@@ -1,7 +1,7 @@
 module Remarkable
   module ActiveRecord
     module Matchers
-      class AssociationMatcher < Remarkable::Base
+      class AssociationMatcher < Remarkable::ActiveRecord::Base
         arguments :macro, :collection => :associations, :as => :association
 
         optionals :through, :class_name, :foreign_key, :dependent, :join_table, :as

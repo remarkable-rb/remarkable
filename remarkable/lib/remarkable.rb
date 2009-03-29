@@ -1,19 +1,7 @@
-# Remarkable core module
-module Remarkable
-  # Helper that includes required Remarkable modules into the given klass.
-  #
-  def self.include_matchers!(base, klass)
-    # Add Remarkable core modules
-    klass.send :extend,  Remarkable::Macros
-
-    klass.send :extend,  base::Macros   if defined?(base::Macros)
-    klass.send :include, base::Matchers if defined?(base::Matchers)
-  end
-end
-
 # Load core files
 dir = File.dirname(__FILE__)
 require File.join(dir, 'remarkable', 'version')
+require File.join(dir, 'remarkable', 'matchers')
 require File.join(dir, 'remarkable', 'i18n')
 require File.join(dir, 'remarkable', 'dsl')
 require File.join(dir, 'remarkable', 'messages')

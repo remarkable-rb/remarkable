@@ -26,7 +26,7 @@ module Remarkable
 
       def pending_method_missing(negative, method, *args, &block)
         # Create an example group instance and get the matcher.
-        matcher = self.new('pending_method_missing_group').send(method, *args, &block)
+        matcher = Remarkable::Matchers.send(method, *args, &block)
         description = matcher.description
 
         verb = Remarkable.t(negative ? 'remarkable.core.should_not' : 'remarkable.core.should')

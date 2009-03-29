@@ -3,7 +3,7 @@ require 'ruby-debug'
 
 RAILS_ENV     = 'test'
 RAILS_VERSION = ENV['RAILS_VERSION'] || '=2.2.2'
-RSPEC_VERSION = ENV['RSPEC_VERSION'] || '=1.2.0'
+RSPEC_VERSION = ENV['RSPEC_VERSION'] || Spec::VERSION::STRING
 
 # Load Rails
 gem 'activesupport', RAILS_VERSION
