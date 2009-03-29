@@ -47,7 +47,11 @@ module Remarkable
         method_caller = calltrace.detect{ |c| c !~ /method_missing/ }
 
         example(description) do
-          raise Spec::Example::ExamplePendingError.new(pending_text || 'TODO', method_caller)
+          if ::Spec::Example::ExamplePendingError.method(:new).arity == 2
+            raise Spec::Example::ExamplePendingError.new(pending_text || 'TODO', method_caller)
+          else # For rspec <= 1.1.12
+            raise Spec::Example::ExamplePendingError.new(pending_text || 'TODO')
+          end
         end
       end
 
