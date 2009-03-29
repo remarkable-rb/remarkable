@@ -11,18 +11,10 @@ describe Remarkable::Macros do
   should_not_contain(1, 4)
 
   describe "with disabled examples" do
-    # Example disabled without parameters to assure rescue block works properly
+    # Example disabled without parameters to ensure rescue works properly
     xshould_not_single_contain
     xshould_contain(5)
     xshould_not_contain(1)
-  end
-
-  describe "with pending examples" do
-    pshould_single_contain(4)
-
-    pending("pending examples") do
-      should_contain(5)
-    end
   end
 
   describe "with blocks" do

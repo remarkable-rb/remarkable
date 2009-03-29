@@ -1,7 +1,7 @@
 # v3.0.0
 
+* Added pending and disabled macros
 * Added I18n
 * Added DSL core structure
 * Added macros core structure
 * Added matchers core structure
-
