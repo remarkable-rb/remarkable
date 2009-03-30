@@ -11,13 +11,10 @@ module Remarkable # :nodoc:
         def matches?(subject)
           @subject = subject
 
-          initialize_with_spec!
+          @options[:controller] ||= controller_name
 
-          unless @options[:controller]
-            @options[:controller] = @controller.class.name.gsub(/Controller$/, '').tableize
-          end
           @options[:controller] = @options[:controller].to_s
-          @options[:action] = @options[:action].to_s
+          @options[:action]     = @options[:action].to_s
 
           @populated_path = @path.dup
           @options.each do |key, value|
@@ -38,12 +35,18 @@ module Remarkable # :nodoc:
 
         private
 
-        def initialize_with_spec!
-          # In Rspec 1.1.12 we can actually do:
-          #
-          #   @controller = @subject
-          #
-          @controller = @spec.instance_eval { controller }
+        def controller_name
+          controller = if @spec.class.respond_to?(:controller_class)
+            @spec.class.controller_class
+          elsif @spec.class.respond_to?(:described_class)
+            @spec.class.described_class
+          end
+
+          if controller.ancestors.include?(ActionController::Base)
+            controller.name.gsub(/Controller$/, '').tableize
+          else
+            raise ArgumentError, "I cannot guess the controller name in route_for. Please supply :controller as option"
+          end
         end
 
         def map_to_path?
@@ -68,7 +71,7 @@ module Remarkable # :nodoc:
       end
 
       def route(method, path, options)
-        Route.new(method, path, options)
+        Route.new(method, path, options).spec(self)
       end
     end
   end

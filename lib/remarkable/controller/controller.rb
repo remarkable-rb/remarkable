@@ -15,6 +15,15 @@ module Spec
         private
         include Remarkable::Private
       end
+
+      class RoutingExampleGroup
+        include Remarkable::Assertions
+        include Remarkable::Controller::Matchers
+        extend Remarkable::Controller::Macros
+
+        private
+        include Remarkable::Private
+      end
     end
   end
 end
