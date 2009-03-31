@@ -26,6 +26,8 @@ Remarkable.locale = locale
 
 # Declaring specs
 describe TasksController, :type => :controller do
+  mock_models :task
+
   should_filter_params :password
   should_not_filter_params :username
 

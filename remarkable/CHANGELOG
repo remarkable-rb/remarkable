@@ -1,5 +1,14 @@
 # v3.0.0
 
+* Added Remarkable::Matchers. Now you can include your Remarkable matchers and
+  macros in test unit as well.
+
+    class Test::Unit::TestCase
+      include Spec::Matchers
+      include Remarkable::Matchers
+      extend  Remarkable::Macros
+    end
+
 * Added pending and disabled macros
 * Added I18n
 * Added DSL core structure

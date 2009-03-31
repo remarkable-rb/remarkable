@@ -31,4 +31,12 @@ describe Remarkable::Base do
   it { should contain(1) }
   it { should_not contain(10) }
 
+  class MatchersSandbox
+    include Remarkable::Matchers
+  end
+
+  it 'should allow Macros and Matchers to be added to any class' do
+    MatchersSandbox.new.should respond_to(:contain)
+  end
+
 end

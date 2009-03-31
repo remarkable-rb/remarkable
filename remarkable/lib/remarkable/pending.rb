@@ -11,7 +11,7 @@ module Remarkable
         include Macros
 
         def example(mather_description=nil)
-          method_caller = caller.detect{ |c| c !~ /method_missing/ }
+          method_caller = caller.detect{ |c| c !~ /method_missing'/ }
 
           error = begin
             ::Spec::Example::ExamplePendingError.new(description || 'TODO', method_caller)
