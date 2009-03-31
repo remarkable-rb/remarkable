@@ -88,6 +88,14 @@ describe 'association_matcher' do
         matcher.failure_message.should == 'Expected company association with readonly equals to true, got "false"'
       end
 
+      if RAILS_VERSION =~ /^2.3/
+        it 'should set autosave_matches? message' do
+          matcher = define_and_validate(:autosave => false)
+          matcher.autosave.matches?(@model)
+          matcher.failure_message.should == 'Expected company association with autosave equals to true, got "false"'
+        end
+      end
+
       it 'should set polymorphic_matches? message' do
         matcher = define_and_validate(:polymorphic => false)
         matcher.polymorphic.matches?(@model)
@@ -156,7 +164,187 @@ describe 'association_matcher' do
     end
 
     describe 'macros' do
+      before(:each){ define_and_validate(:validate => true, :readonly => true) }
 
+      should_belong_to :company
+      should_belong_to :company, :readonly    => true
+      should_belong_to :company, :validate    => true
+      should_belong_to :company, :class_name  => "Company"
+      should_belong_to :company, :foreign_key => :company_id
+
+      should_not_belong_to :project
+      should_not_have_one  :company
+      should_not_have_many :companies
+
+      should_not_belong_to :company, :readonly    => false
+      should_not_belong_to :company, :validate    => false
+      should_not_belong_to :company, :class_name  => "Anything"
+      should_not_belong_to :company, :foreign_key => :anything_id
+    end
+  end
+
+  describe 'have_and_belong_to_many' do
+
+    # Defines a model, create a validation and returns a raw matcher
+    def define_and_validate(options={})
+      define_model :label
+
+      columns = options.delete(:association_columns) || [ :label_id, :project_id ]
+      create_table(options.delete(:association_table) || :labels_projects) do |table|
+        columns.each { |name| table.column(name, :integer) }
+      end
+
+      @model = define_model :project, options.delete(:model_columns) || {} do
+        has_and_belongs_to_many :labels, options
+      end
+
+      have_and_belong_to_many :labels
+    end
+
+    describe 'messages' do
+      it 'should contain a description' do
+        matcher = define_and_validate
+        matcher.description.should == 'have and belong to many labels'
+
+        matcher.class_name('Label')
+        matcher.description.should == 'have and belong to many labels with class name "Label"'
+
+        matcher.foreign_key('label_id')
+        matcher.description.should == 'have and belong to many labels with class name "Label" and with foreign key "label_id"'
+
+        matcher = have_and_belong_to_many(:labels).autosave
+        matcher.description.should == 'have and belong to many labels autosaving associated records'
+
+        matcher.uniq
+        matcher.description.should == 'have and belong to many labels with unique records and autosaving associated records'
+      end
+
+      it 'should set association_exists? message' do
+        define_and_validate
+        matcher = have_and_belong_to_many('whatever')
+        matcher.matches?(@model)
+        matcher.failure_message.should == 'Expected Project records have and belong to many whatever, got no association'
+      end
+
+      it 'should set macro_matches? message' do
+        define_and_validate
+        matcher = have_many('labels')
+        matcher.matches?(@model)
+        matcher.failure_message.should == 'Expected Project records have many labels, got Project records have and belong to many labels'
+      end
+
+      it 'should set foreign_key_exists? message' do
+        matcher = define_and_validate(:association_columns => [])
+        matcher.matches?(@model)
+        matcher.failure_message.should == 'Expected foreign key "project_id" to exist on "labels_projects", but does not'
+      end
+
+      it 'should set join_table_exists? message' do
+        matcher = define_and_validate(:association_table => 'another_name')
+        matcher.matches?(@model)
+        matcher.failure_message.should == 'Expected join table "labels_projects" to exist, but does not'
+      end
+
+      it 'should set validate_matches? message' do
+        matcher = define_and_validate(:validate => false)
+        matcher.validate.matches?(@model)
+        matcher.failure_message.should == 'Expected labels association with validate equals to true, got "false"'
+      end
+
+      it 'should set readonly_matches? message' do
+        matcher = define_and_validate(:readonly => false)
+        matcher.readonly.matches?(@model)
+        matcher.failure_message.should == 'Expected labels association with readonly equals to true, got "false"'
+      end
+
+      if RAILS_VERSION =~ /^2.3/
+        it 'should set autosave_matches? message' do
+          matcher = define_and_validate(:autosave => false)
+          matcher.autosave.matches?(@model)
+          matcher.failure_message.should == 'Expected labels association with autosave equals to true, got "false"'
+        end
+      end
+
+      it 'should set uniq_matches? message' do
+        matcher = define_and_validate(:uniq => false)
+        matcher.uniq.matches?(@model)
+        matcher.failure_message.should == 'Expected labels association with uniq equals to true, got "false"'
+      end
+    end
+
+    describe 'matchers' do
+      describe 'without options' do
+        before(:each){ define_and_validate }
+
+        it { should have_and_belong_to_many(:labels) }
+        it { should_not belong_to(:label) }
+        it { should_not have_one(:label) }
+        it { should_not have_many(:labels) }
+        it { should_not have_and_belong_to_many(:companies) }
+      end
+
+      describe 'with class name option' do
+        it { should define_and_validate.class_name('Label') }
+
+        it { should define_and_validate(:class_name => 'SuperLabel',
+                                        :association_table => 'projects_super_labels').class_name('SuperLabel') }
+
+        it { should_not define_and_validate.class_name('SuperLabel') }
+
+        # Fails because join table is missing
+        it { should_not define_and_validate(:class_name => 'SuperLabel').class_name('SuperLabel') }
+      end
+
+      describe 'with foreign_key option' do
+        it { should define_and_validate.foreign_key(:project_id) }
+        it { should_not define_and_validate.foreign_key(:association_id) }
+
+        # Checks whether fk exists or not
+        it { should define_and_validate(:foreign_key => :association_id,
+                                        :association_columns => [ :association_id ]).foreign_key(:association_id) }
+
+        it { should_not define_and_validate(:foreign_key => :association_id).foreign_key(:association_id) }
+        it { should_not define_and_validate(:association_columns => [ :association_id ]).foreign_key(:association_id) }
+      end
+
+      describe 'with join table option' do
+        it { should define_and_validate.join_table('labels_projects') }
+        it { should define_and_validate(:join_table => 'my_table',
+                                        :association_table => 'my_table').join_table('my_table') }
+
+        it { should_not define_and_validate.join_table('projects_labels') }
+
+        it { should_not define_and_validate(:join_table => 'my_table',
+                                            :association_table => 'another_table').join_table('my_table') }
+        it { should_not define_and_validate(:join_table => 'another_table',
+                                            :association_table => 'my_table').join_table('my_table') }
+        it { should_not define_and_validate(:join_table => 'my_table',
+                                            :association_table => 'my_table').join_table('another_table') }
+      end
+
+      create_optional_boolean_specs(:uniq, self)
+      create_optional_boolean_specs(:readonly, self)
+      create_optional_boolean_specs(:validate, self)
+      create_optional_boolean_specs(:autosave, self) if RAILS_VERSION =~ /^2.3/
+    end
+
+    describe 'macros' do
+      before(:each){ define_and_validate(:validate => true, :readonly => true) }
+
+      should_have_and_belong_to_many :labels
+      should_have_and_belong_to_many :labels, :readonly    => true
+      should_have_and_belong_to_many :labels, :validate    => true
+      should_have_and_belong_to_many :labels, :class_name  => "Label"
+      should_have_and_belong_to_many :labels, :foreign_key => :project_id
+
+      should_not_have_and_belong_to_many :companies
+      should_not_have_one  :label
+      should_not_have_many :labels
+
+      should_not_have_and_belong_to_many :labels, :readonly    => false
+      should_not_have_and_belong_to_many :labels, :validate    => false
+      should_not_have_and_belong_to_many :labels, :class_name  => "Anything"
+      should_not_have_and_belong_to_many :labels, :foreign_key => :anything_id
     end
   end
 
