@@ -64,11 +64,12 @@ module Remarkable
         private
 
           def reflection
-            @reflection ||= subject_class.reflect_on_association(@association.to_sym) if @subject
+            @reflection ||= subject_class.reflect_on_association(@association.to_sym)
           end
 
+          # Rescue nil to avoid raising errors in invalid through associations
           def reflection_class_name
-            reflection.class_name.to_s
+            reflection.class_name.to_s rescue nil
           end
 
           def reflection_foreign_key
@@ -80,7 +81,7 @@ module Remarkable
           end
 
           def has_join_table?
-            @options.key?(:through) || @macro == :has_and_belongs_to_many
+            reflection.options.key?(:through) || reflection.macro == :has_and_belongs_to_many
           end
 
           def table_has_column?(table_name, column)
@@ -106,7 +107,7 @@ module Remarkable
           def interpolation_options
             options = { :macro => Remarkable.t(@macro, :scope => matcher_i18n_scope, :default => @macro.to_s) }
 
-            if reflection
+            if @subject && reflection
               options.merge!(
                 :actual_macro         => Remarkable.t(reflection.macro, :scope => matcher_i18n_scope, :default => reflection.macro.to_s),
                 :subject_table        => subject_class.table_name.inspect,
@@ -217,8 +218,6 @@ module Remarkable
       # * <tt>:foreign_key</tt> - the expected foreign key in the associated table.
       #   When used with :through, it will check for the foreign key in the join table.
       # * <tt>:dependent</tt>   - the expected dependent value for the association.
-      # * <tt>:uniq</tt>     - checks wether uniq is true or false.
-      # * <tt>:readonly</tt> - checks wether readonly is true or false.
       # * <tt>:validate</tt> - checks wether validate is true or false.
       # * <tt>:autosave</tt> - checks wether autosave is true or false.
       #

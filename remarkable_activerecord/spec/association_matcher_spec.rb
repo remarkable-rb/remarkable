@@ -233,16 +233,16 @@ describe 'association_matcher' do
         matcher.failure_message.should == 'Expected Project records have many labels, got Project records have and belong to many labels'
       end
 
-      it 'should set foreign_key_exists? message' do
-        matcher = define_and_validate(:association_columns => [])
-        matcher.matches?(@model)
-        matcher.failure_message.should == 'Expected foreign key "project_id" to exist on "labels_projects", but does not'
-      end
-
       it 'should set join_table_exists? message' do
         matcher = define_and_validate(:association_table => 'another_name')
         matcher.matches?(@model)
         matcher.failure_message.should == 'Expected join table "labels_projects" to exist, but does not'
+      end
+
+      it 'should set foreign_key_exists? message' do
+        matcher = define_and_validate(:association_columns => [])
+        matcher.matches?(@model)
+        matcher.failure_message.should == 'Expected foreign key "project_id" to exist on "labels_projects", but does not'
       end
 
       it 'should set validate_matches? message' do
@@ -290,9 +290,6 @@ describe 'association_matcher' do
                                         :association_table => 'projects_super_labels').class_name('SuperLabel') }
 
         it { should_not define_and_validate.class_name('SuperLabel') }
-
-        # Fails because join table is missing
-        it { should_not define_and_validate(:class_name => 'SuperLabel').class_name('SuperLabel') }
       end
 
       describe 'with foreign_key option' do
@@ -345,6 +342,274 @@ describe 'association_matcher' do
       should_not_have_and_belong_to_many :labels, :validate    => false
       should_not_have_and_belong_to_many :labels, :class_name  => "Anything"
       should_not_have_and_belong_to_many :labels, :foreign_key => :anything_id
+    end
+  end
+
+  describe 'have_many' do
+
+    # Defines a model, create a validation and returns a raw matcher
+    def define_and_validate(options={})
+      columns = options.delete(:association_columns) || { :task_id => :integer, :project_id => :integer }
+      define_model :task, columns
+
+      define_model :project_task, columns do
+        belongs_to :task
+        belongs_to :project
+      end unless options.delete(:skip_through)
+
+      @model = define_model :project, options.delete(:model_columns) || {} do
+        has_many :tasks, options
+        has_many :project_tasks
+      end
+
+      have_many :tasks
+    end
+
+    describe 'messages' do
+      it 'should contain a description' do
+        matcher = define_and_validate
+        matcher.description.should == 'have many tasks'
+
+        matcher.class_name('Task')
+        matcher.description.should == 'have many tasks with class name "Task"'
+
+        matcher.foreign_key('task_id')
+        matcher.description.should == 'have many tasks with class name "Task" and with foreign key "task_id"'
+
+        matcher = have_many(:tasks).autosave
+        matcher.description.should == 'have many tasks autosaving associated records'
+
+        matcher.uniq
+        matcher.description.should == 'have many tasks with unique records and autosaving associated records'
+      end
+
+      it 'should set association_exists? message' do
+        define_and_validate
+        matcher = have_many('whatever')
+        matcher.matches?(@model)
+        matcher.failure_message.should == 'Expected Project records have many whatever, got no association'
+      end
+
+      it 'should set macro_matches? message' do
+        define_and_validate
+        matcher = have_and_belong_to_many('tasks')
+        matcher.matches?(@model)
+        matcher.failure_message.should == 'Expected Project records have and belong to many tasks, got Project records have many tasks'
+      end
+
+      it 'should set foreign_key_exists? message' do
+        matcher = define_and_validate(:association_columns => {})
+        matcher.matches?(@model)
+        matcher.failure_message.should == 'Expected foreign key "project_id" to exist on "tasks", but does not'
+      end
+
+      it 'should set through_exists? message' do
+        matcher = define_and_validate(:through => 'project_tasks')
+        matcher.through(:another).matches?(@model)
+        matcher.failure_message.should == 'Expected Project records have many tasks through :another, through association does not exist'
+      end
+
+      it 'should set join_table_exists? message' do
+        matcher = define_and_validate(:through => 'project_tasks', :skip_through => true)
+        matcher.through(:project_tasks).matches?(@model)
+        matcher.failure_message.should == 'Expected join table "project_tasks" to exist, but does not'
+      end
+    end
+
+    describe 'matchers' do
+      describe 'without options' do
+        before(:each){ define_and_validate }
+
+        it { should have_many(:tasks) }
+        it { should_not belong_to(:task) }
+        it { should_not have_one(:task) }
+        it { should_not have_and_belong_to_many(:tasks) }
+      end
+
+      describe 'with class name option' do
+        before(:each){ define_model :super_task, :project_id => :integer }
+
+        it { should define_and_validate.class_name('Task') }
+        it { should define_and_validate(:class_name => 'SuperTask').class_name('SuperTask') }
+
+        it { should_not define_and_validate.class_name('SuperTask') }
+        it { should_not define_and_validate(:class_name => 'SuperTask').class_name('Task') }
+      end
+
+      describe 'with foreign_key option' do
+        it { should define_and_validate.foreign_key(:project_id) }
+        it { should_not define_and_validate.foreign_key(:association_id) }
+
+        # Checks whether fk exists or not
+        it { should define_and_validate(:foreign_key => :association_id,
+                                        :association_columns => { :association_id => :integer }).foreign_key(:association_id) }
+
+        it { should_not define_and_validate(:foreign_key => :association_id).foreign_key(:association_id) }
+        it { should_not define_and_validate(:association_columns => { :association_id => :integer }).foreign_key(:association_id) }
+      end
+
+      describe 'with dependent option' do
+        it { should define_and_validate(:dependent => :delete_all).dependent(:delete_all) }
+        it { should define_and_validate(:dependent => :destroy).dependent(:destroy) }
+
+        it { should_not define_and_validate(:dependent => :delete_all).dependent(:destroy) }
+        it { should_not define_and_validate(:dependent => :destroy).dependent(:delete_all) }
+      end
+
+      describe 'with through option' do
+        it { should define_and_validate(:through => 'project_tasks') }
+        it { should define_and_validate(:through => 'project_tasks').through(:project_tasks) }
+
+        it { should_not define_and_validate(:through => 'project_tasks').through(:something) }
+        it { should_not define_and_validate(:through => 'project_tasks', :skip_through => true).through(:project_tasks) }
+      end
+
+      create_optional_boolean_specs(:uniq, self)
+      create_optional_boolean_specs(:readonly, self)
+      create_optional_boolean_specs(:validate, self)
+      create_optional_boolean_specs(:autosave, self) if RAILS_VERSION =~ /^2.3/
+    end
+
+    describe 'macros' do
+      before(:each){ define_and_validate(:through => 'project_tasks', :readonly => true, :validate => true) } 
+
+      should_have_many :tasks
+      should_have_many :tasks, :readonly => true
+      should_have_many :tasks, :validate => true
+      should_have_many :tasks, :through => :project_tasks
+
+      should_not_have_many :tasks, :readonly => false
+      should_not_have_many :tasks, :validate => false
+      should_not_have_many :tasks, :through => :another_thing
+    end
+  end
+
+  describe 'have_one' do
+
+    # Defines a model, create a validation and returns a raw matcher
+    def define_and_validate(options={})
+      columns = options.delete(:association_columns) || { :manager_id => :integer, :project_id => :integer }
+      define_model :manager, columns
+
+      define_model :project_manager, columns do
+        belongs_to :manager
+        belongs_to :project
+      end unless options.delete(:skip_through)
+
+      @model = define_model :project, options.delete(:model_columns) || {} do
+        has_one  :manager, options
+        has_many :project_managers
+      end
+
+      have_one :manager
+    end
+
+    describe 'messages' do
+      it 'should contain a description' do
+        matcher = define_and_validate
+        matcher.description.should == 'have one manager'
+
+        matcher.class_name('Manager')
+        matcher.description.should == 'have one manager with class name "Manager"'
+
+        matcher.foreign_key('manager_id')
+        matcher.description.should == 'have one manager with class name "Manager" and with foreign key "manager_id"'
+      end
+
+      it 'should set association_exists? message' do
+        define_and_validate
+        matcher = have_one('whatever')
+        matcher.matches?(@model)
+        matcher.failure_message.should == 'Expected Project records have one whatever, got no association'
+      end
+
+      it 'should set macro_matches? message' do
+        define_and_validate
+        matcher = belong_to('manager')
+        matcher.matches?(@model)
+        matcher.failure_message.should == 'Expected Project records belong to manager, got Project records have one manager'
+      end
+
+      it 'should set foreign_key_exists? message' do
+        matcher = define_and_validate(:association_columns => {})
+        matcher.matches?(@model)
+        matcher.failure_message.should == 'Expected foreign key "project_id" to exist on "managers", but does not'
+      end
+
+      it 'should set through_exists? message' do
+        matcher = define_and_validate(:through => 'project_managers')
+        matcher.through(:another).matches?(@model)
+        matcher.failure_message.should == 'Expected Project records have one manager through :another, through association does not exist'
+      end
+
+      it 'should set join_table_exists? message' do
+        matcher = define_and_validate(:through => 'project_managers', :skip_through => true)
+        matcher.through(:project_managers).matches?(@model)
+        matcher.failure_message.should == 'Expected join table "project_managers" to exist, but does not'
+      end
+    end
+
+    describe 'matchers' do
+      describe 'without options' do
+        before(:each){ define_and_validate }
+
+        it { should have_one(:manager) }
+        it { should_not belong_to(:manager) }
+        it { should_not have_many(:managers) }
+        it { should_not have_and_belong_to_many(:managers) }
+      end
+
+      describe 'with class name option' do
+        before(:each){ define_model :super_manager, :project_id => :integer }
+
+        it { should define_and_validate.class_name('Manager') }
+        it { should define_and_validate(:class_name => 'SuperManager').class_name('SuperManager') }
+
+        it { should_not define_and_validate.class_name('SuperManager') }
+        it { should_not define_and_validate(:class_name => 'SuperManager').class_name('Manager') }
+      end
+
+      describe 'with foreign_key option' do
+        it { should define_and_validate.foreign_key(:project_id) }
+        it { should_not define_and_validate.foreign_key(:association_id) }
+
+        # Checks whether fk exists or not
+        it { should define_and_validate(:foreign_key => :association_id,
+                                        :association_columns => { :association_id => :integer }).foreign_key(:association_id) }
+
+        it { should_not define_and_validate(:foreign_key => :association_id).foreign_key(:association_id) }
+        it { should_not define_and_validate(:association_columns => { :association_id => :integer }).foreign_key(:association_id) }
+      end
+
+      describe 'with dependent option' do
+        it { should define_and_validate(:dependent => :delete).dependent(:delete) }
+        it { should define_and_validate(:dependent => :destroy).dependent(:destroy) }
+
+        it { should_not define_and_validate(:dependent => :delete).dependent(:destroy) }
+        it { should_not define_and_validate(:dependent => :destroy).dependent(:delete) }
+      end
+
+      describe 'with through option' do
+        it { should define_and_validate(:through => 'project_managers') }
+        it { should define_and_validate(:through => 'project_managers').through(:project_managers) }
+
+        it { should_not define_and_validate(:through => 'project_managers').through(:something) }
+        it { should_not define_and_validate(:through => 'project_managers', :skip_through => true).through(:project_managers) }
+      end
+
+      create_optional_boolean_specs(:validate, self)
+      create_optional_boolean_specs(:autosave, self) if RAILS_VERSION =~ /^2.3/
+    end
+
+    describe 'macros' do
+      before(:each){ define_and_validate(:through => 'project_managers', :validate => true) } 
+
+      should_have_one :manager
+      should_have_one :manager, :validate => true
+      should_have_one :manager, :through => :project_managers
+
+      should_not_have_one :manager, :validate => false
+      should_not_have_one :manager, :through => :another_thing
     end
   end
 
