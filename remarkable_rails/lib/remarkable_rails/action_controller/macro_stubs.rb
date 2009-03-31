@@ -78,6 +78,8 @@
 # the middle of the description. But, we can make it even better:
 #
 #   describe ProjectsController do
+#     mock_models :project
+#
 #     describe :get => :show, :id => 37 do
 #       expects :find, :on => Project, :with => '37', :returns => mock_project
 #
@@ -97,26 +99,13 @@
 #      in your spec output, you will still see: "responding to GET show". Which
 #      is also localized, as all Remarkable macro and matchers.
 #
-#   2. proc is gone. You can call the class method mock_project that will just
-#      create the proc for you. But remember, mock_project will return a proc,
-#      so you can actually do:
+#   2. proc is gone. We've added a call to mock_models which creates a class
+#      method that simply returns a proc and a instance method that do the
+#      actual mock. In other words, it creates:
 #
-#        expects :find_id, :on => Project, :returns => mock_project.id
-#
-#      The proper way to do that would be:
-#
-#        expects :find_id, :on => Project, :returns => proc { mock_project.id }
-#
-#      You also don't need to define the instance method mock_project as well.
-#      The first time you call a mock_project method, it's caught by method
-#      missing which generates and cache mock_project on the fly. If you are
-#      worried with performance, you can do:
-#
-#        describe ProjectsController do
-#          mock_models :project
+#        def self.mock_project
+#          proc { mock_project }
 #        end
-#
-#      And this will create the mock methods for you:
 #
 #        def mock_project(stubs={})
 #          @project ||= mock_model(Project, stubs)
@@ -169,7 +158,8 @@ module Remarkable
 
       def self.included(base)
         base.extend ClassMethods
-        base.class_inheritable_reader :expects_chain, :default_action, :default_mime, :default_verb, :default_params
+        base.class_inheritable_reader :expects_chain, :default_action, :default_mime,
+                                      :default_verb, :default_params
       end
 
       module ClassMethods
@@ -186,7 +176,7 @@ module Remarkable
         #   method. This option is used only in expectations and is optional.
         #
         # * <tt>:returns</tt> - Tell what the expectations should return. Not
-        #   required as well.
+        #   required.
         #
         # * <tt>:times</tt> - The number of times the object will receive the
         #   method. Used only in expectations and when not given, defaults to 1.
@@ -321,51 +311,48 @@ module Remarkable
           example_group.class_eval(&block)
         end
 
-        protected
+        # Creates mock methods automatically.
+        #
+        # == Options
+        #
+        # * <tt>:class_method</tt> - When set to false, does not create the
+        #   class method which returns a proc.
+        #
+        # == Examples
+        #
+        # Doing this:
+        #
+        #   describe ProjectsController do
+        #     mock_models :project
+        #   end
+        #
+        # Will create a class and instance mock method for you:
+        #
+        #   def self.mock_project
+        #     proc { mock_project }
+        #   end
+        #
+        #   def mock_project(stubs={})
+        #     @project ||= mock_model(Project, stubs)
+        #   end
+        #
+        # If you want to create just the instance method, you can give
+        # :class_method => false as option.
+        #
+        def mock_models(*models)
+          options = models.extract_options!
+          options = { :class_method => true }.merge(options)
 
-          # Overwrites method missing to create mocks on the fly.
-          #
-          # It creates the instance method and returns a proc that will call it
-          # further.
-          #
-          def method_missing(method, *args) #:nodoc:
-            if method.to_s =~ /^mock_(.*)$/
-              create_mock_model_method($1)
-              proc { send(method, *args) }
-            else
-              super
-            end
-          end
-
-          # Creates mock methods automatically.
-          #
-          # == Examples
-          #
-          # Doing this:
-          #
-          #   describe ProjectsController do
-          #     mock_models :project
-          #   end
-          #
-          # Will create the mock method for you:
-          #
-          #   def mock_project(stubs={})
-          #     @project ||= mock_model(Project, stubs)
-          #   end
-          #
-          def mock_models(*models)
-            models.each{ |m| create_mock_model_method(m.to_s) }
-          end
-
-          # Creates a mock method on the fly, as described in <tt>mock_models</tt>.
-          #
-          def create_mock_model_method(model) #:nodoc:
+          models.each do |model|
             self.class_eval <<-METHOD
+              #{"def self.mock_#{model}; proc { mock_#{model} }; end" if options[:class_method]}
+
               def mock_#{model}(stubs={})
-                @#{model} ||= mock_model(#{model.classify}, stubs)
+                @#{model} ||= mock_model(#{model.to_s.classify}, stubs)
               end
             METHOD
           end
+        end
 
       end
 
@@ -445,22 +432,10 @@ module Remarkable
         # evaluated in the instance binding.
         #
         def evaluate_value(duck) #:nodoc:
-          if duck.is_a? Proc
-            self.instance_eval &duck
+          if duck.is_a?(Proc)
+            self.instance_eval(&duck)
           else
             duck
-          end
-        end
-
-        # Whenever the user call mock_task and the mock is not defined, we
-        # create a method and then call it.
-        #
-        def method_missing(method, *args) #:nodoc:
-          if method.to_s =~ /^mock_(.*)$/
-            self.class.send(:create_mock_model_method, $1)
-            self.send(method, *args)
-          else
-            super
           end
         end
 

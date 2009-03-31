@@ -1,35 +1,38 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+# Define a metaclass in the Object because we are going to need it.
+class Object; def metaclass; class << self; self; end; end; end
+
 describe 'MacroStubs' do
   controller_name 'tasks'
+  mock_models :task
 
   def current_id; '37'; end
 
-  describe 'when generating mocks' do
-    mock_models :user
-
+  describe 'mock_models' do
     before(:each) do
-      self.class.send(:undef_method, :mock_task) if self.respond_to?(:mock_task)  
+      self.class.metaclass.send(:undef_method, :mock_project) if self.class.respond_to?(:mock_project)
+      self.class.send(:undef_method, :mock_project)     if self.respond_to?(:mock_project)
     end
 
-    it 'should generate mock methods explicitely' do
-      self.respond_to?(:mock_user).should be_true
+    it 'should create a class mock method' do
+      self.class.respond_to?(:mock_project).should be_false
+      self.class.mock_models :project
+      self.class.respond_to?(:mock_project).should be_true
     end
 
-    it 'should create mock dynamically with class methods' do
-      self.respond_to?(:mock_task).should be_false
-      self.class.mock_task
-      self.respond_to?(:mock_task).should be_true
+    it 'should create an instance mock method' do
+      self.respond_to?(:mock_project).should be_false
+      self.class.mock_models :project
+      self.respond_to?(:mock_project).should be_true
     end
 
-    it 'should create mock dynamically with instance methods' do
-      self.instance_variable_get('@task').should be_nil
-      self.respond_to?(:mock_task).should be_false
-
-      mock_task
-
-      self.instance_variable_get('@task').should_not be_nil
-      self.respond_to?(:mock_task).should be_true
+    it 'should create just an instance method when :class_method is false' do
+      self.class.respond_to?(:mock_project).should be_false
+      self.respond_to?(:mock_project).should be_false
+      self.class.mock_models :project, :class_method => false
+      self.class.respond_to?(:mock_project).should be_false
+      self.respond_to?(:mock_project).should be_true
     end
 
     it 'should create procs which evals to mocks dynamically' do
@@ -37,7 +40,7 @@ describe 'MacroStubs' do
       proc.should be_kind_of(Proc)
 
       self.instance_variable_get('@task').should be_nil
-      instance_eval &proc
+      instance_eval(&proc)
       self.instance_variable_get('@task').should_not be_nil
     end
   end
