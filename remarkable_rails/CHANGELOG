@@ -24,7 +24,7 @@ specs for a destroy action rewritten like this:
     expects :find, :on => Task, :with => '37', :returns => proc { mock_task }
     expects :destroy, :on => mock_task
 
-    should_assign_to :task, :equal => proc { mock_task }
+    should_assign_to :task, :with => proc { mock_task }
     should_redirect_to { tasks_url }
   end
 
@@ -55,12 +55,23 @@ But how each macro knows if they should perform expectations or stubs? By defaul
 only should_assign_to macro performs expectations (check macro stubs documentation
 to change this behavior).
 
-Finally, you don't need to play with procs all the time when creating mocks.
-You can call mock_project as a class method and it will create a proc for you,
-which will reference the mock. So you can rewrite:
+Finally, you don't need to play with procs all the time. There is a convenience
+method called mock_models that generates both class and instance method. So
+doing this:
 
-  expects :find, :on => Task, :with => '37', :returns => mock_task
-  should_assign_to :task, :equal => mock_task
+  describe ProjectsController do
+    mock_models :project
+  end
+
+Is the same as:
+
+  def self.mock_project
+    proc { mock_project }
+  end
+
+  def mock_project(stubs={})
+    @project ||= mock_model(Project, stubs)
+  end
 
 For more options, information and configuration, check macro stubs documentation.
 
