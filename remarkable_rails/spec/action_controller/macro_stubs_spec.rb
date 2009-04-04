@@ -12,7 +12,7 @@ describe 'MacroStubs' do
   describe 'mock_models' do
     before(:each) do
       self.class.metaclass.send(:undef_method, :mock_project) if self.class.respond_to?(:mock_project)
-      self.class.send(:undef_method, :mock_project)     if self.respond_to?(:mock_project)
+      self.class.send(:undef_method, :mock_project)           if self.respond_to?(:mock_project)
     end
 
     it 'should create a class mock method' do
@@ -80,6 +80,12 @@ describe 'MacroStubs' do
       @controller.send(:performed?).should be_true
     end
 
+    it 'should not run action twice' do
+      run_action!
+      @controller.send(:performed?).should be_true
+      proc{ run_action!.should be_false }.should_not raise_error
+    end
+
     it 'should run expectations without performing an action' do
       self.should_receive(:current_id).once.and_return('37')
       run_expectations!
@@ -118,44 +124,56 @@ describe 'MacroStubs' do
         @request.parameters[:special_task_id].should == '42'
       end
     end
+
+    describe 'and running actions in a before(:all) filter' do
+      get! :show, :id => 37
+
+      it 'should run the action before each example' do
+        @controller.send(:performed?).should be_true
+      end
+    end
   end
 
   describe 'with matcher macros' do
 
-    describe :delete => :destroy, :id => 37 do
-      expects :find,    :on => Task,     :with => '37', :returns => mock_task
-      expects :destroy, :on => mock_task
+    [:delete, :delete!].each do |method|
 
-      subject { controller }
+      describe method => :destroy, :id => 37 do
+        expects :find,    :on => Task,     :with => '37', :returns => mock_task
+        expects :destroy, :on => mock_task
 
-      should_assign_to :task
-      should_assign_to :task, :with => mock_task
-      should_assign_to :task, :with_kind_of => Task
+        subject { controller }
 
-      should_set_the_flash
-      should_set_the_flash :notice
-      should_set_the_flash :notice, :to => 'Task deleted.'
+        should_assign_to :task
+        should_assign_to :task, :with => mock_task
+        should_assign_to :task, :with_kind_of => Task
 
-      should_set_session
-      should_set_session :last_task_id
-      should_set_session :last_task_id, :to => 37
+        should_set_the_flash
+        should_set_the_flash :notice
+        should_set_the_flash :notice, :to => 'Task deleted.'
 
-      should_redirect_to{ project_tasks_url(10) }
-      should_redirect_to proc{ project_tasks_url(10) }, :with => 302
+        should_set_session
+        should_set_session :last_task_id
+        should_set_session :last_task_id, :to => 37
 
-      it 'should run action declared in describe' do
-        @controller.send(:performed?).should_not be_true
+        should_redirect_to{ project_tasks_url(10) }
+        should_redirect_to proc{ project_tasks_url(10) }, :with => 302
 
-        run_action!
+        it 'should run action declared in describe' do
+          @controller.send(:performed?).should_not be_true unless method == :delete!
 
-        @controller.action_name.should == 'destroy'
-        @controller.request.method.should == :delete
-        @controller.send(:performed?).should be_true
+          run_action!
+
+          @controller.action_name.should == 'destroy'
+          @controller.request.method.should == :delete
+          @controller.send(:performed?).should be_true
+        end
+
+        it 'should provide a description based on parameters given in describe' do
+          self.class.description.should =~ /responding to #DELETE destroy$/
+        end
       end
 
-      it 'should provide a description based on parameters given in describe' do
-        self.class.description.should =~ /responding to #DELETE destroy$/
-      end
     end
 
   end

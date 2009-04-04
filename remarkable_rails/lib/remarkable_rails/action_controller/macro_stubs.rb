@@ -135,7 +135,7 @@
 # using the method <tt>params</tt>.
 #
 # Finally, if you used expects chain like above, but need to write a spec by
-# hand. You can invoke the action and expectations with run_expectations!,
+# hand you can invoke the action and expectations with run_expectations!,
 # run_stubs! and run_action!. Examples:
 #
 #   describe :get => :new do
@@ -147,14 +147,27 @@
 #     end
 #   end
 #
+# = Performance!
+#
+# Must people run their actions in a before(:all) filter because this speeds up
+# tests. You can do the same here, just appending a bang to the call:
+#
+#     describe "responding to GET show" do
+#       get! :show, :id => 37
+#     end
+#
+# Or in the compact way:
+#
+#     describe :get! => :show, :id => 37
+#
+# But this is a still experimental. If you find troubles, please open a ticket
+# and use the method without a bang.
+#
 module Remarkable
   module ActionController
 
-    # Define error classes, so we only catch them in matchers
-    class MacroStubsError < ::ArgumentError; end
-
     module MacroStubs
-      HTTP_VERBS = [ :get, :post, :put, :delete ]
+      HTTP_VERBS_METHODS = [:get, :get!, :post, :post!, :put, :put!, :delete, :delete!]
 
       def self.included(base)
         base.extend ClassMethods
@@ -219,12 +232,58 @@ module Remarkable
 
         [:get, :post, :put, :delete].each do |verb|
           module_eval <<-VERB, __FILE__, __LINE__
+            # Declares that we want to do a #{verb} request in the given action
+            # and with the given params.
+            #
+            # == Examples
+            #
+            #   #{verb} :action, :id => 42
+            #
             def #{verb}(action, params={})
               params(params)
               write_inheritable_attribute(:default_verb, #{verb.inspect})
               write_inheritable_attribute(:default_action, action)
             end
           VERB
+        end
+
+        [:get!, :post!, :put!, :delete!].each do |verb|
+          module_eval <<-VERB, __FILE__, __LINE__
+            # Declares that we want to do a #{verb} request in the given action
+            # and with the given params, but the action is performed just once
+            # in the describe group. In other words, it's performed in a
+            # before(:all) filter.
+            #
+            # == Examples
+            #
+            #   #{verb} :action, :id => 42
+            #
+            def #{verb}(action, params={})
+              #{verb.to_s.chop}(action, params)
+              run_callbacks_once!
+            end
+          VERB
+        end
+
+        # Undefine the method run_callbacks so rspec won't run them in the
+        # before and after :each cycle. Then we redefine it as run_callbacks_once,
+        # which will be used as an before(:all) and after(:all) filter.
+        #
+        def run_callbacks_once! #:nodoc:
+          unless instance_methods.any?{|m| m.to_s == 'run_callbacks_once' }
+            alias_method :run_callbacks_once, :run_callbacks
+            class_eval "def run_callbacks(*args); end"
+
+            prepend_before(:all) do
+              setup_mocks_for_rspec
+              run_callbacks_once :setup
+              run_action!
+            end
+
+            append_after(:all) do
+              run_callbacks_once :teardown
+            end
+          end
         end
 
         # Overwrites describe to provide quick action description with I18n.
@@ -261,7 +320,7 @@ module Remarkable
         #
         def describe(*args, &block)
           options = args.first.is_a?(Hash) ? args.first : {}
-          verb    = (options.keys & HTTP_VERBS).first
+          verb    = (options.keys & HTTP_VERBS_METHODS).first
 
           if verb
             action = options.delete(verb)
@@ -269,10 +328,10 @@ module Remarkable
 
             description = Remarkable.t 'remarkable.action_controller.responding',
                                         :default => "responding to ##{verb.upcase} #{action}",
-                                        :verb => verb.upcase, :action => action
+                                        :verb => verb.sub('!', '').upcase, :action => action
 
             send_args = [ verb, action, options ]
-          elsif defined?(Mime::Type) && args.first.is_a?(Mime::Type)
+          elsif args.first.is_a?(Mime::Type)
             mime = args.first
 
             description = Remarkable.t 'remarkable.action_controller.mime_type',
@@ -284,31 +343,15 @@ module Remarkable
             return super(*args, &block)
           end
 
-          # Discard first argument, attach description
           args.shift
           args.unshift(description)
 
-          # Creates a new example group with an empty block, send him the new
-          # configuration and then eval the given block.
+          # Creates an example group, send the method and eval the given block.
           #
-          # We have to do this because the following does not work:
-          #
-          #   super(*args) do
-          #     self.send(verb, action, options)
-          #     yield
-          #   end
-          #
-          # And the reason why we are not doing this:
-          #
-          #   example_group = super(*args, &block)
-          #   example_group.send(verb, action, options)
-          #
-          # Is because we need to set the verb and action BEFORE the block is
-          # evaluated to allow inheritance.
-          #
-          example_group = super(*args, &proc{})
-          example_group.send(*send_args)
-          example_group.class_eval(&block)
+          example_group = super(*args) do
+            send(*send_args)
+            instance_eval(&block)
+          end
         end
 
         # Creates mock methods automatically.
@@ -370,10 +413,8 @@ module Remarkable
             object       = evaluate_value(options.delete(:on))
             return_value = evaluate_value(options.delete(:returns))
 
-            raise MacroStubsError, "You have to give me :on option when calling expects." if object.nil?
+            raise ScriptError, "You have to give me :on as an option when calling :expects." if object.nil?
 
-            # Now we actually do the stubbing or expectations
-            #
             if use_expectations
               with  = evaluate_value(options.delete(:with))
               times = options.delete(:times) || 1
@@ -402,34 +443,35 @@ module Remarkable
           evaluate_expectation_chain(true)
         end
 
-        # Run the action declared in the describe group. The first parameter
-        # is if you want to run expectations or stubs. You can also supply
-        # the verb (get, post, put or delete), which action to call, parameters
-        # and the mime type.
+        # Run the action declared in the describe group, but before runs also
+        # the expectations. If an action was already performed, it doesn't run
+        # anything at all and returns false.
         #
-        def run_action!(use_expectations=true, verb=nil, action=nil, params={}, mime=nil)
-          # Execute the expectation chain
+        # The first parameter is if you want to run expectations or stubs. You
+        # can also supply the verb (get, post, put or delete), which action to
+        # call, parameters and the mime type. If any of those parameters are
+        # supplied, they override the current definition.
+        #
+        def run_action!(use_expectations=true, verb=nil, action=nil, params=nil, mime=nil)
+          return false if controller.send(:performed?)
+
           evaluate_expectation_chain(use_expectations)
 
           mime   ||= default_mime
           verb   ||= default_verb
           action ||= default_action
-          params   = (default_params || {}).merge(params)
+          params ||= default_params
 
-          raise MacroStubsError, 'You have to declare if I should do a :get, :post, :put or :delete' unless verb
-          raise MacroStubsError, 'You have to say which action I should call'                        unless action
+          raise ScriptError, "No action was performed or declared." unless verb && action
 
-          # Set the mime type
           request.env["HTTP_ACCEPT"] ||= mime.to_s if mime
-
-          # Run the action
           send(verb, action, params)
         end
 
         # Evaluate a given value.
         #
-        # This allows procs to be given to the receive chain and they will be
-        # evaluated in the instance binding.
+        # This allows procs to be given to the expectation chain and they will
+        # be evaluated in the instance binding.
         #
         def evaluate_value(duck) #:nodoc:
           if duck.is_a?(Proc)

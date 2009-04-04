@@ -9,17 +9,11 @@ module Remarkable
 
       protected
 
-        # Before assertions, check if the controller already performed an action.
-        #
-        # So the first step is to find the controller. If we find it, we see if
-        # it already performed and, if not, we call run_action! in the @spec
-        # binding.
+        # Before assertions, call run_action! to perform the action if it was
+        # not performed yet.
         #
         def perform_action_with_macro_stubs
-          controller = @spec.instance_variable_get('@controller')
-          @spec.send(:run_action!, run_with_expectations?) unless controller && controller.send(:performed?)
-        rescue Remarkable::ActionController::MacroStubsError
-          nil
+          @spec.send(:run_action!, run_with_expectations?) if @spec.send(:controller)
         end
 
         def run_with_expectations?
