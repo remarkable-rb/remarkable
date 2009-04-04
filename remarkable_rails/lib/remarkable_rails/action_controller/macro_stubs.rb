@@ -160,8 +160,9 @@
 #
 #     describe :get! => :show, :id => 37
 #
-# But this is a still experimental. If you find troubles, please open a ticket
-# and use the method without a bang.
+# If any error happens while performing the action, including expectations not
+# met, rspec will output an error but ALL the examples inside the example group
+# (describe) won't be run.
 #
 module Remarkable
   module ActionController
@@ -278,6 +279,8 @@ module Remarkable
               setup_mocks_for_rspec
               run_callbacks_once :setup
               run_action!
+              verify_mocks_for_rspec
+              teardown_mocks_for_rspec
             end
 
             append_after(:all) do
