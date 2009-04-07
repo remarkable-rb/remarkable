@@ -36,7 +36,7 @@ module Remarkable
       def get_description_from_matcher(should_or_should_not, method, *args, &block)
         verb = should_or_should_not.to_s.gsub('_', ' ')
 
-        desc = Remarkable::Matchers.send(method, *args, &block).description
+        desc = Remarkable::Matchers.send(method, *args, &block).spec(self).description
         verb = Remarkable.t("remarkable.core.#{should_or_should_not}", :default => verb)
       rescue
         desc = method.to_s.gsub('_', ' ')
