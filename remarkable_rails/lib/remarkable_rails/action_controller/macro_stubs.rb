@@ -164,6 +164,9 @@
 # met, rspec will output an error but ALL the examples inside the example group
 # (describe) won't be run.
 #
+# Whenever using a bang action, if you have to run something before performing
+# the action, you have to use prepend_before(:all).
+#
 module Remarkable
   module ActionController
 
@@ -275,7 +278,7 @@ module Remarkable
             alias_method :run_callbacks_once, :run_callbacks
             class_eval "def run_callbacks(*args); end"
 
-            prepend_before(:all) do
+            before(:all) do
               setup_mocks_for_rspec
               run_callbacks_once :setup
               run_action!
@@ -283,7 +286,7 @@ module Remarkable
               teardown_mocks_for_rspec
             end
 
-            append_after(:all) do
+            after(:all) do
               run_callbacks_once :teardown
             end
           end

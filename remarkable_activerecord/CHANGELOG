@@ -29,6 +29,9 @@ clear. The right way to do that (with subjects) is:
      should_validate_presence_of :size
    end
 
+Is also valid to remember that previous versions of Remarkable were overriding
+subject definitions on rspec. This was also fixed.
+
 # v2.x
 
 [ENHANCEMENT] Added associations, allow_mass_assignment, allow_values_for,

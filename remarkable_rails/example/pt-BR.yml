@@ -18,36 +18,18 @@ pt-BR:
       mime_type: "com {{format}}"
       assign_to:
         description: "assinalar {{names}}"
-        expectations:
-          assigned_value: "ação assinalasse {{name}}"
-          is_kind_of: "valor assinalado a {{name}} fosse um tipo de {{with_kind_of}}, obtive {{assign_class}}"
-          is_equal_value: "valor assinalado a {{name}} fosse um tipo de {{with}}, obtive {{assign_inspect}}"
         optionals:
           with_kind_of:
             positive: "com um tipo de {{value}}"
       filter_params:
-        description: "filtrar parâmetros com {{params}} do log"
-        expectations:
-          responds_to_filter_params: "que o controllador respondesse a filter_parameters (controlador não está filtrando nenhum parâmetro)"
-          is_filtered: "{{param}} fosse filtrado"
+        description: "filtrar parâmetros {{params}} do log"
       redirect_to:
-        description: "redirecionar para {{expected}}"
-        expectations:
-          redirected: "redirecionar para {{expected}}, não fui redirecionado a lugar algum"
-          status_matches: "redirecionar para {{expected}} com status {{with}}, obtive status {{status}}"
-          url_matches: "redirecionar para {{expected}}, fui redirecionado para {{actual}}"
+        description: "redicionar para {{expected}}"
         optionals:
           with:
-            positive: "com status {{inspect}}"
+            positive: "com {{inspect}}"
       render_template:
         description: "renderizar"
-        expectations:
-          rendered: "template {{template}} fosse renderizado, nada foi renderizado"
-          template_matches: "template {{template}} fosse renderizado, obtive {{actual_template}}"
-          layout_matches: "renderizar com layout {{layout}}, obtive {{actual_layout}}"
-          status_matches: "renderizar com {{with}}, obtive {{actual_status}}"
-          body_matches: "renderizar com corpo {{body}}, obtive {{actual_body}}"
-          content_type_matches: "renderizar com content type {{content_type}}, obtive {{actual_content_type}}"
         optionals:
           template:
             positive: "template {{inspect}}"
@@ -55,44 +37,27 @@ pt-BR:
             positive: "com layout {{inspect}}"
             negative: "sem layout"
           with:
-            positive: "com status {{value}}"
-            success: "com sucesso"
+            positive: "com {{value}}"
           body:
-            positive: "com corpo {{inspect}}"
+            positive: "com conteúdo {{inspect}}"
           content_type:
-            positive: "com content-type {{inspect}}"
+            positive: "com content type {{inspect}}"
       respond_with:
         description: "responder"
-        expectations:
-          status_matches: "responder com {{with}}, obtive {{actual_status}}"
-          body_matches: "responder com corpo {{body}}, obtive {{actual_body}}"
-          content_type_matches: "responder com content type {{content_type}}, obtive {{actual_content_type}}"
         optionals:
           with:
             positive: "com {{value}}"
-            success: "com sucesso"
           body:
-            positive: "com corpo {{inspect}}"
+            positive: "com conteúdo {{inspect}}"
           content_type:
-            positive: "com content-type {{inspect}}"
+            positive: "com content type {{inspect}}"
       set_session:
         description: "setar {{keys}} na sessão"
-        expectations:
-          is_not_empty: "que qualquer variável fosse setada, obtive {{session_inspect}}"
-          contains_value: "que qualquer variável fosse setada em {{to}}, obtive {{session_inspect}}"
-          assigned_value: "a variável {{key}} fosse setada, obtive {{session_inspect}}"
-          is_equal_value: "a variável {{key}} fosse setada para {{to}}, obtive {{session_inspect}}"
         optionals:
           to:
             positive: "para {{inspect}}"
       set_the_flash:
-        description: "setar uma mensagem flash {{keys}}"
-        expectations:
-          is_not_empty: "que qualquer mensagem flash fosse setada, obtive {{flash_inspect}}"
-          contains_value: "que qualquer mensagem flash fosse setada para {{to}}, obtive {{flash_inspect}}"
-          assigned_value: "que a mensagem flash {{key}} fosse setada, obtive {{flash_inspect}}"
-          is_equal_value: "que a mensagem flash {{key}} fosse setada para {{to}}, obtive {{flash_inspect}}"
+        description: "setar mensagem {{keys}}"
         optionals:
           to:
             positive: "para {{inspect}}"
-
