@@ -20,17 +20,17 @@ describe 'allow_values_for' do
       @matcher.description.should == 'allow "X", "Y", and "Z" as values for title'
     end
 
-    it 'should set is_valid? missing message' do
+    it 'should set is_valid? message' do
       @matcher.in("A").matches?(@model)
       @matcher.failure_message.should == 'Expected Product to be valid when title is set to "A"'
     end
 
-    it 'should set allow_nil? missing message' do
+    it 'should set allow_nil? message' do
       @matcher.allow_nil.matches?(@model)
       @matcher.failure_message.should == 'Expected Product to allow nil values for title'
     end
 
-    it 'should set allow_blank? missing message' do
+    it 'should set allow_blank? message' do
       @matcher.allow_blank.matches?(@model)
       @matcher.failure_message.should == 'Expected Product to allow blank values for title'
     end

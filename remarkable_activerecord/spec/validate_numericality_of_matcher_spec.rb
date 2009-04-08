@@ -56,8 +56,6 @@ describe 'validate_numericality_of' do
       matcher.description.should == 'ensure numericality of age is greater than 10 and is less than 20'
     end
 
-    # To test missing messages, we need expectations in assertions methods that
-    # should return false.
     it 'should set only_numeric_values? message' do
       @matcher.should_receive(:only_numeric_values?).and_return(false)
       @matcher.matches?(@model)

@@ -23,22 +23,22 @@ describe 'validate_inclusion_of' do
       @matcher.description.should == 'ensure inclusion of title and size in "X", "Y", and "Z"'
     end
 
-    it 'should set is_valid? missing message' do
+    it 'should set is_valid? message' do
       @matcher.in(1..10).matches?(@model)
       @matcher.failure_message.should == 'Expected Product to be valid when title is set to 1'
     end
 
-    it 'should set is_invalid? missing message' do
+    it 'should set is_invalid? message' do
       @matcher.in(3..10).matches?(@model)
       @matcher.failure_message.should == 'Expected Product to be invalid when title is set to 2'
     end
 
-    it 'should set allow_nil? missing message' do
+    it 'should set allow_nil? message' do
       @matcher.allow_nil.matches?(@model)
       @matcher.failure_message.should == 'Expected Product to allow nil values for title'
     end
 
-    it 'should set allow_blank? missing message' do
+    it 'should set allow_blank? message' do
       @matcher.allow_blank.matches?(@model)
       @matcher.failure_message.should == 'Expected Product to allow blank values for title'
     end

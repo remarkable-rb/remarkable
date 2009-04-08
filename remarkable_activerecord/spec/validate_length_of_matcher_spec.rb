@@ -40,34 +40,34 @@ describe 'validate_length_of' do
       @matcher.description.should == 'ensure length of size is minimum 3 characters, not allowing nil values, and allowing blank values'
     end
 
-    it 'should set less_than_min_length? missing message' do
+    it 'should set less_than_min_length? message' do
       @matcher.within(4..5).matches?(@model)
       @matcher.failure_message.should == 'Expected Product to be invalid when size length is less than 4 characters'
     end
 
-    it 'should set exactly_min_length? missing message' do
+    it 'should set exactly_min_length? message' do
       @matcher.should_receive(:less_than_min_length?).and_return(true)
       @matcher.within(2..5).matches?(@model)
       @matcher.failure_message.should == 'Expected Product to be valid when size length is 2 characters'
     end
 
-    it 'should set more_than_max_length? missing message' do
+    it 'should set more_than_max_length? message' do
       @matcher.within(3..4).matches?(@model)
       @matcher.failure_message.should == 'Expected Product to be invalid when size length is more than 4 characters'
     end
 
-    it 'should set exactly_max_length? missing message' do
+    it 'should set exactly_max_length? message' do
       @matcher.should_receive(:more_than_max_length?).and_return(true)
       @matcher.within(3..6).matches?(@model)
       @matcher.failure_message.should == 'Expected Product to be valid when size length is 6 characters'
     end
 
-    it 'should set allow_blank? missing message' do
+    it 'should set allow_blank? message' do
       @matcher.within(3..5).allow_blank.matches?(@model)
       @matcher.failure_message.should == 'Expected Product to allow blank values for size'
     end
 
-    it 'should set allow_nil? missing message' do
+    it 'should set allow_nil? message' do
       @matcher.within(3..5).allow_nil.matches?(@model)
       @matcher.failure_message.should == 'Expected Product to allow nil values for size'
     end

@@ -23,6 +23,8 @@ module Remarkable
       def have_readonly_attributes(*attributes)
         HaveReadonlyAttributesMatcher.new(*attributes).spec(self)
       end
+      alias :have_readonly_attribute :have_readonly_attributes
+
     end
   end
 end

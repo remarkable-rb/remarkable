@@ -28,13 +28,13 @@ describe 'have_scope' do
       @matcher.description.should == 'have to scope itself to {} when :title is called with 1 as argument'
     end
 
-    it 'should set is_scope? missing message' do
+    it 'should set is_scope? message' do
       @matcher = have_scope(:null)
       @matcher.matches?(@model)
       @matcher.failure_message.should == 'Expected :null when called on Product return a ActiveRecord::NamedScope::Scope object'
     end
 
-    it 'should set has_options? missing message' do
+    it 'should set options_match? message' do
       @matcher = have_scope(:recent, :conditions => {:special => true})
       @matcher.matches?(@model)
       @matcher.failure_message.should == 'Expected :recent when called on Product scope to {:conditions=>{:special=>true}}, got {:order=>"created_at DESC"}'

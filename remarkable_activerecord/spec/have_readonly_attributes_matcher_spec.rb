@@ -19,7 +19,7 @@ describe 'have_readonly_attributes' do
       @matcher.description.should == 'make title and category read-only'
     end
 
-    it 'should set is_readonly? missing message' do
+    it 'should set is_readonly? message' do
       @matcher = define_and_validate(:readonly => [:another])
       @matcher.matches?(@model)
       @matcher.failure_message.should == 'Expected Product to make title read-only, got ["another"]'

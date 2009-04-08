@@ -21,13 +21,13 @@ describe 'allow_mass_assignment_of' do
       @matcher.description.should == 'allow mass assignment of title and category'
     end
 
-    it 'should set is_protected? missing message' do
+    it 'should set is_protected? message' do
       @matcher = define_and_validate(:protected => true)
       @matcher.matches?(@model)
       @matcher.failure_message.should == 'Expected Product to allow mass assignment of title (Product is protecting title)'
     end
 
-    it 'should set is_accessible? missing message' do
+    it 'should set is_accessible? message' do
       @matcher = define_and_validate(:accessible => [:another])
       @matcher.matches?(@model)
       @matcher.failure_message.should == 'Expected Product to allow mass assignment of title (Product has not made title accessible)'

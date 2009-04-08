@@ -19,7 +19,7 @@ describe 'validate_presence_of' do
       @matcher.description.should == 'require title and size to be set'
     end
 
-    it 'should set allow_nil? missing message' do
+    it 'should set allow_nil? message' do
       @matcher = validate_presence_of(:category)
       @matcher.matches?(@model)
       @matcher.failure_message.should == 'Expected Product to require category to be set'

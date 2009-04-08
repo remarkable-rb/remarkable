@@ -3,7 +3,7 @@ module Remarkable
     module Matchers
       class HaveScopeMatcher < Remarkable::ActiveRecord::Base
         arguments :scope_name
-        assertions :is_scope?, :options_matches?
+        assertions :is_scope?, :options_match?
 
         optionals :with, :select, :conditions, :order, :limit, :offset
 
@@ -19,7 +19,7 @@ module Remarkable
             @scope_object.class == ::ActiveRecord::NamedScope::Scope
           end
 
-          def options_matches?
+          def options_match?
             @options.empty? || @scope_object.proxy_options == @options.except(:with)
           end
 

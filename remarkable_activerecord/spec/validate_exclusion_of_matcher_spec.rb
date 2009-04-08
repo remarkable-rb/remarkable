@@ -23,25 +23,25 @@ describe 'validate_exclusion_of' do
       @matcher.description.should == 'ensure exclusion of title and size in "X", "Y", and "Z"'
     end
 
-    it 'should set is_invalid? missing message' do
+    it 'should set is_invalid? message' do
       @matcher = define_and_validate(:in => 2..10)
       @matcher.in(1..10).matches?(@model)
       @matcher.failure_message.should == 'Expected Product to be invalid when title is set to 1'
     end
 
-    it 'should set is_valid? missing message' do
+    it 'should set is_valid? message' do
       @matcher = define_and_validate(:in => 2..10)
       @matcher.in(3..10).matches?(@model)
       @matcher.failure_message.should == 'Expected Product to be valid when title is set to 2'
     end
 
-    it 'should set allow_nil? missing message' do
+    it 'should set allow_nil? message' do
       @matcher = define_and_validate(:in => [nil])
       @matcher.allow_nil.matches?(@model)
       @matcher.failure_message.should == 'Expected Product to allow nil values for title'
     end
 
-    it 'should set allow_blank? missing message' do
+    it 'should set allow_blank? message' do
       @matcher = define_and_validate(:in => [''])
       @matcher.allow_blank.matches?(@model)
       @matcher.failure_message.should == 'Expected Product to allow blank values for title'

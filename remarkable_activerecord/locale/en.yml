@@ -115,7 +115,7 @@ en:
         description: "have to scope itself to {{options}} when {{scope_name}} is called"
         expectations:
           is_scope: "{{scope_name}} when called on {{subject_name}} return a ActiveRecord::NamedScope::Scope object"
-          options_matches: "{{scope_name}} when called on {{subject_name}} scope to {{options}}, got {{actual}}"
+          options_match: "{{scope_name}} when called on {{subject_name}} scope to {{options}}, got {{actual}}"
         optionals:
           with:
             positive: "with {{inspect}} as argument"
