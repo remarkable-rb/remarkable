@@ -1,6 +1,6 @@
-module Remarkable # :nodoc:
-  module ActiveRecord # :nodoc:
-    module Matchers # :nodoc:
+module Remarkable
+  module ActiveRecord
+    module Matchers
       class HaveReadonlyAttributesMatcher < Remarkable::ActiveRecord::Base
         arguments :collection => :attributes, :as => :attribute
         collection_assertions :is_readonly?
