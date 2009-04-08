@@ -149,23 +149,38 @@
 #
 # = Performance!
 #
-# Must people run their actions in a before(:all) filter because this speeds up
-# tests. You can do the same here, just appending a bang to the call:
+# Remarkable comes with a new way to speed up your tests. It runs your
+# expectations and perform the action inside a before(:all), so you can do:
 #
-#     describe "responding to GET show" do
-#       get! :show, :id => 37
-#     end
+#   describe "responding to GET show" do
+#     get! :show, :id => 37
+#
+#     should_assign_to :task
+#     should_render_template :show
+#   end
 #
 # Or in the compact way:
 #
-#     describe :get! => :show, :id => 37
+#   describe :get! => :show, :id => 37
 #
-# If any error happens while performing the action, including expectations not
-# met, rspec will output an error but ALL the examples inside the example group
-# (describe) won't be run.
+# The action will be performed just once before asserting the assignment and
+# the template. If any error happens while performing the action, including
+# expectations not met, rspec will output an error but ALL the examples inside
+# the example group (describe) won't be run.
 #
-# Whenever using a bang action, if you have to run something before performing
-# the action, you have to use prepend_before(:all).
+# This comes with some rspec and rspec rails tweakings. Whenever using a bang
+# action, if you have to run something before performing the action, you have
+# to use prepend_before(:all). It's also adviced to call setup_mocks_for_rspec
+# inside your before(:all), to ensure that your mocks will be created and
+# removed.
+#
+# For example, if you want to login an user before performing the action you
+# should do:
+#
+#   prepend_before(:all) do
+#     setup_mocks_for_rspec
+#     login_as(mock_user)
+#   end
 #
 module Remarkable
   module ActionController
