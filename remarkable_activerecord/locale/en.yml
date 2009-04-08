@@ -16,6 +16,12 @@ en:
             positive: "allowing blank values"
             negative: "not allowing blank values"
 
+      allow_mass_assignment_of:
+        description: "allow mass assignment of {{attributes}}"
+        expectations:
+          is_protected: "{{subject_name}} to allow mass assignment of {{attribute}} ({{subject_name}} is protecting {{attribute}})"
+          is_accessible: "{{subject_name}} to allow mass assignment of {{attribute}} ({{subject_name}} has not made {{attribute}} accessible)"
+
       association:
         belongs_to: belong to
         has_many: have many

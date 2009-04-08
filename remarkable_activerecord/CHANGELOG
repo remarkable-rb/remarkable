@@ -1,10 +1,14 @@
 # v3.0.0
 
-[ENHANCEMENT] Added more options to association_matcher. Previously it was
+[ENHANCEMENT] Added more options to associations matcher. Previously it was
 handling just :dependent and :through options. Now it deals with:
 
   :through, :class_name, :foreign_key, :dependent, :join_table, :uniq,
   :readonly, :validate, :autosave, :counter_cache, :polymorphic
+
+And they are much smarter! In :join_table and :through cases, they also test if
+the table exists or not. :counter_cache and :foreign_key also checks if the
+column exists or not.
 
 [COMPATIBILITY] Removed callback, have_instance_method and have_class_method
 matchers. They don't lead to a good TDD since you should test they behavior
@@ -35,7 +39,7 @@ subject definitions on rspec. This was also fixed.
 # v2.x
 
 [ENHANCEMENT] Added associations, allow_mass_assignment, allow_values_for,
-have_db_column, have_index, have_named_scope, have_readonly_attributes,
+have_column, have_index, have_scope, have_readonly_attributes,
 validate_acceptance_of, validate_associate, validate_confirmation_of,
 validate_exclusion_of, validate_inclusion_of, validate_length_of,
 validate_numericality_of, validate_presence_of and validate_uniqueness_of
