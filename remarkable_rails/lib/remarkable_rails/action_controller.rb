@@ -12,10 +12,11 @@ Dir[File.join(dir, 'action_controller', 'matchers', '*.rb')].each do |file|
   require file
 end
 
-# Iinclude macro_stubs and matchers in Spec::Rails
+# Include macro_stubs and matchers in Spec::Rails
 if defined?(Spec::Rails)
   Spec::Rails::Example::ControllerExampleGroup.send :include, Remarkable::ActionController::MacroStubs
 
-  Remarkable.include_matchers!(Remarkable::ActionController, Spec::Rails::Example::FunctionalExampleGroup)
+  Remarkable.include_matchers!(Remarkable::ActionController, Spec::Rails::Example::ControllerExampleGroup)
+  Remarkable.include_matchers!(Remarkable::ActionController, Spec::Rails::Example::RoutingExampleGroup)
 end
 

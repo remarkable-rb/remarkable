@@ -60,6 +60,11 @@ en:
             positive: "with body {{inspect}}"
           content_type:
             positive: "with content type {{inspect}}"
+      route:
+        description: "route {{method}} {{path}} to/from {{options}}"
+        expectations:
+          map_to_path: "to map {{options}} to {{method}} {{path}}, got {{actual}}"
+          generate_params: "to generate params {{options}} from {{method}} {{path}}, got {{actual}}"
       set_session:
         description: "set session variable {{keys}}"
         expectations:
