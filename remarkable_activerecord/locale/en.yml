@@ -79,6 +79,11 @@ en:
             positive: "with counter cache {{inspect}}"
             negative: "without counter cache"
 
+      have_readonly_attributes:
+        description: "make {{attributes}} read-only"
+        expectations:
+          is_readonly: "{{subject_name}} to make {{attribute}} read-only, got {{actual}}"
+
       validate_acceptance_of:
         description: "require {{attributes}} to be accepted"
         expectations:
