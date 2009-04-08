@@ -60,11 +60,13 @@ module ModelBuilder
     class_name = name.to_s.pluralize.classify
     table_name = class_name.tableize
 
-    create_table(table_name) do |table|
+    table = columns.delete(:table) || lambda {|table|
       columns.each do |name, type|
         table.column name, type
       end
-    end
+    }
+
+    create_table(table_name, &table)
 
     klass    = define_model_class(class_name, &block)
     instance = klass.new

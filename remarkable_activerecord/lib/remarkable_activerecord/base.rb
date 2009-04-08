@@ -2,6 +2,11 @@ module Remarkable
   module ActiveRecord
     class Base < Remarkable::Base
 
+      def with_options(opts={})
+        @options.merge!(opts)
+        self
+      end
+
       protected
 
         # Checks for the given key in @options, if it exists and it's true,

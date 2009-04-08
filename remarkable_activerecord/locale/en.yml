@@ -79,6 +79,33 @@ en:
             positive: "with counter cache {{inspect}}"
             negative: "without counter cache"
 
+      have_column:
+        description: "have column(s) named {{columns}}"
+        expectations:
+          column_exists: "{{subject_name}} to have column named {{column}}"
+          options_match: "{{subject_name}} to have column {{column}} with options {{options}}, got {{actual}}"
+        optionals:
+          type:
+            positive: "with type {{inspect}}"
+          null:
+            positive: "allowing null values"
+            negative: "not allowing null values"
+          default:
+            positive: "with default {{inspect}}"
+            negative: "with default {{inspect}}"
+          limit:
+            positive: "with limit {{inspect}}"
+
+      have_index:
+        description: "have index for column(s) {{columns}}"
+        expectations:
+          index_exists: "index {{column}} to exist on table {{table_name}}"
+          is_unique: "index on {{column}} with unique equals to {{unique}}, got {{actual}}"
+        optionals:
+          unique:
+            positive: "with unique values"
+            negative: "with non unique values"
+
       have_readonly_attributes:
         description: "make {{attributes}} read-only"
         expectations:

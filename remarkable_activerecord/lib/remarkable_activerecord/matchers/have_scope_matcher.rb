@@ -71,7 +71,7 @@ module Remarkable
       #   end
       #
       def have_scope(*args)
-        HaveScopeMatcher.new(*args)
+        HaveScopeMatcher.new(*args).spec(self)
       end
     end
   end
