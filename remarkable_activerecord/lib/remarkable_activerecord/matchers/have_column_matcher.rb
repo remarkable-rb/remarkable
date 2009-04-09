@@ -51,15 +51,17 @@ module Remarkable
       #
       # == Examples
       #
-      #   should_have_db_column :name, :type => :string, :default => ''
+      #   should_have_column :name, :type => :string, :default => ''
       #
-      #   it { should have_db_column(:name, :type => :string) }
-      #   it { should have_db_column(:name).type(:string) }
+      #   it { should have_column(:name, :type => :string) }
+      #   it { should have_column(:name).type(:string) }
       # 
       def have_column(*args)
         HaveColumnMatcher.new(*args).spec(self)
       end
-      alias :have_columns :have_column
+      alias :have_columns    :have_column
+      alias :have_db_column  :have_column
+      alias :have_db_columns :have_column
 
     end
   end

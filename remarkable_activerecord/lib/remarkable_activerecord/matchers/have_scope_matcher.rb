@@ -73,6 +73,8 @@ module Remarkable
       def have_scope(*args)
         HaveScopeMatcher.new(*args).spec(self)
       end
+      alias :have_named_scope :have_scope
+
     end
   end
 end

@@ -48,7 +48,9 @@ module Remarkable
       def have_index(*args)
         HaveIndexMatcher.new(*args).spec(self)
       end
-      alias :have_indices :have_index
+      alias :have_indices    :have_index
+      alias :have_db_index   :have_index
+      alias :have_db_indices :have_index
 
     end
   end
