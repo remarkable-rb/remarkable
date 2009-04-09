@@ -149,8 +149,8 @@
 #
 # = Performance!
 #
-# Remarkable comes with a new way to speed up your tests. It runs your
-# expectations and perform the action inside a before(:all), so you can do:
+# Remarkable comes with a new way to speed up your tests. It perform the action
+# inside a before(:all), so you can do:
 #
 #   describe "responding to GET show" do
 #     get! :show, :id => 37
@@ -164,13 +164,16 @@
 #   describe :get! => :show, :id => 37
 #
 # The action will be performed just once before asserting the assignment and
-# the template. If any error happens while performing the action, including
-# expectations not met, rspec will output an error but ALL the examples inside
-# the example group (describe) won't be run.
+# the template. If any error happens while performing the action rspec will
+# output an error but ALL the examples inside the example group (describe) won't
+# be run.
+#
+# By now, the bang methods works only when integrate_views are true and this is
+# when you must have the bigger performance gain.
 #
 # This comes with some rspec and rspec rails tweakings. So if you want to do
-# something before the action is performed (add more stubs or log someone in
-# session, you have to do it giving a block to the action method):
+# something before the action is performed (stubs something or log someone in
+# session), you have to do it giving a block to the action method:
 #
 #   get! :show, :id => 37 do
 #     login_as(mock_user)
