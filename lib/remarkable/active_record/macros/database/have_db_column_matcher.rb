@@ -82,19 +82,21 @@ module Remarkable # :nodoc:
       #   (:type => :string, :primary => true, etc.)
       #
       # Example:
-      # it { should have_db_column(:name).type(:string) }
-      # it { should have_db_column(:age).with_options(:type => :integer) }
-      # it { should_not have_db_column(:salary) }
+      # it { should have_column(:name).type(:string) }
+      # it { should have_column(:age).with_options(:type => :integer) }
+      # it { should_not have_column(:salary) }
       # 
       def have_db_column(column, options = {})
         ColumnMatcher.new(column, options)
       end
+      alias :have_column :have_db_column
 
       # Alias for #have_db_column
       # 
       def have_db_columns(*columns)
         ColumnMatcher.new(*columns)
       end
+      alias :have_columns :have_db_columns
       
     end
   end
