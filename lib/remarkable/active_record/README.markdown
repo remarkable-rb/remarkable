@@ -46,22 +46,22 @@ Options:
 
 h2. Database
 
-h3. have_db_column
+h3. have_column
 
 Ensure that the given column is defined on the models backing SQL table. The options are the same as the instance variables defined on the column definition: :precision, :limit, :default, :null, :primary, :type, :scale, and :sql_type.
 
-<pre><code>  should_have_db_column :email, :type => "string", :default  => nil, :precision => nil, :limit => 255, 		
+<pre><code>  should_have_column :email, :type => "string", :default  => nil, :precision => nil, :limit => 255, 		
                         :null => true, :primary => false, :scale => nil, :sql_type => 'varchar(255)'
 
-  it { should have_db_column(:email, :type => "string", :default  => nil, :precision => nil, :limit => 255, 		
+  it { should have_column(:email, :type => "string", :default  => nil, :precision => nil, :limit => 255, 		
                              :null => true, :primary => false, :scale => nil, :sql_type => 'varchar(255)') }</code></pre>
 
-h3. have_db_columns
+h3. have_columns
 
 Ensure that the given columns are defined on the models backing SQL table.
 
-<pre><code>  should_have_db_columns :id, :email, :name, :created_at
-  it { should have_db_columns :id, :email, :name, :created_at }</code></pre>
+<pre><code>  should_have_columns :id, :email, :name, :created_at
+  it { should have_columns :id, :email, :name, :created_at }</code></pre>
 
 h3. have_indices
 
@@ -116,7 +116,7 @@ Ensures that the attribute can be set on mass update.
   should_allow_mass_assignment_of :email, :name
   it { should allow_mass_assignment_of(:email, :name) }
 
-h3. have_named_scope
+h3. have_scope
 
 Ensures that the model has a method named scope_name that returns a NamedScope object with the proxy options set to the options you supply. scope_name can be either a symbol, or a method call which will be evaled against the model. The eval‘d method call has access to all the same instance variables that a should statement would.
 
@@ -124,7 +124,7 @@ Options: Any of the options that the named scope would pass on to find.
 
 Example:
 
-  should_have_named_scope :visible, :conditions => {:visible => true}
+  should_have_scope :visible, :conditions => {:visible => true}
 
 Passes for:
 
@@ -138,8 +138,8 @@ Or for:
 
 You can test lambdas or methods that return ActiveRecord#scoped calls:
 
-  should_have_named_scope 'recent(5)', :limit => 5
-  should_have_named_scope 'recent(1)', :limit => 1
+  should_have_scope :recent, :with => 5, :limit => 5
+  should_have_scope :recent, :with => 1, :limit => 1
 
 Passes for:
 

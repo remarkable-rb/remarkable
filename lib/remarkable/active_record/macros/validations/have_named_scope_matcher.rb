@@ -88,8 +88,8 @@ module Remarkable # :nodoc:
       #
       # You can test lambdas or methods that return ActiveRecord#scoped calls:
       #
-      #   it { should have_scope('recent(5)', :limit => 5) }
-      #   it { should have_scope('recent(1)', :limit => 1) }
+      #   should_have_scope :recent, :with => 5, :limit => 5
+      #   should_have_scope :recent, :with => 1, :limit => 1
       #
       # Passes for
       #   named_scope :recent, lambda {|c| {:limit => c}}
