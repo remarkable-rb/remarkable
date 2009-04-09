@@ -2,17 +2,31 @@ module Remarkable # :nodoc:
   module ActiveRecord # :nodoc:
     module Matchers # :nodoc:
       class HaveNamedScope < Remarkable::Matcher::Base
+
         def initialize(scope_call, *args)
           @scope_opts = args.extract_options!
           @scope_call = scope_call.to_s
           @args       = args
         end
-        
+
+        def with(args)
+          @scope_call[:with] = args
+          self
+        end
+
         def matches?(subject)
           @subject = subject
-          
+
           assert_matcher do
-            @scope = @spec.instance_eval("#{subject_class}.#{@scope_call}")
+            @scope = if @scope_call.to_s.match(/(\w+)\(([@\w]+)\)/)
+              warn "[DEPRECATION] Strings given to have_scope won't be evaluated anymore, " <<
+                   "please give :with as option. have_scope(:#{$1}, :with => [#{$2}])"
+              @spec.instance_eval("#{subject_class}.#{@scope_call}")
+            elsif @scope_opts[:with]
+              subject_class.send(@scope_call, *@scope_opts.delete(:with))
+            else
+              subject_class.send(@scope_call)
+            end
             return_scope_object? && scope_itself_to_options?
           end
         end

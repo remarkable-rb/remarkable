@@ -46,10 +46,18 @@ describe User do
   it { should_not have_named_scope('recent(1)', :limit => 2) }
   it { should have_named_scope('recent_via_method(7)', :limit => 7) }
   it { should_not have_named_scope('recent_via_method(7)', :limit => 8) }
+
+  it { should have_named_scope(:recent, :with => 5) }
+  it { should have_named_scope(:recent, :with => [5], :limit => 5) }
+  it { should_not have_named_scope(:recent, :with => 5, :limit => 4) }
+  it { should have_named_scope(:recent_via_method, :with => 7, :limit => 7) }
+  it { should_not have_named_scope(:recent_via_method, :with => [7], :limit => 8) }
+
   describe "when given an instance variable" do
     before(:each) do
       @count = 2
     end
+
     it { should have_named_scope("recent(#{@count})", :limit => 2) }
     it { should have_named_scope("recent(@count)", :limit => 2) }
     it { should_not have_named_scope("recent(#{@count})", :limit => 1) }
