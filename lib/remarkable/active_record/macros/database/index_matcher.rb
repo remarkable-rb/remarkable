@@ -81,7 +81,9 @@ module Remarkable # :nodoc:
       def have_indices(*columns)
         IndexMatcher.new(*columns)
       end
-      alias_method :have_index, :have_indices
+      alias :have_index :have_indices
+      alias :have_db_index :have_indices
+      alias :have_db_indices :have_indices
 
     end
   end
