@@ -9,18 +9,18 @@ describe 'route_matcher' do
     end
 
     it 'should contain a description message' do
-      @matcher.description.should == 'route GET "/projects" to/from {:controller=>"boo", :action=>"index"}'
+      @matcher.description.should match(/route GET "\/projects" to\/from/)
     end
 
     it 'should set map_to_path? message' do
       @matcher.matches?(nil)
-      @matcher.failure_message.should == 'Expected to map {:controller=>"boo", :action=>"index"} to GET "/projects", got "/boo"'
+      @matcher.failure_message.should match(/Expected to map/)
     end
 
     it 'should set map_to_path? message' do
       @matcher.stub!(:map_to_path?).and_return(true)
       @matcher.matches?(nil)
-      @matcher.failure_message.should == 'Expected to generate params {:controller=>"boo", :action=>"index"} from GET "/projects", got {:controller=>"projects", :action=>"index"}'
+      @matcher.failure_message.should match(/Expected to generate params/)
     end
   end
 
