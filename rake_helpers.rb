@@ -52,7 +52,7 @@ end
 
 desc "Build the gem and install it"
 task :install => :gem do
-  system("sudo gem install #{PACKAGE_DIR}/#{GEM_NAME}-#{GEM_VERSION}.gem --local --ignore-dependencies")
+  system("sudo gem install #{PACKAGE_DIR}/#{GEM_NAME}-#{GEM_VERSION}.gem --local --ignore-dependencies --no-ri --no-rdoc")
 end
 
 desc "Uninstall the gem"
