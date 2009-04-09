@@ -4,6 +4,8 @@ module Remarkable # :nodoc:
 
       ::ActiveRecord::Callbacks::CALLBACKS.each do |callback|
         define_method("have_#{callback}_callback") do |method|
+          warn "[DEPRECATION] have_#{callback}_callback is deprecated and will be removed in the next Remarkable version. " <<
+               "For more information, please check: http://carlosbrando.lighthouseapp.com/projects/19775/milestones/35628-remarkable-231"
           CallbackMatcher.new(callback, method)
         end
       end
