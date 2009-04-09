@@ -16,6 +16,33 @@ RELEASE_NAME       = "REL #{GEM_VERSION}"
 
 RSPEC_VERSION      = '1.2.0'
 
+def self.configure_gemspec!
+  $spec = Gem::Specification.new do |s|
+    s.rubyforge_project = RUBY_FORGE_PROJECT
+    s.name = GEM_NAME
+    s.version = GEM_VERSION
+    s.platform = Gem::Platform::RUBY
+    s.has_rdoc = true
+    s.extra_rdoc_files = EXTRA_RDOC_FILES
+    s.summary = PROJECT_SUMMARY
+    s.description = PROJECT_DESCRIPTION
+    s.authors = GEM_AUTHOR
+    s.email = GEM_EMAIL
+    s.homepage = PROJECT_URL
+    s.require_path = 'lib'
+    s.files = EXTRA_RDOC_FILES + Dir.glob("{lib,locale}/**/*")
+    s.test_files = Dir.glob("spec/**/*")
+    yield s
+  end
+
+  Rake::GemPackageTask.new($spec) do |pkg|
+    pkg.package_dir = PACKAGE_DIR
+    pkg.gem_spec    = $spec
+    pkg.need_zip    = true
+    pkg.need_tar    = true
+  end
+end
+
 desc "Create a gemspec file"
 task :gemspec do
   File.open("#{GEM_NAME}.gemspec", "w") do |file|
