@@ -3,33 +3,40 @@ require File.join(current_dir, "remarkable/lib/remarkable/version.rb")
 
 require "rubygems"
 require "fileutils"
-
 include FileUtils
 
-remarkable_gems = [
+REMARKABLE_GEMS = [
   :remarkable,
   :remarkable_activerecord,
   :remarkable_rails
 ]
 
-remarkable_gems_paths = remarkable_gems.map{|g| File.join(current_dir, g.to_s) }
+REMARKABLE_GEMS_PATHS = REMARKABLE_GEMS.map{|g| File.join(current_dir, g.to_s) }
 
-desc "Run spec tasks in all remarkable folders"
-task :spec do
-  remarkable_gems_paths.each do |folder|
-    puts
-    cd folder
-    system "rake spec"
+def self.recursive_tasks(*names)
+  names.each do |name|
+    desc "Run #{name} tasks in all remarkable gems"
+    task name do
+      REMARKABLE_GEMS_PATHS.each do |path|
+        cd path
+        system "rake #{name}"
+        puts
+      end
+    end
   end
 end
 
-desc "Run pre_commit tasks in all remarkable folders"
-task :pre_commit do
-  remarkable_gems_paths.each do |folder|
-    puts
-    cd folder
-    system "rake pre_commit"
+def self.unique_tasks(*names)
+  names.each do |name|
+    desc "Run #{name} tasks in remarkable core gem"
+    task name do
+      cd REMARKABLE_GEMS_PATHS[0]
+      system "rake #{name}"
+    end
   end
 end
 
-task :default => [:pre_commit]
+unique_tasks    :clobber_package
+recursive_tasks :clobber_rdoc, :gem, :gemspec, :install, :package, :pre_commit,
+                :rdoc, :repackage, :rerdoc, :spec, :uninstall
+

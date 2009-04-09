@@ -35,7 +35,7 @@ spec = Gem::Specification.new do |s|
   s.email = GEM_EMAIL
   s.homepage = PROJECT_URL
   s.require_path = 'lib'
-  s.add_dependency('rspec_rails', ">= #{RSPEC_VERSION}")
+  s.add_dependency('rspec-rails', ">= #{RSPEC_VERSION}")
   s.add_dependency('remarkable', ">= #{GEM_VERSION}")
   s.add_dependency('remarkable_activerecord', ">= #{GEM_VERSION}")
   s.files = %w(Rakefile) + EXTRA_RDOC_FILES + Dir.glob("{lib,locale,spec}/**/*")
@@ -55,7 +55,7 @@ end
 
 desc "Build the gem and install it"
 task :install => :gem do
-  system("sudo gem install #{PACKAGE_DIR}/#{GEM_NAME}-#{GEM_VERSION}.gem --local")
+  system("sudo gem install #{PACKAGE_DIR}/#{GEM_NAME}-#{GEM_VERSION}.gem --local --ignore-dependencies")
 end
 
 desc "Uninstall the gem"
