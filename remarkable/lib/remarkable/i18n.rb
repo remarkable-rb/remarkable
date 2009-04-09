@@ -51,4 +51,4 @@ unless RAILS_I18N
 end
 
 Remarkable.extend Remarkable::I18n
-Remarkable.locale = I18n.locale
+Remarkable.locale = :en
