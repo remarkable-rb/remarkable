@@ -47,6 +47,8 @@ module Remarkable # :nodoc:
       #   it { should have_instance_methods(:email, :name, :name=) }
       #
       def have_instance_methods(*methods)
+        warn "[DEPRECATION] have_instance_methods is deprecated and will be removed in the next Remarkable version. " <<
+             "For more information, please check: http://carlosbrando.lighthouseapp.com/projects/19775/milestones/35628-remarkable-231"
         HaveInstanceMethods.new(*methods)
       end
     end
