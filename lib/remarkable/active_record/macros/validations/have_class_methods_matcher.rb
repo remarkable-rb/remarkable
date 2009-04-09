@@ -47,6 +47,8 @@ module Remarkable # :nodoc:
       #   it { should have_class_methods(:find, :destroy) }
       #
       def have_class_methods(*methods)
+        warn "[DEPRECATION] have_class_methods is deprecated and will be removed in the next Remarkable version. " <<
+             "For more information, please check: http://carlosbrando.lighthouseapp.com/projects/19775/milestones/35628-remarkable-231"
         HaveClassMethods.new(*methods)
       end
     end
