@@ -168,18 +168,20 @@
 # expectations not met, rspec will output an error but ALL the examples inside
 # the example group (describe) won't be run.
 #
-# This comes with some rspec and rspec rails tweakings. Whenever using a bang
-# action, if you have to run something before performing the action, you have
-# to use prepend_before(:all). It's also adviced to call setup_mocks_for_rspec
-# inside your before(:all), to ensure that your mocks will be created and
-# removed.
+# This comes with some rspec and rspec rails tweakings. So if you want to do
+# something before the action is performed (add more stubs or log someone in
+# session, you have to do it giving a block to the action method):
 #
-# For example, if you want to login an user before performing the action you
-# should do:
-#
-#   prepend_before(:all) do
-#     setup_mocks_for_rspec
+#   get! :show, :id => 37 do
 #     login_as(mock_user)
+#   end
+#
+# You can still use the compact way and give the block:
+#
+#   describe :get => :show, :id => 37 do
+#     get! do
+#       login_as(mock_user)
+#     end
 #   end
 #
 module Remarkable
@@ -191,7 +193,7 @@ module Remarkable
       def self.included(base)
         base.extend ClassMethods
         base.class_inheritable_reader :expects_chain, :default_action, :default_mime,
-                                      :default_verb, :default_params
+                                      :default_verb, :default_params, :before_all_block
       end
 
       module ClassMethods
@@ -277,8 +279,9 @@ module Remarkable
             #
             #   #{verb} :action, :id => 42
             #
-            def #{verb}(action, params={})
-              #{verb.to_s.chop}(action, params)
+            def #{verb}(action=nil, params={}, &block)
+              #{verb.to_s.chop}(action, params) if action
+              write_inheritable_array(:before_all_block, [block]) if block
               run_callbacks_once!
             end
           VERB
@@ -288,7 +291,7 @@ module Remarkable
         # before and after :each cycle. Then we redefine it as run_callbacks_once,
         # which will be used as an before(:all) and after(:all) filter.
         #
-        def run_callbacks_once! #:nodoc:
+        def run_callbacks_once!(&block) #:nodoc:
           unless instance_methods.any?{|m| m.to_s == 'run_callbacks_once' }
             alias_method :run_callbacks_once, :run_callbacks
             class_eval "def run_callbacks(*args); end"
@@ -296,6 +299,11 @@ module Remarkable
             before(:all) do
               setup_mocks_for_rspec
               run_callbacks_once :setup
+
+              before_all_block.each do |block|
+                instance_eval(&block)
+              end if before_all_block
+
               run_action!
               verify_mocks_for_rspec
               teardown_mocks_for_rspec

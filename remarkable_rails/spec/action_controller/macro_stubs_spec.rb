@@ -126,10 +126,26 @@ describe 'MacroStubs' do
     end
 
     describe 'and running actions in a before(:all) filter' do
-      get! :show, :id => 37
+      get :show, :id => 37
+
+      get! do
+        @request.should_not be_nil
+      end
+
+      get! do
+        @flag = true
+      end
+
+      get! do
+        @controller.should_not be_nil
+      end
 
       it 'should run the action before each example' do
         @controller.send(:performed?).should be_true
+      end
+
+      it 'should execute the given block' do
+        @flag.should be_true
       end
     end
   end
