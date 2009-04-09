@@ -65,7 +65,7 @@ task :release => :package do
       packages.each{|p| r.add_file(RUBY_FORGE_PROJECT, gem.to_s, GEM_VERSION, p) }
     rescue Exception => e
       if e.message =~ /You have already released this version/
-        puts "You already released #{gem}. Continuing..."
+        puts "You already released #{gem}-#{GEM_VERSION}. Continuing..."
         puts
       else
         raise e
