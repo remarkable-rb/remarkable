@@ -6,7 +6,6 @@ module Remarkable
 
   # Helper that includes required Remarkable modules into the given klass.
   def self.include_matchers!(base, klass)
-    # Add Remarkable macros core module
     klass.send :extend, Remarkable::Macros
 
     if defined?(base::Matchers)

@@ -11,13 +11,12 @@ module Remarkable
     ] unless self.const_defined?(:ATTR_READERS)
 
     def self.extended(base)
-      # Load modules
       base.extend Assertions
       base.send :include, Callbacks
       base.send :include, Matches
       base.send :include, Optionals
 
-      # Set the default value for matcher_arguments
+      # Initialize matcher_arguments hash with names as an empty array
       base.instance_variable_set('@matcher_arguments', { :names => [] })
     end
 

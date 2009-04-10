@@ -10,7 +10,7 @@ module Remarkable
 
     private
 
-      # Returns the subject class if it's not one.
+      # Returns the subject class unless it's a class object.
       def subject_class
         nil unless @subject
         @subject.is_a?(Class) ? @subject : @subject.class

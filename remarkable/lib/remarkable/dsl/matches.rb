@@ -3,7 +3,7 @@ module Remarkable
     module Matches
 
       # For each instance under the collection declared in <tt>arguments</tt>,
-      # this method will call each method declared in <tt>assertions</tt>.
+      # this method will call each method declared in <tt>collection_assertions</tt>.
       #
       # As an example, let's assume you have the following matcher:
       #
@@ -49,14 +49,8 @@ module Remarkable
           {}
         end
 
-        # Overwrites default_i18n_options to provide collection interpolation,
-        # arguments and optionals to interpolation options.
-        #
-        # Their are appended in the reverse order above. So if you have an optional
-        # with the same name as an argument, the argument overwrites the optional.
-        #
-        # All values are provided calling inspect, so what you will have in your
-        # I18n available for interpolation is @options[:allow_nil].inspect.
+        # Overwrites default_i18n_options to provide arguments and optionals
+        # to interpolation options.
         #
         # If you still need to provide more other interpolation options, you can
         # do that in two ways:
@@ -95,13 +89,11 @@ module Remarkable
           i18n_options.update(super)
         end
 
-        # Methods that return collection_name and object_name as a Hash for
-        # interpolation.
+        # Method responsible to add collection as interpolation.
         #
         def collection_interpolation
           options = {}
 
-          # Add collection to options
           if collection_name = self.class.matcher_arguments[:collection]
             collection_name = collection_name.to_sym
             collection = instance_variable_get("@#{collection_name}")
@@ -115,8 +107,8 @@ module Remarkable
           options
         end
 
-        # Helper that send the methods given and create a expectation message if
-        # any returns false.
+        # Send the assertion methods given and create a expectation message
+        # if any of those methods returns false.
         #
         # Since most assertion methods ends with an question mark and it's not
         # readable in yml files, we remove question and exclation marks at the

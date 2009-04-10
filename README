@@ -1,2 +1,40 @@
-Remarkable
-==========
+= Remarkable 3.0
+
+Remarkable is a framework for rspec matchers that supports macros and I18n. It's
+constituted of three pieces:
+
+  + Remarkable: the framework with helpers, DSL, I18n and rspec features;
+
+  + Remarkable ActiveRecord: a collection of matchers for ActiveRecord. It
+    supports all ActiveRecord validations, associations and some extra matchers.
+
+  + Remarkable Rails: a collection of matchers for ActionController. It also
+    includes MacroStubs, which is a clean DSL for stubbing your controller methods.
+
+In each folder above, you can find a README more detailed description of each piece.
+
+== Install & Upgrade
+
+Install the gem:
+
+  sudo gem install remarkable_rails
+
+This will install remarkable, remarkable_activerecord and remarkable_rails gems.
+
+If you are developing matchers, for example hpricot matchers, you should install
+only the remarkable "core" gem:
+
+  sudo gem install remarkable
+
+Users who are upgrading to Remarkable 3.0, should not find any problem if their
+tests are running without deprecation warnings.
+
+== More information
+
+Google group: http://groups.google.com/group/remarkable-core
+Bug tracking: http://carlosbrando.lighthouseapp.com/projects/19775-remarkable/overview
+
+== LICENSE
+
+All projects are under MIT LICENSE.
+

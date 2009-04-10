@@ -11,10 +11,8 @@ require File.join(dir, 'remarkable', 'macros')
 require File.join(dir, 'remarkable', 'pending')
 require File.join(dir, 'remarkable', 'core_ext', 'array')
 
-# Loads rspec files only if spec is defined
 if defined?(Spec)
   require File.join(dir, 'remarkable', 'rspec')
 end
 
-# Add Remarkable default locale file
 Remarkable.add_locale File.join(dir, '..', 'locale', 'en.yml')

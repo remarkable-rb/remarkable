@@ -24,7 +24,7 @@ module Remarkable
         # validate_presence_of is a matcher declared as:
         #
         #   class ValidatePresenceOfMatcher < Remarkable::Base
-        #     arguments :collection => :attributes
+        #     arguments :collection => :attributes, :as => :attribute
         #   end
         #
         # In this case, Remarkable provides an API that enables you to easily
@@ -107,7 +107,7 @@ END
         # For example, validate_presence_of can be written as:
         #
         #   class ValidatePresenceOfMatcher < Remarkable::Base
-        #     arguments :collection => :attributes
+        #     arguments :collection => :attributes, :as => :attribute
         #     collection_assertions :allow_nil?
         #
         #     protected
@@ -168,8 +168,7 @@ END
         end
         alias :assertion :assertions
 
-        # Class method that accepts a block or a Hash that will overwrite
-        # instance method default_options.
+        # Class method that accepts a block or a hash to set matcher's default options.
         #
         def default_options(hash = {}, &block)
           if block_given?
