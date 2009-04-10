@@ -1,8 +1,0 @@
-en:
-  activerecord:
-    errors:
-      models:
-        user:
-          attributes:
-            email:
-              invalid: 'Please, give me a valid e-mail address.'

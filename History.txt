@@ -1,6 +1,0 @@
-* 2.2.0
-  * Added support to ALL ActiveRecord validations
-  * Some code refactoring to simplify Remarkable Base
-
-* 2.1.5
-  * Added new method should_render_page_with_metadata with tests
