@@ -66,6 +66,19 @@ tests are running without deprecation warnings.
 We are currently seeking for people who wants to join us and provide matchers
 for Datamapper, Sequel, Sinatra and all other possible options. :)
 
+== Browse the documentation
+
+Remarkable:
+  http://remarkable.rubyforge.org/core/
+
+Remarkable ActiveRecord:
+  http://remarkable.rubyforge.org/activerecord/
+  http://remarkable.rubyforge.org/activerecord/classes/Remarkable/ActiveRecord/Matchers.html
+
+Remarkable Rails:
+  http://remarkable.rubyforge.org/rails/
+  http://remarkable.rubyforge.org/rails/classes/Remarkable/ActionController/Matchers.html
+
 == More information
 
 Google group: http://groups.google.com/group/remarkable-core
