@@ -1,0 +1,44 @@
+[TODO] Port views matchers from rspec to Remarkable to provide I18n.
+
+# v3.0.0
+
+[ENHANCEMENT] redirect_to and render_template were ported from rspec-rails to
+remarkable to provide I18n. The second was also extended to deal with :with,
+:layout and :content_type as options.
+
+render_with_layout, render_without_layout delegate their logic to render_template
+so they share the same options.
+
+respond_with_content_type and respond_wity_body delegate their logic to
+respond_with matcher, so they also share the same options.
+
+:set_the_flash was also redesign to inherit from :set_session, providing a
+consistent API.
+
+[ENHANCEMENT] remarkable_rails now ships with a new feature, called macro stubs.
+This allows you to declare just once your mocks and/or expectations, and each
+matcher will know how to deal with properly. A TasksController could have your
+specs for a create action rewritten like this:
+
+  describe TasksController do
+    mock_models :task
+
+    describe :post => :create, :task => { :these => 'params' } do
+      expects :new,  :on => Task, with => {'these' => 'params'}, :returns => mock_task
+      expects :save, :on => mock_task, :returns => true
+
+      should_assign_to :task, :with => mock_task
+      should_redirect_to { task_url(mock_task) }
+    end
+  end
+
+It automatically performs the action before running each macro. In assign_to,
+it executes the expects as expectations (:should_receive), and in redirect_to
+it executes the expects as stubs (:stub!), just as above.
+
+For more options, information and configuration, check macro stubs documentation.
+
+# v2.x
+
+[ENHANCMENT] Added assign_to, filter_params, render_with_layout, respond_with
+respond_with_content_type, route, set_session and set_the_flash matchers.

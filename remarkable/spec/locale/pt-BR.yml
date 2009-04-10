@@ -1,0 +1,21 @@
+pt-BR:
+  remarkable:
+    core:
+      not: não
+      should: deve
+      should_not: não deve
+      example_disabled: Exemplo desativado
+      failure_message_for_should: Esperava que {{expectation}}
+      failure_message_for_should_not: Não esperava que {{expectation}}
+
+      helpers:
+        words_connector: ', '
+        two_words_connector: ' e '
+        last_word_connector: ' e '
+
+    specs:
+      collection_contain:
+        description: "conter os valores fornecidos"
+        expectations:
+          included: "{{value}} estivesse incluso em {{subject_inspect}}"
+          is_array?: "valor dado é um array, mas é {{subject_name}}"

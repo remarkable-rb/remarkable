@@ -1,0 +1,63 @@
+pt-BR:
+  remarkable:
+    core:
+      not: não
+      should: deve
+      should_not: não deve
+      example_disabled: Exemplo desativado
+      failure_message_for_should: Esperava que {{expectation}}
+      failure_message_for_should_not: Não esperava que {{expectation}}
+
+      helpers:
+        words_connector: ', '
+        two_words_connector: ' e '
+        last_word_connector: ' e '
+
+    action_controller:
+      responding: "respondendo a #{{verb}} {{action}}"
+      mime_type: "com {{format}}"
+      assign_to:
+        description: "assinalar {{names}}"
+        optionals:
+          with_kind_of:
+            positive: "com um tipo de {{value}}"
+      filter_params:
+        description: "filtrar parâmetros {{params}} do log"
+      redirect_to:
+        description: "redicionar para {{expected}}"
+        optionals:
+          with:
+            positive: "com {{inspect}}"
+      render_template:
+        description: "renderizar"
+        optionals:
+          template:
+            positive: "template {{inspect}}"
+          layout:
+            positive: "com layout {{inspect}}"
+            negative: "sem layout"
+          with:
+            positive: "com {{value}}"
+          body:
+            positive: "com conteúdo {{inspect}}"
+          content_type:
+            positive: "com content type {{inspect}}"
+      respond_with:
+        description: "responder"
+        optionals:
+          with:
+            positive: "com {{value}}"
+          body:
+            positive: "com conteúdo {{inspect}}"
+          content_type:
+            positive: "com content type {{inspect}}"
+      set_session:
+        description: "setar {{keys}} na sessão"
+        optionals:
+          to:
+            positive: "para {{inspect}}"
+      set_the_flash:
+        description: "setar mensagem {{keys}}"
+        optionals:
+          to:
+            positive: "para {{inspect}}"

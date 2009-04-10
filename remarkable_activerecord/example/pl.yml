@@ -1,0 +1,87 @@
+pl:
+  activerecord:
+    models:
+      user: Użytkownik
+    attributes:
+      user:
+        name: Imię
+        email: E-mail
+        age: Wiek
+
+  remarkable:
+    core:
+      not: nie
+      should: powinien
+      should_not: nie powinien
+      example_disabled: Przykład niepełnosprawny
+      failure_message_for_should: Oczekiwany {{expectation}}
+      failure_message_for_should_not: Nie oczekiwany {{expectation}}
+
+      helpers:
+        words_connector: ', '
+        two_words_connector: ' i '
+        last_word_connector: ' i '
+
+    active_record:
+      validate_length_of:
+        description: "upewnienia co do ilości znaków {{attributes}}"
+        optionals:
+          within:
+            positive: "pomiędzy {{inspect}}"
+          maximum:
+            positive: "maksymalnie {{inspect}}"
+          minimum:
+            positive: "minimalnie {{inspect}}"
+          is:
+            positive: "jest {{inspect}}"
+          allow_nil:
+            positive: "zezwalając wartość nil"
+            negative: "nie zezwalając wartość nil"
+          allow_blank:
+            positive: "zezwalając pustą wartość"
+            negative: "nie zezwalając pustą wartość"
+
+      validate_numericality_of:
+        description: "upewnienia o numeryczności {{attributes}}"
+        optionals:
+          only_integer:
+            positive: "zezwalając tylko na całe wartości"
+          odd:
+            positive: "zezwalając tylko na nieparzyste wartości"
+          even:
+            positive: "zezwalając tylko na parzyste wartości"
+          equal_to:
+            positive: "z wartościami równymi {{inspect}}"
+          less_than:
+            positive: "z wartościami mniejszymi niż {{inspect}}"
+          greater_than:
+            positive: "z wartościami większymi niż {{inspect}}"
+          less_than_or_equal_to:
+            positive: "z wartościami mniejszymi lub równymi {{inspect}}"
+          greater_than_or_equal_to:
+            positive: "z wartościami większymi lub równymi {{inspect}}"
+          allow_nil:
+            positive: "zezwalając wartość nil"
+            negative: "nie zezwalając wartość nil"
+          allow_blank:
+            positive: "zezwalając pustą wartość"
+            negative: "nie zezwalając pustą wartość"
+
+      validate_presence_of:
+        description: "wymagać podania {{attributes}}"
+
+      validate_uniqueness_of:
+        description: "wymagać niepowtarzalnych wartości dla {{attributes}}"
+        optionals:
+          scope:
+            positive: "w zakresie {{inspect}}"
+          case_sensitive:
+            positive: "ze znaczeniem wielkości liter"
+            negative: "z brakiem znaczenia wielkości liter"
+          allow_nil:
+            positive: "zezwalając wartość nil"
+            negative: "nie zezwalając wartość nil"
+          allow_blank:
+            positive: "zezwalając pustą wartość"
+            negative: "nie zezwalając pustą wartość"
+
