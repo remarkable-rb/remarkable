@@ -18,64 +18,27 @@ consistent API.
 [ENHANCEMENT] remarkable_rails now ships with a new feature, called macro stubs.
 This allows you to declare just once your mocks and/or expectations, and each
 matcher will know how to deal with properly. A TasksController could have your
-specs for a destroy action rewritten like this:
+specs for a create action rewritten like this:
 
-  describe :delete => :destroy, :id => 37 do
-    expects :find, :on => Task, :with => '37', :returns => proc { mock_task }
-    expects :destroy, :on => mock_task
+  describe TasksController do
+    mock_models :task
 
-    should_assign_to :task, :with => proc { mock_task }
-    should_redirect_to { tasks_url }
+    describe :post => :create, :task => { :these => 'params' } do
+      expects :new,  :on => Task, with => {'these' => 'params'}, :returns => mock_task
+      expects :save, :on => mock_task, :returns => true
+
+      should_assign_to :task, :with => mock_task
+      should_redirect_to { task_url(mock_task) }
+    end
   end
 
-This will generate two tests, the first one will assert the assignment of
-:task and the second will assert if the action is redirecting to tasks_url.
-
-But before doing the assertions, each macros run the expectations declared and
-perform the action automatically. In other words, should assign to macro is
-doing:
-
-  it 'should assign to task' do
-    Task.should_receive(:find).with('37').and_return(mock_task)
-    mock_task.should_receive(:destroy)
-    delete :destroy, :id => '37'
-    assigns(:task).should == mock_task
-  end
-
-On the other hand, should render template is doing something like this:
-
-  it 'should render template show' do
-    Task.stub!(:find).and_return(mock_task)
-    mock_task.should_receive(:destroy)
-    delete :destroy, :id => '37'
-    response.should render_template('show')
-  end
-
-But how each macro knows if they should perform expectations or stubs? By default,
-only should_assign_to macro performs expectations (check macro stubs documentation
-to change this behavior).
-
-Finally, you don't need to play with procs all the time. There is a convenience
-method called mock_models that generates both class and instance method. So
-doing this:
-
-  describe ProjectsController do
-    mock_models :project
-  end
-
-Is the same as:
-
-  def self.mock_project
-    proc { mock_project }
-  end
-
-  def mock_project(stubs={})
-    @project ||= mock_model(Project, stubs)
-  end
+It automatically performs the action before running each macro. In assign_to,
+it executes the expects as expectations (:should_receive), and in redirect_to
+it executes the expects as stubs (:stub!), just as above.
 
 For more options, information and configuration, check macro stubs documentation.
 
 # v2.x
 
 [ENHANCMENT] Added assign_to, filter_params, render_with_layout, respond_with
-respond_with_content_type, set_session and set_the_flash matchers.
+respond_with_content_type, route, set_session and set_the_flash matchers.

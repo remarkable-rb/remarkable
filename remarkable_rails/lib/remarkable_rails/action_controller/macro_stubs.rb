@@ -5,16 +5,13 @@
 # Let's jump off to an example:
 #
 #   describe ProjectsController do
-#     describe "responding to GET show" do
+#     describe :get => :show, :id => 37 do
 #       expects :find, :on => Project, :with => '37', :returns => proc { mock_project }
-#       get     :show, :id => 37
 #
-#       should_assign_to :project
+#       should_assign_to :project, :with => proc { mock_project }
 #       should_render_template 'show'
 #
-#       describe 'with mime type XML' do
-#         mime Mime::XML
-#
+#       describe Mime::XML do
 #         should_assign_to :project
 #         should_respond_with_content_type Mime::XML
 #       end
@@ -22,17 +19,9 @@
 #   end
 #
 # See how the spec is readable: a ProjectsController responding to get show
-# expects :find on Project which returns a proc with mock project, request the
-# action show with id 37 and then should assign to project and render template
-# 'show' (it will get even better soon).
+# expects :find on Project which a mock project and then should assign to
+# project and render template 'show'.
 #
-# == Understanding it
-#
-# The <tt>expects</tt> method declares that a Project will receive :find with
-# '37' as argument and return the value of the proc. Next, we declare we should
-# perform a GET on action show with params { :id => '37' }.
-# 
-# Then we have two Remarkable macros: should_assign_to and should_render_template.
 # Each macro before asserting will check if an action was already performed and
 # if not, it runs the expectations and call the action.
 #
@@ -66,52 +55,38 @@
 #   it { should assign_to(:project).with_stubs            }
 #   it { should render_tempalte('show').with_expectations }
 #
-# == Readability
+# == mock_models
 #
-# Previously, you probably noticed that the readibility was not a 100%:
+# You don't have to play with proc all the time. You can call mock_models which
+# creates a class method that simply returns a proc and a instance method that
+# do the actual mock. In other words, it creates:
 #
-#  " A ProjectsController responding to get show expects :find on Project
-#    which returns a proc with mock project, request the action show with
-#    id 37 and then should assign to project and render template 'show'   "
+#    def self.mock_project
+#      proc { mock_project }
+#    end
 #
-# This is because we are reading get action show twice and there is a proc in
-# the middle of the description. But, we can make it even better:
+#    def mock_project(stubs={})
+#      @project ||= mock_model(Project, stubs)
+#    end
 #
-#   describe ProjectsController do
-#     mock_models :project
+# Then you can replace those lines:
 #
-#     describe :get => :show, :id => 37 do
-#       expects :find, :on => Project, :with => '37', :returns => mock_project
+#    expects :find, :on => Project, :with => '37', :returns => proc { mock_project }
+#    should_assign_to :project, :with => proc { mock_project }
 #
-#       should_assign_to :project
-#       should_render_template 'show'
+# For:
 #
-#       describe Mime::XML do
-#         should_assign_to :project
-#         should_respond_with_content_type Mime::XML
-#       end
-#     end
-#   end
-#
-# You might have notices two changes:
-#
-#   1. We moved the "get :show, :id => 37" to the describe method. Don't worry
-#      in your spec output, you will still see: "responding to GET show". Which
-#      is also localized, as all Remarkable macro and matchers.
-#
-#   2. proc is gone. We've added a call to mock_models which creates a class
-#      method that simply returns a proc and a instance method that do the
-#      actual mock. In other words, it creates:
-#
-#        def self.mock_project
-#          proc { mock_project }
-#        end
-#
-#        def mock_project(stubs={})
-#          @project ||= mock_model(Project, stubs)
-#        end
+#    expects :find, :on => Project, :with => '37', :returns => mock_project
+#    should_assign_to :project, :with => mock_project
 #
 # = Give me more!
+#
+# If you need to specify the describe description, you can also do:
+#
+#   describe 'my description' do
+#     get :show, :id => 37
+#
+# Which is the same as above.
 #
 # Things start to get even better when we start to talk about nested resources.
 # After our ProjectsController is created, we want to create a TasksController:
