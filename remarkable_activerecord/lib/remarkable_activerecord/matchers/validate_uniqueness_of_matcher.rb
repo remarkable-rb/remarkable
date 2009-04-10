@@ -1,7 +1,7 @@
 module Remarkable
   module ActiveRecord
     module Matchers
-      class ValidateUniquenessOfMatcher < Remarkable::ActiveRecord::Base
+      class ValidateUniquenessOfMatcher < Remarkable::ActiveRecord::Base #:nodoc:
         arguments :collection => :attributes, :as => :attribute
 
         optional :message

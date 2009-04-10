@@ -1,8 +1,7 @@
 module Remarkable
   module ActiveRecord
     module Matchers
-      class ValidateNumericalityOfMatcher < Remarkable::ActiveRecord::Base
-
+      class ValidateNumericalityOfMatcher < Remarkable::ActiveRecord::Base #:nodoc:
         arguments :collection => :attributes, :as => :attribute
 
         optional :equal_to, :greater_than_or_equal_to, :greater_than,

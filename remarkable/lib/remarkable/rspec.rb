@@ -2,7 +2,7 @@
 #
 module Spec #:nodoc:
   module Matchers #:nodoc:
-    # Provides I18n on should and should_not.
+    # Overwrites to provide I18n on should and should_not.
     #
     def self.generated_description
       return nil if last_should.nil?
@@ -13,7 +13,7 @@ module Spec #:nodoc:
 
   module Example #:nodoc:
     module ExampleGroupMethods #:nodoc:
-      # Provides I18n on example disabled message.
+      # Overwrites to provide I18n on example disabled message.
       #
       def xexample(description=nil, opts={}, &block)
         disabled = Remarkable.t 'remarkable.core.example_disabled', :default => 'Example disabled'

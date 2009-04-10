@@ -1,7 +1,7 @@
 module Remarkable
   module ActiveRecord
     module Matchers
-      class AllowMassAssignmentOfMatcher < Remarkable::ActiveRecord::Base
+      class AllowMassAssignmentOfMatcher < Remarkable::ActiveRecord::Base #:nodoc:
         arguments :collection => :attributes, :as => :attribute
 
         collection_assertions :is_protected?, :is_accessible?

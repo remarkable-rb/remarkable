@@ -1,7 +1,7 @@
 module Remarkable
   module ActiveRecord
     module Matchers
-      class HaveIndexMatcher < Remarkable::ActiveRecord::Base
+      class HaveIndexMatcher < Remarkable::ActiveRecord::Base #:nodoc:
         arguments :collection => :columns, :as => :column
 
         optional :unique, :default => true

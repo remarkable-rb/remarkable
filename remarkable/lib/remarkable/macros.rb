@@ -3,7 +3,7 @@ module Remarkable
 
     protected
 
-      def method_missing(method_id, *args, &block)
+      def method_missing(method_id, *args, &block) #:nodoc:
         if method_id.to_s =~ /^(should_not|should)_(.+)/
           should_or_should_not_method_missing($1, $2, caller, *args, &block)
         elsif method_id.to_s =~ /^x(should_not|should)_(.+)/
@@ -13,7 +13,7 @@ module Remarkable
         end
       end
 
-      def should_or_should_not_method_missing(should_or_should_not, method, calltrace, *args, &block)
+      def should_or_should_not_method_missing(should_or_should_not, method, calltrace, *args, &block) #:nodoc:
         it {
           begin
             send(should_or_should_not, send(method, *args, &block))
@@ -24,7 +24,7 @@ module Remarkable
         }
       end
 
-      def disabled_method_missing(should_or_should_not, method, *args, &block)
+      def disabled_method_missing(should_or_should_not, method, *args, &block) #:nodoc:
         description = get_description_from_matcher(should_or_should_not, method, *args, &block)
         xexample(description)
       end
@@ -33,7 +33,7 @@ module Remarkable
       # deduct the description from the matcher name, but it will be shown in
       # english.
       #
-      def get_description_from_matcher(should_or_should_not, method, *args, &block)
+      def get_description_from_matcher(should_or_should_not, method, *args, &block) #:nodoc:
         verb = should_or_should_not.to_s.gsub('_', ' ')
 
         desc = Remarkable::Matchers.send(method, *args, &block).spec(self).description

@@ -1,7 +1,7 @@
 module Remarkable
   module ActiveRecord
     module Matchers
-      class HaveColumnMatcher < Remarkable::ActiveRecord::Base
+      class HaveColumnMatcher < Remarkable::ActiveRecord::Base #:nodoc:
         arguments :collection => :columns, :as => :column
 
         optional :type, :default, :precision, :limit, :scale, :sql_type

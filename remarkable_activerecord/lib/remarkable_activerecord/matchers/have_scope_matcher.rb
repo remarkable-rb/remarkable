@@ -1,7 +1,7 @@
 module Remarkable
   module ActiveRecord
     module Matchers
-      class HaveScopeMatcher < Remarkable::ActiveRecord::Base
+      class HaveScopeMatcher < Remarkable::ActiveRecord::Base #:nodoc:
         arguments :scope_name
         assertions :is_scope?, :options_match?
 

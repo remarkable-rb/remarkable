@@ -7,7 +7,7 @@ module Remarkable
         PendingSandbox.new(description, self).instance_eval(&block)
       end
 
-      class PendingSandbox < Struct.new(:description, :spec)
+      class PendingSandbox < Struct.new(:description, :spec) #:nodoc:
         include Macros
 
         def example(mather_description=nil)

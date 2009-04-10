@@ -4,7 +4,7 @@ module Remarkable
 
       OPTIONAL_KEYS = [ :positive, :negative, :not_given ]
 
-      def self.included(base)
+      def self.included(base) #:nodoc:
         base.extend ClassMethods
       end
 
@@ -111,7 +111,7 @@ module Remarkable
       # Overwrites description to support optionals. Check <tt>optional</tt> for
       # more information.
       #
-      def description(options={})
+      def description(options={}) #:nodoc:
         message = super(options)
         message.strip!
 

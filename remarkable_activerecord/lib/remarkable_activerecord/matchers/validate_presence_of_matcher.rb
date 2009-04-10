@@ -1,7 +1,7 @@
 module Remarkable
   module ActiveRecord
     module Matchers
-      class ValidatePresenceOfMatcher < Remarkable::ActiveRecord::Base
+      class ValidatePresenceOfMatcher < Remarkable::ActiveRecord::Base #:nodoc:
         arguments :collection => :attributes, :as => :attribute
         optional  :message
 

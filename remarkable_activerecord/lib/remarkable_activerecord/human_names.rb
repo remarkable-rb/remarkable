@@ -1,7 +1,7 @@
 if defined?(Spec)
-  module Spec
-    module Example
-      module ExampleGroupMethods
+  module Spec #:nodoc:
+    module Example #:nodoc:
+      module ExampleGroupMethods #:nodoc:
 
         # This allows "describe User" to use the I18n human name of User.
         #

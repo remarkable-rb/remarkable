@@ -2,7 +2,7 @@ module Remarkable
   module DSL
     module Callbacks
 
-      def self.included(base)
+      def self.included(base) #:nodoc:
         base.extend ClassMethods
       end
 
@@ -29,7 +29,7 @@ module Remarkable
           end
       end
 
-      def run_after_initialize_callbacks
+      def run_after_initialize_callbacks #:nodoc:
         self.class.after_initialize_callbacks.each do |method|
           if method.is_a?(Proc)
             instance_eval &method
@@ -39,7 +39,7 @@ module Remarkable
         end
       end
 
-      def run_before_assert_callbacks
+      def run_before_assert_callbacks #:nodoc:
         self.class.before_assert_callbacks.each do |method|
           if method.is_a?(Proc)
             instance_eval &method

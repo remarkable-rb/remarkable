@@ -10,7 +10,7 @@ module Remarkable
       :matcher_collection_assertions, :before_assert_callbacks, :after_initialize_callbacks
     ] unless self.const_defined?(:ATTR_READERS)
 
-    def self.extended(base)
+    def self.extended(base) #:nodoc:
       base.extend Assertions
       base.send :include, Callbacks
       base.send :include, Matches
@@ -22,7 +22,7 @@ module Remarkable
 
     # Make Remarkable::Base DSL inheritable.
     #
-    def inherited(base)
+    def inherited(base) #:nodoc:
       base.class_eval do
         class << self
           attr_reader *ATTR_READERS

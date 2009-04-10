@@ -1,7 +1,7 @@
 module Remarkable
   module ActiveRecord
     module Matchers
-      class ValidateAssociatedMatcher < Remarkable::ActiveRecord::Base
+      class ValidateAssociatedMatcher < Remarkable::ActiveRecord::Base #:nodoc:
         arguments :collection => :associations, :as => :association, :block => :block
         optional  :message, :builder
 

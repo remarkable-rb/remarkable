@@ -1,174 +1,174 @@
-# Macro stubs makes stubs and expectations easier, more readable and DRY.
-#
-# == Example
-#
-# Let's jump off to an example:
-#
-#   describe ProjectsController do
-#     describe :get => :show, :id => 37 do
-#       expects :find, :on => Project, :with => '37', :returns => proc { mock_project }
-#
-#       should_assign_to :project, :with => proc { mock_project }
-#       should_render_template 'show'
-#
-#       describe Mime::XML do
-#         should_assign_to :project
-#         should_respond_with_content_type Mime::XML
-#       end
-#     end
-#   end
-#
-# See how the spec is readable: a ProjectsController responding to get show
-# expects :find on Project which a mock project and then should assign to
-# project and render template 'show'.
-#
-# Each macro before asserting will check if an action was already performed and
-# if not, it runs the expectations and call the action.
-#
-# In other words, should assign to macro is basically doing:
-#
-#   it 'should assign to project' do
-#     Project.should_receive(:find).with('37').and_return(mock_project)
-#     get :show, :id => '37'
-#     assigns(:project).should == mock_project
-#   end
-#
-# On the other hand, should render template is doing something like this:
-#
-#   it 'should render template show' do
-#     Project.stub!(:find).and_return(mock_project)
-#     get :show, :id => '37'
-#     response.should render_template('show')
-#   end
-#
-# Now comes the first question: how each macro knows if they should perform
-# expectations or stubs?
-#
-# By default, only should_assign_to macro performs expectations. You can change
-# this behavior sending :with_stubs or :with_expectations as options:
-#
-#   should_assign_to       :project, :with_stubs => true
-#   should_render_template 'show', :with_expectations => true
-#
-# This also works in the rspec way:
-#
-#   it { should assign_to(:project).with_stubs            }
-#   it { should render_tempalte('show').with_expectations }
-#
-# == mock_models
-#
-# You don't have to play with proc all the time. You can call mock_models which
-# creates a class method that simply returns a proc and a instance method that
-# do the actual mock. In other words, it creates:
-#
-#    def self.mock_project
-#      proc { mock_project }
-#    end
-#
-#    def mock_project(stubs={})
-#      @project ||= mock_model(Project, stubs)
-#    end
-#
-# Then you can replace those lines:
-#
-#    expects :find, :on => Project, :with => '37', :returns => proc { mock_project }
-#    should_assign_to :project, :with => proc { mock_project }
-#
-# For:
-#
-#    expects :find, :on => Project, :with => '37', :returns => mock_project
-#    should_assign_to :project, :with => mock_project
-#
-# = Give me more!
-#
-# If you need to specify the describe description, you can also do:
-#
-#   describe 'my description' do
-#     get :show, :id => 37
-#
-# Which is the same as above.
-#
-# Things start to get even better when we start to talk about nested resources.
-# After our ProjectsController is created, we want to create a TasksController:
-#
-#   describe TasksController do
-#     params :project_id => '42' #=> define params for all requests
-#
-#     # Those two expectations get inherited in all describe groups below
-#     expects :find_by_title, :on => Project, :with => '42', :returns => mock_project
-#     expects :tasks, :and_return => Task
-#
-#     describe :get => :show, :id => '37' do
-#       expects :find, :with => '37', :and_return => mock_task
-#
-#       should_assign_to :project, :task
-#       should_render_template 'show'
-#     end
-#   end
-#
-# As you noticed, you can define parameters that will be available to all requests,
-# using the method <tt>params</tt>.
-#
-# Finally, if you used expects chain like above, but need to write a spec by
-# hand you can invoke the action and expectations with run_expectations!,
-# run_stubs! and run_action!. Examples:
-#
-#   describe :get => :new do
-#     expects :new, :on => Project, :returns => mock_project
-#
-#     it "should do something different" do
-#       run_action!
-#       # do you assertions here
-#     end
-#   end
-#
-# = Performance!
-#
-# Remarkable comes with a new way to speed up your tests. It perform the action
-# inside a before(:all), so you can do:
-#
-#   describe "responding to GET show" do
-#     get! :show, :id => 37
-#
-#     should_assign_to :task
-#     should_render_template :show
-#   end
-#
-# Or in the compact way:
-#
-#   describe :get! => :show, :id => 37
-#
-# The action will be performed just once before asserting the assignment and
-# the template. If any error happens while performing the action rspec will
-# output an error but ALL the examples inside the example group (describe) won't
-# be run.
-#
-# By now, the bang methods works only when integrate_views are true and this is
-# when you must have the bigger performance gain.
-#
-# This comes with some rspec and rspec rails tweakings. So if you want to do
-# something before the action is performed (stubs something or log someone in
-# session), you have to do it giving a block to the action method:
-#
-#   get! :show, :id => 37 do
-#     login_as(mock_user)
-#   end
-#
-# You can still use the compact way and give the block:
-#
-#   describe :get => :show, :id => 37 do
-#     get! do
-#       login_as(mock_user)
-#     end
-#   end
-#
 module Remarkable
   module ActionController
 
+    # Macro stubs makes stubs and expectations easier, more readable and DRY.
+    #
+    # == Example
+    #
+    # Let's jump off to an example:
+    #
+    #   describe ProjectsController do
+    #     describe :get => :show, :id => 37 do
+    #       expects :find, :on => Project, :with => '37', :returns => proc { mock_project }
+    #
+    #       should_assign_to :project, :with => proc { mock_project }
+    #       should_render_template 'show'
+    #
+    #       describe Mime::XML do
+    #         should_assign_to :project
+    #         should_respond_with_content_type Mime::XML
+    #       end
+    #     end
+    #   end
+    #
+    # See how the spec is readable: a ProjectsController responding to get show
+    # expects :find on Project which a mock project and then should assign to
+    # project and render template 'show'.
+    #
+    # Each macro before asserting will check if an action was already performed and
+    # if not, it runs the expectations and call the action.
+    #
+    # In other words, should assign to macro is basically doing:
+    #
+    #   it 'should assign to project' do
+    #     Project.should_receive(:find).with('37').and_return(mock_project)
+    #     get :show, :id => '37'
+    #     assigns(:project).should == mock_project
+    #   end
+    #
+    # On the other hand, should render template is doing something like this:
+    #
+    #   it 'should render template show' do
+    #     Project.stub!(:find).and_return(mock_project)
+    #     get :show, :id => '37'
+    #     response.should render_template('show')
+    #   end
+    #
+    # Now comes the first question: how each macro knows if they should perform
+    # expectations or stubs?
+    #
+    # By default, only should_assign_to macro performs expectations. You can change
+    # this behavior sending :with_stubs or :with_expectations as options:
+    #
+    #   should_assign_to       :project, :with_stubs => true
+    #   should_render_template 'show', :with_expectations => true
+    #
+    # This also works in the rspec way:
+    #
+    #   it { should assign_to(:project).with_stubs            }
+    #   it { should render_tempalte('show').with_expectations }
+    #
+    # == mock_models
+    #
+    # You don't have to play with proc all the time. You can call mock_models which
+    # creates a class method that simply returns a proc and a instance method that
+    # do the actual mock. In other words, it creates:
+    #
+    #    def self.mock_project
+    #      proc { mock_project }
+    #    end
+    #
+    #    def mock_project(stubs={})
+    #      @project ||= mock_model(Project, stubs)
+    #    end
+    #
+    # Then you can replace those lines:
+    #
+    #    expects :find, :on => Project, :with => '37', :returns => proc { mock_project }
+    #    should_assign_to :project, :with => proc { mock_project }
+    #
+    # For:
+    #
+    #    expects :find, :on => Project, :with => '37', :returns => mock_project
+    #    should_assign_to :project, :with => mock_project
+    #
+    # = Give me more!
+    #
+    # If you need to specify the describe description, you can also do:
+    #
+    #   describe 'my description' do
+    #     get :show, :id => 37
+    #
+    # Which is the same as above.
+    #
+    # Things start to get even better when we start to talk about nested resources.
+    # After our ProjectsController is created, we want to create a TasksController:
+    #
+    #   describe TasksController do
+    #     params :project_id => '42' #=> define params for all requests
+    #
+    #     # Those two expectations get inherited in all describe groups below
+    #     expects :find_by_title, :on => Project, :with => '42', :returns => mock_project
+    #     expects :tasks, :and_return => Task
+    #
+    #     describe :get => :show, :id => '37' do
+    #       expects :find, :with => '37', :and_return => mock_task
+    #
+    #       should_assign_to :project, :task
+    #       should_render_template 'show'
+    #     end
+    #   end
+    #
+    # As you noticed, you can define parameters that will be available to all requests,
+    # using the method <tt>params</tt>.
+    #
+    # Finally, if you used expects chain like above, but need to write a spec by
+    # hand you can invoke the action and expectations with run_expectations!,
+    # run_stubs! and run_action!. Examples:
+    #
+    #   describe :get => :new do
+    #     expects :new, :on => Project, :returns => mock_project
+    #
+    #     it "should do something different" do
+    #       run_action!
+    #       # do you assertions here
+    #     end
+    #   end
+    #
+    # = Performance!
+    #
+    # Remarkable comes with a new way to speed up your tests. It perform the action
+    # inside a before(:all), so you can do:
+    #
+    #   describe "responding to GET show" do
+    #     get! :show, :id => 37
+    #
+    #     should_assign_to :task
+    #     should_render_template :show
+    #   end
+    #
+    # Or in the compact way:
+    #
+    #   describe :get! => :show, :id => 37
+    #
+    # The action will be performed just once before asserting the assignment and
+    # the template. If any error happens while performing the action rspec will
+    # output an error but ALL the examples inside the example group (describe) won't
+    # be run.
+    #
+    # By now, the bang methods works only when integrate_views are true and this is
+    # when you must have the bigger performance gain.
+    #
+    # This comes with some rspec and rspec rails tweakings. So if you want to do
+    # something before the action is performed (stubs something or log someone in
+    # session), you have to do it giving a block to the action method:
+    #
+    #   get! :show, :id => 37 do
+    #     login_as(mock_user)
+    #   end
+    #
+    # You can still use the compact way and give the block:
+    #
+    #   describe :get => :show, :id => 37 do
+    #     get! do
+    #       login_as(mock_user)
+    #     end
+    #   end
+    #
     module MacroStubs
       HTTP_VERBS_METHODS = [:get, :get!, :post, :post!, :put, :put!, :delete, :delete!]
 
-      def self.included(base)
+      def self.included(base) #:nodoc:
         base.extend ClassMethods
         base.class_inheritable_reader :expects_chain, :default_action, :default_mime,
                                       :default_verb, :default_params, :before_all_block

@@ -70,7 +70,7 @@ module Remarkable
         #
         # In both cases, :real_value will be available as interpolation option.
         #
-        def default_i18n_options
+        def default_i18n_options #:nodoc:
           i18n_options = {}
 
           @options.each do |key, value|
@@ -91,7 +91,7 @@ module Remarkable
 
         # Method responsible to add collection as interpolation.
         #
-        def collection_interpolation
+        def collection_interpolation #:nodoc:
           options = {}
 
           if collection_name = self.class.matcher_arguments[:collection]
@@ -115,7 +115,7 @@ module Remarkable
         # end of the method name before translating it. So if you have a method
         # called is_valid? on I18n yml file we will check for a key :is_valid.
         #
-        def send_methods_and_generate_message(methods)
+        def send_methods_and_generate_message(methods) #:nodoc:
           methods.each do |method|
             bool, hash = send(method)
 

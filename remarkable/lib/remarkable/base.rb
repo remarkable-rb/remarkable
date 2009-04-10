@@ -3,12 +3,13 @@ module Remarkable
     include Remarkable::Messages
     extend  Remarkable::DSL
 
+    # Optional to provide spec binding to matchers.
     def spec(binding)
       @spec = binding
       self
     end
 
-    private
+    protected
 
       # Returns the subject class unless it's a class object.
       def subject_class
@@ -25,7 +26,7 @@ module Remarkable
 
       # Iterates over the collection given yielding the block and return false
       # if any of them also returns false.
-      def assert_matcher_for(collection)
+      def assert_matcher_for(collection) #:nodoc:
         collection.each do |item|
           return false unless yield(item)
         end
@@ -39,7 +40,7 @@ module Remarkable
       #   assert_contains(['a', '1'], 'a') => passes
       #   assert_contains(['a', '1'], /not there/) => fails
       #
-      def assert_contains(collection, x) # :nodoc:
+      def assert_contains(collection, x)
         collection = [collection] unless collection.is_a?(Array)
 
         case x

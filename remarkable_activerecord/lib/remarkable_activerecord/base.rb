@@ -2,6 +2,14 @@ module Remarkable
   module ActiveRecord
     class Base < Remarkable::Base
 
+      # Provides a way to send options to all ActiveRecord matchers.
+      #
+      #   validates_presence_of(:name).with_options(:allow_nil => false)
+      #
+      # Is equivalent to:
+      #
+      #   validates_presence_of(:name, :allow_nil => false)
+      #
       def with_options(opts={})
         @options.merge!(opts)
         self
@@ -205,7 +213,7 @@ module Remarkable
         # Changes how collection are interpolated to provide localized names
         # whenever is possible.
         #
-        def collection_interpolation
+        def collection_interpolation #:nodoc:
           described_class = if @subject
             subject_class
           elsif @spec

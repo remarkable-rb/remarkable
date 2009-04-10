@@ -1,8 +1,7 @@
 module Remarkable
   module ActiveRecord
     module Matchers
-      class ValidateAcceptanceOfMatcher < Remarkable::ActiveRecord::Base
-
+      class ValidateAcceptanceOfMatcher < Remarkable::ActiveRecord::Base #:nodoc:
         arguments :collection => :attributes, :as => :attribute
 
         optional :accept, :message
