@@ -12,9 +12,9 @@ Remarkable?
     :through, :class_name, :foreign_key, :dependent, :join_table, :uniq,
     :readonly, :validate, :autosave, :counter_cache, :polymorphic
 
-  Besides, in Remarkable 3.0 the matchers become much smarter. Whenever giving
-  join table or through, we also check if the given table exists. Whenever giving
-  :foreign_key or :counter_cache, we also check if the given column exists;
+  Besides in Remarkable 3.0 matchers became much smarter. Whenever :join_table
+  or :through is given as option, it checks if the given table exists. Whenever
+  :foreign_key or :counter_cache is given, it checks if the given column exists;
 
 * Tests and more tests. We have a huge tests suite ready to run and tested in
   ActiveRecord 2.1.2, 2.2.2 and 2.3.2;
