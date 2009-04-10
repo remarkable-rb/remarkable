@@ -13,6 +13,9 @@ constituted of three pieces:
 
 In each folder above, you can find a README more detailed description of each piece.
 
+Remarkable is tested in Rails 2.1.2, 2.2.2 and 2.3.2 and requires rspec >= 1.2.0
+and rspec-rails >= 1.2.0.
+
 == Install & Upgrade
 
 Install the gem:
@@ -20,6 +23,8 @@ Install the gem:
   sudo gem install remarkable_rails
 
 This will install remarkable, remarkable_activerecord and remarkable_rails gems.
+When using within Rails, you need to require just this gem, if you are using
+ActiveRecord, it will require the remarkable_activerecord gem automatically.
 
 If you are developing matchers, for example hpricot matchers, you should install
 only the remarkable "core" gem:
@@ -28,6 +33,11 @@ only the remarkable "core" gem:
 
 Users who are upgrading to Remarkable 3.0, should not find any problem if their
 tests are running without deprecation warnings.
+
+== Volunteers
+
+We are currently seeking for people who wants to join us and provide matchers
+for Datamapper, Sequel, Sinatra and all other possible options. :)
 
 == More information
 
