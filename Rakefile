@@ -60,7 +60,7 @@ task :release => :package do
     packages = %w(gem tgz zip).collect{ |ext| File.join(PACKAGE_DIR, "#{gem}-#{GEM_VERSION}.#{ext}") }
 
     begin
-      puts "Adding #{gem}..."
+      puts "Adding #{gem} #{GEM_VERSION}..."
       r.add_release RUBY_FORGE_PROJECT, gem.to_s, GEM_VERSION, *packages
       packages.each{|p| r.add_file(RUBY_FORGE_PROJECT, gem.to_s, GEM_VERSION, p) }
     rescue Exception => e
