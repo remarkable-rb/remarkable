@@ -62,7 +62,7 @@ module ModelBuilder
 
     table = columns.delete(:table) || lambda {|table|
       columns.each do |name, type|
-        table.column name, type
+        table.column name, *type
       end
     }
 

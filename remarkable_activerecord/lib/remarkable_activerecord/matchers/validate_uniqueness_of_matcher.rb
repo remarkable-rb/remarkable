@@ -83,18 +83,37 @@ module Remarkable
             true
           end
 
-          # Change the existing object attribute to nil to run allow nil validation.
+          # Change the existing object attribute to nil to run allow nil
+          # validations. If we find any problem while updating the @existing
+          # record, it's because we can't save nil values in the database. So it
+          # passes when :allow_nil is false, but should raise an error when
+          # :allow_nil is true
           #
           def allow_nil?
+            return true unless @options.key?(:allow_nil)
+
             @existing.update_attribute(@attribute, nil)
             super
+          rescue Exception => e
+            raise ScriptError, "You declared that #{@attribute} accepts nil values in validate_uniqueness_of, " <<
+                               "but I cannot save nil values in the database, got: #{e.message}" if @options[:allow_nil]
+
+            true
           end
 
-          # Change the existing object attribute to blank to run allow blank validation.
+          # Change the existing object attribute to blank to run allow blank
+          # validation. It uses the same logic as :allow_nil.
           #
           def allow_blank?
+            return true unless @options.key?(:allow_blank)
+
             @existing.update_attribute(@attribute, '')
             super
+          rescue Exception => e
+            raise ScriptError, "You declared that #{@attribute} accepts blank values in validate_uniqueness_of, " <<
+                               "but I cannot save blank values in the database, got: #{e.message}" if @options[:allow_blank]
+
+            true
           end
 
           # Returns a value to be used as new scope. It does a range query in the
