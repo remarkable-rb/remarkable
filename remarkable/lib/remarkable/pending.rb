@@ -3,7 +3,7 @@ module Remarkable
 
     protected
 
-      def pending(description=nil, &block)
+      def pending(description='TODO', &block)
         PendingSandbox.new(description, self).instance_eval(&block)
       end
 
@@ -14,9 +14,9 @@ module Remarkable
           method_caller = caller.detect{ |c| c !~ /method_missing'/ }
 
           error = begin
-            ::Spec::Example::ExamplePendingError.new(description || 'TODO', method_caller)
-          rescue # For rspec <= 1.1.12
-            ::Spec::Example::ExamplePendingError.new(description || 'TODO')
+            ::Spec::Example::ExamplePendingError.new(description, method_caller)
+          rescue # For rspec <= 1.1.12 and rspec => 1.2.4
+            ::Spec::Example::ExamplePendingError.new(description)
           end
 
           spec.send(:example, mather_description){ raise error }
