@@ -41,10 +41,12 @@ module Remarkable
           #
           def responds_to_scope?
             (@options[:scope] || []).each do |scope|
-              method = :"#{scope}="
-              return false, :method => method unless @subject.respond_to?(method)
+              setter = :"#{scope}="
 
-              @subject.send(method, @existing.send(scope))
+              return false, :method => setter unless @subject.respond_to?(setter)
+              return false, :method => scope  unless @existing.respond_to?(scope)
+
+              @subject.send(setter, @existing.send(scope))
             end
             true
           end
@@ -73,12 +75,13 @@ module Remarkable
           #
           def valid_with_new_scope?
             (@options[:scope] || []).each do |scope|
-              previous_scope_value = @subject.send(scope)
+              setter = :"#{scope}="
 
-              @subject.send("#{scope}=", new_value_for_scope(scope))
+              previous_scope_value = @subject.send(scope)
+              @subject.send(setter, new_value_for_scope(scope))
               return false, :method => scope unless good?(@value)
 
-              @subject.send("#{scope}=", previous_scope_value)
+              @subject.send(setter, previous_scope_value)
             end
             true
           end
@@ -120,10 +123,12 @@ module Remarkable
           # database and tries to return a new value which does not belong to it.
           #
           def new_value_for_scope(scope)
-            new_scope = (@existing.send(scope) || 999).next.to_s
+            values = [(@existing.send(scope) || 999).next.to_s]
 
             # Generate a range of values to search in the database
-            values = 100.times.inject([new_scope]) {|v,i| v << v.last.next }
+            100.times do
+              values << values.last.next
+            end
             conditions = { scope => values, @attribute => @value }
 
             # Get values from the database, get the scope attribute and map them to string.
