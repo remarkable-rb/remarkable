@@ -42,7 +42,7 @@ In each folder above, you can find a README more detailed description of each pi
 
 Remarkable Rails requires rspec >= 1.2.0 and rspec-rails >= 1.2.0.
 
-== Install & Upgrade
+== Install on Rails
 
 Install the gem:
 
@@ -53,18 +53,36 @@ This will install remarkable, remarkable_activerecord and remarkable_rails gems.
 Inside Rails you need to require just this gem. If you are using ActiveRecord,
 it will automatically require the remarkable_activerecord gem.
 
-If you are developing matchers, for example hpricot matchers, you should install
-only the remarkable "core" gem:
+== Rails 2.3
 
-  sudo gem install remarkable
+In Rails 2.3, in order to rspec load properly, you have to use this configuration
+on your config/environments/test.rb
+
+  config.gem "rspec",            :lib => false
+  config.gem "rspec-rails",      :lib => false
+  config.gem "remarkable_rails", :lib => false
+
+And then require remarkable inside your spec_helper.rb, after "spec/rails":
+
+  require 'spec/rails'
+  require 'remarkable_rails'
+
+This is the safest way to avoid conflicts.
 
 Users who are upgrading to Remarkable 3.0, should not find any problem if their
 tests are running without deprecation warnings.
 
-== Volunteers
+== Developers
 
-We are currently seeking for people who wants to join us and provide matchers
-for Datamapper, Sequel, Sinatra and all other possible options. :)
+If you are developing matchers, for example hpricot matchers, you need to install
+only the remarkable "core" gem:
+
+  sudo gem install remarkable
+
+If you stumble into any problem or have doubts while building your matchers,
+please drop us a line. We are currently searching for people who wants to join
+us and provide matchers for Datamapper, Sequel, Sinatra and all other possible
+options. :)
 
 == Browse the documentation
 

@@ -3,10 +3,22 @@
 Remarkable Rails is a collection of matchers to Rails. This package has some
 ActionController matchers and soon some ActionView matchers.
 
-Whenever using the Remarkable Rails gem and ActiveRecord, it will automatically
-add your ActiveRecord matchers. So just one line is needed to install both:
+Whenever using the Remarkable Rails gem, it will automatically add your ActiveRecord
+matchers. So just one line is needed to install both:
 
   sudo gem install remarkable_rails
+
+If you are using Rails 2.3, you need to have this configuration on your
+config/environments/test.rb:
+
+  config.gem "rspec",            :lib => false
+  config.gem "rspec-rails",      :lib => false
+  config.gem "remarkable_rails", :lib => false
+
+And then require remarkable inside your spec_helper.rb, after "spec/rails":
+
+  require 'spec/rails'
+  require 'remarkable_rails'
 
 == Matchers & Macros
 
