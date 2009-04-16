@@ -145,12 +145,12 @@ describe 'validate_uniqueness_of' do
         end
 
         # Create a model
-        User.create(:username => Time.now)
+        User.create(:username => 'jose')
         validate_uniqueness_of(:username)
       end
 
       it { should define_and_validate }
-      it { should define_and_validate.allow_nil(false) }
+      it { should define_and_validate(:allow_nil => false).allow_nil(false) }
 
       it 'should raise an error if allow nil is true but we cannot save nil values in the database'do
         proc { should define_and_validate.allow_nil }.should raise_error(ScriptError, /You declared that username accepts nil values in validate_uniqueness_of, but I cannot save nil values in the database, got/)

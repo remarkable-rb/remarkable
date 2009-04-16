@@ -95,13 +95,15 @@ module Remarkable
           def allow_nil?
             return true unless @options.key?(:allow_nil)
 
-            @existing.update_attribute(@attribute, nil)
-            super
-          rescue Exception => e
-            raise ScriptError, "You declared that #{@attribute} accepts nil values in validate_uniqueness_of, " <<
-                               "but I cannot save nil values in the database, got: #{e.message}" if @options[:allow_nil]
+            begin
+              @existing.update_attribute(@attribute, nil)
+            rescue ::ActiveRecord::StatementInvalid => e
+              raise ScriptError, "You declared that #{@attribute} accepts nil values in validate_uniqueness_of, " <<
+                                 "but I cannot save nil values in the database, got: #{e.message}" if @options[:allow_nil]
+              return true
+            end
 
-            true
+            super
           end
 
           # Change the existing object attribute to blank to run allow blank
@@ -110,13 +112,15 @@ module Remarkable
           def allow_blank?
             return true unless @options.key?(:allow_blank)
 
-            @existing.update_attribute(@attribute, '')
-            super
-          rescue Exception => e
-            raise ScriptError, "You declared that #{@attribute} accepts blank values in validate_uniqueness_of, " <<
-                               "but I cannot save blank values in the database, got: #{e.message}" if @options[:allow_blank]
+            begin
+              @existing.update_attribute(@attribute, '')
+            rescue ::ActiveRecord::StatementInvalid => e
+              raise ScriptError, "You declared that #{@attribute} accepts blank values in validate_uniqueness_of, " <<
+                                 "but I cannot save blank values in the database, got: #{e.message}" if @options[:allow_blank]
+              return true
+            end
 
-            true
+            super
           end
 
           # Returns a value to be used as new scope. It does a range query in the
