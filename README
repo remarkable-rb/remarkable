@@ -1,5 +1,7 @@
 = Remarkable 3.0
 
+(you can read this file nicely formatted here: http://remarkable.rubyforge.org/core/)
+
 Remarkable is a framework for rspec matchers that supports macros and I18n. It's
 constituted of three pieces:
 
