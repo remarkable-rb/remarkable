@@ -20,8 +20,7 @@ require 'spec'
 require File.join(File.dirname(__FILE__), '..', 'spec', 'spec_helper')
 
 # Configure remarkable locale
-locale_file = File.join(File.dirname(__FILE__), "#{locale}.yml")
-Remarkable.add_locale locale_file if File.exist?(locale_file)
+Remarkable.add_locale File.join(File.dirname(__FILE__), '..', '..', 'remarkable_i18n', "#{locale}.yml")
 Remarkable.locale = locale
 
 # Setting up a model
