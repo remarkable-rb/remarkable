@@ -23,13 +23,13 @@ describe 'respond_with' do
 
     it 'should set status_matches? message' do
       @matcher.matches?(@controller)
-      @matcher.failure_message.should == 'Expected to respond with :error, got 200'
+      @matcher.failure_message.should == 'Expected to respond with status :error, got 200'
     end
 
     it 'should set content_type_matches? message' do
       @matcher = respond_with(:success)
       @matcher.body(/anything/).matches?(@controller)
-      @matcher.failure_message.should == 'Expected to respond with body equals to /anything/, got " "'
+      @matcher.failure_message.should == 'Expected to respond with body /anything/, got " "'
     end
 
     it 'should set content_type_matches? message' do

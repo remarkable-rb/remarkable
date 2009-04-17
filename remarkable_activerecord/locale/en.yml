@@ -71,8 +71,6 @@ en:
           autosave:
             positive: "autosaving associated records"
             negative: "not autosaving associated records"
-          polymorphic:
-            positive: "through a polymorphic interface"
           as:
             positive: "through the polymorphic interface {{inspect}}"
           counter_cache:
@@ -91,8 +89,8 @@ en:
             positive: "allowing null values"
             negative: "not allowing null values"
           default:
-            positive: "with default {{inspect}}"
-            negative: "with default {{inspect}}"
+            positive: "with default value {{inspect}}"
+            negative: "with default value {{inspect}}"
           limit:
             positive: "with limit {{inspect}}"
 
@@ -114,7 +112,7 @@ en:
       have_scope:
         description: "have to scope itself to {{options}} when {{scope_name}} is called"
         expectations:
-          is_scope: "{{scope_name}} when called on {{subject_name}} return a ActiveRecord::NamedScope::Scope object"
+          is_scope: "{{scope_name}} when called on {{subject_name}} return an instance of ActiveRecord::NamedScope::Scope"
           options_match: "{{scope_name}} when called on {{subject_name}} scope to {{options}}, got {{actual}}"
         optionals:
           with:

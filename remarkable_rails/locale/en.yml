@@ -36,8 +36,8 @@ en:
           rendered: "template {{template}} to be rendered, got no render"
           template_matches: "template {{template}} to be rendered, got {{actual_template}}"
           layout_matches: "to render with layout {{layout}}, got {{actual_layout}}"
-          status_matches: "to render with {{with}}, got {{actual_status}}"
-          body_matches: "to render with body equals to {{body}}, got {{actual_body}}"
+          status_matches: "to render with status {{with}}, got {{actual_status}}"
+          body_matches: "to render with body {{body}}, got {{actual_body}}"
           content_type_matches: "to render with content type {{content_type}}, got {{actual_content_type}}"
         optionals:
           template:
@@ -55,8 +55,8 @@ en:
       respond_with:
         description: "respond"
         expectations:
-          status_matches: "to respond with {{with}}, got {{actual_status}}"
-          body_matches: "to respond with body equals to {{body}}, got {{actual_body}}"
+          status_matches: "to respond with status {{with}}, got {{actual_status}}"
+          body_matches: "to respond with body {{body}}, got {{actual_body}}"
           content_type_matches: "to respond with content type {{content_type}}, got {{actual_content_type}}"
         optionals:
           with:

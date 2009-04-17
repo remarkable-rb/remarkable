@@ -49,8 +49,8 @@ en:
           rendered: "template {{template}} to be rendered, got no render"
           template_matches: "template {{template}} to be rendered, got {{actual_template}}"
           layout_matches: "to render with layout {{layout}}, got {{actual_layout}}"
-          status_matches: "to render with {{with}}, got {{actual_status}}"
-          body_matches: "to render with body equals to {{body}}, got {{actual_body}}"
+          status_matches: "to render with status {{with}}, got {{actual_status}}"
+          body_matches: "to render with body {{body}}, got {{actual_body}}"
           content_type_matches: "to render with content type {{content_type}}, got {{actual_content_type}}"
         optionals:
           template:
@@ -68,8 +68,8 @@ en:
       respond_with:
         description: "respond"
         expectations:
-          status_matches: "to respond with {{with}}, got {{actual_status}}"
-          body_matches: "to respond with body equals to {{body}}, got {{actual_body}}"
+          status_matches: "to respond with status {{with}}, got {{actual_status}}"
+          body_matches: "to respond with body {{body}}, got {{actual_body}}"
           content_type_matches: "to respond with content type {{content_type}}, got {{actual_content_type}}"
         optionals:
           with:
@@ -178,8 +178,6 @@ en:
           autosave:
             positive: "autosaving associated records"
             negative: "not autosaving associated records"
-          polymorphic:
-            positive: "through a polymorphic interface"
           as:
             positive: "through the polymorphic interface {{inspect}}"
           counter_cache:
@@ -198,8 +196,8 @@ en:
             positive: "allowing null values"
             negative: "not allowing null values"
           default:
-            positive: "with default {{inspect}}"
-            negative: "with default {{inspect}}"
+            positive: "with default value {{inspect}}"
+            negative: "with default value {{inspect}}"
           limit:
             positive: "with limit {{inspect}}"
 
@@ -221,7 +219,7 @@ en:
       have_scope:
         description: "have to scope itself to {{options}} when {{scope_name}} is called"
         expectations:
-          is_scope: "{{scope_name}} when called on {{subject_name}} return a ActiveRecord::NamedScope::Scope object"
+          is_scope: "{{scope_name}} when called on {{subject_name}} return an instance of ActiveRecord::NamedScope::Scope"
           options_match: "{{scope_name}} when called on {{subject_name}} scope to {{options}}, got {{actual}}"
         optionals:
           with:

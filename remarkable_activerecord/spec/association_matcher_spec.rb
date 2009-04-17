@@ -35,13 +35,12 @@ describe 'association_matcher' do
         matcher.readonly
         matcher.description.should == 'belong to company with dependent :destroy and with readonly records'
 
-        matcher.polymorphic
-        matcher.description.should == 'belong to company with dependent :destroy, with readonly records, ' << 
-                                       'and through a polymorphic interface'
+        matcher.as(:interface)
+        matcher.description.should == 'belong to company with dependent :destroy, through the polymorphic interface :interface, and with readonly records'
 
         matcher.counter_cache('projects_count')
-        matcher.description.should == 'belong to company with dependent :destroy, with readonly records, ' <<
-                                       'through a polymorphic interface, and with counter cache "projects_count"'
+        matcher.description.should == 'belong to company with dependent :destroy, through the polymorphic interface :interface, ' <<
+                                      'with readonly records, and with counter cache "projects_count"'
       end
 
       it 'should set association_exists? message' do
