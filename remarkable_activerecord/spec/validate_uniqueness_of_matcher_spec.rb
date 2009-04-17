@@ -105,7 +105,7 @@ describe 'validate_uniqueness_of' do
       proc { @matcher.matches?(@model) }.should_not raise_error(ScriptError)
     end
 
-    it 'should raise an error if no object with not nil attribute is found' do
+    it 'should raise an error if no object with not blank attribute is found' do
       @matcher = define_and_validate.allow_blank
       User.destroy_all
 
@@ -114,6 +114,11 @@ describe 'validate_uniqueness_of' do
 
       User.create(:username => 'jose')
       proc { @matcher.matches?(@model) }.should_not raise_error(ScriptError)
+    end
+
+    it 'should raise an error if @existing record is the same as @subject' do
+      @matcher = define_and_validate
+      proc { @matcher.matches?(User.first) }.should raise_error(ScriptError, /which is different from the subject record/)
     end
 
     it 'should raise an error if cannot find a new scope value' do

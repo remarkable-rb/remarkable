@@ -22,19 +22,31 @@ module Remarkable
           # Tries to find an object in the database. If allow_nil and/or allow_blank
           # is given, we must find a record which is not nil or not blank.
           #
-          # If any of these attempts fail, the validation fail.
+          # We should also ensure that the object retrieved from the database
+          # is not the @subject.
+          #
+          # If any of these attempts fail, an error is raised.
           #
           def find_first_object?
-            @existing, message = if @options[:allow_nil]
-              [ subject_class.find(:first, :conditions => "#{@attribute} IS NOT NULL"), " with #{@attribute} not nil" ]
+            conditions, message = if @options[:allow_nil]
+              [ ["#{@attribute} IS NOT NULL"], " with #{@attribute} not nil" ]
             elsif @options[:allow_blank]
-              [ subject_class.find(:first, :conditions => "#{@attribute} != ''"), " with #{@attribute} not blank" ]
+              [ ["#{@attribute} != ''"], " with #{@attribute} not blank" ]
             else
-              [ subject_class.find(:first), "" ]
+              [ [], "" ]
             end
 
-            return true if @existing
-            raise ScriptError, "could not find a #{subject_class} in the database" + message
+            unless @subject.new_record?
+              primary_key = subject_class.primary_key
+
+              message    << " which is different from the subject record (the object being validated is the same as the one in the database)"
+              conditions << "#{subject_class.primary_key} != '#{@subject.send(primary_key)}'"
+            end
+
+            options = conditions.empty? ? {} : { :conditions => conditions.join(' AND ') }
+
+            return true if @existing = subject_class.find(:first, options)
+            raise ScriptError, "could not find a #{subject_class} record in the database" + message
           end
 
           # Set subject scope to be equal to the object found.
