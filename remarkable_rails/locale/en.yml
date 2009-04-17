@@ -3,6 +3,7 @@ en:
     action_controller:
       responding: "responding to #{{verb}} {{action}}"
       mime_type: "with {{format}}"
+
       assign_to:
         description: "assign {{names}}"
         expectations:
@@ -12,11 +13,13 @@ en:
         optionals:
           with_kind_of:
             positive: "with kind of {{value}}"
+
       filter_params:
         description: "filter {{params}} parameters from log"
         expectations:
           respond_to_filter_params: "controller to respond to filter_parameters (controller is not filtering any parameter)"
           is_filtered: "{{param}} to be filtered, got no filtering"
+
       redirect_to:
         description: "redirect to {{expected}}"
         expectations:
@@ -26,6 +29,7 @@ en:
         optionals:
           with:
             positive: "with status {{inspect}}"
+
       render_template:
         description: "render"
         expectations:
@@ -47,6 +51,7 @@ en:
             positive: "with body {{inspect}}"
           content_type:
             positive: "with content type {{inspect}}"
+
       respond_with:
         description: "respond"
         expectations:
@@ -60,11 +65,13 @@ en:
             positive: "with body {{inspect}}"
           content_type:
             positive: "with content type {{inspect}}"
+
       route:
         description: "route {{method}} {{path}} to/from {{options}}"
         expectations:
           map_to_path: "to map {{options}} to {{method}} {{path}}, got {{actual}}"
           generate_params: "to generate params {{options}} from {{method}} {{path}}, got {{actual}}"
+
       set_session:
         description: "set session variable {{keys}}"
         expectations:
@@ -75,6 +82,7 @@ en:
         optionals:
           to:
             positive: "to {{inspect}}"
+
       set_the_flash:
         description: "set the flash message {{keys}}"
         expectations:

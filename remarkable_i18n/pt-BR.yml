@@ -1,0 +1,358 @@
+en:
+  remarkable:
+    core:
+      not: "não"
+      should: "deve"
+      should_not: "não deve"
+      example_disabled: "Exemplo desativado"
+      failure_message_for_should: "Esperava que {{expectation}}"
+      failure_message_for_should_not: "Não esperava que {{expectation}}"
+
+      helpers:
+        words_connector: ", "
+        two_words_connector: " e "
+        last_word_connector: " e "
+
+    action_controller:
+      responding: "respondendo para #{{verb}} {{action}}"
+      mime_type: "com {{format}}"
+
+      assign_to:
+        description: "assinalar {{names}}"
+        expectations:
+          assigned_value: "ação assinalasse {{name}}, nenhum assinalamento ocorreu"
+          is_kind_of: "valor assinalado a {{name}} fosse um tipo de {{with_kind_of}}, obtive {{assign_class}}"
+          is_equal_value: "valor assinalado a {{name}} fosse igual a {{with}}, obtive {{assign_inspect}}"
+        optionals:
+          with_kind_of:
+            positive: "com um tipo de {{value}}"
+
+      filter_params:
+        description: "filtre {{params}} parâmetros do log"
+        expectations:
+          respond_to_filter_params: "controller respondesse para :filter_parameters (controller não está filtrando nenhum parâmetro)"
+          is_filtered: "{{param}} fosse filtrado, nenhum filtro ocorreu"
+
+      redirect_to:
+        description: "redirecione para {{expected}}"
+        expectations:
+          redirected: "redirecionasse para {{expected}}, nenhum redirecionamento ocorreu"
+          status_matches: "redirecionasse para {{expected}} com status {{with}}, obtive status {{status}}"
+          url_matches: "redirecionasse para {{expected}}, obtive redirecionamento para {{actual}}"
+        optionals:
+          with:
+            positive: "com status {{inspect}}"
+
+      render_template:
+        description: "renderize"
+        expectations:
+          rendered: "template {{template}} fosse renderizado, nenhuma renderização ocorreu"
+          template_matches: "template {{template}} fosse renderizado, obtive {{actual_template}}"
+          layout_matches: "renderizasse com layout {{layout}}, obtive {{actual_layout}}"
+          status_matches: "renderizasse com status {{with}}, obtive {{actual_status}}"
+          body_matches: "renderizasse com conteúdo {{body}}, obtive {{actual_body}}"
+          content_type_matches: "renderizasse com content type {{content_type}}, obtive {{actual_content_type}}"
+        optionals:
+          template:
+            positive: "template {{inspect}}"
+          layout:
+            positive: "com layout {{inspect}}"
+            negative: "sem layout"
+          with:
+            positive: "com statys {{value}}"
+          body:
+            positive: "com conteúdo {{inspect}}"
+          content_type:
+            positive: "com content type {{inspect}}"
+
+      respond_with:
+        description: "responder"
+        expectations:
+          status_matches: "respondesse com status {{with}}, obtive {{actual_status}}"
+          body_matches: "respondesse com corpo {{body}}, obtive {{actual_body}}"
+          content_type_matches: "respondesse com content type {{content_type}}, obtive {{actual_content_type}}"
+        optionals:
+          with:
+            positive: "com {{value}}"
+          body:
+            positive: "com conteúdo {{inspect}}"
+          content_type:
+            positive: "com content type {{inspect}}"
+
+      route:
+        description: "tenha rotas {{method}} {{path}} de/para {{options}}"
+        expectations:
+          map_to_path: "tivesse rotas de {{options}} para {{method}} {{path}}, obtive {{actual}}"
+          generate_params: "criasse {{options}} de {{method}} {{path}}, obtive {{actual}}"
+
+      set_session:
+        description: "set variável de sessão {{keys}}"
+        expectations:
+          is_not_empty: "qualquer variável de sessão fosse setada, obtive {{session_inspect}}"
+          contains_value: "qualquer variável de sessão fosse setada para {{to}}, obtive {{session_inspect}}"
+          assigned_value: "variável de sessão {{key}} fosse setada, obtive {{session_inspect}}"
+          is_equal_value: "variável de sessão {{key}} fosse setada para {{to}}, obtive {{session_inspect}}"
+        optionals:
+          to:
+            positive: "para {{inspect}}"
+
+      set_the_flash:
+        description: "setar mensagem flash {{keys}}"
+        expectations:
+          is_not_empty: "qualquer mensagem flash fosse setada, obtive {{flash_inspect}}"
+          contains_value: "qualquer mensagem flash fosse setada para {{to}}, obtive {{flash_inspect}}"
+          assigned_value: "mensagem flash {{key}} fosse setada, obtive {{flash_inspect}}"
+          is_equal_value: "mensagem flash {{key}} fosse setada para {{to}}, obtive {{flash_inspect}}"
+        optionals:
+          to:
+            positive: "para {{inspect}}"
+
+    active_record:
+      allow_nil: "{{subject_name}} {{not}} permitisse valores nulos para {{attribute}}"
+      allow_blank: "{{subject_name}} {{not}} permitisse valores vazios para {{attribute}}"
+
+      allow_values_for:
+        description: "permitir {{in}} como valores para {{attributes}}"
+        expectations:
+          is_valid: "{{subject_name}} fosse válido quando {{attribute}} é igual a {{value}}"
+        optionals:
+          allow_nil:
+            positive: "permitindo valores nulos"
+            negative: "não permitindo valores nulos"
+          allow_blank:
+            positive: "permitindo valores vazios"
+            negative: "não permitindo valores vazios"
+
+      allow_mass_assignment_of:
+        description: "permitir assinalamento em massa de {{attributes}}"
+        expectations:
+          is_protected: "{{subject_name}} permitisse o assinalamento em massa de {{attribute}} ({{subject_name}} está protegendo {{attribute}})"
+          is_accessible: "{{subject_name}} permitisse o assinalamento em massa de {{attribute}} ({{subject_name}} não tornou {{attribute}} accessível)"
+
+      association:
+        belongs_to: pertencer a
+        has_many: ter vários
+        has_and_belongs_to_many: ter e pertencer a vários
+        has_one: ter um
+        description: "{{macro}} {{associations}}"
+        expectations:
+          association_exists: "{{subject_name}} pudesse {{macro}} {{association}}, obtive nenhuma associação"
+          macro_matches: "{{subject_name}} pudesse {{macro}} {{association}}, obtive que {{subject_name}} deve {{actual_macro}} {{association}}"
+          through_exists: "{{subject_name}} pudesse {{macro}} {{association}} através de {{through}}, obtive que {{through}} não existe"
+          join_table_exists: "tabela de junção {{actual_join_table}} existisse, mas não existe"
+          foreign_key_exists: "chave estrangeira {{actual_foreign_key}} existisse em {{foreign_key_table}}, mas não existe"
+          polymorphic_exists: "{{subject_table}} tivesse {{polymorphic_column}} como coluna, mas não tem"
+          counter_cache_exists: "{{reflection_table}} tivesse {{counter_cache_column}} como coluna, mas não tem"
+          through_matches: "{{association}} associação através de {{through}}, obtive {{actual_through}}"
+          class_name_matches: "{{association}} associação com nome de classe {{class_name}}, obtive {{actual_class_name}}"
+          foreign_key_matches: "{{association}} associação com chave estrangeira {{foreign_key}}, obtive {{actual_foreign_key}}"
+          dependent_matches: "{{association}} associação com dependência {{dependent}}, obtive {{actual_dependent}}"
+          join_table_matches: "{{association}} associação com tabela de junção {{join_table}}, obtive {{actual_join_table}}"
+          uniq_matches: "{{association}} associação com uniq igual a {{uniq}}, obtive {{actual_uniq}}"
+          readonly_matches: "{{association}} associação com readonly igual a {{readonly}}, obtive {{actual_readonly}}"
+          validate_matches: "{{association}} associação com validate igual a {{validate}}, obtive {{actual_validate}}"
+          autosave_matches: "{{association}} associação com autosave igual a {{autosave}}, obtive {{actual_autosave}}"
+          polymorphic_matches: "{{association}} associação with polymorphic equals to {{polymorphic}}, obtive {{actual_polymorphic}}"
+          as_matches: "{{association}} associação com interface polimórfica {{as}}, obtive {{actual_as}}"
+          counter_cache_matches: "{{association}} associação com coluna de cache {{counter_cache}}, obtive {{actual_counter_cache}}"
+        optionals:
+          through:
+            positive: "através de {{value}}"
+          class_name:
+            positive: "com nome de classe {{inspect}}"
+          foreign_key:
+            positive: "com chave estrangeira {{inspect}}"
+          dependent:
+            positive: "com dependência {{inspect}}"
+          join_table:
+            positive: "com tabela de junção {{inspect}}"
+          uniq:
+            positive: "com registros únicos"
+            negative: "sem registros únicos"
+          readonly:
+            positive: "com registros apenas leitura"
+            negative: "sem registros apenas leitura"
+          validate:
+            positive: "validando registros associados"
+            negative: "não validando registros associados"
+          autosave:
+            positive: "salvando automaticamente registros associados"
+            negative: "não salvando automaticamente registros associados"
+          as:
+            positive: "através de uma interface polimórfica {{inspect}}"
+          counter_cache:
+            positive: "com coluna de cache {{inspect}}"
+            negative: "sem coluna de cache"
+
+      have_column:
+        description: "haver coluna(s) {{columns}}"
+        expectations:
+          column_exists: "{{subject_name}} houvesse coluna chamada {{column}}"
+          options_match: "{{subject_name}} houvesse coluna {{column}} com configurações {{options}}, obtive {{actual}}"
+        optionals:
+          type:
+            positive: "com tipo {{inspect}}"
+          null:
+            positive: "permitindo valores nulos"
+            negative: "não permitindo valores nulos"
+          default:
+            positive: "com valor default {{inspect}}"
+            negative: "com valor default {{inspect}}"
+          limit:
+            positive: "com limite {{inspect}}"
+
+      have_index:
+        description: "haver índice para coluna(s) {{columns}}"
+        expectations:
+          index_exists: "índice {{column}} existisse na tabela {{table_name}}"
+          is_unique: "índice em {{column}} com valores unicos igual a {{unique}}, obtive {{actual}}"
+        optionals:
+          unique:
+            positive: "com valores únicos"
+            negative: "sem valores únicos"
+
+      have_readonly_attributes:
+        description: "tornar {{attributes}} apenas leitura"
+        expectations:
+          is_readonly: "{{subject_name}} tornasse {{attribute}} apenas leitura, obtive {{actual}}"
+
+      have_scope:
+        description: "haver escopo {{options}} quando {{scope_name}} é chamado"
+        expectations:
+          is_scope: "{{scope_name}} quando chamado em {{subject_name}} retornasse um instância de ActiveRecord::NamedScope::Scope"
+          options_match: "{{scope_name}} quando chamado em {{subject_name}} houvesse escopo {{options}}, obtive {{actual}}"
+        optionals:
+          with:
+            positive: "com {{inspect}} como argumento"
+
+      validate_acceptance_of:
+        description: "exigir que {{attributes}} sejam aceitos"
+        expectations:
+          requires_acceptance: "{{subject_name}} fosse inválido se {{attribute}} não foi aceito"
+          accept_is_valid: "{{subject_name}} fosse válido quando {{attribute}} é aceito com valor {{accept}}"
+        optionals:
+          accept:
+            positive: "com valor {{inspect}}"
+          allow_nil:
+            positive: "permitindo valores nulos"
+            negative: "não permitindo valores nulos"
+
+      validate_associated:
+        description: "exigir que associação {{associations}} seja válida"
+        expectations:
+          is_valid: "{{subject_name}} fosse válida quando {{association}} é inválido"
+
+      validate_confirmation_of:
+        description: "exigir que {{attributes}} seja confirmado"
+        expectations:
+          responds_to_confirmation: "{{subject_name}} respondesse a {{attribute}}_confirmation"
+          confirms: "{{subject_name}} fosse válido somente quando {{attribute}} é confirmado"
+
+      validate_exclusion_of:
+        description: "exigir exclusão de {{attributes}} de {{in}}"
+        expectations:
+          is_valid: "{{subject_name}} fosse válido quando {{attribute}} é igual a {{value}}"
+          is_invalid: "{{subject_name}} fosse inválido quando {{attribute}} é igual a {{value}}"
+        optionals:
+          allow_nil:
+            positive: "permitindo valores nulos"
+            negative: "não permitindo valores nulos"
+          allow_blank:
+            positive: "permitindo valores vazios"
+            negative: "não permitindo valores vazios"
+
+      validate_inclusion_of:
+        description: "exigir inclusão de {{attributes}} em {{in}}"
+        expectations:
+          is_valid: "{{subject_name}} fosse válido quando {{attribute}} é igual a {{value}}"
+          is_invalid: "{{subject_name}} fosse inválido quando {{attribute}} é igual a {{value}}"
+        optionals:
+          allow_nil:
+            positive: "permitindo valores nulos"
+            negative: "não permitindo valores nulos"
+          allow_blank:
+            positive: "permitindo valores vazios"
+            negative: "não permitindo valores vazios"
+
+      validate_length_of:
+        description: "garantir que o tamanho de {{attributes}}"
+        expectations:
+          less_than_min_length: "{{subject_name}} fosse inválido quando tamanho de {{attribute}}  é menor que {{minimum}} caracteres"
+          exactly_min_length: "{{subject_name}} fosse válido quando tamanho de {{attribute}} é {{minimum}} caracteres"
+          more_than_max_length: "{{subject_name}} fosse inválido quando tamanho de {{attribute}} é mais que {{maximum}} caracteres"
+          exactly_max_length: "{{subject_name}} fosse válido quando tamannho de {{attribute}} é {{maximum}} caracteres"
+        optionals:
+          within:
+            positive: "seja entre {{inspect}} caracteres"
+          maximum:
+            positive: "seja no máximo {{inspect}} caracteres"
+          minimum:
+            positive: "seja no mínimo {{inspect}} caracteres"
+          is:
+            positive: "seja igual a {{inspect}} caracteres"
+          allow_nil:
+            positive: "permitindo valores nulos"
+            negative: "não permitindo valores nulos"
+          allow_blank:
+            positive: "permitindo valores vazios"
+            negative: "não permitindo valores vazios"
+
+      validate_numericality_of:
+        description: "permitir apenas números para {{attributes}}"
+        expectations:
+          only_numeric_values: "{{subject_name}} permitisse apenas números para {{attribute}}"
+          only_integer: "{{subject_name}} {{not}} permitisse somente valores inteiros para {{attribute}}"
+          only_even: "{{subject_name}} permitisse apenas valores pares em {{attribute}}"
+          only_odd: "{{subject_name}} permitisse apenas valores ímpares em {{attribute}}"
+          equals_to: "{{subject_name}} fosse válido quando {{attribute}} é igual a {{count}}"
+          more_than_maximum: "{{subject_name}} fosse inválido quando {{attribute}} é maior que {{count}}"
+          less_than_minimum: "{{subject_name}} fosse inválido quando {{attribute}} é menor que {{count}}"
+        optionals:
+          only_integer:
+            positive: "permitindo apenas valores inteiros"
+          odd:
+            positive: "permitindo apenas valores ímpares"
+          even:
+            positive: "permitindo apenas valores pares"
+          equal_to:
+            positive: "iguais a {{inspect}}"
+          less_than:
+            positive: "menores que {{inspect}}"
+          greater_than:
+            positive: "maiores que {{inspect}}"
+          less_than_or_equal_to:
+            positive: "menores ou iguais a {{inspect}}"
+          greater_than_or_equal_to:
+            positive: "maiores ou iguais a {{inspect}}"
+          allow_nil:
+            positive: "permitindo valores nulos"
+            negative: "não permitindo valores nulos"
+          allow_blank:
+            positive: "permitindo valores vazios"
+            negative: "não permitindo valores vazios"
+
+      validate_presence_of:
+        description: "exigir que {{attributes}} seja(m) setado(s)"
+        expectations:
+          allow_nil: "{{subject_name}} exigisse que {{attribute}} fosse setado"
+
+      validate_uniqueness_of:
+        description: "exigir valores únicos para {{attributes}}"
+        expectations:
+          responds_to_scope: "isntância de {{subject_name}} respondesse para {{method}}"
+          is_unique: "{{subject_name}} exigisse valores únicos para {{attribute}}"
+          case_sensitive: "{{subject_name}} {{not}} fosse case sensitive quando validando {{attribute}}"
+          valid_with_new_scope: "{{subject_name}} fosse válido quando {{attribute}} escopo ({{method}}) alterasse"
+        optionals:
+          scope:
+            positive: "com escopo {{inspect}}"
+          case_sensitive:
+            positive: "case sensitive"
+            negative: "case insensitive"
+          allow_nil:
+            positive: "permitindo valores nulos"
+            negative: "não permitindo valores nulos"
+          allow_blank:
+            positive: "permitindo valores vazios"
+            negative: "não permitindo valores vazios"
+

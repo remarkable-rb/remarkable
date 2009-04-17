@@ -1,0 +1,18 @@
+= Remarkable I18n
+
+This folder contains remarkable translations in several languages.
+
+== How to I18n my specs
+
+Inside your spec helper do:
+
+   Remarkable.add_locale "path/to/my_locale.yml"
+   Remarkable.locale = :my_locale
+
+If you are using Remarkable with Rails, you can place the locale file inside
+you config/locales folder and then you can skip the first line.
+
+== Contributors
+
+* pt-BR: José Valim (http://github.com/josevalim)
+
