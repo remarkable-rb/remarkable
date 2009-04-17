@@ -14,13 +14,22 @@ module Remarkable
           end
 
           def invalid_values
-            @in_range ? [ @options[:in].first - 1, @options[:in].last + 1 ] : []
+            if @in_range
+              [ @options[:in].first - 1, @options[:in].last + 1 ]
+            elsif @options[:in].empty?
+              []
+            else
+              [ @options[:in].map(&:to_s).max.to_s.next ]
+            end
           end
 
       end
 
       # Ensures that given values are valid for the attribute. If a range
       # is given, ensures that the attribute is valid in the given range.
+      #
+      # If you give that :size accepts ["S", "M", "L"], it will test that "T"
+      # (the next of the array max value) is not allowed.
       #
       # == Options
       #

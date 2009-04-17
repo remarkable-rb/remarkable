@@ -46,6 +46,7 @@ describe 'validate_inclusion_of' do
 
   describe 'matchers' do
     it { should define_and_validate(:in => ['X', 'Y', 'Z']).in('X', 'Y', 'Z') }
+    it { should_not define_and_validate(:in => ['X', 'Y', 'Z']).in('X', 'Y') }
     it { should_not define_and_validate(:in => ['X', 'Y', 'Z']).in('A') }
 
     it { should define_and_validate(:in => 2..3).in(2..3) }
@@ -55,18 +56,17 @@ describe 'validate_inclusion_of' do
     it { should_not define_and_validate(:in => 2..20).in(2..19) }
     it { should_not define_and_validate(:in => 2..20).in(2..21) }
 
-    it { should define_and_validate(:in => ['X', 'Y', 'Z'], :message => 'valid').in('X', 'Y', 'Z').message('valid') }
-
-    create_optional_boolean_specs(:allow_nil, self, :in => ['X'])
-    create_optional_boolean_specs(:allow_blank, self, :in => ['X'])
+    it { should define_and_validate(:in => ['X', 'Y', 'Z'], :message => 'not valid').in('X', 'Y', 'Z').message('not valid') }
+    it { should_not define_and_validate(:in => ['X', 'Y', 'Z'], :message => 'not valid').in('X', 'Y', 'Z').message('valid') }
   end
 
   describe 'macros' do
     describe 'with array' do
       before(:each){ define_and_validate(:in => ['X', 'Y', 'Z']) }
 
-      should_validate_inclusion_of :title, :in => ['X']
-      should_validate_inclusion_of :title, :size, :in => ['X']
+      should_validate_inclusion_of :title, :in => ['X', 'Y', 'Z']
+      should_validate_inclusion_of :title, :size, :in => ['X', 'Y', 'Z']
+      should_not_validate_inclusion_of :title, :in => ['X', 'Y']
       should_not_validate_inclusion_of :title, :size, :in => ['A']
     end
 

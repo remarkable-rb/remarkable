@@ -10,7 +10,13 @@ module Remarkable
         protected
 
           def valid_values
-            @in_range ? [ @options[:in].first - 1, @options[:in].last + 1 ] : []
+            if @in_range
+              [ @options[:in].first - 1, @options[:in].last + 1 ]
+            elsif @options[:in].empty?
+              []
+            else
+              [ @options[:in].map(&:to_s).max.to_s.next ]
+            end
           end
 
           def invalid_values
@@ -21,6 +27,9 @@ module Remarkable
 
       # Ensures that given values are not valid for the attribute. If a range
       # is given, ensures that the attribute is not valid in the given range.
+      #
+      # If you give that :username does not accept ["admin", "user"], it will
+      # test that "uses" (the next of the array max value) is allowed.
       #
       # == Options
       #
