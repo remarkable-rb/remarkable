@@ -1,20 +1,21 @@
 en:
   remarkable:
     active_record:
-      allow_nil: "{{subject_name}} to {{not}}allow nil values for {{attribute}}"
-      allow_blank: "{{subject_name}} to {{not}}allow blank values for {{attribute}}"
+      expectations:
+        allow_nil: "{{subject_name}} to {{not}}allow nil values for {{attribute}}"
+        allow_blank: "{{subject_name}} to {{not}}allow blank values for {{attribute}}"
+      optionals:
+        allow_nil:
+          positive: "allowing nil values"
+          negative: "not allowing nil values"
+        allow_blank:
+          positive: "allowing blank values"
+          negative: "not allowing blank values"
 
       allow_values_for:
         description: "allow {{in}} as values for {{attributes}}"
         expectations:
           is_valid: "{{subject_name}} to be valid when {{attribute}} is set to {{value}}"
-        optionals:
-          allow_nil:
-            positive: "allowing nil values"
-            negative: "not allowing nil values"
-          allow_blank:
-            positive: "allowing blank values"
-            negative: "not allowing blank values"
 
       allow_mass_assignment_of:
         description: "allow mass assignment of {{attributes}}"
@@ -126,9 +127,6 @@ en:
         optionals:
           accept:
             positive: "with value {{inspect}}"
-          allow_nil:
-            positive: "allowing nil values"
-            negative: "not allowing nil values"
 
       validate_associated:
         description: "require associated {{associations}} to be valid"
@@ -146,26 +144,12 @@ en:
         expectations:
           is_valid: "{{subject_name}} to be valid when {{attribute}} is set to {{value}}"
           is_invalid: "{{subject_name}} to be invalid when {{attribute}} is set to {{value}}"
-        optionals:
-          allow_nil:
-            positive: "allowing nil values"
-            negative: "not allowing nil values"
-          allow_blank:
-            positive: "allowing blank values"
-            negative: "not allowing blank values"
 
       validate_inclusion_of:
         description: "ensure inclusion of {{attributes}} in {{in}}"
         expectations:
           is_valid: "{{subject_name}} to be valid when {{attribute}} is set to {{value}}"
           is_invalid: "{{subject_name}} to be invalid when {{attribute}} is set to {{value}}"
-        optionals:
-          allow_nil:
-            positive: "allowing nil values"
-            negative: "not allowing nil values"
-          allow_blank:
-            positive: "allowing blank values"
-            negative: "not allowing blank values"
 
       validate_length_of:
         description: "ensure length of {{attributes}}"
@@ -183,12 +167,6 @@ en:
             positive: "is minimum {{inspect}} characters"
           is:
             positive: "is equal to {{inspect}} characters"
-          allow_nil:
-            positive: "allowing nil values"
-            negative: "not allowing nil values"
-          allow_blank:
-            positive: "allowing blank values"
-            negative: "not allowing blank values"
 
       validate_numericality_of:
         description: "ensure numericality of {{attributes}}"
@@ -217,12 +195,6 @@ en:
             positive: "is less than or equal to {{inspect}}"
           greater_than_or_equal_to:
             positive: "is greater than or equal to {{inspect}}"
-          allow_nil:
-            positive: "allowing nil values"
-            negative: "not allowing nil values"
-          allow_blank:
-            positive: "allowing blank values"
-            negative: "not allowing blank values"
 
       validate_presence_of:
         description: "require {{attributes}} to be set"
@@ -242,10 +214,4 @@ en:
           case_sensitive:
             positive: "case sensitive"
             negative: "case insensitive"
-          allow_nil:
-            positive: "allowing nil values"
-            negative: "not allowing nil values"
-          allow_blank:
-            positive: "allowing blank values"
-            negative: "not allowing blank values"
 

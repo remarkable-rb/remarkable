@@ -108,20 +108,21 @@ pt-BR:
             positive: "para {{inspect}}"
 
     active_record:
-      allow_nil: "{{subject_name}} {{not}} permitisse valores nulos para {{attribute}}"
-      allow_blank: "{{subject_name}} {{not}} permitisse valores vazios para {{attribute}}"
+      expectations:
+        allow_nil: "{{subject_name}} {{not}} permitisse valores nulos para {{attribute}}"
+        allow_blank: "{{subject_name}} {{not}} permitisse valores vazios para {{attribute}}"
+      optionals:
+        allow_nil:
+          positive: "permitindo valores nulos"
+          negative: "não permitindo valores nulos"
+        allow_blank:
+          positive: "permitindo valores vazios"
+          negative: "não permitindo valores vazios"
 
       allow_values_for:
         description: "permitir {{in}} como valores para {{attributes}}"
         expectations:
           is_valid: "{{subject_name}} fosse válido quando {{attribute}} é igual a {{value}}"
-        optionals:
-          allow_nil:
-            positive: "permitindo valores nulos"
-            negative: "não permitindo valores nulos"
-          allow_blank:
-            positive: "permitindo valores vazios"
-            negative: "não permitindo valores vazios"
 
       allow_mass_assignment_of:
         description: "permitir assinalamento em massa de {{attributes}}"
@@ -233,9 +234,6 @@ pt-BR:
         optionals:
           accept:
             positive: "com valor {{inspect}}"
-          allow_nil:
-            positive: "permitindo valores nulos"
-            negative: "não permitindo valores nulos"
 
       validate_associated:
         description: "exigir que associação {{associations}} seja válida"
@@ -253,26 +251,12 @@ pt-BR:
         expectations:
           is_valid: "{{subject_name}} fosse válido quando {{attribute}} é igual a {{value}}"
           is_invalid: "{{subject_name}} fosse inválido quando {{attribute}} é igual a {{value}}"
-        optionals:
-          allow_nil:
-            positive: "permitindo valores nulos"
-            negative: "não permitindo valores nulos"
-          allow_blank:
-            positive: "permitindo valores vazios"
-            negative: "não permitindo valores vazios"
 
       validate_inclusion_of:
         description: "exigir inclusão de {{attributes}} em {{in}}"
         expectations:
           is_valid: "{{subject_name}} fosse válido quando {{attribute}} é igual a {{value}}"
           is_invalid: "{{subject_name}} fosse inválido quando {{attribute}} é igual a {{value}}"
-        optionals:
-          allow_nil:
-            positive: "permitindo valores nulos"
-            negative: "não permitindo valores nulos"
-          allow_blank:
-            positive: "permitindo valores vazios"
-            negative: "não permitindo valores vazios"
 
       validate_length_of:
         description: "garantir que o tamanho de {{attributes}}"
@@ -290,12 +274,6 @@ pt-BR:
             positive: "seja no mínimo {{inspect}} caracteres"
           is:
             positive: "seja igual a {{inspect}} caracteres"
-          allow_nil:
-            positive: "permitindo valores nulos"
-            negative: "não permitindo valores nulos"
-          allow_blank:
-            positive: "permitindo valores vazios"
-            negative: "não permitindo valores vazios"
 
       validate_numericality_of:
         description: "permitir apenas números para {{attributes}}"
@@ -324,12 +302,6 @@ pt-BR:
             positive: "menores ou iguais a {{inspect}}"
           greater_than_or_equal_to:
             positive: "maiores ou iguais a {{inspect}}"
-          allow_nil:
-            positive: "permitindo valores nulos"
-            negative: "não permitindo valores nulos"
-          allow_blank:
-            positive: "permitindo valores vazios"
-            negative: "não permitindo valores vazios"
 
       validate_presence_of:
         description: "exigir que {{attributes}} seja(m) setado(s)"
@@ -349,10 +321,4 @@ pt-BR:
           case_sensitive:
             positive: "case sensitive"
             negative: "case insensitive"
-          allow_nil:
-            positive: "permitindo valores nulos"
-            negative: "não permitindo valores nulos"
-          allow_blank:
-            positive: "permitindo valores vazios"
-            negative: "não permitindo valores vazios"
 
