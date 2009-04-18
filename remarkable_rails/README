@@ -65,7 +65,7 @@ An equivalent in remarkable would be:
     mock_models :task
 
     describe :post => :create, :task => { :these => 'params' } do
-      expects :new,  :on => Task, with => {'these' => 'params'}, :returns => mock_task
+      expects :new,  :on => Task, :with => {'these' => 'params'}, :returns => mock_task
       expects :save, :on => mock_task, :returns => true
 
       should_assign_to :task, :with => mock_task
