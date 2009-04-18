@@ -20,7 +20,7 @@ module Remarkable
               case template = @response.rendered[:template]
                 when nil
                   unless @response.rendered[:partials].empty?
-                    path_and_file(response.rendered[:partials].keys.first).join("/_")
+                    path_and_file(@response.rendered[:partials].keys.first).join("/_")
                   end
                 when ::ActionView::Template
                   template.path
