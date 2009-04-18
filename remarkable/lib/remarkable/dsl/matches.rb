@@ -120,8 +120,13 @@ module Remarkable
             bool, hash = send(method)
 
             unless bool
-              @expectation ||= Remarkable.t "expectations.#{method.to_s.gsub(/(\?|\!)$/, '')}",
-                                            default_i18n_options.merge(hash || {})
+              parent_scope = matcher_i18n_scope.split('.')
+              matcher_name = parent_scope.pop
+              lookup       = :"expectations.#{method.to_s.gsub(/(\?|\!)$/, '')}"
+
+              hash = { :scope => parent_scope, :default => lookup }.merge(hash || {})
+              @expectation ||= Remarkable.t "#{matcher_name}.#{lookup}", default_i18n_options.merge(hash)
+
               return false
             end
           end
