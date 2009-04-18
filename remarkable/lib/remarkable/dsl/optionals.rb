@@ -116,25 +116,38 @@ module Remarkable
         message.strip!
 
         optionals = self.class.matcher_optionals.map do |optional|
-          scope = matcher_i18n_scope + ".optionals.#{optional}"
-
           if @options.key?(optional)
             value = @options[optional]
             defaults = [ (value ? :positive : :negative) ]
 
             # If optional is a symbol and it's not any to any of the reserved symbols, search for it also
             defaults.unshift(value) if value.is_a?(Symbol) && !OPTIONAL_KEYS.include?(value)
+            defaults << ''
 
-            Remarkable.t defaults.shift, :default => defaults, :raise => true, :scope => scope,
-                                         :inspect => value.inspect, :value => value.to_s
+            options = { :default => defaults, :inspect => value.inspect, :value => value.to_s }
+            translate_optionals_with_namespace(optional, defaults.shift, options)
           else
-            Remarkable.t :not_given, :raise => true, :scope => scope
-          end rescue nil
+            translate_optionals_with_namespace(optional, :not_given, :default => '')
+          end
         end.compact
 
         message << ' ' << array_to_sentence(optionals)
         message.strip!
         message
+      end
+
+      def translate_optionals_with_namespace(optional, key, options={}) #:nodoc:
+        scope = "#{matcher_i18n_scope}.optionals.#{optional}"
+
+        translation = Remarkable.t key, options.merge!(:scope => scope)
+        return translation unless translation.empty?
+
+        parent_scope = scope.split('.')
+        parent_scope.delete_at(-3)
+        translation = Remarkable.t key, options.merge!(:scope => parent_scope)
+        return translation unless translation.empty?
+
+        nil
       end
 
     end

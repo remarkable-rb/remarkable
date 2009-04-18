@@ -1,6 +1,10 @@
 en:
   remarkable:
     specs:
+      optionals:
+        allow_nil:
+          positive: "allowing nil"
+          negative: "not allowing nil"
       contain:
         description: "contain the given values"
       single_contain:

@@ -39,4 +39,15 @@ describe Remarkable::DSL::Optionals do
     @matcher.allow_nil(false)
     @matcher.description.should == 'contain 1 not allowing nil and with blank equal true'
   end
+
+  it 'should provide a description with optionals through namespace lookup' do
+    @matcher = Remarkable::Specs::Matchers::CollectionContainMatcher.new(1)
+    @matcher.description.should == 'contain 1'
+
+    @matcher.allow_nil(true)
+    @matcher.description.should == 'contain 1 allowing nil'
+
+    @matcher.allow_nil(false)
+    @matcher.description.should == 'contain 1 not allowing nil'
+  end
 end
