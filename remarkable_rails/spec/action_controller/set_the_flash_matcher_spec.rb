@@ -49,19 +49,29 @@ describe 'set_the_flash' do
 
     it { should set_the_flash }
     it { should set_the_flash.to('jose') }
+    it { should set_the_flash.to(/jose/) }
     it { should set_the_flash(:notice) }
     it { should set_the_flash(:notice).to('jose') }
+    it { should set_the_flash(:notice).to(/jose/) }
 
     it { should_not set_the_flash.to('joseph') }
+    it { should_not set_the_flash.to(/joseph/) }
     it { should_not set_the_flash(:error) }
     it { should_not set_the_flash(:notice).to('joseph') }
+    it { should_not set_the_flash(:notice).to(/joseph/) }
 
+    it { should set_the_flash{ 'jose' } }
+    it { should set_the_flash{ /jose/ } }
     it { should set_the_flash(:notice){ 'jose' } }
+    it { should set_the_flash(:notice){ /jose/ } }
     it { should set_the_flash(:notice, :to => proc{ 'jose' }) }
+    it { should set_the_flash(:notice, :to => proc{ /jose/ }) }
 
     it { should_not set_the_flash(:notice).to(nil) }
     it { should_not set_the_flash(:notice){ 'joseph' } }
+    it { should_not set_the_flash(:notice){ /joseph/ } }
     it { should_not set_the_flash(:notice, :to => proc{ 'joseph' }) }
+    it { should_not set_the_flash(:notice, :to => proc{ /joseph/ }) }
   end
 
   describe 'macro' do
@@ -69,19 +79,27 @@ describe 'set_the_flash' do
 
     should_set_the_flash
     should_set_the_flash :to => 'jose'
+    should_set_the_flash :to => /jose/
     should_set_the_flash :notice
     should_set_the_flash :notice, :to => 'jose'
+    should_set_the_flash :notice, :to => /jose/
 
     should_not_set_the_flash :to => 'joseph'
+    should_not_set_the_flash :to => /joseph/
     should_not_set_the_flash :error
     should_not_set_the_flash :notice, :to => 'joseph'
+    should_not_set_the_flash :notice, :to => /joseph/
 
     should_set_the_flash(:notice){ 'jose' }
+    should_set_the_flash(:notice){ /jose/ }
     should_set_the_flash :notice, :to => proc{ 'jose' }
+    should_set_the_flash :notice, :to => proc{ /jose/ }
 
     should_not_set_the_flash :notice, :to => nil
     should_not_set_the_flash(:notice){ 'joseph' }
+    should_not_set_the_flash(:notice){ /joseph/ }
     should_not_set_the_flash :notice, :to => proc{ 'joseph' }
+    should_not_set_the_flash :notice, :to => proc{ /joseph/ }
   end
 
   describe 'with no parameter' do
