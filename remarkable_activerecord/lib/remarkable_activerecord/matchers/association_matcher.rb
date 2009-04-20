@@ -5,6 +5,7 @@ module Remarkable
         arguments :macro, :collection => :associations, :as => :association
 
         optionals :through, :source, :source_type, :class_name, :foreign_key, :dependent, :join_table, :as
+        optionals :select, :conditions, :include, :group, :having, :order, :limit, :offset, :finder_sql, :counter_sql
         optionals :uniq, :readonly, :validate, :autosave, :polymorphic, :counter_cache, :default => true
 
         collection_assertions :association_exists?, :macro_matches?, :through_exists?, :source_exists?,
@@ -141,6 +142,9 @@ module Remarkable
       # * <tt>:polymorphic</tt> - if the association should be polymorphic or not.
       #   When true it also checks for the association_type column in the subject table.
       #
+      # Plus all supported sql conditions options: :select, :conditions, :order,
+      # :limit, :offset, :include, :group, :having.
+      #
       # == Examples
       #
       #   should_belong_to :parent, :polymorphic => true
@@ -162,6 +166,9 @@ module Remarkable
       # * <tt>:readonly</tt> - checks wether readonly is true or false.
       # * <tt>:validate</tt> - checks wether validate is true or false.
       # * <tt>:autosave</tt> - checks wether autosave is true or false.
+      #
+      # Plus all supported sql conditions options: :select, :conditions, :order,
+      # :limit, :offset, :include, :group, :having.
       #
       # == Examples
       #
@@ -190,6 +197,9 @@ module Remarkable
       # * <tt>:readonly</tt> - checks wether readonly is true or false.
       # * <tt>:validate</tt> - checks wether validate is true or false.
       # * <tt>:autosave</tt> - checks wether autosave is true or false.
+      #
+      # Plus all supported sql conditions options: :select, :conditions, :order,
+      # :limit, :offset, :include, :group, :having.
       #
       # == Examples
       #
@@ -221,6 +231,9 @@ module Remarkable
       # * <tt>:dependent</tt>   - the expected dependent value for the association.
       # * <tt>:validate</tt> - checks wether validate is true or false.
       # * <tt>:autosave</tt> - checks wether autosave is true or false.
+      #
+      # Plus all supported sql conditions options: :select, :conditions, :order,
+      # :limit, :offset, :include, :group, :having.
       #
       # == Examples
       #

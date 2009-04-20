@@ -178,6 +178,22 @@ pt-BR:
           counter_cache:
             positive: "com coluna de cache {{inspect}}"
             negative: "sem coluna de cache"
+          select:
+            positive: "selecionando {{inspect}}"
+          conditions:
+            positive: "com condições {{inspect}}"
+          include:
+            positive: "incluindo {{inspect}}"
+          group:
+            positive: "agrupando por {{inspect}}"
+          having:
+            positive: "contendo {{inspect}}"
+          order:
+            positive: "com ordem {{inspect}}"
+          limit:
+            positive: "com limite {{inspect}}"
+          offset:
+            positive: "com offset {{inspect}}"
 
       have_column:
         description: "haver coluna(s) {{columns}}"

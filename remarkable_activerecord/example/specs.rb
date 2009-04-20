@@ -26,7 +26,11 @@ Remarkable.locale = locale
 # Setting up a model
 include ModelBuilder
 
+define_model :account, :user_id => :integer
+
 define_model :user, :name => :string, :email => :string, :age => :integer do
+  has_one :account, :select => 'email', :order => 'created_at DESC'
+
   validates_presence_of :name, :email
   validates_length_of :name, :within => 3..40
 
@@ -40,6 +44,7 @@ User.create!(:name => 'José', :email => 'jose.valim@gmail.com')
 # Declaring specs
 describe User do
   xshould_validate_presence_of :age
+  should_have_one :account, :select => 'email', :order => 'created_at DESC'
 
   should_validate_presence_of :name, :email
   should_validate_length_of :name, :within => 3..40

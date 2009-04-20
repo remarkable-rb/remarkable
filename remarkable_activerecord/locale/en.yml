@@ -71,6 +71,22 @@ en:
           counter_cache:
             positive: "with counter cache {{inspect}}"
             negative: "without counter cache"
+          select:
+            positive: "selecting {{inspect}}"
+          conditions:
+            positive: "with conditions {{inspect}}"
+          include:
+            positive: "including {{inspect}}"
+          group:
+            positive: "grouping by {{inspect}}"
+          having:
+            positive: "having {{inspect}}"
+          order:
+            positive: "with order {{inspect}}"
+          limit:
+            positive: "with limit {{inspect}}"
+          offset:
+            positive: "with offset {{inspect}}"
 
       have_column:
         description: "have column(s) named {{columns}}"
