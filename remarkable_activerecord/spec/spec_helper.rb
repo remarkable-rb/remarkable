@@ -11,8 +11,8 @@ require 'active_record'
 
 # Configure ActiveRecord connection
 ActiveRecord::Base.establish_connection(
-  :adapter => 'sqlite3',
-  :dbfile  => 'memory'
+  :adapter  => 'sqlite3',
+  :database => ':memory:'
 )
 
 # Load Remarkable core on place to avoid gem to be loaded
