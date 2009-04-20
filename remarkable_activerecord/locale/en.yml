@@ -33,6 +33,7 @@ en:
           association_exists: "{{subject_name}} records {{macro}} {{association}}, got no association"
           macro_matches: "{{subject_name}} records {{macro}} {{association}}, got {{subject_name}} records {{actual_macro}} {{association}}"
           through_exists: "{{subject_name}} records {{macro}} {{association}} through {{through}}, through association does not exist"
+          source_exists: "{{subject_name}} records {{macro}} {{association}} through {{through}}, source association does not exist"
           join_table_exists: "join table {{actual_join_table}} to exist, but does not"
           foreign_key_exists: "foreign key {{actual_foreign_key}} to exist on {{foreign_key_table}}, but does not"
           polymorphic_exists: "{{subject_table}} to have {{polymorphic_column}} as column, but does not"

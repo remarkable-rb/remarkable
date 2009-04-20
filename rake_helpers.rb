@@ -62,7 +62,7 @@ end
 
 ########### Common specs
 
-gem 'rspec', ENV['RSPEC_VERSION'] || '1.2.2'
+gem 'rspec'
 require 'spec/rake/spectask'
 
 desc "Run the specs under spec"

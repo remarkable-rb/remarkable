@@ -139,7 +139,8 @@ pt-BR:
         expectations:
           association_exists: "{{subject_name}} pudesse {{macro}} {{association}}, obtive nenhuma associação"
           macro_matches: "{{subject_name}} pudesse {{macro}} {{association}}, obtive que {{subject_name}} deve {{actual_macro}} {{association}}"
-          through_exists: "{{subject_name}} pudesse {{macro}} {{association}} através de {{through}}, obtive que {{through}} não existe"
+          through_exists: "{{subject_name}} pudesse {{macro}} {{association}} através de {{through}}, obtive que \"through_association\" não existe"
+          source_exists: "{{subject_name}} pudesse {{macro}} {{association}} através de {{through}}, obtive que \"source association\" não existe"
           join_table_exists: "tabela de junção {{actual_join_table}} existisse, mas não existe"
           foreign_key_exists: "chave estrangeira {{actual_foreign_key}} existisse em {{foreign_key_table}}, mas não existe"
           polymorphic_exists: "{{subject_table}} tivesse {{polymorphic_column}} como coluna, mas não tem"

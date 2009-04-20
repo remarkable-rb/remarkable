@@ -354,11 +354,11 @@ describe 'association_matcher' do
       define_model :project_task, columns do
         belongs_to :task
         belongs_to :project
-      end unless options.delete(:skip_through)
+      end unless options.delete(:skip_source)
 
       @model = define_model :project, options.delete(:model_columns) || {} do
+        has_many :project_tasks unless options.delete(:skip_through)
         has_many :tasks, options
-        has_many :project_tasks
       end
 
       have_many :tasks
@@ -403,15 +403,15 @@ describe 'association_matcher' do
       end
 
       it 'should set through_exists? message' do
-        matcher = define_and_validate(:through => 'project_tasks')
-        matcher.through(:another).matches?(@model)
-        matcher.failure_message.should == 'Expected Project records have many tasks through :another, through association does not exist'
+        matcher = define_and_validate(:through => :project_tasks, :skip_through => true)
+        matcher.through(:project_tasks).matches?(@model)
+        matcher.failure_message.should == 'Expected Project records have many tasks through :project_tasks, through association does not exist'
       end
 
-      it 'should set join_table_exists? message' do
-        matcher = define_and_validate(:through => 'project_tasks', :skip_through => true)
+      it 'should set source_exists? message' do
+        matcher = define_and_validate(:through => :project_tasks, :skip_source => true)
         matcher.through(:project_tasks).matches?(@model)
-        matcher.failure_message.should == 'Expected join table "project_tasks" to exist, but does not'
+        matcher.failure_message.should == 'Expected Project records have many tasks through :project_tasks, source association does not exist'
       end
     end
 
@@ -456,11 +456,11 @@ describe 'association_matcher' do
       end
 
       describe 'with through option' do
-        it { should define_and_validate(:through => 'project_tasks') }
-        it { should define_and_validate(:through => 'project_tasks').through(:project_tasks) }
+        it { should define_and_validate(:through => :project_tasks) }
+        it { should define_and_validate(:through => :project_tasks).through(:project_tasks) }
 
-        it { should_not define_and_validate(:through => 'project_tasks').through(:something) }
-        it { should_not define_and_validate(:through => 'project_tasks', :skip_through => true).through(:project_tasks) }
+        it { should_not define_and_validate(:through => :project_tasks).through(:something) }
+        it { should_not define_and_validate(:through => :project_tasks, :skip_through => true).through(:project_tasks) }
       end
 
       create_optional_boolean_specs(:uniq, self)
@@ -470,7 +470,7 @@ describe 'association_matcher' do
     end
 
     describe 'macros' do
-      before(:each){ define_and_validate(:through => 'project_tasks', :readonly => true, :validate => true) } 
+      before(:each){ define_and_validate(:through => :project_tasks, :readonly => true, :validate => true) } 
 
       should_have_many :tasks
       should_have_many :tasks, :readonly => true
@@ -493,11 +493,11 @@ describe 'association_matcher' do
       define_model :project_manager, columns do
         belongs_to :manager
         belongs_to :project
-      end unless options.delete(:skip_through)
+      end unless options.delete(:skip_source)
 
       @model = define_model :project, options.delete(:model_columns) || {} do
+        has_many :project_managers unless options.delete(:skip_through)
         has_one  :manager, options
-        has_many :project_managers
       end
 
       have_one :manager
@@ -536,15 +536,15 @@ describe 'association_matcher' do
       end
 
       it 'should set through_exists? message' do
-        matcher = define_and_validate(:through => 'project_managers')
-        matcher.through(:another).matches?(@model)
-        matcher.failure_message.should == 'Expected Project records have one manager through :another, through association does not exist'
+        matcher = define_and_validate(:through => :project_managers, :skip_through => true)
+        matcher.through(:project_managers).matches?(@model)
+        matcher.failure_message.should == 'Expected Project records have one manager through :project_managers, through association does not exist'
       end
 
-      it 'should set join_table_exists? message' do
-        matcher = define_and_validate(:through => 'project_managers', :skip_through => true)
+      it 'should set source_exists? message' do
+        matcher = define_and_validate(:through => :project_managers, :skip_source => true)
         matcher.through(:project_managers).matches?(@model)
-        matcher.failure_message.should == 'Expected join table "project_managers" to exist, but does not'
+        matcher.failure_message.should == 'Expected Project records have one manager through :project_managers, source association does not exist'
       end
     end
 
@@ -589,11 +589,11 @@ describe 'association_matcher' do
       end
 
       describe 'with through option' do
-        it { should define_and_validate(:through => 'project_managers') }
-        it { should define_and_validate(:through => 'project_managers').through(:project_managers) }
+        it { should define_and_validate(:through => :project_managers) }
+        it { should define_and_validate(:through => :project_managers).through(:project_managers) }
 
-        it { should_not define_and_validate(:through => 'project_managers').through(:something) }
-        it { should_not define_and_validate(:through => 'project_managers', :skip_through => true).through(:project_managers) }
+        it { should_not define_and_validate(:through => :project_managers).through(:something) }
+        it { should_not define_and_validate(:through => :project_managers, :skip_through => true).through(:project_managers) }
       end
 
       create_optional_boolean_specs(:validate, self)
@@ -601,7 +601,7 @@ describe 'association_matcher' do
     end
 
     describe 'macros' do
-      before(:each){ define_and_validate(:through => 'project_managers', :validate => true) } 
+      before(:each){ define_and_validate(:through => :project_managers, :validate => true) } 
 
       should_have_one :manager
       should_have_one :manager, :validate => true

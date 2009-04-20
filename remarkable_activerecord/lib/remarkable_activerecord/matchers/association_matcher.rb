@@ -10,7 +10,7 @@ module Remarkable
         # Stores optionals declared above in a CONSTANT to generate assertions
         ASSOCIATION_OPTIONS = self.matcher_optionals
 
-        collection_assertions :association_exists?, :macro_matches?, :through_exists?,
+        collection_assertions :association_exists?, :macro_matches?, :through_exists?, :source_exists?,
                               :join_table_exists?, :foreign_key_exists?, :polymorphic_exists?,
                               :counter_cache_exists?
 
@@ -26,15 +26,21 @@ module Remarkable
 
           def through_exists?
             return true unless @options.key?(:through)
-            subject_class.reflect_on_association(@options[:through])
+            reflection.through_reflection rescue false
+          end
+
+          def source_exists?
+            return true unless @options.key?(:through)
+            reflection.source_reflection rescue false
           end
 
           def join_table_exists?
-            return true unless has_join_table?
-            ::ActiveRecord::Base.connection.tables.include?(reflection_join_table)
+            return true unless reflection.macro == :has_and_belongs_to_many
+            ::ActiveRecord::Base.connection.tables.include?(reflection.options[:join_table])
           end
 
           def foreign_key_exists?
+            return true unless foreign_key_table
             table_has_column?(foreign_key_table, reflection_foreign_key)
           end
 
@@ -76,18 +82,14 @@ module Remarkable
             reflection.primary_key_name.to_s
           end
 
-          def reflection_join_table
-            (reflection.options[:join_table] || reflection.options[:through]).to_s
-          end
-
-          def has_join_table?
-            reflection.options.key?(:through) || reflection.macro == :has_and_belongs_to_many
-          end
-
           def table_has_column?(table_name, column)
             ::ActiveRecord::Base.connection.columns(table_name, 'Remarkable column retrieval').any?{|c| c.name == column }
           end
 
+          # In through we don't check the foreign_key, because it's spread
+          # accross the through and the source reflection which should be tested
+          # with their own macros.
+          #
           # In cases a join table exists (has_and_belongs_to_many and through
           # associations), we check the foreign key in the join table.
           #
@@ -95,8 +97,10 @@ module Remarkable
           # other cases it's on the reflection class table.
           #
           def foreign_key_table
-            if has_join_table?
-              reflection_join_table
+            if reflection.options.key?(:through)
+              nil
+            elsif reflection.macro == :has_and_belongs_to_many
+              reflection.options[:join_table]
             elsif reflection.macro == :belongs_to
               subject_class.table_name
             else
