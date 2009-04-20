@@ -4,13 +4,17 @@ Remarkable ActiveRecord is a collection of matchers to ActiveRecord. Why use
 Remarkable?
 
 * The only one with matchers for all ActiveRecord validations, with support to
-  all options;
+  all options (except :on and the option :with in validates_format_of);
 
 * Matchers for all ActiveRecord associations. The only one which supports all
   these options:
 
-    :through, :class_name, :foreign_key, :dependent, :join_table, :uniq,
-    :readonly, :validate, :autosave, :counter_cache, :polymorphic
+    :through, :source, :source_type, :class_name, :foreign_key, :dependent,
+    :join_table, :uniq, :readonly, :validate, :autosave, :counter_cache, :polymorphic
+
+  Plus SQL options:
+
+    :select, :conditions, :include, :group, :having, :order, :limit, :offset
 
   Besides in Remarkable 3.0 matchers became much smarter. Whenever :join_table
   or :through is given as option, it checks if the given table exists. Whenever
