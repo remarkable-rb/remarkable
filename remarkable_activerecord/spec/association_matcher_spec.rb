@@ -75,36 +75,16 @@ describe 'association_matcher' do
         matcher.failure_message.should == 'Expected "companies" to have "projects_count" as column, but does not'
       end
 
-      it 'should set validate_matches? message' do
-        matcher = define_and_validate(:validate => false)
-        matcher.validate.matches?(@model)
-        matcher.failure_message.should == 'Expected company association with validate equals to true, got "false"'
-      end
-
-      it 'should set readonly_matches? message' do
-        matcher = define_and_validate(:readonly => false)
-        matcher.readonly.matches?(@model)
-        matcher.failure_message.should == 'Expected company association with readonly equals to true, got "false"'
-      end
-
-      if RAILS_VERSION =~ /^2.3/
-        it 'should set autosave_matches? message' do
-          matcher = define_and_validate(:autosave => false)
-          matcher.autosave.matches?(@model)
-          matcher.failure_message.should == 'Expected company association with autosave equals to true, got "false"'
-        end
-      end
-
-      it 'should set polymorphic_matches? message' do
+      it 'should set options_matches? message when polymorphic is given' do
         matcher = define_and_validate(:polymorphic => false)
         matcher.polymorphic.matches?(@model)
-        matcher.failure_message.should == 'Expected company association with polymorphic equals to true, got "false"'
+        matcher.failure_message.should == 'Expected Project records belong to company with options {:polymorphic=>"true"}, got {:polymorphic=>"false"}'
       end
 
-      it 'should set counter_cache_matches? message' do
+      it 'should set options_matches? message when counter_cache is given' do
         matcher = define_and_validate(:counter_cache => true)
         matcher.counter_cache(false).matches?(@model)
-        matcher.failure_message.should == 'Expected company association with counter cache false, got "true"'
+        matcher.failure_message.should == 'Expected Project records belong to company with options {:counter_cache=>"false"}, got {:counter_cache=>"true"}'
       end
     end
 
@@ -244,30 +224,10 @@ describe 'association_matcher' do
         matcher.failure_message.should == 'Expected foreign key "project_id" to exist on "labels_projects", but does not'
       end
 
-      it 'should set validate_matches? message' do
-        matcher = define_and_validate(:validate => false)
-        matcher.validate.matches?(@model)
-        matcher.failure_message.should == 'Expected labels association with validate equals to true, got "false"'
-      end
-
-      it 'should set readonly_matches? message' do
-        matcher = define_and_validate(:readonly => false)
-        matcher.readonly.matches?(@model)
-        matcher.failure_message.should == 'Expected labels association with readonly equals to true, got "false"'
-      end
-
-      if RAILS_VERSION =~ /^2.3/
-        it 'should set autosave_matches? message' do
-          matcher = define_and_validate(:autosave => false)
-          matcher.autosave.matches?(@model)
-          matcher.failure_message.should == 'Expected labels association with autosave equals to true, got "false"'
-        end
-      end
-
-      it 'should set uniq_matches? message' do
+      it 'should set options_matches? message' do
         matcher = define_and_validate(:uniq => false)
         matcher.uniq.matches?(@model)
-        matcher.failure_message.should == 'Expected labels association with uniq equals to true, got "false"'
+        matcher.failure_message.should == 'Expected Project records have and belong to many labels with options {:uniq=>"true"}, got {:uniq=>"false"}'
       end
     end
 
@@ -413,6 +373,12 @@ describe 'association_matcher' do
         matcher.through(:project_tasks).matches?(@model)
         matcher.failure_message.should == 'Expected Project records have many tasks through :project_tasks, source association does not exist'
       end
+
+      it 'should set options_matches? message' do
+        matcher = define_and_validate(:dependent => :destroy)
+        matcher.dependent(:nullify).matches?(@model)
+        matcher.failure_message.should == 'Expected Project records have many tasks with options {:dependent=>"nullify"}, got {:dependent=>"destroy"}'
+      end
     end
 
     describe 'matchers' do
@@ -545,6 +511,12 @@ describe 'association_matcher' do
         matcher = define_and_validate(:through => :project_managers, :skip_source => true)
         matcher.through(:project_managers).matches?(@model)
         matcher.failure_message.should == 'Expected Project records have one manager through :project_managers, source association does not exist'
+      end
+
+      it 'should set options_matches? message' do
+        matcher = define_and_validate(:dependent => :destroy)
+        matcher.dependent(:nullify).matches?(@model)
+        matcher.failure_message.should == 'Expected Project records have one manager with options {:dependent=>"nullify"}, got {:dependent=>"destroy"}'
       end
     end
 

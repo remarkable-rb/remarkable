@@ -7,12 +7,9 @@ module Remarkable
         optionals :through, :class_name, :foreign_key, :dependent, :join_table, :as
         optionals :uniq, :readonly, :validate, :autosave, :polymorphic, :counter_cache, :default => true
 
-        # Stores optionals declared above in a CONSTANT to generate assertions
-        ASSOCIATION_OPTIONS = self.matcher_optionals
-
         collection_assertions :association_exists?, :macro_matches?, :through_exists?, :source_exists?,
                               :join_table_exists?, :foreign_key_exists?, :polymorphic_exists?,
-                              :counter_cache_exists?
+                              :counter_cache_exists?, :options_match?
 
         protected
 
@@ -54,17 +51,17 @@ module Remarkable
             table_has_column?(reflection.klass.table_name, reflection.counter_cache_column.to_s)
           end
 
-          ASSOCIATION_OPTIONS.each do |option|
-            collection_assertion :"#{option}_matches?"
+          def options_match?
+            actual_options = {}
 
-            class_eval <<-METHOD, __FILE__, __LINE__
-              def #{option}_matches?
-                return true unless @options.key?(#{option.inspect})
-                actual_value = respond_to?(:reflection_#{option}, true) ? reflection_#{option} : reflection.options[#{option.inspect}].to_s
+            @options.keys.each do |key|
+              method = :"reflection_#{key}"
 
-                return true if @options[#{option.inspect}].to_s == actual_value
-              end
-            METHOD
+              @options[key]       = @options[key].to_s
+              actual_options[key] = (respond_to?(method, true) ? send(method) : reflection.options[key]).to_s
+            end
+
+            return @options == actual_options, :actual => actual_options.inspect
           end
 
         private
@@ -109,7 +106,7 @@ module Remarkable
           end
 
           def interpolation_options
-            options = { :macro => Remarkable.t(@macro, :scope => matcher_i18n_scope, :default => @macro.to_s) }
+            options = { :macro => Remarkable.t(@macro, :scope => matcher_i18n_scope, :default => @macro.to_s), :options => @options.inspect }
 
             if @subject && reflection
               options.merge!(
@@ -118,14 +115,10 @@ module Remarkable
                 :reflection_table     => reflection.klass.table_name.inspect,
                 :foreign_key_table    => foreign_key_table.inspect,
                 :polymorphic_column   => reflection_foreign_key.sub(/_id$/, '_type').inspect,
-                :counter_cache_column => reflection.counter_cache_column.to_s.inspect
+                :counter_cache_column => reflection.counter_cache_column.to_s.inspect,
+                :join_table           => reflection.options[:join_table].inspect,
+                :foreign_key          => reflection_foreign_key.inspect
               ) rescue nil # rescue to allow specs to run properly
-
-              ASSOCIATION_OPTIONS.each do |option|
-                value_to_compare = respond_to?(:"reflection_#{option}", true) ? send(:"reflection_#{option}") : reflection.options[option].to_s
-                options[:"actual_#{option}"] = value_to_compare.inspect
-              end
-
             end
 
             options
