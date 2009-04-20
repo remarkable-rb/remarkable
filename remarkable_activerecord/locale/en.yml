@@ -42,6 +42,10 @@ en:
         optionals:
           through:
             positive: "through {{value}}"
+          source:
+            positive: "with source {{inspect}}"
+          source_type:
+            positive: "with source type {{inspect}}"
           class_name:
             positive: "with class name {{inspect}}"
           foreign_key:

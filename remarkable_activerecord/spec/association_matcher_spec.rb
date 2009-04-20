@@ -308,12 +308,14 @@ describe 'association_matcher' do
 
     # Defines a model, create a validation and returns a raw matcher
     def define_and_validate(options={})
-      columns = options.delete(:association_columns) || { :task_id => :integer, :project_id => :integer }
+      columns = options.delete(:association_columns) || { :task_id => :integer, :project_id => :integer, :todo_id => :integer }
       define_model :task, columns
+      define_model :todo, columns
 
       define_model :project_task, columns do
         belongs_to :task
         belongs_to :project
+        belongs_to :todo
       end unless options.delete(:skip_source)
 
       @model = define_model :project, options.delete(:model_columns) || {} do
@@ -374,10 +376,17 @@ describe 'association_matcher' do
         matcher.failure_message.should == 'Expected Project records have many tasks through :project_tasks, source association does not exist'
       end
 
-      it 'should set options_matches? message' do
+      it 'should set options_matches? message when dependent is given' do
         matcher = define_and_validate(:dependent => :destroy)
         matcher.dependent(:nullify).matches?(@model)
         matcher.failure_message.should == 'Expected Project records have many tasks with options {:dependent=>"nullify"}, got {:dependent=>"destroy"}'
+      end
+
+      it 'should set options_matches? message when source is given' do
+        matcher = define_and_validate(:through => :project_tasks, :source => :todo)
+        matcher.through(:project_tasks).source(:task).matches?(@model)
+        matcher.failure_message.should match(/:source=>"task"/)
+        matcher.failure_message.should match(/:source=>"todo"/)
       end
     end
 
@@ -429,6 +438,11 @@ describe 'association_matcher' do
         it { should_not define_and_validate(:through => :project_tasks, :skip_through => true).through(:project_tasks) }
       end
 
+      describe 'with source option' do
+        it { should define_and_validate(:through => :project_tasks, :source => :todo).source(:todo) }
+        it { should_not define_and_validate(:through => :project_tasks, :source => :todo).source(:task) }
+      end
+
       create_optional_boolean_specs(:uniq, self)
       create_optional_boolean_specs(:readonly, self)
       create_optional_boolean_specs(:validate, self)
@@ -453,12 +467,14 @@ describe 'association_matcher' do
 
     # Defines a model, create a validation and returns a raw matcher
     def define_and_validate(options={})
-      columns = options.delete(:association_columns) || { :manager_id => :integer, :project_id => :integer }
+      columns = options.delete(:association_columns) || { :manager_id => :integer, :project_id => :integer, :boss_id => :integer }
       define_model :manager, columns
+      define_model :boss,    columns
 
       define_model :project_manager, columns do
         belongs_to :manager
         belongs_to :project
+        belongs_to :boss
       end unless options.delete(:skip_source)
 
       @model = define_model :project, options.delete(:model_columns) || {} do
@@ -513,10 +529,17 @@ describe 'association_matcher' do
         matcher.failure_message.should == 'Expected Project records have one manager through :project_managers, source association does not exist'
       end
 
-      it 'should set options_matches? message' do
+      it 'should set options_matches? message when dependent is given' do
         matcher = define_and_validate(:dependent => :destroy)
         matcher.dependent(:nullify).matches?(@model)
         matcher.failure_message.should == 'Expected Project records have one manager with options {:dependent=>"nullify"}, got {:dependent=>"destroy"}'
+      end
+
+      it 'should set options_matches? message when source is given' do
+        matcher = define_and_validate(:through => :project_managers, :source => :boss)
+        matcher.through(:project_managers).source(:manager).matches?(@model)
+        matcher.failure_message.should match(/:source=>"manager"/)
+        matcher.failure_message.should match(/:source=>"boss"/)
       end
     end
 
@@ -566,6 +589,11 @@ describe 'association_matcher' do
 
         it { should_not define_and_validate(:through => :project_managers).through(:something) }
         it { should_not define_and_validate(:through => :project_managers, :skip_through => true).through(:project_managers) }
+      end
+
+      describe 'with source option' do
+        it { should define_and_validate(:through => :project_managers, :source => :boss).source(:boss) }
+        it { should_not define_and_validate(:through => :project_managers, :source => :boss).source(:manager) }
       end
 
       create_optional_boolean_specs(:validate, self)

@@ -4,7 +4,7 @@ module Remarkable
       class AssociationMatcher < Remarkable::ActiveRecord::Base #:nodoc:
         arguments :macro, :collection => :associations, :as => :association
 
-        optionals :through, :class_name, :foreign_key, :dependent, :join_table, :as
+        optionals :through, :source, :source_type, :class_name, :foreign_key, :dependent, :join_table, :as
         optionals :uniq, :readonly, :validate, :autosave, :polymorphic, :counter_cache, :default => true
 
         collection_assertions :association_exists?, :macro_matches?, :through_exists?, :source_exists?,
@@ -181,6 +181,8 @@ module Remarkable
       # * <tt>:class_name</tt>  - the expected associted class name.
       # * <tt>:through</tt>     - the expected join model which to perform the query.
       #   It also checks if the through table exists.
+      # * <tt>:source</tt>      - the source of the through association.
+      # * <tt>:source_type</tt> - the source type of the through association.
       # * <tt>:foreign_key</tt> - the expected foreign key in the associated table.
       #   When used with :through, it will check for the foreign key in the join table.
       # * <tt>:dependent</tt>   - the expected dependent value for the association.
@@ -212,6 +214,8 @@ module Remarkable
       # * <tt>:class_name</tt>  - the expected associted class name.
       # * <tt>:through</tt>     - the expected join model which to perform the query.
       #   It also checks if the through table exists.
+      # * <tt>:source</tt>      - the source of the through association.
+      # * <tt>:source_type</tt> - the source type of the through association.
       # * <tt>:foreign_key</tt> - the expected foreign key in the associated table.
       #   When used with :through, it will check for the foreign key in the join table.
       # * <tt>:dependent</tt>   - the expected dependent value for the association.

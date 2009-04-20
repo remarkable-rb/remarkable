@@ -149,6 +149,10 @@ pt-BR:
         optionals:
           through:
             positive: "através de {{value}}"
+          source:
+            positive: "com origem {{inspect}}"
+          source_type:
+            positive: "com tipo de origem {{inspect}}"
           class_name:
             positive: "com nome de classe {{inspect}}"
           foreign_key:
