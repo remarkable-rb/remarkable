@@ -1,4 +1,13 @@
-# v3.0.0
+* Added support to sql options in association_matcher: select, conditions, include,
+  group, having, order, limit and offset. [#48]
+
+* :source and :source_type are not supported by association matcher [#47]
+
+* validate_inclusion_of became smarter since it now tests invalid values too [#36]
+
+* Fixed three bugs in validate_uniqueness_of matcher [#42] [#40] [#37]
+
+# v3.0
 
 [ENHANCEMENT] Added more options to associations matcher. Previously it was
 handling just :dependent and :through options. Now it deals with:

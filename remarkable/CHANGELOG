@@ -1,4 +1,18 @@
-# v3.0.0
+* Added namespace lookup to optionals and expectations. For example, in ActiveRecord
+  several matchers have :allow_nil and :allow_blank as options. So you can store
+  the translation at:
+
+    remarkable:
+      activerecord:
+        optionals:
+          allow_nil:
+            # ...
+          allow_blank:
+            # ...
+
+* Added a repository to hold I18n files
+
+# v3.0
 
 * Added Remarkable::Matchers. Now you can include your Remarkable matchers and
   macros in test unit as well.

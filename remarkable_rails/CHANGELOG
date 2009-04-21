@@ -1,6 +1,10 @@
-[TODO] Port views matchers from rspec to Remarkable to provide I18n.
+* :to option in set_session and set_the_flash now accepts Regexp [#46]
 
-# v3.0.0
+* render_template now works with partials [#43]
+
+* Added to support for routing example group (inside spec/routing) [#26]
+
+# v3.0
 
 [ENHANCEMENT] redirect_to and render_template were ported from rspec-rails to
 remarkable to provide I18n. The second was also extended to deal with :with,
