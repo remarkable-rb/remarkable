@@ -154,9 +154,16 @@ describe 'MacroStubs' do
 
     [:delete, :delete!].each do |method|
 
-      describe method => :destroy do
-        expects :find,    :on => Task, :with => nil, :returns => mock_task
+      describe method => :destroy, :id => '37' do
+        expects :find,    :on => Task, :with => '37', :returns => mock_task
         expects :destroy, :on => mock_task
+        expects :title,   :on => mock_task, :with => false do |boolean|
+          if boolean
+            'This should not appear'
+          else
+            'My favourite task'
+          end
+        end
 
         subject { controller }
 
@@ -166,7 +173,7 @@ describe 'MacroStubs' do
 
         should_set_the_flash
         should_set_the_flash :notice
-        should_set_the_flash :notice, :to => 'Task deleted.'
+        should_set_the_flash :notice, :to => %{"My favourite task" was removed}
 
         should_set_session
         should_set_session :last_task_id

@@ -23,7 +23,7 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     @task.destroy
 
-    flash[:notice]         = 'Task deleted.'
+    flash[:notice]         = "#{@task.title(false).inspect} was removed"
     session[:last_task_id] = 37
 
     respond_to do |format|

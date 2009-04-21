@@ -62,15 +62,20 @@ module Remarkable
     #
     # You don't have to play with proc all the time. You can call mock_models which
     # creates a class method that simply returns a proc and a instance method that
-    # do the actual mock. In other words, it creates:
+    # do the actual mock.
     #
-    #    def self.mock_project
-    #      proc { mock_project }
-    #    end
+    #   describe ProjectsController do
+    #     mock_models :project
     #
-    #    def mock_project(stubs={})
-    #      @project ||= mock_model(Project, stubs)
-    #    end
+    # And it creates:
+    #
+    #   def self.mock_project
+    #     proc { mock_project }
+    #   end
+    #
+    #   def mock_project(stubs={})
+    #     @project ||= mock_model(Project, stubs)
+    #   end
     #
     # Then you can replace those lines:
     #
@@ -84,12 +89,11 @@ module Remarkable
     #
     # = Give me more!
     #
-    # If you need to specify the describe description, you can also do:
+    # If you need to set the example group description, you can also call <tt>get</tt>,
+    # <tt>post</tt>, <tt>put</tt> and <tt>delete</tt> methods:
     #
     #   describe 'my description' do
     #     get :show, :id => 37
-    #
-    # Which is the same as above.
     #
     # Things start to get even better when we start to talk about nested resources.
     # After our ProjectsController is created, we want to create a TasksController:
@@ -112,9 +116,8 @@ module Remarkable
     # As you noticed, you can define parameters that will be available to all requests,
     # using the method <tt>params</tt>.
     #
-    # Finally, if you used expects chain like above, but need to write a spec by
-    # hand you can invoke the action and expectations with run_expectations!,
-    # run_stubs! and run_action!. Examples:
+    # Finally if you need to write a spec by hand, you can invoke the action and
+    # expectations with run_action!, run_expectations! and run_stubs!. Examples:
     #
     #   describe :get => :new do
     #     expects :new, :on => Project, :returns => mock_project
@@ -127,8 +130,8 @@ module Remarkable
     #
     # = Performance!
     #
-    # Remarkable comes with a new way to speed up your tests. It perform the action
-    # inside a before(:all), so you can do:
+    # Remarkable comes with a new way to speed up your tests. It performs the
+    # action inside a before(:all), so you can do:
     #
     #   describe "responding to GET show" do
     #     get! :show, :id => 37
@@ -141,17 +144,16 @@ module Remarkable
     #
     #   describe :get! => :show, :id => 37
     #
-    # The action will be performed just once before asserting the assignment and
-    # the template. If any error happens while performing the action rspec will
-    # output an error but ALL the examples inside the example group (describe) won't
-    # be run.
+    # The action will be performed just once before running the macros. If any
+    # error happens while performing the action, rspec will output an error
+    # but ALL the examples inside the example group (describe) won't be run.
     #
-    # By now, the bang methods works only when integrate_views are true and this is
-    # when you must have the bigger performance gain.
+    # By now, the bang methods works only when integrate_views is true and this
+    # is when you must see a bigger performance gain.
     #
-    # This comes with some rspec and rspec rails tweakings. So if you want to do
-    # something before the action is performed (stubs something or log someone in
-    # session), you have to do it giving a block to the action method:
+    # This feature comes with some rspec and rspec rails tweakings. So if you want
+    # to do something before the action is performed (stubs something or log
+    # someone in session), you have to do it giving a block to the action method:
     #
     #   get! :show, :id => 37 do
     #     login_as(mock_user)
@@ -177,7 +179,8 @@ module Remarkable
       module ClassMethods
 
         # Creates a chain that will be evaluated as stub or expectation. The
-        # first parameter is the method expected.
+        # first parameter is the method expected. Also, a block can be given
+        # to calculate the returned value. See examples below.
         #
         # == Options
         #
@@ -197,8 +200,12 @@ module Remarkable
         #
         #   expects :new, :on => Project, :returns => :mock_project, :times => 2
         #
-        def expects(*args)
-          write_inheritable_array(:expects_chain, [args])
+        #   expects :human_attribute_name, :on => Project, :with => :title do |attr|
+        #     attr.to_s.humanize
+        #   end
+        #
+        def expects(*args, &block)
+          write_inheritable_array(:expects_chain, [args << block])
         end
 
         # The mime type of the request. The value given will be called transformed
@@ -413,7 +420,7 @@ module Remarkable
         def evaluate_expectation_chain(use_expectations=true) #:nodoc:
           return if self.expects_chain.nil?
 
-          self.expects_chain.each do |method, default_options|
+          self.expects_chain.each do |method, default_options, block|
             options = default_options.dup
 
             # Those are used both in expectations and stubs
@@ -429,7 +436,12 @@ module Remarkable
             else
               chain = object.stub!(method)
             end
-            chain = chain.and_return(return_value)
+
+            chain = if block
+              chain.and_return(&block)
+            else
+              chain.and_return(return_value)
+            end
           end
         end
 

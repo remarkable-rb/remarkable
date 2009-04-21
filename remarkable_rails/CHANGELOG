@@ -1,3 +1,9 @@
+* Macro stubs now supports blocks too [#50]
+
+    expects :human_attribute_name, :on => Project, :with => :title do |attr|
+      attr.to_s.humanize
+    end
+
 * :to option in set_session and set_the_flash now accepts Regexp [#46]
 
 * render_template now works with partials [#43]
