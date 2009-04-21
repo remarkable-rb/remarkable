@@ -11,7 +11,7 @@ module Remarkable
 
           def is_scope?
             @scope_object = if @options[:with]
-              subject_class.send(@scope_name, *@options[:with])
+              subject_class.send(@scope_name, @options[:with])
             else
               subject_class.send(@scope_name)
             end

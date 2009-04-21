@@ -7,6 +7,7 @@ describe 'have_scope' do
     @model = define_model :product, :title => :string, :category => :string do
       named_scope :recent, :order => 'created_at DESC'
       named_scope :latest, lambda {|c| {:limit => c}}
+      named_scope :since, lambda {|t| {:conditions => ['created_at > ?', t]}}
 
       def self.beginning(c)
         scoped(:offset => c)
@@ -48,10 +49,12 @@ describe 'have_scope' do
 
     it { should have_scope(:latest,    :with => 10, :limit => 10) }
     it { should have_scope(:beginning, :with => 10, :offset => 10) }
+    it { should have_scope(:since,     :with => Time.at(0), :conditions => ["created_at > ?", Time.at(0)]) }
 
     it { should_not have_scope(:null) }
     it { should_not have_scope(:latest,    :with => 5, :limit => 10) }
     it { should_not have_scope(:beginning, :with => 5, :offset => 10) }
+    it { should_not have_scope(:since,     :with => Time.at(0), :conditions => ["created_at > ?", Time.at(1)]) }
   end
 
   describe 'macros' do
@@ -60,10 +63,11 @@ describe 'have_scope' do
 
     should_have_scope :latest,    :with => 10, :limit => 10
     should_have_scope :beginning, :with => 10, :offset => 10
-
+    should_have_scope :since,     :with => Time.at(0), :conditions => ["created_at > ?", Time.at(0)]
+    
     should_not_have_scope :null
     should_not_have_scope :latest,    :with => 5, :limit => 10
     should_not_have_scope :beginning, :with => 5, :offset => 10
+    should_not_have_scope :since,     :with => Time.at(0), :conditions => ["created_at > ?", Time.at(1)]
   end
 end
-
