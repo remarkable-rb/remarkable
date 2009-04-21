@@ -74,14 +74,14 @@ module Remarkable
 
       end
 
-      # Ensures that a session keys were set. If you want to check that a variable
-      # is not being set, please do:
+      # Ensures that the given session keys were set. If you want to check that
+      # a variable is not being set, just do:
       #
-      #   should_not_set_session(:user)
+      #   should_not_set_session :user
       #
       # If you want to assure that a variable is being set to nil, do instead:
       #
-      #   should_set_session(:user).to(nil)
+      #   should_set_session :user, :to => nil
       #
       # == Options
       #

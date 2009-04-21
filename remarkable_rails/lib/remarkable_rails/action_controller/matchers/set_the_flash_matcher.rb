@@ -16,18 +16,19 @@ module Remarkable
 
       end
 
-      # Ensures that a session keys were set. If you want to check that a flash
-      # is not being set, please do:
+      # Ensures that a flash message is being set. If you want to check that a
+      # flash is not being set, just do:
       #
-      #   should_not_set_the_flash(:user)
+      #   should_not_set_the_flash :user
       #
       # If you want to assure that a flash is being set to nil, do instead:
       #
-      #   should_set_the_flash(:user).to(nil)
+      #   should_set_the_flash :user, :to => nil
       #
       # == Options
       #
-      # * <tt>:to</tt> - The value to compare the flash key. It accepts procs and can also be given as a block (see examples below)
+      # * <tt>:to</tt> - The value to compare the flash key.
+      #   It accepts procs and can also be given as a block (see examples below)
       #
       # == Examples
       #

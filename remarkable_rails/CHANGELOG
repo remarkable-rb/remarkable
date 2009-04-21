@@ -1,3 +1,5 @@
+* Added set_cookies matcher [#51]
+
 * Add a helper to declare that a XmlHttpRequest should be performed:
 
     describe :get => :show do
