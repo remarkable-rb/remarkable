@@ -165,6 +165,7 @@ describe 'MacroStubs' do
           end
         end
 
+        xhr!
         subject { controller }
 
         should_assign_to :task
@@ -194,6 +195,11 @@ describe 'MacroStubs' do
 
         it 'should provide a description based on parameters given in describe' do
           self.class.description.should =~ /responding to #DELETE destroy$/
+        end
+
+        it 'should perform a XmlHttpRequest' do
+          run_action!
+          request.env['HTTP_X_REQUESTED_WITH'].should == 'XMLHttpRequest'
         end
       end
 

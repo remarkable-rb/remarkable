@@ -1,3 +1,8 @@
+* Add a helper to declare that a XmlHttpRequest should be performed:
+
+    describe :get => :show do
+      xhr!
+
 * Macro stubs now supports blocks too [#50]
 
     expects :human_attribute_name, :on => Project, :with => :title do |attr|

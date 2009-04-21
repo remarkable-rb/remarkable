@@ -173,7 +173,8 @@ module Remarkable
       def self.included(base) #:nodoc:
         base.extend ClassMethods
         base.class_inheritable_reader :expects_chain, :default_action, :default_mime,
-                                      :default_verb, :default_params, :before_all_block
+                                      :default_verb, :default_params, :default_xhr,
+                                      :before_all_block
       end
 
       module ClassMethods
@@ -234,6 +235,18 @@ module Remarkable
         #
         def params(params)
           write_inheritable_hash(:default_params, params)
+        end
+
+        # Sets the request to perform a XmlHttpRequest.
+        #
+        # == Examples
+        #
+        #   describe TasksController do
+        #     xhr!
+        #   end
+        #
+        def xhr!(bool=true)
+          write_inheritable_attribute(:default_xhr, bool)
         end
 
         [:get, :post, :put, :delete].each do |verb|
@@ -465,10 +478,11 @@ module Remarkable
         #
         # The first parameter is if you want to run expectations or stubs. You
         # can also supply the verb (get, post, put or delete), which action to
-        # call, parameters and the mime type. If any of those parameters are
-        # supplied, they override the current definition.
+        # call, parameters, the mime type and if a xhr should be performed. If
+        # any of those parameters are supplied, they override the current
+        # definition.
         #
-        def run_action!(use_expectations=true, verb=nil, action=nil, params=nil, mime=nil)
+        def run_action!(use_expectations=true, verb=nil, action=nil, params=nil, mime=nil, xhr=nil)
           return false if controller.send(:performed?)
 
           evaluate_expectation_chain(use_expectations)
@@ -477,10 +491,12 @@ module Remarkable
           verb   ||= default_verb
           action ||= default_action
           params ||= default_params
+          xhr    ||= default_xhr
 
           raise ScriptError, "No action was performed or declared." unless verb && action
 
-          request.env["HTTP_ACCEPT"] ||= mime.to_s if mime
+          request.env["HTTP_ACCEPT"] ||= mime.to_s                if mime
+          request.env['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest' if xhr
           send(verb, action, params)
         end
 
