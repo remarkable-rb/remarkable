@@ -1,3 +1,5 @@
+* Allow all objects to be sent to have_scope (thanks to Szymon Nowak) [#53]
+
 * Added support to sql options in association_matcher: select, conditions, include,
   group, having, order, limit and offset. [#48]
 
