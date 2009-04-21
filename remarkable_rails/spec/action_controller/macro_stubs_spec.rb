@@ -154,8 +154,8 @@ describe 'MacroStubs' do
 
     [:delete, :delete!].each do |method|
 
-      describe method => :destroy, :id => 37 do
-        expects :find,    :on => Task,     :with => '37', :returns => mock_task
+      describe method => :destroy do
+        expects :find,    :on => Task, :with => nil, :returns => mock_task
         expects :destroy, :on => mock_task
 
         subject { controller }

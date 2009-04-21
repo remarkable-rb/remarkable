@@ -423,12 +423,9 @@ module Remarkable
             raise ScriptError, "You have to give me :on as an option when calling :expects." if object.nil?
 
             if use_expectations
-              with  = evaluate_value(options.delete(:with))
-              times = options.delete(:times) || 1
-
               chain = object.should_receive(method)
-              chain = chain.with(with) if with
-              chain = chain.exactly(times).times
+              chain = chain.with(evaluate_value(options.delete(:with))) if options.key?(:with)
+              chain = chain.exactly(options.delete(:times) || 1).times
             else
               chain = object.stub!(method)
             end
