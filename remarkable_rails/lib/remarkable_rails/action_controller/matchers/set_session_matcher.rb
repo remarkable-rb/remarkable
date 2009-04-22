@@ -44,7 +44,7 @@ module Remarkable
           #
           def is_equal_value?
             return true unless value_to_compare?
-            assert_contains(session[@key], @options[:to])
+            assert_contains([session[@key]], @options[:to])
           end
 
           def session

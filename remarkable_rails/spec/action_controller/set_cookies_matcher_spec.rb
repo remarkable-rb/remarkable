@@ -115,6 +115,8 @@ describe 'set_cookies' do
         cookies[:true]    = true
         cookies[:false]   = false
         cookies[:nil]     = nil
+        cookies[:array]   = [1,2]
+        cookies[:date]    = Date.today
       }
     end
 
@@ -145,6 +147,14 @@ describe 'set_cookies' do
     should_set_cookies :nil
     should_set_cookies :nil, :to => nil
     should_not_set_cookies :nil, :to => true
+
+    should_set_cookies :array
+    should_set_cookies :array, :to => [1,2]
+    should_not_set_cookies :array, :to => [2,1]
+
+    should_set_cookies :date
+    should_set_cookies :date, :to => Date.today
+    should_not_set_cookies :date, :to => (Date.today + 1)
   end
 
   describe 'with no parameter' do

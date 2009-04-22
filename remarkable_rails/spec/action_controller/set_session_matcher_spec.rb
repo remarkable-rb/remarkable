@@ -48,10 +48,11 @@ describe 'set_session' do
     before(:each) do
      build_response {
         session[:user]    = 'jose'
-        session[:address] = 'Avenue'
         session[:true]    = true
         session[:false]   = false
         session[:nil]     = nil
+        session[:array]   = [1,2]
+        session[:date]    = Date.today
       }
     end
 
@@ -82,16 +83,25 @@ describe 'set_session' do
     it { should set_session(:nil) }
     it { should set_session(:nil).to(nil) }
     it { should_not set_session(:nil).to(true) }
+
+    it { should set_session(:array) }
+    it { should set_session(:array).to([1,2]) }
+    it { should_not set_session(:array).to([2,1]) }
+
+    it { should set_session(:date) }
+    it { should set_session(:date).to(Date.today) }
+    it { should_not set_session(:date).to(Date.today + 1) }
   end
 
   describe 'macro' do
     before(:each) do
      build_response {
         session[:user]    = 'jose'
-        session[:address] = 'Avenue'
         session[:true]    = true
         session[:false]   = false
         session[:nil]     = nil
+        session[:array]   = [1,2]
+        session[:date]    = Date.today
       }
     end
 
@@ -122,6 +132,14 @@ describe 'set_session' do
     should_set_session :nil
     should_set_session :nil, :to => nil
     should_not_set_session :nil, :to => true
+
+    should_set_session :array
+    should_set_session :array, :to => [1,2]
+    should_not_set_session :array, :to => [2,1]
+
+    should_set_session :date
+    should_set_session :date, :to => Date.today
+    should_not_set_session :date, :to => (Date.today + 1)
   end
 
   describe 'with no parameter' do

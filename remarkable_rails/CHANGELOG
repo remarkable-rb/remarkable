@@ -1,3 +1,5 @@
+* Ensure set_cookies and set_session work with arrays [#55]
+
 * Added set_cookies matcher [#51]
 
 * Add a helper to declare that a XmlHttpRequest should be performed:
