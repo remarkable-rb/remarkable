@@ -30,7 +30,7 @@ describe 'set_cookies' do
       @matcher.failure_message.should == 'Expected cookie user to be set, got {}'
     end
 
-    if RAILS_VERSION =~ /^2.1/ || RAILS_VERSION =~ /^2.2/
+    if RAILS_VERSION =~ /^2.(1|2)/
       it 'should set contains_value? message' do
         build_response { cookies[:user] = 10 }
         @matcher = set_cookies.to(1)
@@ -63,10 +63,11 @@ describe 'set_cookies' do
     before(:each) do
      build_response {
         cookies[:user]    = 'jose'
-        cookies[:address] = 'Avenue'
         cookies[:true]    = true
         cookies[:false]   = false
         cookies[:nil]     = nil
+        cookies[:array]   = [1,2]
+        cookies[:date]    = Date.today
       }
     end
 
@@ -97,13 +98,20 @@ describe 'set_cookies' do
     it { should set_cookies(:nil) }
     it { should set_cookies(:nil).to(nil) }
     it { should_not set_cookies(:nil).to(true) }
+
+    it { should set_cookies(:array) }
+    it { should set_cookies(:array).to([1,2]) }
+    it { should_not set_cookies(:array).to([2,1]) }
+
+    it { should set_cookies(:date) }
+    it { should set_cookies(:date).to(Date.today) }
+    it { should_not set_cookies(:date).to(Date.today + 1) }
   end
 
   describe 'macro' do
     before(:each) do
      build_response {
         cookies[:user]    = 'jose'
-        cookies[:address] = 'Avenue'
         cookies[:true]    = true
         cookies[:false]   = false
         cookies[:nil]     = nil

@@ -15,14 +15,23 @@ module Remarkable
         #
         # On Rails 2.3.2:
         #
-        #   1. Convert :to values to string, unless it's nil
+        #   1. Return nil if nil, join when array or convert to string;
         #   2. Convert all keys to string.
         #
         before_assert do
-          if @subject.request.env.key?("rack.input")
-            @options[:to] = @options[:to].to_s if @options.key?(:to) && !@options[:to].nil?
-          else
-            @options[:to] = @options[:to] ? [@options[:to]] : [] if @options.key?(:to)
+          if @options.key?(:to)
+            if @subject.request.env.key?("rack.input")
+              @options[:to] = case @options[:to]
+                when nil
+                  nil
+                when Array
+                  @options[:to].join('&')
+                else
+                  @options[:to].to_s
+              end
+            else
+              @options[:to] = @options[:to] ? Array(@options[:to]) : []
+            end
           end
 
           @keys.collect!(&:to_s)
