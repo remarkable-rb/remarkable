@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'set_cookies_matcher') 
+require File.join(File.dirname(__FILE__), 'set_session_matcher')
 
 module Remarkable
   module ActionController
