@@ -18,7 +18,8 @@ module Remarkable
           begin
             send(should_or_should_not, send(method, *args, &block))
           rescue Exception => e
-            e.set_backtrace(calltrace.to_a)
+            trace = e.backtrace.to_a + calltrace.to_a
+            e.set_backtrace(trace)
             raise e
           end
         }
