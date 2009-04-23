@@ -12,6 +12,20 @@ en:
           positive: "allowing blank values"
           negative: "not allowing blank values"
 
+      accept_nested_attributes_for:
+        description: "accept nested attributes for {{associations}}"
+        expectations:
+          association_exists: "{{subject_name}} to have association {{association}}, but does not"
+          is_autosave: "{{subject_name}} to have association {{association}} with autosave true, got false"
+          responds_to_attributes: "{{subject_name}} to respond to :{{association}}_attributes=, but does not"
+          allows_destroy: "{{subject_name}} with allow destroy equals to {{allow_destroy}}, got {{actual}}"
+          accepts: "{{subject_name}} to accept attributes {{attributes}} for {{association}}, but does not"
+          rejects: "{{subject_name}} to reject attributes {{attributes}} for {{association}}, but does not"
+        optionals:
+          allow_destroy:
+            positive: "allowing destroy"
+            negative: "not allowing destroy"
+
       allow_values_for:
         description: "allow {{in}} as values for {{attributes}}"
         expectations:

@@ -1,3 +1,5 @@
+* Added accept_nested_attributes_for matcher [#39]
+
 * Added have_default_scope matcher [#38]
 
 * Allow :include, :join, :group and :having as quick accessors to have_scope matcher
@@ -5,7 +7,7 @@
 * Allow all objects to be sent to have_scope (thanks to Szymon Nowak and Nolan Eakins) [#53]
 
 * Added support to sql options in association_matcher: select, conditions, include,
-  group, having, order, limit and offset. [#48]
+  group, having, order, limit and offset, plus finder_sql and counter_sql. [#48]
 
 * :source and :source_type are now supported by association matcher [#47]
 

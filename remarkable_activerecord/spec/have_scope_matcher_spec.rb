@@ -23,23 +23,23 @@ describe 'have_scope' do
   describe 'messages' do
 
     it 'should contain a description' do
-      @matcher = have_scope(:title)
-      @matcher.description.should == 'have to scope itself to {} when :title is called'
+      matcher = have_scope(:title)
+      matcher.description.should == 'have to scope itself to {} when :title is called'
 
-      @matcher.with(1)
-      @matcher.description.should == 'have to scope itself to {} when :title is called with [1] as argument'
+      matcher.with(1)
+      matcher.description.should == 'have to scope itself to {} when :title is called with [1] as argument'
     end
 
     it 'should set is_scope? message' do
-      @matcher = have_scope(:null)
-      @matcher.matches?(@model)
-      @matcher.failure_message.should == 'Expected :null when called on Product return an instance of ActiveRecord::NamedScope::Scope'
+      matcher = have_scope(:null)
+      matcher.matches?(@model)
+      matcher.failure_message.should == 'Expected :null when called on Product return an instance of ActiveRecord::NamedScope::Scope'
     end
 
     it 'should set options_match? message' do
-      @matcher = have_scope(:recent, :conditions => {:special => true})
-      @matcher.matches?(@model)
-      @matcher.failure_message.should == 'Expected :recent when called on Product scope to {:conditions=>{:special=>true}}, got {:order=>"created_at DESC"}'
+      matcher = have_scope(:recent, :conditions => {:special => true})
+      matcher.matches?(@model)
+      matcher.failure_message.should == 'Expected :recent when called on Product scope to {:conditions=>{:special=>true}}, got {:order=>"created_at DESC"}'
     end
 
   end

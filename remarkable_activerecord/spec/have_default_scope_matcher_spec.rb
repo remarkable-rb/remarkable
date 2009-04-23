@@ -14,14 +14,14 @@ if RAILS_VERSION == '2.3.2'
     describe 'messages' do
 
       it 'should contain a description' do
-        @matcher = have_default_scope(:conditions => {:special => true})
-        @matcher.description.should == 'have a default scope with {:conditions=>{:special=>true}}'
+        matcher = have_default_scope(:conditions => {:special => true})
+        matcher.description.should == 'have a default scope with {:conditions=>{:special=>true}}'
       end
 
       it 'should set options_match? message' do
-        @matcher = have_default_scope(:conditions => {:special => true})
-        @matcher.matches?(@model)
-        @matcher.failure_message.should == 'Expected default scope with {:conditions=>{:special=>true}}, got [{:order=>"created_at DESC"}, {:conditions=>{:published=>true}}]'
+        matcher = have_default_scope(:conditions => {:special => true})
+        matcher.matches?(@model)
+        matcher.failure_message.should == 'Expected default scope with {:conditions=>{:special=>true}}, got [{:order=>"created_at DESC"}, {:conditions=>{:published=>true}}]'
       end
 
     end

@@ -15,7 +15,7 @@ module Remarkable
 
           def default_scope
             @default_scope ||= if @subject
-              scopes = @subject.class.default_scoping || []
+              scopes = subject_class.default_scoping || []
               scopes.map!{ |s| s[:find] }
             else
               []
