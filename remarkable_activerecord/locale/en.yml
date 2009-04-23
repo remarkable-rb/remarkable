@@ -105,6 +105,11 @@ en:
           limit:
             positive: "with limit {{inspect}}"
 
+      have_default_scope:
+        description: "have a default scope with {{options}}"
+        expectations:
+          options_match: "default scope with {{options}}, got {{actual}}"
+
       have_index:
         description: "have index for column(s) {{columns}}"
         expectations:
