@@ -5,13 +5,14 @@ module Remarkable
         arguments :scope_name
         assertions :is_scope?, :options_match?
 
-        optionals :with, :select, :conditions, :order, :limit, :offset
+        optionals :with, :splat => true
+        optionals :select, :conditions, :join, :include, :group, :having, :order, :limit, :offset
 
         protected
 
           def is_scope?
             @scope_object = if @options[:with]
-              if @options[:with].respond_to?(:size)
+              if @options[:with].is_a?(Array)
                 subject_class.send(@scope_name, *@options[:with])
               else
                 subject_class.send(@scope_name, @options[:with])

@@ -1,9 +1,11 @@
-* Allow all objects to be sent to have_scope (thanks to Szymon Nowak) [#53]
+* Allow :include, :join, :group and :having as quick accessors to have_scope matcher
+
+* Allow all objects to be sent to have_scope (thanks to Szymon Nowak and Nolan Eakins) [#53]
 
 * Added support to sql options in association_matcher: select, conditions, include,
   group, having, order, limit and offset. [#48]
 
-* :source and :source_type are not supported by association matcher [#47]
+* :source and :source_type are now supported by association matcher [#47]
 
 * validate_inclusion_of became smarter since it now tests invalid values too [#36]
 
