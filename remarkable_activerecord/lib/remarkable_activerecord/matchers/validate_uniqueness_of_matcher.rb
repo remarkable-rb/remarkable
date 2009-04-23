@@ -167,6 +167,15 @@ module Remarkable
       # option, you need to have in the database a record which is not nil in the
       # given attributes. The same is required for allow_blank option.
       #
+      # Notice that the record being validate should not be the same as in the
+      # database. In other words, you can't do this:
+      #
+      #   subject { Post.create!(@valid_attributes) }
+      #   should_validate_uniquness_of :title
+      #
+      # But don't worry, if you eventually do that, a helpful error message
+      # will be raised.
+      #
       # == Options
       #
       # * <tt>:scope</tt> - field(s) to scope the uniqueness to.
