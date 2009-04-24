@@ -5,7 +5,8 @@ module Remarkable
         arguments
         assertions :options_match?
 
-        optionals :select, :conditions, :join, :include, :group, :having, :order, :limit, :offset
+        optionals :conditions, :include, :joins, :limit, :offset, :order, :select,
+                  :readonly, :group, :having, :from, :lock
 
         protected
 
@@ -32,8 +33,9 @@ module Remarkable
       #
       # == Options
       #
-      # All options that the default scope would pass on to find: select, conditions,
-      # join, include, group, having, order, limit e offset.
+      # All options that the default scope would pass on to find: :conditions,
+      # :include, :joins, :limit, :offset, :order, :select, :readonly, :group,
+      # :having, :from, :lock.
       #
       # == Examples
       #

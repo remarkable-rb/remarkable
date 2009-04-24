@@ -6,7 +6,8 @@ module Remarkable
         assertions :is_scope?, :options_match?
 
         optionals :with, :splat => true
-        optionals :select, :conditions, :join, :include, :group, :having, :order, :limit, :offset
+        optionals :conditions, :include, :joins, :limit, :offset, :order, :select,
+                  :readonly, :group, :having, :from, :lock
 
         protected
 
@@ -43,7 +44,9 @@ module Remarkable
       #
       # * <tt>with</tt> - Options to be sent to the named scope
       #
-      # And all other options that the named scope would pass on to find.
+      # All options that the named scope would pass on to find: :conditions,
+      # :include, :joins, :limit, :offset, :order, :select, :readonly, :group,
+      # :having, :from, :lock.
       #
       # == Examples
       # 

@@ -2,7 +2,8 @@
 
 * Added have_default_scope matcher [#38]
 
-* Allow :include, :join, :group and :having as quick accessors to have_scope matcher
+* Allow :conditions, :include, :joins, :limit, :offset, :order, :select, :readonly,
+  :group, :having, :from, :lock as quick accessors to have_scope matcher
 
 * Allow all objects to be sent to have_scope (thanks to Szymon Nowak and Nolan Eakins) [#53]
 
