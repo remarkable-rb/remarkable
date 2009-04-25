@@ -50,6 +50,19 @@ In each folder above, you can find a README more detailed description of each pi
 
 * I18n and great documentation.
 
+* It has your style. You can choose between:
+
+    1) it { should validate_numericality_of(:age).greater_than(18).only_integer }
+
+    2) it { should validate_numericality_of(:age, :greater_than => 18, :only_integer => true) }
+
+    3) should_validate_numericality_of :age, :greater_than => 18, :only_integer => true
+
+    4) should_validate_numericality_of :age do |m|
+         m.only_integer
+         m.greater_than 18
+       end
+
 Remarkable Rails requires rspec >= 1.2.0 and rspec-rails >= 1.2.0.
 
 == Install on Rails

@@ -1,3 +1,12 @@
+* Added support to blocks configuration. All Remarkable matcher and macros can
+  now be configured using a block:
+
+    should_accept_nested_attributes_for :tasks do |m|
+      m.allow_destroy
+      m.accept(:name => 'cool')
+      m.reject(:name => '')
+    end
+
 * Added support to {{sentence}} as interpolation option in optionals.
   Previously we had:
 

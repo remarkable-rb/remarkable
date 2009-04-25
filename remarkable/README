@@ -1,18 +1,30 @@
 = Remarkable
 
 This is the core package of Remarkable. It provides a DSL for creating matchers
-with I18n support, decoupling messages from matcher's logic and adding rspec
-extra features.
+with I18n support, decouples messages from matchers logic, add rspec extra features,
+create macros automatically and allow those macros to be configurable wth blocks.
 
 == Macros
 
 Each matcher in Remarkable is also available as a macro. So this matcher:
 
-  it { should validate_presence_of(:name) }
+  it { should validate_numericality_of(:age, :greater_than => 18, :only_integer => true) }
+  it { should validate_numericality_of(:age).greater_than(18).only_integer }
 
 Can also be written as:
 
-  should_validate_presence_of :name
+  should_validate_numericality_of :age, :greater_than => 18, :only_integer => true
+
+Which can be also written as:
+
+  should_validate_numericality_of :age do |m|
+    m.only_integer
+    m.greater_than 18
+  end
+
+Choose your style!
+
+== Disabled Macros
 
 Remarkable adds the possibility to disable macros. So as you could do:
 
