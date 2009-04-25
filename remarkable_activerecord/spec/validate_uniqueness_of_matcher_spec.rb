@@ -21,23 +21,25 @@ describe 'validate_uniqueness_of' do
     it 'should contain a description' do
       @matcher.description.should == 'require unique values for username'
 
-      @matcher.scope(:email)
-      @matcher.description.should == 'require unique values for username scoped to [:email]'
-
-      @matcher.scope(:access_code)
-      @matcher.description.should == 'require unique values for username scoped to [:email, :access_code]'
-
       @matcher.case_sensitive
-      @matcher.description.should == 'require unique values for username scoped to [:email, :access_code] and case sensitive'
+      @matcher.description.should == 'require unique values for username case sensitive'
 
       @matcher.case_sensitive(false)
-      @matcher.description.should == 'require unique values for username scoped to [:email, :access_code] and case insensitive'
+      @matcher.description.should == 'require unique values for username case insensitive'
 
       @matcher.allow_nil
-      @matcher.description.should == 'require unique values for username scoped to [:email, :access_code], case insensitive, and allowing nil values'
+      @matcher.description.should == 'require unique values for username case insensitive and allowing nil values'
 
       @matcher.allow_blank(false)
-      @matcher.description.should == 'require unique values for username scoped to [:email, :access_code], case insensitive, allowing nil values, and not allowing blank values'
+      @matcher.description.should == 'require unique values for username case insensitive, allowing nil values, and not allowing blank values'
+
+      @matcher = validate_uniqueness_of(:username, :scope => :email)
+      @matcher.description.should == 'require unique values for username scoped to :email'
+
+      @matcher = validate_uniqueness_of(:username)
+      @matcher.scope(:email)
+      @matcher.scope(:access_code)
+      @matcher.description.should == 'require unique values for username scoped to :email and :access_code'
     end
 
     it 'should set responds_to_scope? message' do

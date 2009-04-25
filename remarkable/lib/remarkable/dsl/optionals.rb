@@ -210,7 +210,7 @@ module Remarkable
 
             if self.class.matcher_optionals_splat.include?(optional)
               value = [ value ] unless Array === value
-              options[:sentence] = array_to_sentence(value)
+              options[:sentence] = array_to_sentence(value, true)
             end
 
             translate_optionals_with_namespace(optional, defaults.shift, options)

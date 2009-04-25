@@ -80,10 +80,12 @@ module Remarkable
 
       # Converts an array to a sentence
       #
-      def array_to_sentence(array)
+      def array_to_sentence(array, inspect=false)
         words_connector     = Remarkable.t 'remarkable.core.helpers.words_connector'
         two_words_connector = Remarkable.t 'remarkable.core.helpers.two_words_connector'
         last_word_connector = Remarkable.t 'remarkable.core.helpers.last_word_connector'
+
+        array.map!{|i| i.inspect} if inspect
 
         case array.length
           when 0

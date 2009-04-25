@@ -1,3 +1,6 @@
+* validate_uniqueness_of and accept_nested_attributes_for now use the new
+  interpolation option {{sentence}} [#58]
+
 * Added accept_nested_attributes_for matcher [#39]
 
 * Added have_default_scope matcher [#38]

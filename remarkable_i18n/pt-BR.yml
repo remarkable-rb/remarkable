@@ -119,6 +119,24 @@ pt-BR:
           positive: "permitindo valores vazios"
           negative: "não permitindo valores vazios"
 
+      accept_nested_attributes_for:
+        description: "aceite attributos aninhandos para {{associations}}"
+        expectations:
+          association_exists: "{{subject_name}} tivesse associação {{association}}, mas não tem"
+          is_autosave: "{{subject_name}} tivesse associação {{association}} com autosave habilitado, obtive desabilitado"
+          responds_to_attributes: "{{subject_name}} respondesse para :{{association}}_attributes=, mas não responde"
+          allows_destroy: "{{subject_name}} com permissão para destruir igual a {{allow_destroy}}, obtive {{actual}}"
+          accepts: "{{subject_name}} to aceitasse atributos {{attributes}} para {{association}}, mas não aceita"
+          rejects: "{{subject_name}} to rejeitasse atributos {{attributes}} para {{association}}, mas não rejeita"
+        optionals:
+          allow_destroy:
+            positive: "permitindo destruição"
+            negative: "não permitindo destruição"
+          accept:
+            positive: "aceitando {{sentence}}"
+          reject:
+            positive: "rejeitando {{sentence}}"
+
       allow_values_for:
         description: "permitir {{in}} como valores para {{attributes}}"
         expectations:
@@ -211,6 +229,11 @@ pt-BR:
             negative: "com valor default {{inspect}}"
           limit:
             positive: "com limite {{inspect}}"
+
+      have_default_scope:
+        description: "haver escopo padrão com {{options}}"
+        expectations:
+          options_match: "tivesse escopo padrão {{options}}, obtive {{actual}}"
 
       have_index:
         description: "haver índice para coluna(s) {{columns}}"
@@ -327,7 +350,7 @@ pt-BR:
           valid_with_new_scope: "{{subject_name}} fosse válido quando {{attribute}} escopo ({{method}}) alterasse"
         optionals:
           scope:
-            positive: "com escopo {{inspect}}"
+            positive: "com escopo {{sentence}}"
           case_sensitive:
             positive: "case sensitive"
             negative: "case insensitive"

@@ -25,6 +25,10 @@ en:
           allow_destroy:
             positive: "allowing destroy"
             negative: "not allowing destroy"
+          accept:
+            positive: "accepting {{sentence}}"
+          reject:
+            positive: "rejecting {{sentence}}"
 
       allow_values_for:
         description: "allow {{in}} as values for {{attributes}}"
@@ -239,7 +243,7 @@ en:
           valid_with_new_scope: "{{subject_name}} to be valid when {{attribute}} scope ({{method}}) change"
         optionals:
           scope:
-            positive: "scoped to {{inspect}}"
+            positive: "scoped to {{sentence}}"
           case_sensitive:
             positive: "case sensitive"
             negative: "case insensitive"
