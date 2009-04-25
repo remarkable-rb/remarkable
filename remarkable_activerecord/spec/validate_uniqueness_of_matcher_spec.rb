@@ -172,5 +172,9 @@ describe 'validate_uniqueness_of' do
     should_validate_uniqueness_of :username, :scope => :email
     should_not_validate_uniqueness_of :email
     should_not_validate_uniqueness_of :username, :scope => :access_code
+
+    should_validate_uniqueness_of :username do |m|
+      m.scope :email
+    end
   end
 end

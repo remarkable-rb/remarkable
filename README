@@ -61,6 +61,7 @@ In each folder above, you can find a README more detailed description of each pi
     4) should_validate_numericality_of :age do |m|
          m.only_integer
          m.greater_than 18
+         # Or: m.greater_than = 18
        end
 
 Remarkable Rails requires rspec >= 1.2.0 and rspec-rails >= 1.2.0.

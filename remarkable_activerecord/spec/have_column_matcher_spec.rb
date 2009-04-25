@@ -63,6 +63,11 @@ describe 'have_column_matcher' do
     should_have_column :price, :precision => 10
     should_have_column :price, :precision => 10, :scale => 2
 
+    should_have_column :price do |m|
+      m.scale = 2
+      m.precision = 10
+    end
+
     should_not_have_column :name,  :null => false
     should_not_have_column :email, :limit => 400
     should_not_have_column :email, :default => ''

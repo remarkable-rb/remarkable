@@ -20,6 +20,7 @@ Which can be also written as:
   should_validate_numericality_of :age do |m|
     m.only_integer
     m.greater_than 18
+    # Or: m.greater_than = 18
   end
 
 Choose your style!

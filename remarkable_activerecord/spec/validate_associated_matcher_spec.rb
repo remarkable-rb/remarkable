@@ -111,6 +111,10 @@ describe 'validate_associated' do
     describe 'has_many with builder' do
       before(:each){ define_and_validate(:has_many, :tasks, :with_builder => true) }
       should_validate_associated :tasks, :builder => proc{ |p| p.tasks.build(:name => true) }
+
+      should_validate_associated :tasks do |m|
+        m.builder { |p| p.tasks.build(:name => true) }
+      end
     end
 
     describe 'has_and_belongs_to_many with skip validation' do

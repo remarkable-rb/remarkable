@@ -88,6 +88,11 @@ describe 'assign_to' do
     should_assign_to :user, :with => 'jose'
     should_assign_to :user, :with_kind_of => String
 
+    should_assign_to :user do |m|
+      m.with { 'jose' }
+      m.with_kind_of String
+    end
+
     should_not_assign_to :post
     should_not_assign_to :user, :with => 'joseph'
     should_not_assign_to :user, :with_kind_of => Fixnum

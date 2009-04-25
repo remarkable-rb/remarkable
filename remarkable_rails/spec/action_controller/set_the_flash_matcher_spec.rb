@@ -95,6 +95,10 @@ describe 'set_the_flash' do
     should_set_the_flash :notice, :to => proc{ 'jose' }
     should_set_the_flash :notice, :to => proc{ /jose/ }
 
+    should_set_the_flash :notice do |m|
+      m.to = /jose/
+    end
+
     should_not_set_the_flash :notice, :to => nil
     should_not_set_the_flash(:notice){ 'joseph' }
     should_not_set_the_flash(:notice){ /joseph/ }

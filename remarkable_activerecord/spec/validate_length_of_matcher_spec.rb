@@ -156,10 +156,15 @@ describe 'validate_length_of' do
 
     should_validate_length_of :size, :in => 3..5
     should_validate_length_of :size, :within => 3..5
+
     should_not_validate_length_of :size, :within => 2..5
     should_not_validate_length_of :size, :within => 4..5
     should_not_validate_length_of :size, :within => 3..4
     should_not_validate_length_of :size, :within => 3..6
     should_not_validate_length_of :category, :in => 3..5
+
+    should_validate_length_of :size do |m|
+      m.in = 3..5
+    end
   end
 end

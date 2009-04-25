@@ -151,6 +151,13 @@ describe 'association_matcher' do
       should_belong_to :company, :class_name  => "Company"
       should_belong_to :company, :foreign_key => :company_id
 
+      should_belong_to :company do |m|
+        m.readonly
+        m.validate
+        m.class_name = "Company"
+        m.foreign_key = :company_id
+      end
+
       should_not_belong_to :project
       should_not_have_one  :company
       should_not_have_many :companies
@@ -292,6 +299,13 @@ describe 'association_matcher' do
       should_have_and_belong_to_many :labels, :validate    => true
       should_have_and_belong_to_many :labels, :class_name  => "Label"
       should_have_and_belong_to_many :labels, :foreign_key => :project_id
+
+      should_have_and_belong_to_many :labels do |m|
+        m.readonly
+        m.validate
+        m.class_name "Label"
+        m.foreign_key :project_id
+      end
 
       should_not_have_and_belong_to_many :companies
       should_not_have_one  :label
@@ -457,6 +471,12 @@ describe 'association_matcher' do
       should_have_many :tasks, :validate => true
       should_have_many :tasks, :through => :project_tasks
 
+      should_have_many :tasks do |m|
+        m.readonly
+        m.validate
+        m.through = :project_tasks
+      end
+
       should_not_have_many :tasks, :readonly => false
       should_not_have_many :tasks, :validate => false
       should_not_have_many :tasks, :through => :another_thing
@@ -606,6 +626,11 @@ describe 'association_matcher' do
       should_have_one :manager
       should_have_one :manager, :validate => true
       should_have_one :manager, :through => :project_managers
+
+      should_have_one :manager do |m|
+        m.validate
+        m.through = :project_managers
+      end
 
       should_not_have_one :manager, :validate => false
       should_not_have_one :manager, :through => :another_thing

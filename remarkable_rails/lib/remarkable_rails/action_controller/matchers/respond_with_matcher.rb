@@ -2,7 +2,6 @@ module Remarkable
   module ActionController
     module Matchers
       class RespondWithMatcher < Remarkable::ActionController::Base #:nodoc:
-
         arguments
 
         optional :with, :body, :content_type

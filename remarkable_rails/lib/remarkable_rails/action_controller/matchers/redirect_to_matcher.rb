@@ -4,8 +4,8 @@ module Remarkable
       class RedirectToMatcher < Remarkable::ActionController::Base #:nodoc:
         include ::ActionController::StatusCodes
 
-        arguments :expected, :block => :block
-        optional :with
+        arguments :expected, :block => true
+        optional :with, :block => true
 
         assertions :redirected?, :status_matches?, :url_matches?
 

@@ -2,9 +2,9 @@ module Remarkable
   module ActionController
     module Matchers
       class SetSessionMatcher < Remarkable::ActionController::Base #:nodoc:
-        arguments :collection => :keys, :as => :key, :block => :block
+        arguments :collection => :keys, :as => :key, :block => true
 
-        optional :to
+        optional :to, :block => true
 
         assertion :is_not_empty?, :contains_value?
         collection_assertions :assigned_value?, :is_equal_value?

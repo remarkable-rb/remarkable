@@ -2,9 +2,11 @@ module Remarkable
   module ActionController
     module Matchers
       class AssignToMatcher < Remarkable::ActionController::Base #:nodoc:
-        arguments :collection => :names, :as => :name, :block => :block
+        arguments :collection => :names, :as => :name, :block => true
 
-        optional :with, :with_kind_of
+        optional :with, :block => true
+        optional :with_kind_of
+
         collection_assertions :assigned_value?, :is_kind_of?, :is_equal_value?
 
         before_assert :evaluate_expected_value

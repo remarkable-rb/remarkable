@@ -143,6 +143,11 @@ describe 'respond_with' do
       should_respond_with :success, :content_type => Mime::HTML
       should_respond_with 200..299, :content_type => Mime::HTML
 
+      should_respond_with 200 do |m|
+        m.body /\s*/
+        m.content_type Mime::HTML
+      end
+
       should_not_respond_with 404
       should_not_respond_with :not_found
       should_not_respond_with 300..400

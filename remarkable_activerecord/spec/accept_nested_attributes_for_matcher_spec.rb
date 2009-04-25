@@ -112,6 +112,13 @@ if RAILS_VERSION == '2.3.2'
       should_accept_nested_attributes_for :category, :accept => [ { :name => 'Jose' }, { :name => 'Maria' } ]
       should_accept_nested_attributes_for :category, :reject => [ { :name => '' } ]
 
+      should_accept_nested_attributes_for :category do |m|
+        m.allow_destroy
+        m.accept :name => "Jose"
+        m.accept :name => "Maria"
+        m.reject :name => ""
+      end
+
       should_not_accept_nested_attributes_for :nothing
       should_not_accept_nested_attributes_for :labels
       should_not_accept_nested_attributes_for :tags

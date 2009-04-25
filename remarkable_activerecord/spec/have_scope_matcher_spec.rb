@@ -71,6 +71,11 @@ describe 'have_scope' do
     should_have_scope :since,     :with => Time.at(0), :conditions => ["created_at > ?", Time.at(0)]
     should_have_scope :between,   :with => [ 2, 10 ],  :conditions => [ "created_at > ? and created_at < ?", 2, 10 ]
 
+    should_have_scope :between do |m|
+      m.with(2, 10)
+      m.conditions([ "created_at > ? and created_at < ?", 2, 10 ])
+    end
+
     should_not_have_scope :null
     should_not_have_scope :latest,    :with => 5, :limit => 10
     should_not_have_scope :beginning, :with => 5, :offset => 10

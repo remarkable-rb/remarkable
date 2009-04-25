@@ -131,6 +131,9 @@ describe 'set_cookies' do
 
     should_set_cookies(:user){ 'jose' }
     should_set_cookies :user, :to => proc{ 'jose' }
+    should_set_cookies :user do |m|
+      m.to { 'jose' }
+    end
 
     should_not_set_cookies :user, :to => nil
     should_not_set_cookies(:user){ 'joseph' }

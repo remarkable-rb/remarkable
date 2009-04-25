@@ -173,8 +173,14 @@ describe 'validate_numericality_of' do
     should_validate_numericality_of :price, :less_than => 100000
     should_validate_numericality_of :price, :greater_than => 9999
     should_validate_numericality_of :price, :less_than => 100000, :greater_than => 999
+
     should_not_validate_numericality_of :size
     should_not_validate_numericality_of :price, :less_than => 55555
     should_not_validate_numericality_of :price, :greater_than => 55555
+
+    should_validate_numericality_of :price do |m|
+      m.less_than 100000
+      m.greater_than 999
+    end
   end
 end

@@ -117,6 +117,10 @@ describe 'set_session' do
     should_set_session(:user){ 'jose' }
     should_set_session :user, :to => proc{ 'jose' }
 
+    should_set_session :user do |m|
+      m.to { 'jose' }
+    end
+
     should_not_set_session :user, :to => nil
     should_not_set_session(:user){ 'joseph' }
     should_not_set_session :user, :to => proc{ 'joseph' }

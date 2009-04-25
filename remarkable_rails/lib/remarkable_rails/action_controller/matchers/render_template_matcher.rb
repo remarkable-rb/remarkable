@@ -4,7 +4,6 @@ module Remarkable
   module ActionController
     module Matchers
       class RenderTemplateMatcher < RespondWithMatcher #:nodoc:
-
         prepend_optional :template, :layout
 
         assertions :rendered?, :template_matches?, :layout_matches?
