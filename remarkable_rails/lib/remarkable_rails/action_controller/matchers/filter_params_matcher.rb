@@ -31,8 +31,8 @@ module Remarkable
       #   it { should filter_params(:password) }
       #   it { should_not filter_params(:username) }
       #
-      def filter_params(*params)
-        FilterParamsMatcher.new(*params).spec(self)
+      def filter_params(*params, &block)
+        FilterParamsMatcher.new(*params, &block).spec(self)
       end
       alias :filter_param :filter_params
 

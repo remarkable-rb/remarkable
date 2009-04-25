@@ -60,8 +60,8 @@ module Remarkable
       #   should_have_default_scope :conditions => { :published => true,
       #                                               :visible => true }  # Fails
       #
-      def have_default_scope(*args)
-        HaveDefaultScopeMatcher.new(*args).spec(self)
+      def have_default_scope(*args, &block)
+        HaveDefaultScopeMatcher.new(*args, &block).spec(self)
       end
 
     end

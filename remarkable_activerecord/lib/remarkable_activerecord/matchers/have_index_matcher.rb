@@ -45,8 +45,8 @@ module Remarkable
       #   it { should have_index(:ssn).unique(true) }
       #   it { should have_index([:name, :email]).unique(true) }
       #
-      def have_index(*args)
-        HaveIndexMatcher.new(*args).spec(self)
+      def have_index(*args, &block)
+        HaveIndexMatcher.new(*args, &block).spec(self)
       end
       alias :have_indices    :have_index
       alias :have_db_index   :have_index

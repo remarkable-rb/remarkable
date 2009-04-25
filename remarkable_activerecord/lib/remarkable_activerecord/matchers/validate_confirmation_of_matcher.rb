@@ -35,8 +35,8 @@ module Remarkable
       #
       #   it { should validate_confirmation_of(:email, :password) }
       #
-      def validate_confirmation_of(*attributes)
-        ValidateConfirmationOfMatcher.new(*attributes).spec(self)
+      def validate_confirmation_of(*attributes, &block)
+        ValidateConfirmationOfMatcher.new(*attributes, &block).spec(self)
       end
 
     end

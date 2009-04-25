@@ -41,8 +41,8 @@ module Remarkable
       #   it { should validate_acceptance_of(:eula, :terms) }
       #   it { should validate_acceptance_of(:eula, :terms, :accept => true) }
       #
-      def validate_acceptance_of(*attributes)
-        ValidateAcceptanceOfMatcher.new(*attributes).spec(self)
+      def validate_acceptance_of(*attributes, &block)
+        ValidateAcceptanceOfMatcher.new(*attributes, &block).spec(self)
       end
 
     end

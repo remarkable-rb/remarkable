@@ -26,8 +26,8 @@ module Remarkable
       #   should_allow_mass_assignment_of :email, :name
       #   it { should allow_mass_assignment_of(:email, :name) }
       #
-      def allow_mass_assignment_of(*attributes)
-        AllowMassAssignmentOfMatcher.new(*attributes).spec(self)
+      def allow_mass_assignment_of(*attributes, &block)
+        AllowMassAssignmentOfMatcher.new(*attributes, &block).spec(self)
       end
     end
   end

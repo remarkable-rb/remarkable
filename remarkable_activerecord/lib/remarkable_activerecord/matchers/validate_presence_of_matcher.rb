@@ -56,8 +56,8 @@ module Remarkable
       #   should_validate_presence_of :name, :phone_number
       #   it { should validate_presence_of(:name, :phone_number) }
       #
-      def validate_presence_of(*args)
-        ValidatePresenceOfMatcher.new(*args).spec(self)
+      def validate_presence_of(*args, &block)
+        ValidatePresenceOfMatcher.new(*args, &block).spec(self)
       end
     end
   end

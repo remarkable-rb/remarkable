@@ -47,8 +47,8 @@ module Remarkable
       #   should_validate_exclusion_of :username, :in => ["admin", "user"]
       #   should_validate_exclusion_of :age, :in => 30..60
       #
-      def validate_exclusion_of(*args)
-        ValidateExclusionOfMatcher.new(*args).spec(self)
+      def validate_exclusion_of(*args, &block)
+        ValidateExclusionOfMatcher.new(*args, &block).spec(self)
       end
 
     end

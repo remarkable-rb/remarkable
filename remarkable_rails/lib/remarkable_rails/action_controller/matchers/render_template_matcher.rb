@@ -122,24 +122,24 @@ module Remarkable
       #
       # Extensions check does not work in Rails 2.1.x.
       #
-      def render_template(*args)
+      def render_template(*args, &block)
         options = args.extract_options!
-        RenderTemplateMatcher.new(options.merge(:template => args.first)).spec(self)
+        RenderTemplateMatcher.new(options.merge(:template => args.first), &block).spec(self)
       end
 
       # This is just a shortcut for render_template :layout => layout. It's also
       # used for Shoulda compatibility. Check render_template for more information.
       #
-      def render_with_layout(*args)
+      def render_with_layout(*args, &block)
         options = args.extract_options!
-        RenderTemplateMatcher.new(options.merge(:layout => args.first)).spec(self)
+        RenderTemplateMatcher.new(options.merge(:layout => args.first), &block).spec(self)
       end
 
       # This is just a shortcut for render_template :layout => nil. It's also
       # used for Shoulda compatibility. Check render_template for more information.
       #
-      def render_without_layout(options={})
-        RenderTemplateMatcher.new(options.merge(:layout => nil)).spec(self)
+      def render_without_layout(options={}, &block)
+        RenderTemplateMatcher.new(options.merge(:layout => nil), &block).spec(self)
       end
 
     end

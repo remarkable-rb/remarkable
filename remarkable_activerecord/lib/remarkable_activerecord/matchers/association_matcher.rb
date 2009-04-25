@@ -150,8 +150,8 @@ module Remarkable
       #   should_belong_to :parent, :polymorphic => true
       #   it { should belong_to(:parent) }
       #
-      def belong_to(*associations)
-        AssociationMatcher.new(:belongs_to, *associations).spec(self)
+      def belong_to(*associations, &block)
+        AssociationMatcher.new(:belongs_to, *associations, &block).spec(self)
       end
 
       # Ensures that the has_and_belongs_to_many relationship exists, if the join
@@ -175,8 +175,8 @@ module Remarkable
       #  should_have_and_belong_to_many :posts, :cars
       #  it{ should have_and_belong_to_many :posts, :cars }
       #
-      def have_and_belong_to_many(*associations)
-        AssociationMatcher.new(:has_and_belongs_to_many, *associations).spec(self)
+      def have_and_belong_to_many(*associations, &block)
+        AssociationMatcher.new(:has_and_belongs_to_many, *associations, &block).spec(self)
       end
 
       # Ensures that the has_many relationship exists. Will also test that the
@@ -211,8 +211,8 @@ module Remarkable
       #   it{ should have_many(:enemies, :through => :friends) }
       #   it{ should have_many(:enemies, :dependent => :destroy) }
       #
-      def have_many(*associations)
-        AssociationMatcher.new(:has_many, *associations).spec(self)
+      def have_many(*associations, &block)
+        AssociationMatcher.new(:has_many, *associations, &block).spec(self)
       end
 
       # Ensures that the has_many relationship exists. Will also test that the
@@ -240,8 +240,8 @@ module Remarkable
       #  should_have_one :universe
       #  it{ should have_one(:universe) }
       #
-      def have_one(*associations)
-        AssociationMatcher.new(:has_one, *associations).spec(self)
+      def have_one(*associations, &block)
+        AssociationMatcher.new(:has_one, *associations, &block).spec(self)
       end
 
     end

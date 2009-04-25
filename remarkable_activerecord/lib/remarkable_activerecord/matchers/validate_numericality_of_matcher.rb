@@ -174,8 +174,8 @@ module Remarkable
       #   it { should validate_numericality_of(:age, :odd => true) }
       #   it { should validate_numericality_of(:age, :even => true) }
       #
-      def validate_numericality_of(*attributes)
-        ValidateNumericalityOfMatcher.new(*attributes).spec(self)
+      def validate_numericality_of(*attributes, &block)
+        ValidateNumericalityOfMatcher.new(*attributes, &block).spec(self)
       end
 
     end

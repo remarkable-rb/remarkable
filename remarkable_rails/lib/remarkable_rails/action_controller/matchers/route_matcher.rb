@@ -85,8 +85,8 @@ module Remarkable
       #   should_route :get,    '/users/5/posts', :controller => :posts, :action => :index,   :user_id => 5
       #   should_route :post,   '/users/5/posts', :controller => :posts, :action => :create,  :user_id => 5
       #
-      def route(*params)
-        RouteMatcher.new(*params).spec(self)
+      def route(*params, &block)
+        RouteMatcher.new(*params, &block).spec(self)
       end
 
     end

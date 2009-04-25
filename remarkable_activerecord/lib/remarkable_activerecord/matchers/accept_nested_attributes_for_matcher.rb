@@ -112,8 +112,8 @@ module Remarkable
       #
       # You can also give arrays to :accept and :reject to verify multiple attributes.
       #
-      def accept_nested_attributes_for(*args)
-        AcceptNestedAttributesForMatcher.new(*args).spec(self)
+      def accept_nested_attributes_for(*args, &block)
+        AcceptNestedAttributesForMatcher.new(*args, &block).spec(self)
       end
 
     end

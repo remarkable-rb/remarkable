@@ -75,8 +75,8 @@ module Remarkable
       #     scoped(:limit => c)
       #   end
       #
-      def have_scope(*args)
-        HaveScopeMatcher.new(*args).spec(self)
+      def have_scope(*args, &block)
+        HaveScopeMatcher.new(*args, &block).spec(self)
       end
       alias :have_named_scope :have_scope
 

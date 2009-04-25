@@ -47,8 +47,8 @@ module Remarkable
       #   it { should validate_inclusion_of(:size, :in => ["S", "M", "L", "XL"]) }
       #   it { should validate_inclusion_of(:age, :in => 18..100) }
       #
-      def validate_inclusion_of(*args)
-        ValidateInclusionOfMatcher.new(*args).spec(self)
+      def validate_inclusion_of(*args, &block)
+        ValidateInclusionOfMatcher.new(*args, &block).spec(self)
       end
 
     end

@@ -83,9 +83,9 @@ module Remarkable
       #   it { should allow_values_for(:isbn, "isbn 1 2345 6789 0", "ISBN 1-2345-6789-0") }
       #   it { should_not allow_values_for(:isbn, "bad 1", "bad 2") }
       #
-      def allow_values_for(attribute, *args)
+      def allow_values_for(attribute, *args, &block)
         options = args.extract_options!
-        AllowValuesForMatcher.new(attribute, options.merge!(:in => args)).spec(self)
+        AllowValuesForMatcher.new(attribute, options.merge!(:in => args), &block).spec(self)
       end
       alias :validate_format_of :allow_values_for
 

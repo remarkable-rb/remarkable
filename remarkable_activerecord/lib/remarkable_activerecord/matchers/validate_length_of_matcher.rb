@@ -115,8 +115,8 @@ module Remarkable
       #   it { should validate_length_of(:password).minimum(6) }
       #   it { should validate_length_of(:age).is(18) }
       #
-      def validate_length_of(*attributes)
-        ValidateLengthOfMatcher.new(*attributes).spec(self)
+      def validate_length_of(*attributes, &block)
+        ValidateLengthOfMatcher.new(*attributes, &block).spec(self)
       end
     end
   end

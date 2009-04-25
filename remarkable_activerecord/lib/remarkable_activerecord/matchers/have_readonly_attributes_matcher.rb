@@ -20,8 +20,8 @@ module Remarkable
       #
       #   it { should have_readonly_attributes(:password, :admin_flag) }
       #
-      def have_readonly_attributes(*attributes)
-        HaveReadonlyAttributesMatcher.new(*attributes).spec(self)
+      def have_readonly_attributes(*attributes, &block)
+        HaveReadonlyAttributesMatcher.new(*attributes, &block).spec(self)
       end
       alias :have_readonly_attribute :have_readonly_attributes
 

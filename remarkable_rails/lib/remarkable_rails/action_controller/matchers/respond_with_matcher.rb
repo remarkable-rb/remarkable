@@ -98,26 +98,26 @@ module Remarkable
       #   it { should respond_with(301).content_type(Mime::XML)      }
       #   it { should respond_with(300..399).content_type(Mime::XML) }
       #
-      def respond_with(*args)
+      def respond_with(*args, &block)
         options = args.extract_options!
-        RespondWithMatcher.new(options.merge(:with => args.first)).spec(self)
+        RespondWithMatcher.new(options.merge(:with => args.first), &block).spec(self)
       end
 
       # This is just a shortcut for respond_with :body => body. Check respond_with
       # for more information.
       #
-      def respond_with_body(*args)
+      def respond_with_body(*args, &block)
         options = args.extract_options!
-        RespondWithMatcher.new(options.merge(:body => args.first)).spec(self)
+        RespondWithMatcher.new(options.merge(:body => args.first), &block).spec(self)
       end
 
       # This is just a shortcut for respond_with :content_type => content_type.
       # It's also used for Shoulda compatibility. Check respond_with for more
       # information.
       #
-      def respond_with_content_type(*args)
+      def respond_with_content_type(*args, &block)
         options = args.extract_options!
-        RespondWithMatcher.new(options.merge(:content_type => args.first)).spec(self)
+        RespondWithMatcher.new(options.merge(:content_type => args.first), &block).spec(self)
       end
 
     end

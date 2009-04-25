@@ -192,8 +192,8 @@ module Remarkable
       #   it { should validate_uniqueness_of(:email, :scope => :name, :case_sensitive => false) }
       #   it { should validate_uniqueness_of(:address, :scope => [:first_name, :last_name]) }
       #
-      def validate_uniqueness_of(*attributes)
-        ValidateUniquenessOfMatcher.new(*attributes).spec(self)
+      def validate_uniqueness_of(*attributes, &block)
+        ValidateUniquenessOfMatcher.new(*attributes, &block).spec(self)
       end
     end
   end
