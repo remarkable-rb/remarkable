@@ -29,7 +29,7 @@ if RAILS_VERSION == '2.3.2'
 
         matcher.accept(:name => 'jose')
         matcher.accept(:name => 'maria')
-        matcher.description.should == 'accept nested attributes for category, allowing destroy, and accepting {:name=>"jose"} and {:name=>"maria"}'
+        matcher.description.should == 'accept nested attributes for category allowing destroy and accepting {:name=>"jose"} and {:name=>"maria"}'
       end
 
       it 'should set association_match? message' do

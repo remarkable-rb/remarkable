@@ -1,3 +1,12 @@
+[COMPATIBILITY] validate_associated no longer accepts a block to confgure the
+builder:
+
+    should_validate_associated(:tasks){ |p| p.tasks.build(:captcha => 'i_am_a_robot') }
+
+The right way to do this is by giving an option called builder and a proc:
+
+    should_validate_associated :tasks, :builder => proc{ |p| p.tasks.build(:captcha => 'i_am_a_robot') }
+
 * validate_uniqueness_of and accept_nested_attributes_for now use the new
   interpolation option {{sentence}} [#58]
 
@@ -22,8 +31,8 @@
 
 # v3.0
 
-[ENHANCEMENT] Added more options to associations matcher. Previously it was
-handling just :dependent and :through options. Now it deals with:
+* Added more options to associations matcher. Previously it was handling just
+:dependent and :through options. Now it deals with:
 
   :through, :class_name, :foreign_key, :dependent, :join_table, :uniq,
   :readonly, :validate, :autosave, :counter_cache, :polymorphic
@@ -60,10 +69,9 @@ subject definitions on rspec. This was also fixed.
 
 # v2.x
 
-[ENHANCEMENT] Added associations, allow_mass_assignment, allow_values_for,
-have_column, have_index, have_scope, have_readonly_attributes,
-validate_acceptance_of, validate_associate, validate_confirmation_of,
-validate_exclusion_of, validate_inclusion_of, validate_length_of,
-validate_numericality_of, validate_presence_of and validate_uniqueness_of
-matchers.
+* Added associations, allow_mass_assignment, allow_values_for, have_column,
+have_index, have_scope, have_readonly_attributes, validate_acceptance_of,
+validate_associated, validate_confirmation_of, validate_exclusion_of,
+validate_inclusion_of, validate_length_of, validate_numericality_of,
+validate_presence_of and validate_uniqueness_of matchers.
 
