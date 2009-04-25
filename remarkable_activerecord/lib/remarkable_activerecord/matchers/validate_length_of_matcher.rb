@@ -105,15 +105,20 @@ module Remarkable
       #
       # == Examples
       #
+      #   it { should validate_length_of(:password).within(6..20) }
+      #   it { should validate_length_of(:password).maximum(20) }
+      #   it { should validate_length_of(:password).minimum(6) }
+      #   it { should validate_length_of(:age).is(18) }
+      #
       #   should_validate_length_of :password, :within => 6..20
       #   should_validate_length_of :password, :maximum => 20
       #   should_validate_length_of :password, :minimum => 6
       #   should_validate_length_of :age, :is => 18
       #
-      #   it { should validate_length_of(:password).within(6..20) }
-      #   it { should validate_length_of(:password).maximum(20) }
-      #   it { should validate_length_of(:password).minimum(6) }
-      #   it { should validate_length_of(:age).is(18) }
+      #   should_validate_length_of :password do |m|
+      #     m.minimum 6
+      #     m.maximum 20
+      #   end
       #
       def validate_length_of(*attributes, &block)
         ValidateLengthOfMatcher.new(*attributes, &block).spec(self)

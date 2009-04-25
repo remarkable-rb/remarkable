@@ -165,14 +165,19 @@ module Remarkable
       #
       # == Examples
       #
-      #   should_validate_numericality_of :age, :price
-      #   should_validate_numericality_of :price, :only_integer => false, :greater_than => 10
-      #
       #   it { should validate_numericality_of(:age).odd }
       #   it { should validate_numericality_of(:age).even }
       #   it { should validate_numericality_of(:age).only_integer }
       #   it { should validate_numericality_of(:age, :odd => true) }
       #   it { should validate_numericality_of(:age, :even => true) }
+      #
+      #   should_validate_numericality_of :age, :price
+      #   should_validate_numericality_of :price, :only_integer => false, :greater_than => 10
+      #
+      #   should_validate_numericality_of :price do |m|
+      #     m.only_integer = false
+      #     m.greater_than = 10
+      #   end
       #
       def validate_numericality_of(*attributes, &block)
         ValidateNumericalityOfMatcher.new(*attributes, &block).spec(self)

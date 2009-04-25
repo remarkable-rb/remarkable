@@ -88,6 +88,10 @@ module Remarkable
       #   should_validate_associated :tasks
       #   should_validate_associated :tasks, :builder => proc{ |p| p.tasks.build(:captcha => 'i_am_a_bot') }
       #
+      #   should_validate_associated :tasks do |m|
+      #     m.builder { |p| p.tasks.build(:captcha => 'i_am_a_bot') }
+      #   end
+      #
       #   it { should validate_associated(:tasks) }
       #   it { should validate_associated(:tasks, :builder => proc{ |p| p.tasks.build(:captcha => 'i_am_a_bot') }) }
       #

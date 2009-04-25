@@ -45,6 +45,14 @@ module Remarkable
       #   it { should have_index(:ssn).unique(true) }
       #   it { should have_index([:name, :email]).unique(true) }
       #
+      #   should_have_index :ssn, :unique => true, :limit => 9, :null => false
+      #
+      #   should_have_index :ssn do |m|
+      #     m.unique
+      #     m.limit = 9
+      #     m.null = false
+      #   end
+      #
       def have_index(*args, &block)
         HaveIndexMatcher.new(*args, &block).spec(self)
       end

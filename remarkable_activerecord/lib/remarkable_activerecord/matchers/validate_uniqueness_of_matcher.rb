@@ -188,9 +188,17 @@ module Remarkable
       # == Examples
       #
       #   it { should validate_uniqueness_of(:keyword, :username) }
-      #   it { should validate_uniqueness_of(:name, :message => "O NOES! SOMEONE STOELED YER NAME!") }
       #   it { should validate_uniqueness_of(:email, :scope => :name, :case_sensitive => false) }
       #   it { should validate_uniqueness_of(:address, :scope => [:first_name, :last_name]) }
+      #
+      #   should_validate_uniqueness_of :keyword, :username
+      #   should_validate_uniqueness_of :email, :scope => :name, :case_sensitive => false
+      #   should_validate_uniqueness_of :address, :scope => [:first_name, :last_name]
+      #
+      #   should_validate_uniqueness_of :email do |m|
+      #     m.scope = name
+      #     m.case_sensitive = false
+      #   end
       #
       def validate_uniqueness_of(*attributes, &block)
         ValidateUniquenessOfMatcher.new(*attributes, &block).spec(self)

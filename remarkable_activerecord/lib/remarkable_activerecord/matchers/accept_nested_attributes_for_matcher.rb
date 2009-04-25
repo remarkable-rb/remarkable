@@ -96,21 +96,30 @@ module Remarkable
       #
       #   class Projects < ActiveRecord::Base
       #     has_many :tasks
-      #     accepts_nested_attributes_for :tasks, :reject_if => proc { |a| a[:name].blank? }
+      #     accepts_nested_attributes_for :tasks, :reject_if => proc { |a| a[:title].blank? }
       #   end
       #
       # You can have the following specs:
       #
-      #   should_accept_nested_attributes_for :tasks, :reject => { :name => '' }        # Passes
-      #   should_accept_nested_attributes_for :tasks, :accept => { :name => 'My task' } # Passes
+      #   should_accept_nested_attributes_for :tasks, :reject => { :title => '' }        # Passes
+      #   should_accept_nested_attributes_for :tasks, :accept => { :title => 'My task' } # Passes
       #
-      #   should_accept_nested_attributes_for :tasks, :accept => { :name => 'My task' },
-      #                                               :reject => { :name => '' }        # Passes
+      #   should_accept_nested_attributes_for :tasks, :accept => { :title => 'My task' },
+      #                                               :reject => { :title => '' }        # Passes
       #
-      #   should_accept_nested_attributes_for :tasks, :accept => { :name => '' }        # Fail
-      #   should_accept_nested_attributes_for :tasks, :reject => { :name => 'My task' } # Fail
+      #   should_accept_nested_attributes_for :tasks, :accept => { :title => '' }        # Fail
+      #   should_accept_nested_attributes_for :tasks, :reject => { :title => 'My task' } # Fail
       #
       # You can also give arrays to :accept and :reject to verify multiple attributes.
+      # In such cases the block syntax is more recommended for readability:
+      #
+      #   should_accept_nested_attributes_for :tasks do
+      #     m.allow_destroy(false)
+      #     m.accept :title => 'My task'
+      #     m.accept :title => 'Another task'
+      #     m.reject :title => nil
+      #     m.reject :title => ''
+      #   end
       #
       def accept_nested_attributes_for(*args, &block)
         AcceptNestedAttributesForMatcher.new(*args, &block).spec(self)
