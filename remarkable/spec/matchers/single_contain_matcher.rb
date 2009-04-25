@@ -13,7 +13,7 @@ module Remarkable
 
         before_assert do
           @before_assert = true
-          @iterator.call(@subject) if @iterator
+          @subject.instance_eval(&@iterator) if @iterator
         end
 
         protected

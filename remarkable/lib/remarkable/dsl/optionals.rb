@@ -132,9 +132,11 @@ module Remarkable
             options = names.extract_options!
 
             @matcher_optionals += names
+            default = options[:default] ? "=#{options[:default].inspect}" : nil
 
             block = if options[:block]
               @matcher_optionals_block += names 
+              default ||= "=nil"
               ', &block'
             else
               nil
@@ -146,8 +148,6 @@ module Remarkable
             else
               nil
             end
-
-            default = options[:default] ? "=#{options[:default].inspect}" : ""
 
             names.each do |name|
               class_eval <<-END, __FILE__, __LINE__
@@ -164,7 +164,11 @@ module Remarkable
                 end
               END
             end
-            class_eval "alias :#{options[:alias]} :#{names.last}" if options[:alias]
+
+            class_eval %{
+              alias :#{options[:alias]} :#{names.last}
+              alias :#{options[:alias]}= :#{names.last}=
+            } if options[:alias]
 
             # Call unique to avoid duplicate optionals.
             @matcher_optionals.uniq!

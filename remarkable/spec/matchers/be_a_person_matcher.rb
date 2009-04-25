@@ -7,6 +7,10 @@ module Remarkable
         optional :first_name
         optional :age, :default => 18
         optional :last_name, :alias => :family_name
+        optional :bands, :splat => true
+        optional :builder, :block => true
+
+        attr_reader :options
 
         def description
           "be a person"

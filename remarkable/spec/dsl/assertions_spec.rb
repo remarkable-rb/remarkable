@@ -33,7 +33,7 @@ describe Remarkable::DSL::Assertions do
 
   it 'should accept blocks as argument' do
     should_not single_contain(4)
-    should single_contain(4){ |array| array << 4 }
+    should single_contain(4){ self << 4 }
   end
 
   it 'should provide an interface for default_options hook' do
