@@ -1,12 +1,23 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe Remarkable::Macros do
+describe Remarkable::Pending do
 
-  describe "with pending examples" do
-    pending "pending examples" do
-      should_contain(5)
-      it("should not be run"){ true.should be_false }
+  it "should create pending groups" do
+    spec = self
+
+    self.class.pending "pending examples" do
+      self.instance_variable_get("@_pending_group").should spec.be_true
+      self.instance_variable_get("@_pending_group_description").should spec.eql("pending examples")
+      self.instance_variable_get("@_pending_group_execute").should spec.be_true
     end
+
+    self.instance_variable_get("@_pending_group").should be_nil
+    self.instance_variable_get("@_pending_group_description").should be_nil
+    self.instance_variable_get("@_pending_group_execute").should be_nil
+  end
+
+  pending "pending examples" do
+    should_contain(5)
   end
 
 end

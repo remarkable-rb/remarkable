@@ -10,6 +10,7 @@ module Remarkable
   # target as argument.
   #
   def self.include_matchers!(base, target)
+    target.send :extend, Remarkable::Pending
     target.send :extend, Remarkable::Macros
 
     if defined?(base::Matchers)

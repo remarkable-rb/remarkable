@@ -17,7 +17,13 @@ module Remarkable
       end
 
       def should_or_should_not_method_missing(should_or_should_not, method, calltrace, *args, &block) #:nodoc:
-        it {
+        description = if @_pending_group
+          get_description_from_matcher(should_or_should_not, method, *args, &block)
+        else
+          nil
+        end
+
+        example(description){
           begin
             send(should_or_should_not, send(method, *args, &block))
           rescue Exception => e

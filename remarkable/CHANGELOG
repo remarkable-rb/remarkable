@@ -1,3 +1,5 @@
+* Pending groups show proper backtrace and run by default in execute mode [#49]
+
 * Added support to blocks configuration. All Remarkable matcher and macros can
   now be configured using a block:
 
