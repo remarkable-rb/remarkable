@@ -5,7 +5,8 @@
 * Allow :conditions, :include, :joins, :limit, :offset, :order, :select, :readonly,
   :group, :having, :from, :lock as quick accessors to have_scope matcher
 
-* Allow all objects to be sent to have_scope (thanks to Szymon Nowak and Nolan Eakins) [#53]
+* Allow all kind of objects to be sent to have_scope (including datetimes, arrays,
+  booleans and nil) (thanks to Szymon Nowak and Nolan Eakins) [#53]
 
 * Added support to sql options in association_matcher: select, conditions, include,
   group, having, order, limit and offset, plus finder_sql and counter_sql. [#48]

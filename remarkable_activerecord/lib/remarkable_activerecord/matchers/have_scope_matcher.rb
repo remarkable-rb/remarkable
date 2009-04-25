@@ -12,12 +12,9 @@ module Remarkable
         protected
 
           def is_scope?
-            @scope_object = if @options[:with]
-              if @options[:with].is_a?(Array)
-                subject_class.send(@scope_name, *@options[:with])
-              else
-                subject_class.send(@scope_name, @options[:with])
-              end
+            @scope_object = if @options.key?(:with)
+              @options[:with] = [ @options[:with] ] unless Array === @options[:with]
+              subject_class.send(@scope_name, *@options[:with])
             else
               subject_class.send(@scope_name)
             end

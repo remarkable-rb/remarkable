@@ -50,6 +50,7 @@ describe 'have_scope' do
 
     it { should have_scope(:latest).with(10).limit(10) }
     it { should have_scope(:beginning).with(10).offset(10) }
+    it { should have_scope(:since).with(false).conditions(["created_at > ?", false]) }
     it { should have_scope(:since).with(Time.at(0)).conditions(["created_at > ?", Time.at(0)]) }
     it { should have_scope(:between).with(2, 10).conditions(["created_at > ? and created_at < ?", 2, 10]) }
 
@@ -66,6 +67,7 @@ describe 'have_scope' do
 
     should_have_scope :latest,    :with => 10, :limit => 10
     should_have_scope :beginning, :with => 10, :offset => 10
+    should_have_scope :since,     :with => false, :conditions => ["created_at > ?", false]
     should_have_scope :since,     :with => Time.at(0), :conditions => ["created_at > ?", Time.at(0)]
     should_have_scope :between,   :with => [ 2, 10 ],  :conditions => [ "created_at > ? and created_at < ?", 2, 10 ]
 
