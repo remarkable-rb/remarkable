@@ -8,7 +8,16 @@ module Remarkable
 
       module ClassMethods
         protected
-          # Class method that accepts a block or a symbol which is called after initialization.
+          # Class method that accepts a block or a symbol which is called after
+          # initialization.
+          #
+          # == Examples
+          #
+          #   after_initialize :evaluate_given_blocks
+          #
+          #   after_initialize do
+          #     # code
+          #   end
           #
           def after_initialize(symbol=nil, &block)
             if block_given?
@@ -18,7 +27,16 @@ module Remarkable
             end
           end
 
-          # Class method that accepts a block or a symbol which is called before assertion.
+          # Class method that accepts a block or a symbol which is called before
+          # running assertions.
+          #
+          # == Examples
+          #
+          #   before_assert :evaluate_given_blocks
+          #
+          #   before_assert do
+          #     # code
+          #   end
           #
           def before_assert(symbol=nil, &block)
             if block_given?

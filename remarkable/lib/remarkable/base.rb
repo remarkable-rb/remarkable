@@ -1,4 +1,6 @@
 module Remarkable
+  # This class holds the basic structure for Remarkable matchers. All matchers
+  # must inherit from it.
   class Base
     include Remarkable::Messages
     extend  Remarkable::DSL

@@ -24,7 +24,7 @@ describe 'validate_uniqueness_of' do
       @matcher.scope(:email)
       @matcher.description.should == 'require unique values for username scoped to [:email]'
 
-      @matcher.scope(:email, :access_code)
+      @matcher.scope(:access_code)
       @matcher.description.should == 'require unique values for username scoped to [:email, :access_code]'
 
       @matcher.case_sensitive

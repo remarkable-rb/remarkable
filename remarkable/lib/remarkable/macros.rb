@@ -1,4 +1,7 @@
 module Remarkable
+  # This class is responsable for converting matchers to macros. You shouldn't
+  # worry with what happens here, because it happens automatically.
+  #
   module Macros
 
     protected

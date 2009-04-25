@@ -3,6 +3,15 @@ module Remarkable
 
     protected
 
+      # Adds a pending block to your specs.
+      #
+      # == Examples
+      #
+      #   pending 'create manager resource' do
+      #     should_have_one :manager
+      #     should_validate_associated :manager
+      #   end
+      #
       def pending(description='TODO', &block)
         PendingSandbox.new(description, self).instance_eval(&block)
       end

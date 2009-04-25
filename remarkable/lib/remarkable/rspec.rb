@@ -1,5 +1,3 @@
-# Hacks into rspec to provide I18n.
-#
 module Spec #:nodoc:
   module Matchers #:nodoc:
     # Overwrites to provide I18n on should and should_not.

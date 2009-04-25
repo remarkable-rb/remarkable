@@ -1,4 +1,7 @@
 module Remarkable
+  # Holds the methods required by rspec for each matcher plus a collection of
+  # helpers to deal with I18n.
+  #
   module Messages
 
     # Provides a default description message. Overwrite it if needed.

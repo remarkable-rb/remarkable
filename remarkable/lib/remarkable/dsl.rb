@@ -1,19 +1,36 @@
 dir = File.dirname(__FILE__)
 require File.join(dir, 'dsl', 'assertions')
 require File.join(dir, 'dsl', 'optionals')
-require File.join(dir, 'dsl', 'matches')
 require File.join(dir, 'dsl', 'callbacks')
 
 module Remarkable
+  # The DSL module is responsable for all Remarkable convenience methods.
+  # It has three main submodules:
+  #
+  #   * <tt>Assertions</tt> - adds a class methods to define matcher initialization and assertions,
+  #                           allowing matches? to be hidden from the matcher developer and dealing
+  #                           with I18n in the expectations messages;
+  #
+  #   * <tt>Callbacks</tt> - provides API for after_initialize and before_assert callbacks;
+  #
+  #   * <tt>Optionals</tt> - add an optionals DSL, which is also used for the auto configuring blocks
+  #                          and dynamic descriptions.
+  #
   module DSL
-    ATTR_READERS = [ :matcher_arguments, :matcher_optionals, :matcher_single_assertions,
-      :matcher_collection_assertions, :before_assert_callbacks, :after_initialize_callbacks
+    ATTR_READERS = [
+      :matcher_arguments,
+      :matcher_optionals,
+      :matcher_optionals_splat,
+      :matcher_optionals_block,
+      :matcher_single_assertions,
+      :matcher_collection_assertions,
+      :before_assert_callbacks,
+      :after_initialize_callbacks
     ] unless self.const_defined?(:ATTR_READERS)
 
     def self.extended(base) #:nodoc:
-      base.extend Assertions
+      base.send :include, Assertions
       base.send :include, Callbacks
-      base.send :include, Matches
       base.send :include, Optionals
 
       # Initialize matcher_arguments hash with names as an empty array
