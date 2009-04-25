@@ -1,6 +1,10 @@
 en:
   remarkable:
     active_record:
+      describe:
+        each: "{{key}} is {{value}}"
+        prepend: "when "
+        connector: " and "
       expectations:
         allow_nil: "{{subject_name}} to {{not}}allow nil values for {{attribute}}"
         allow_blank: "{{subject_name}} to {{not}}allow blank values for {{attribute}}"

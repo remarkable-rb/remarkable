@@ -5,14 +5,22 @@ module Remarkable
   module Matchers; end
 
   # Helper that includes required Remarkable modules into the given klass.
-  def self.include_matchers!(base, klass)
-    klass.send :extend, Remarkable::Macros
+  #
+  # If the module to be included responds to :after_include, it's called with the
+  # target as argument.
+  #
+  def self.include_matchers!(base, target)
+    target.send :extend, Remarkable::Macros
 
     if defined?(base::Matchers)
-      klass.send :include, base::Matchers
+      target.send :include, base::Matchers
 
       Remarkable::Matchers.send :extend, base::Matchers
       Remarkable::Matchers.send :include, base::Matchers
+    end
+
+    if base.respond_to?(:after_include)
+      base.after_include(target)
     end
   end
 end

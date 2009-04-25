@@ -7,7 +7,7 @@ if defined?(Spec)
         #
         def self.build_description_with_i18n(*args)
           args.inject("") do |description, arg|
-            arg = if RAILS_I18N && arg.respond_to?(:human_name)
+            arg = if arg.respond_to?(:human_name)
               arg.human_name(:locale => Remarkable.locale)
             else
               arg.to_s
@@ -26,7 +26,7 @@ if defined?(Spec)
 
         # This is for rspec >= 1.2.0.
         #
-        def build_description_from(*args)
+        def self.build_description_from(*args)
           text = ExampleGroupMethods.build_description_with_i18n(*args)
           text == "" ? nil : text
         end

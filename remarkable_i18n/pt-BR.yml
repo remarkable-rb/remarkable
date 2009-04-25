@@ -108,6 +108,10 @@ pt-BR:
             positive: "para {{inspect}}"
 
     active_record:
+      describe:
+        each: "{{key}} for {{value}}"
+        prepend: "quando "
+        connector: " e "
       expectations:
         allow_nil: "{{subject_name}} {{not}} permitisse valores nulos para {{attribute}}"
         allow_blank: "{{subject_name}} {{not}} permitisse valores vazios para {{attribute}}"
@@ -150,9 +154,9 @@ pt-BR:
 
       association:
         belongs_to: pertencer a
-        has_many: ter vários
-        has_and_belongs_to_many: ter e pertencer a vários
-        has_one: ter um
+        has_many: possuir vários(as)
+        has_and_belongs_to_many: possuir e pertencer a vários(as)
+        has_one: possuir um(a)
         description: "{{macro}} {{associations}}"
         expectations:
           association_exists: "{{subject_name}} pudesse {{macro}} {{association}}, obtive nenhuma associação"

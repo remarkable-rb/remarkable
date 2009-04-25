@@ -1,3 +1,26 @@
+* Allow subjects to be overwriten quickly (quick subjects):
+
+    describe Post
+      should_validate_presente_of :title
+ 
+      describe :published => true do
+        should_validate_presence_of :published_at
+      end
+    end
+ 
+  Is the same as:
+
+    describe Post
+      should_validate_presente_of :title
+ 
+      describe "when published is true" do
+        subject { Post.new(:published => true) }
+        should_validate_presence_of :published_at
+      end
+    end
+
+  And the string can be also localized using I18n. [#57 status:resolved]
+
 [COMPATIBILITY] validate_associated no longer accepts a block to confgure the
 builder:
 

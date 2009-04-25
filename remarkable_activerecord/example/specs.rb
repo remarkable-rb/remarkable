@@ -12,16 +12,19 @@
 # Get given locale
 locale = ARGV.pop
 
-# Load rubygems and rspec
 require 'rubygems'
 require 'spec'
 
-# Load spec helper
 require File.join(File.dirname(__FILE__), '..', 'spec', 'spec_helper')
+
+Remarkable.locale = locale
 
 # Configure remarkable locale
 Remarkable.add_locale File.join(File.dirname(__FILE__), '..', '..', 'remarkable_i18n', "#{locale}.yml")
-Remarkable.locale = locale
+
+# Specific file
+file = File.join(File.dirname(__FILE__), "#{locale}.yml")
+Remarkable.add_locale file if File.exists?(file)
 
 # Setting up a model
 include ModelBuilder
