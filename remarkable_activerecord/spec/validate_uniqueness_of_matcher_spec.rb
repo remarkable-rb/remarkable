@@ -5,12 +5,12 @@ describe 'validate_uniqueness_of' do
 
   # Defines a model, create a validation and returns a raw matcher
   def define_and_validate(options={})
-    @model = define_model :user, :username => :string, :email => :integer, :access_code => :string do
+    @model = define_model :user, :username => :string, :email => :string, :public => :boolean, :deleted_at => :timestamp do
       validates_uniqueness_of :username, options
     end
 
     # Create a model
-    User.create(:username => 'jose')
+    User.create(:username => 'jose', :deleted_at => 1.day.ago, :public => false)
 
     validate_uniqueness_of(:username)
   end
@@ -38,8 +38,8 @@ describe 'validate_uniqueness_of' do
 
       @matcher = validate_uniqueness_of(:username)
       @matcher.scope(:email)
-      @matcher.scope(:access_code)
-      @matcher.description.should == 'require unique values for username scoped to :email and :access_code'
+      @matcher.scope(:public)
+      @matcher.description.should == 'require unique values for username scoped to :email and :public'
     end
 
     it 'should set responds_to_scope? message' do
@@ -75,9 +75,12 @@ describe 'validate_uniqueness_of' do
 
     describe 'scoped to' do
       it { should define_and_validate(:scope => :email).scope(:email) }
-      it { should define_and_validate(:scope => [:email, :access_code]).scope(:email, :access_code) }
+      it { should define_and_validate(:scope => :public).scope(:public) }
+      it { should define_and_validate(:scope => :deleted_at).scope(:deleted_at) }
+      it { should define_and_validate(:scope => [:email, :public]).scope(:email, :public) }
+      it { should define_and_validate(:scope => [:email, :public, :deleted_at]).scope(:email, :public, :deleted_at) }
       it { should_not define_and_validate(:scope => :email).scope(:title) }
-      it { should_not define_and_validate(:scope => :email).scope(:access_code) }
+      it { should_not define_and_validate(:scope => :email).scope(:public) }
     end
 
     create_message_specs(self)

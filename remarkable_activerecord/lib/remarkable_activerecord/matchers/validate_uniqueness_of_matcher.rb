@@ -135,10 +135,35 @@ module Remarkable
             super
           end
 
-          # Returns a value to be used as new scope. It does a range query in the
-          # database and tries to return a new value which does not belong to it.
+          # Returns a value to be used as new scope. It deals with four different
+          # cases: date, time, boolean and stringfiable (everything that can be
+          # converted to a string and the next value makes sense)
           #
           def new_value_for_scope(scope)
+            column_type = if @existing.respond_to?(:column_for_attribute)
+              @existing.column_for_attribute(scope)
+            else
+              nil
+            end
+
+            case column_type.type
+              when :int, :integer, :float, :decimal
+                new_value_for_stringfiable_scope(scope)
+              when :datetime, :timestamp, :time
+                Time.now + 10000
+              when :date
+                Date.today + 100
+              when :boolean
+                !@existing.send(scope)
+              else
+                new_value_for_stringfiable_scope(scope)
+            end
+          end
+
+          # Returns a value to be used as scope by generating a range of values
+          # and searching for them in the database.
+          #
+          def new_value_for_stringfiable_scope(scope)
             values = [(@existing.send(scope) || 999).next.to_s]
 
             # Generate a range of values to search in the database

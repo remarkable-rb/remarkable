@@ -1,3 +1,6 @@
+* Allow validate_uniqueness_of to work when scopes are not stringfiable values.
+  You can now give timestamps, datetime, date and boolean as scopes. [#60]
+
 * Allow subjects to be overwriten quickly (quick subjects):
 
     describe Post
@@ -19,7 +22,7 @@
       end
     end
 
-  And the string can be also localized using I18n. [#57 status:resolved]
+  And the string can be also localized using I18n. [#57]
 
 [COMPATIBILITY] validate_associated no longer accepts a block to confgure the
 builder:
