@@ -94,6 +94,12 @@ describe Remarkable::DSL::Optionals do
       @matcher.description.should == 'contain 1 not allowing nil and with blank equal true'
     end
 
+    it "should provide a sentence interpolation option to optionals" do
+      @matcher = Remarkable::Specs::Matchers::SingleContainMatcher.new(1)
+      @matcher.values(1, 2, 3)
+      @matcher.description.should == 'contain 1 not checking for blank and values equal to 1, 2, and 3'
+    end
+
     it "should provide a description with optionals through namespace lookup" do
       @matcher = Remarkable::Specs::Matchers::CollectionContainMatcher.new(1)
       @matcher.description.should == 'contain 1'

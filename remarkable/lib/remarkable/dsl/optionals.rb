@@ -200,13 +200,19 @@ module Remarkable
         optionals = self.class.matcher_optionals.map do |optional|
           if @options.key?(optional)
             value = @options[optional]
-            defaults = [ (value ? :positive : :negative) ]
 
+            defaults = [ (value ? :positive : :negative) ]
             # If optional is a symbol and it's not any to any of the reserved symbols, search for it also
             defaults.unshift(value) if value.is_a?(Symbol) && !OPTIONAL_KEYS.include?(value)
             defaults << ''
 
             options = { :default => defaults, :inspect => value.inspect, :value => value.to_s }
+
+            if self.class.matcher_optionals_splat.include?(optional)
+              value = [ value ] unless Array === value
+              options[:sentence] = array_to_sentence(value)
+            end
+
             translate_optionals_with_namespace(optional, defaults.shift, options)
           else
             translate_optionals_with_namespace(optional, :not_given, :default => '')

@@ -16,6 +16,8 @@ en:
           allow_blank:
             positive: "with blank equal {{inspect}}"
             not_given: "not checking for blank"
+          values:
+            positive: "values equal to {{sentence}}"
       collection_contain:
         description: "contain {{values}}"
         expectations:

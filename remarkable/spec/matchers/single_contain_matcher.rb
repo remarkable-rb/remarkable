@@ -8,6 +8,7 @@ module Remarkable
 
         optional :allow_nil
         optional :allow_blank
+        optional :values, :splat => true
 
         after_initialize :set_after_initialize
 
