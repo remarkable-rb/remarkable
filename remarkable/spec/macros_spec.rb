@@ -21,6 +21,6 @@ describe Remarkable::Macros do
     subject { [1, 2, 3] }
 
     should_not_single_contain(4)
-    should_single_contain(4){ |array| array << 4 }
+    should_single_contain(4){ self << 4 }
   end
 end

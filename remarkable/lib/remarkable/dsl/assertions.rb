@@ -53,6 +53,9 @@ module Remarkable
           # * <tt>:block</tt> - tell the matcher can receive blocks as argument and store
           #                     them under the variable given.
           #
+          # Note: the expected block cannot have arity 1. This is already reserved
+          # for macro configuration.
+          #
           # == Examples
           #
           # Let's see for each example how the arguments declarion reflects on
@@ -138,11 +141,14 @@ module Remarkable
             end
 
             if block = options.delete(:block)
-              block = :block if block == true
+              block = :block unless block.is_a?(Symbol)
               @matcher_arguments[:block] = block
-              args  << "&#{block}"
-              names << block
             end
+
+            # Blocks are always appended. If they have arity 1, they are used for
+            # macro configuration, otherwise, they are stored in the :block variable.
+            #
+            args << "&block"
 
             assignments = names.map do |name|
               "@#{name} = #{name}"
@@ -150,10 +156,13 @@ module Remarkable
 
             class_eval <<-END, __FILE__, __LINE__
               def initialize(#{args.join(',')})
+                _builder, block = block, nil if block && block.arity == 1
                 #{assignments}
+                #{"@#{block} = block" if block}
                 @options = default_options.merge(#{get_options})
                 #{set_collection}
                 run_after_initialize_callbacks
+                _builder.call(self) if _builder
               end
             END
           end

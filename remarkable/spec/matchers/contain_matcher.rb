@@ -23,8 +23,8 @@ module Remarkable
         end
       end
 
-      def contain(*args)
-        ContainMatcher.new(*args).spec(self)
+      def contain(*args, &block)
+        ContainMatcher.new(*args, &block).spec(self)
       end
     end
   end
