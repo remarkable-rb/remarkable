@@ -1,8 +1,11 @@
 module Remarkable
   module Pending
 
+    # We cannot put the alias method in the module because it's a Ruby 1.8 bug
+    # http://coderrr.wordpress.com/2008/03/28/alias_methodmodule-bug-in-ruby-18/
+    #
     def self.extended(base) #:nodoc:
-      base.instance_eval do
+      class << base
         alias :it :example
         alias :specify :example
       end
@@ -38,24 +41,22 @@ module Remarkable
       @_pending_group_execute = nil
     end
 
-    protected
+    def example(description=nil, options={}, backtrace=nil, &implementation) #:nodoc:
+      if block_given? && @_pending_group
+        pending_caller      = caller.detect{ |c| c !~ /method_missing'/ }
+        pending_description = @_pending_group_description
 
-      def example(description=nil, &block) #:nodoc:
-        if @_pending_group
-          pending_caller      = caller.detect{ |c| c !~ /method_missing'/ }
-          pending_description = @_pending_group_description
-
-          pending_block = if block_given? && @_pending_group_execute
-            proc{ pending(pending_description, &block) }
-          else
-            proc{ pending(pending_description) }
-          end
-
-          super(description, {}, pending_caller, &pending_block)
+        pending_block = if @_pending_group_execute
+          proc{ pending(pending_description, &implementation) }
         else
-          super(description, &block)
+          proc{ pending(pending_description) }
         end
+
+        super(description, options, backtrace || pending_caller, &pending_block)
+      else
+        super(description, options, backtrace || caller(0)[1], &implementation)
       end
+    end
 
   end
 end

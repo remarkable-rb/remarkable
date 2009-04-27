@@ -17,6 +17,16 @@ describe Remarkable::Pending do
   end
 
   pending "pending examples" do
+#    example "should show as not implemented"
+#
+#    specify "should show as pending" do
+#      raise "oops"
+#    end
+#
+#    it "should show as fixed" do
+#      # success ...
+#    end
+
     should_contain(5)
   end
 
