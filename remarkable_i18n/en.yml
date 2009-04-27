@@ -85,6 +85,18 @@ en:
           map_to_path: "to map {{options}} to {{method}} {{path}}, got {{actual}}"
           generate_params: "to generate params {{options}} from {{method}} {{path}}, got {{actual}}"
 
+      set_cookies:
+        description: "set cookies {{keys}}"
+        expectations:
+          is_not_empty: "any cookie to be set, got {{cookies_inspect}}"
+          contains_value: "any cookie to be set to {{to}}, got {{cookies_inspect}}"
+          assigned_value: "cookie {{key}} to be set, got {{cookies_inspect}}"
+          is_equal_value: "cookie {{key}} to be set to {{to}}, got {{cookies_inspect}}"
+        optionals:
+          to:
+            positive: "to {{inspect}}"
+            negative: "to {{inspect}}"
+
       set_session:
         description: "set session variable {{keys}}"
         expectations:
@@ -95,6 +107,7 @@ en:
         optionals:
           to:
             positive: "to {{inspect}}"
+            negative: "to {{inspect}}"
 
       set_the_flash:
         description: "set the flash message {{keys}}"
@@ -106,6 +119,7 @@ en:
         optionals:
           to:
             positive: "to {{inspect}}"
+            negative: "to {{inspect}}"
 
     active_record:
       describe:

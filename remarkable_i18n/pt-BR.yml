@@ -85,6 +85,18 @@ pt-BR:
           map_to_path: "tivesse rotas de {{options}} para {{method}} {{path}}, obtive {{actual}}"
           generate_params: "criasse {{options}} de {{method}} {{path}}, obtive {{actual}}"
 
+      set_cookies:
+        description: "definir cookies {{keys}}"
+        expectations:
+          is_not_empty: "algum cookie ser definido, obtive {{cookies_inspect}}"
+          contains_value: "algum cookie ser definido para {{to}}, obtive {{cookies_inspect}}"
+          assigned_value: "cookie {{key}} ser definido, obtive {{cookies_inspect}}"
+          is_equal_value: "cookie {{key}} ser definido para {{to}}, obtive {{cookies_inspect}}"
+        optionals:
+          to:
+            positive: "para {{inspect}}"
+            negative: "para {{inspect}}"
+
       set_session:
         description: "set variável de sessão {{keys}}"
         expectations:
@@ -95,6 +107,7 @@ pt-BR:
         optionals:
           to:
             positive: "para {{inspect}}"
+            negative: "para {{inspect}}"
 
       set_the_flash:
         description: "setar mensagem flash {{keys}}"
@@ -106,6 +119,7 @@ pt-BR:
         optionals:
           to:
             positive: "para {{inspect}}"
+            negative: "para {{inspect}}"
 
     active_record:
       describe:
@@ -167,7 +181,7 @@ pt-BR:
           foreign_key_exists: "chave estrangeira {{foreign_key}} existisse em {{foreign_key_table}}, mas não existe"
           polymorphic_exists: "{{subject_table}} tivesse {{polymorphic_column}} como coluna, mas não tem"
           counter_cache_exists: "{{reflection_table}} tivesse {{counter_cache_column}} como coluna, mas não tem"
-          through_exists: "{{subject_name}} pudesse {{macro}} {{association}} com configuração {{options}}, obtive {{actual}}"
+          options_match: "{{subject_name}} tivesse {{macro}} {{association}} com as opções {{options}}, obtive {{actual}}"
         optionals:
           through:
             positive: "através de {{value}}"
