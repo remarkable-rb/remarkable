@@ -54,20 +54,20 @@ module Remarkable
           pieces = []
           attributes.each do |key, value|
             translated_key = if described_class.respond_to?(:human_attribute_name)
-              described_class.human_attribute_name(key, :locale => Remarkable.locale)
+              described_class.human_attribute_name(key.to_s, :locale => Remarkable.locale)
             else
               key.to_s.humanize
             end
 
             pieces << Remarkable.t("remarkable.active_record.describe.each",
                                     :default => "{{key}} is {{value}}",
-                                    :key => key, :value => value.inspect)
+                                    :key => translated_key.downcase, :value => value.inspect)
           end
 
           description << pieces.join(connector)
           args.unshift(description)
 
-          # Creates an example group, send the method and eval the given block.
+          # Creates an example group, set the subject and eval the given block.
           #
           example_group = super(*args) do
             write_inheritable_hash(:default_subject_attributes, attributes)

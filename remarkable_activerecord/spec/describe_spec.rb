@@ -30,6 +30,13 @@ describe Post do
       self.class.description.should == "MyPost when published is true"
     end
 
+    it "should call human name attribute on the described class" do
+      Post.should_receive(:human_attribute_name).with("comments_count", :locale => :en).and_return("__COMMENTS__COUNT__")
+      self.class.describe(:comments_count => 5) do
+        self.description.should == 'MyPost when published is true and __comments__count__ is 5'
+      end
+    end
+
     describe :public => false do
       it "should nest subject attributes" do
         subject.published.should be_true
