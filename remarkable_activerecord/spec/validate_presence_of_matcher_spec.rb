@@ -38,6 +38,38 @@ describe 'validate_presence_of' do
     end
 
     create_message_specs(self)
+
+    describe 'with belongs to' do
+      def define_and_validate(validation)
+        define_model :category
+
+        define_model :product, :category_id => :integer do
+          belongs_to :category
+          validates_presence_of :category if validation
+        end
+
+        validate_presence_of(:category)
+      end
+
+      it { should define_and_validate(true) }
+      it { should_not define_and_validate(false) }
+    end
+
+    describe 'with has many' do
+      def define_and_validate(validation)
+        define_model :stocks, :product_id => :integer
+
+        define_model :product do
+          has_many :stocks
+          validates_presence_of :stocks if validation
+        end
+
+        validate_presence_of :stocks
+      end
+
+      it { should define_and_validate(true) }
+      it { should_not define_and_validate(false) }
+    end
   end
 
   describe 'macros' do

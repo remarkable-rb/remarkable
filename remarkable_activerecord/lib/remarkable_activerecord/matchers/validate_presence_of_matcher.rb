@@ -41,7 +41,26 @@ module Remarkable
         optional  :message
 
         collection_assertions :allow_nil?
-        default_options :message => :blank, :allow_nil => false
+        default_options :message => :blank
+
+        protected
+
+          def allow_nil?
+            bad?(blank_value, :message)
+          end
+
+          def blank_value
+            collection? ? [] : nil
+          end
+
+          def collection?
+            if reflection = subject_class.reflect_on_association(@attribute)
+              [:has_many, :has_and_belongs_to_many].include?(reflection.macro)
+            else
+              false
+            end
+          end
+
       end
 
       # Ensures that the model cannot be saved if one of the attributes listed is not present.
