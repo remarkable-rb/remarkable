@@ -24,7 +24,7 @@ describe Remarkable::Pending do
 #    end
 #
 #    it "should show as fixed" do
-#      # success ...
+#      true.should be_true
 #    end
 
     should_contain(5)

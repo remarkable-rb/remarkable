@@ -47,7 +47,7 @@ module Remarkable
         pending_description = @_pending_group_description
 
         pending_block = if @_pending_group_execute
-          proc{ pending(pending_description, &implementation) }
+          proc{ pending(pending_description){ self.instance_eval(&implementation) } }
         else
           proc{ pending(pending_description) }
         end
