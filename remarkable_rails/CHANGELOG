@@ -1,3 +1,5 @@
+# v3.1
+
 * Ensure set_cookies and set_session work with arrays [#55]
 
 * Added set_cookies matcher [#51]

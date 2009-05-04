@@ -1,7 +1,9 @@
-* Allow validate_presence_of to work with associations. [#63]
+# v3.1
+
+* Allow validate_presence_of to work with associations [#63]
 
 * Allow validate_uniqueness_of to work when scopes are not stringfiable values.
-  You can now give timestamps, datetime, date and boolean as scopes. [#60]
+  You can now give timestamps, datetime, date and boolean as scopes [#60]
 
 * Allow subjects to be overwriten quickly (quick subjects):
 
@@ -24,7 +26,7 @@
       end
     end
 
-  And the string can be also localized using I18n. [#57]
+  And the string can be also localized using I18n [#57]
 
 [COMPATIBILITY] validate_associated no longer accepts a block to confgure the
 builder:
