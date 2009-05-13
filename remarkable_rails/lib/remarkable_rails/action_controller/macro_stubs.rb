@@ -58,6 +58,21 @@ module Remarkable
     #   it { should assign_to(:project).with_stubs            }
     #   it { should render_tempalte('show').with_expectations }
     #
+    # == Attention!
+    #
+    # If you need to check that an array is being sent to a method, you need to
+    # give an array inside another array, for example:
+    #
+    #   expects :comment_ids=, :on => Post, :with => [1,2,3]
+    #
+    # Is the same as:
+    #
+    #   Post.comment_ids = (1, 2, 3)
+    #
+    # And it won't work. The right way to handle this is:
+    #
+    #   expects :comment_ids=, :on => Post, :with => [[1,2,3]]
+    #
     # == mock_models
     #
     # You don't have to play with proc all the time. You can call mock_models which
@@ -451,7 +466,7 @@ module Remarkable
 
               if options.key?(:with)
                 with  = evaluate_value(options[:with])
-                chain = chain.with(with)
+                chain = chain.with(*with)
               end
 
               times = options[:times] || 1

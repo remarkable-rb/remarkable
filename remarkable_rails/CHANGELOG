@@ -1,3 +1,6 @@
+* Allow multiple args to be given to :with in expects. If you need to verify that
+  an array is being sent, you need to send an array inside another array [#70]
+
 * Allow procs or blocks to be given to respond_with_body and respond_with :body [#67]
 
 * Allow ordered to be given to macro stubs as option [#66]

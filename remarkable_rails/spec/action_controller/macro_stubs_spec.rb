@@ -50,19 +50,32 @@ describe 'MacroStubs' do
     expects :max, :min, :count, :on => Task, :ordered => true
 
     get :show, :id => 37
-    
-    it "should fail if expectation is not met" do
-      stub!(:current_id).and_return("42")
+
+    it 'should fail if expectation is not met' do
+      self.stub!(:current_id).and_return("42")
 
       lambda {
         run_action!(true)
       }.should raise_error(Spec::Mocks::MockExpectationError, /expected :find with \("42"\) but received it with \("37"\)/)
     end
 
-    it "should fail if expectations are received out of order" do
+    it 'should fail if expectations are received out of order' do
       lambda {
         run_action!(true)
       }.should raise_error(Spec::Mocks::MockExpectationError, /received :count out of order/)
+    end
+
+    it 'should splat an array given to with' do
+      self.stub!(:current_id).and_return([1, 2, 3])
+      run_expectations!
+
+      lambda {
+        Task.find([1,2,3])
+      }.should raise_error(Spec::Mocks::MockExpectationError, /expected :find with \(1\, 2\, 3\) but received it with \(\[1\, 2\, 3\]\)/)
+
+      lambda {
+        Task.find(1, 2, 3)
+      }.should_not raise_error
     end
 
     after(:each) do
