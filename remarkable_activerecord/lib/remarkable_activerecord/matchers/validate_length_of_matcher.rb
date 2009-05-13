@@ -6,6 +6,7 @@ module Remarkable
 
         optional :within, :alias => :in
         optional :minimum, :maximum, :is
+        optional :with_kind_of
         optional :allow_nil, :allow_blank, :default => true
         optional :message, :too_short, :too_long, :wrong_length
 
@@ -56,7 +57,13 @@ module Remarkable
           end
 
           def value_for_length(value)
-            "x" * value
+            repeatable = if @options[:with_kind_of]
+              [ @options[:with_kind_of].new ]
+            else
+              "x"
+            end
+
+            repeatable * value
           end
 
           def interpolation_options
@@ -96,6 +103,13 @@ module Remarkable
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.wrong_length') % range.last</tt>
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.wrong_length') % value</tt>
+      #
+      # It also accepts an extra option called :with_kind_of. If you are validating
+      # the size of an association array, you have to specify the kind of the array
+      # being validated. For example, if your post accepts maximum 10 comments, you
+      # can do:
+      #
+      #   validate_length_of :comments, :maximum => 10, :with_kind_of => Comment
       #
       # == Gotcha
       #

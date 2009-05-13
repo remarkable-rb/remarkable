@@ -325,6 +325,8 @@ pt-BR:
             positive: "seja no mínimo {{inspect}} caracteres"
           is:
             positive: "seja igual a {{inspect}} caracteres"
+          with_kind_of:
+            positive: "com um tipo de {{value}}"
 
       validate_numericality_of:
         description: "permitir apenas números para {{attributes}}"

@@ -1,3 +1,8 @@
+* validate_length_of accepts :with_kind_of to enable it to work with associations [#69]
+  In your Post specs now you can write:
+
+    should_validate_length_of :comments, :maximum => 10, :with_kind_of => Comment
+
 # v3.1
 
 * Allow validate_presence_of to work with associations [#63]

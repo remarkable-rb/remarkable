@@ -204,6 +204,8 @@ en:
             positive: "is minimum {{inspect}} characters"
           is:
             positive: "is equal to {{inspect}} characters"
+          with_kind_of:
+            positive: "with kind of {{value}}"
 
       validate_numericality_of:
         description: "ensure numericality of {{attributes}}"
