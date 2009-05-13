@@ -1,3 +1,5 @@
+* Allow ordered to be given to macro stubs as option [#66]
+
 * Allow multiple methods to be given to expects [#65]
 
 # v3.1

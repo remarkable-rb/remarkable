@@ -198,6 +198,9 @@ module Remarkable
         # * <tt>:times</tt> - The number of times the object will receive the
         #   method. Used only in expectations and when not given, defaults to 1.
         #
+        # * <tt>:ordered</tt> - When true specifies that expectations should
+        #   be received in order.
+        #
         # == Example
         #
         #   expects :new, :on => Project, :returns => :mock_project, :times => 2
@@ -439,19 +442,22 @@ module Remarkable
         def evaluate_expectation_chain(use_expectations=true) #:nodoc:
           return if self.expects_chain.nil?
 
-          self.expects_chain.each do |method, default_options, block|
-            options = default_options.dup
-
-            # Those are used both in expectations and stubs
-            object       = evaluate_value(options.delete(:on))
-            return_value = evaluate_value(options.delete(:returns))
-
+          self.expects_chain.each do |method, options, block|
+            object = evaluate_value(options[:on])
             raise ScriptError, "You have to give me :on as an option when calling :expects." if object.nil?
 
             if use_expectations
               chain = object.should_receive(method)
-              chain = chain.with(evaluate_value(options.delete(:with))) if options.key?(:with)
-              chain = chain.exactly(options.delete(:times) || 1).times
+
+              if options.key?(:with)
+                with  = evaluate_value(options[:with])
+                chain = chain.with(with)
+              end
+
+              times = options[:times] || 1
+              chain = chain.exactly(times).times
+
+              chain = chain.ordered if options[:ordered]
             else
               chain = object.stub!(method)
             end
@@ -459,6 +465,7 @@ module Remarkable
             chain = if block
               chain.and_return(&block)
             else
+              return_value = evaluate_value(options[:returns])
               chain.and_return(return_value)
             end
           end

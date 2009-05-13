@@ -45,6 +45,31 @@ describe 'MacroStubs' do
     end
   end
 
+  describe 'failures' do
+    expects :find, :on => Task, :with => proc{ current_id }, :returns => mock_task
+    expects :max, :min, :count, :on => Task, :ordered => true
+
+    get :show, :id => 37
+    
+    it "should fail if expectation is not met" do
+      stub!(:current_id).and_return("42")
+
+      lambda {
+        run_action!(true)
+      }.should raise_error(Spec::Mocks::MockExpectationError, /expected :find with \("42"\) but received it with \("37"\)/)
+    end
+
+    it "should fail if expectations are received out of order" do
+      lambda {
+        run_action!(true)
+      }.should raise_error(Spec::Mocks::MockExpectationError, /received :count out of order/)
+    end
+
+    after(:each) do
+      teardown_mocks_for_rspec
+    end
+  end
+
   describe 'when extending describe group behavior' do
     expects :find, :on => Task, :with => proc{ current_id }, :returns => mock_task
     expects :count, :max, :min, :on => Task
