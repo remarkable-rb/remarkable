@@ -47,6 +47,7 @@ describe 'MacroStubs' do
 
   describe 'when extending describe group behavior' do
     expects :find, :on => Task, :with => proc{ current_id }, :returns => mock_task
+    expects :count, :max, :min, :on => Task
 
     get :show, :id => 37
     params :special_task_id => 42
@@ -90,7 +91,7 @@ describe 'MacroStubs' do
       self.should_receive(:current_id).once.and_return('37')
       run_expectations!
       @controller.send(:performed?).should_not be_true
-      Task.find('37') # Execute expectations by hand
+      get :show, :id => '37' # Execute the action to match expectations
     end
 
     it 'should run action with stubs' do

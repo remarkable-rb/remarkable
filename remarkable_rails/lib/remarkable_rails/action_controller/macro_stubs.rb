@@ -180,8 +180,9 @@ module Remarkable
       module ClassMethods
 
         # Creates a chain that will be evaluated as stub or expectation. The
-        # first parameter is the method expected. Also, a block can be given
-        # to calculate the returned value. See examples below.
+        # first parameter is the method expected. You can also specify multiple
+        # methods to stub and give a block to calculate the returned value. See
+        # examples below.
         #
         # == Options
         #
@@ -201,12 +202,17 @@ module Remarkable
         #
         #   expects :new, :on => Project, :returns => :mock_project, :times => 2
         #
+        #   expects :new, :find, :on => Project, :returns => :mock_project
+        #
         #   expects :human_attribute_name, :on => Project, :with => :title do |attr|
         #     attr.to_s.humanize
         #   end
         #
         def expects(*args, &block)
-          write_inheritable_array(:expects_chain, [args << block])
+          options = args.extract_options!
+          args.each do |arg|
+            write_inheritable_array(:expects_chain, [ [ arg, options, block] ])
+          end
         end
 
         # The mime type of the request. The value given will be called transformed

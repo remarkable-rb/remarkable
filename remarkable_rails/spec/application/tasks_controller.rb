@@ -13,6 +13,11 @@ class TasksController < ApplicationController
   def show
     @task = Task.find(params[:id])
 
+    # Multiple expects
+    Task.count
+    Task.max
+    Task.min
+
     respond_to do |format|
       format.html { render :text => 'show' }
       format.xml  { render :xml => @task.to_xml }

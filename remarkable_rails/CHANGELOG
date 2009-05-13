@@ -1,3 +1,5 @@
+* Allow multiple methods to be given to expects [#65]
+
 # v3.1
 
 * Ensure set_cookies and set_session work with arrays [#55]
