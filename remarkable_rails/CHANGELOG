@@ -1,3 +1,19 @@
+* mock_models now creates a second class method to be used on the index action [#71]
+  In other words, mock_models :project will create:
+
+    def self.mock_project
+     proc { mock_project }
+    end
+
+    # This was added to be used on index actions
+    def self.mock_projects
+      proc { [ mock_project ] }
+    end
+
+    def mock_project(stubs={})
+      @project ||= mock_model(Project, stubs)
+    end
+
 * Allow multiple args to be given to :with in expects. If you need to verify that
   an array is being sent, you need to send an array inside another array [#70]
 

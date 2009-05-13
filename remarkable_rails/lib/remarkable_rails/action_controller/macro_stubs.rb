@@ -56,7 +56,7 @@ module Remarkable
     # This also works in the rspec way:
     #
     #   it { should assign_to(:project).with_stubs            }
-    #   it { should render_tempalte('show').with_expectations }
+    #   it { should render_template('show').with_expectations }
     #
     # == Attention!
     #
@@ -76,7 +76,7 @@ module Remarkable
     # == mock_models
     #
     # You don't have to play with proc all the time. You can call mock_models which
-    # creates a class method that simply returns a proc and a instance method that
+    # creates two class methods that simply returns a proc and a instance method that
     # do the actual mock.
     #
     #   describe ProjectsController do
@@ -86,6 +86,11 @@ module Remarkable
     #
     #   def self.mock_project
     #     proc { mock_project }
+    #   end
+    #
+    #   # To be used on index actions
+    #   def self.mock_projects
+    #     proc { [mock_project] }
     #   end
     #
     #   def mock_project(stubs={})
@@ -420,10 +425,15 @@ module Remarkable
         #     mock_models :project
         #   end
         #
-        # Will create a class and instance mock method for you:
+        # Will create one instance and two class mock methods for you:
         #
         #   def self.mock_project
         #     proc { mock_project }
+        #   end
+        #
+        #   # To be used on index actions
+        #   def self.mock_projects
+        #     proc { [ mock_project ] }
         #   end
         #
         #   def mock_project(stubs={})
@@ -438,11 +448,13 @@ module Remarkable
           options = { :class_method => true }.merge(options)
 
           models.each do |model|
+            model = model.to_s
             self.class_eval <<-METHOD
-              #{"def self.mock_#{model}; proc { mock_#{model} }; end" if options[:class_method]}
+              #{"def self.mock_#{model}; proc { mock_#{model} }; end"               if options[:class_method]}
+              #{"def self.mock_#{model.pluralize}; proc { [ mock_#{model} ] }; end" if options[:class_method]}
 
               def mock_#{model}(stubs={})
-                @#{model} ||= mock_model(#{model.to_s.classify}, stubs)
+                @#{model} ||= mock_model(#{model.classify}, stubs)
               end
             METHOD
           end

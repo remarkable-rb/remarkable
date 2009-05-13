@@ -11,14 +11,21 @@ describe 'MacroStubs' do
 
   describe 'mock_models' do
     before(:each) do
-      self.class.metaclass.send(:undef_method, :mock_project) if self.class.respond_to?(:mock_project)
-      self.class.send(:undef_method, :mock_project)           if self.respond_to?(:mock_project)
+      self.class.metaclass.send(:undef_method, :mock_projects) if self.class.respond_to?(:mock_projects)
+      self.class.metaclass.send(:undef_method, :mock_project)  if self.class.respond_to?(:mock_project)
+      self.class.send(:undef_method, :mock_project)            if self.respond_to?(:mock_project)
     end
 
-    it 'should create a class mock method' do
+    it 'should create a class singular mock method' do
       self.class.respond_to?(:mock_project).should be_false
       self.class.mock_models :project
       self.class.respond_to?(:mock_project).should be_true
+    end
+
+    it 'should create a class plural mock method' do
+      self.class.respond_to?(:mock_projects).should be_false
+      self.class.mock_models :project
+      self.class.respond_to?(:mock_projects).should be_true
     end
 
     it 'should create an instance mock method' do
@@ -35,13 +42,22 @@ describe 'MacroStubs' do
       self.respond_to?(:mock_project).should be_true
     end
 
-    it 'should create procs which evals to mocks dynamically' do
+    it 'should create procs which evals to a mock dynamically' do
       proc = self.class.mock_task
       proc.should be_kind_of(Proc)
 
-      self.instance_variable_get('@task').should be_nil
-      instance_eval(&proc)
-      self.instance_variable_get('@task').should_not be_nil
+      @task.should be_nil
+      instance_eval(&proc).should == mock_task
+      @task.should_not be_nil
+    end
+
+    it 'should create procs which evals to an array of mocks dynamically' do
+      proc = self.class.mock_tasks
+      proc.should be_kind_of(Proc)
+
+      @task.should be_nil
+      instance_eval(&proc).should == [ mock_task ]
+      @task.should == mock_task
     end
   end
 
