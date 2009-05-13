@@ -78,6 +78,8 @@ describe 'respond_with' do
 
       it { should respond_with_body(%{<?xml version="1.0" encoding="UTF-8"?>\n<nil-classes type="array"/>\n}) }
       it { should respond_with_body(/xml/)       }
+      it { should respond_with_body{/xml/}       }
+      it { should respond_with_body proc{/xml/}  }
       it { should_not respond_with_body('html')  }
       it { should_not respond_with_body(/html/)  }
     end

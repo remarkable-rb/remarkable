@@ -19,11 +19,11 @@ module Remarkable
           #     # code
           #   end
           #
-          def after_initialize(symbol=nil, &block)
+          def after_initialize(*symbols, &block)
             if block_given?
               @after_initialize_callbacks << block
-            elsif symbol
-              @after_initialize_callbacks << symbol
+            else
+              @after_initialize_callbacks += symbols
             end
           end
 
@@ -38,11 +38,11 @@ module Remarkable
           #     # code
           #   end
           #
-          def before_assert(symbol=nil, &block)
+          def before_assert(*symbols, &block)
             if block_given?
               @before_assert_callbacks << block
-            elsif symbol
-              @before_assert_callbacks << symbol
+            else
+              @before_assert_callbacks += symbols
             end
           end
       end

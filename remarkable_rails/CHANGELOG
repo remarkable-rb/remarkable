@@ -1,3 +1,5 @@
+* Allow procs or blocks to be given to respond_with_body and respond_with :body [#67]
+
 * Allow ordered to be given to macro stubs as option [#66]
 
 * Allow multiple methods to be given to expects [#65]

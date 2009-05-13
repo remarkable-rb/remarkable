@@ -2,7 +2,7 @@ module Remarkable
   module ActionController
     module Matchers
       class RespondWithMatcher < Remarkable::ActionController::Base #:nodoc:
-        arguments
+        arguments :block => true
 
         optional :with, :body, :content_type
 
@@ -11,7 +11,7 @@ module Remarkable
           @controller = @spec.instance_variable_get('@controller')
         end
 
-        before_assert :evaluate_content_type
+        before_assert :evaluate_content_type, :evaluate_body
 
         assertions :status_matches?, :body_matches?, :content_type_matches?
 
@@ -45,7 +45,6 @@ module Remarkable
             assert_contains(@response.content_type, @options[:content_type])
           end
 
-          # Evaluate content_type before assertions to have nice descriptions
           def evaluate_content_type
             return unless @options.key?(:content_type)
 
@@ -56,6 +55,14 @@ module Remarkable
                 @options[:content_type]
               else
                 @options[:content_type].to_s
+            end
+          end
+
+          def evaluate_body
+            if @options.key?(:body) || @block
+              value = @options.key?(:body) ? @options[:body] : @block
+              value = @spec.instance_eval(&value) if value.is_a?(Proc)
+              @options[:body] = value
             end
           end
 
@@ -99,7 +106,8 @@ module Remarkable
       #
       def respond_with(*args, &block)
         options = args.extract_options!
-        RespondWithMatcher.new(options.merge(:with => args.first), &block).spec(self)
+        options.merge!(:with => args.first)
+        RespondWithMatcher.new(options, &block).spec(self)
       end
 
       # This is just a shortcut for respond_with :body => body. Check respond_with
@@ -107,7 +115,10 @@ module Remarkable
       #
       def respond_with_body(*args, &block)
         options = args.extract_options!
-        RespondWithMatcher.new(options.merge(:body => args.first), &block).spec(self)
+        # Since body can be also given as block, only merge if any arguments was
+        # actually sent.
+        options.merge!(:body => args.first) unless args.empty?
+        RespondWithMatcher.new(options, &block).spec(self)
       end
 
       # This is just a shortcut for respond_with :content_type => content_type.
@@ -116,7 +127,8 @@ module Remarkable
       #
       def respond_with_content_type(*args, &block)
         options = args.extract_options!
-        RespondWithMatcher.new(options.merge(:content_type => args.first), &block).spec(self)
+        options.merge!(:content_type => args.first)
+        RespondWithMatcher.new(options, &block).spec(self)
       end
 
     end
