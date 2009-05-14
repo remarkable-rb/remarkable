@@ -94,6 +94,15 @@ describe 'MacroStubs' do
       }.should_not raise_error
     end
 
+    it 'should not splat hashes' do
+      self.stub!(:current_id).and_return('login' => 'login')
+      run_expectations!
+
+      lambda {
+        Task.find('login' => 'login')
+      }.should_not raise_error
+    end
+
     after(:each) do
       teardown_mocks_for_rspec
     end

@@ -477,8 +477,13 @@ module Remarkable
               chain = object.should_receive(method)
 
               if options.key?(:with)
-                with  = evaluate_value(options[:with])
-                chain = chain.with(*with)
+                with = evaluate_value(options[:with])
+
+                chain = if with.is_a?(Array)
+                  chain.with(*with)
+                else
+                  chain.with(with)
+                end
               end
 
               times = options[:times] || 1
