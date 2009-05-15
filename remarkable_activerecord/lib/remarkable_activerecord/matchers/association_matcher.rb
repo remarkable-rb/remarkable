@@ -32,24 +32,27 @@ module Remarkable
             reflection.source_reflection rescue false
           end
 
+          # has_and_belongs_to_many only works if the tables are in the same
+          # database, so we always look for the table in the subject connection.
+          #
           def join_table_exists?
             return true unless reflection.macro == :has_and_belongs_to_many
-            ::ActiveRecord::Base.connection.tables.include?(reflection.options[:join_table])
+            subject_class.connection.tables.include?(reflection.options[:join_table])
           end
 
           def foreign_key_exists?
             return true unless foreign_key_table
-            table_has_column?(foreign_key_table, reflection_foreign_key)
+            table_has_column?(foreign_key_table_class, foreign_key_table, reflection_foreign_key)
           end
 
           def polymorphic_exists?
             return true unless @options[:polymorphic]
-            table_has_column?(subject_class.table_name, reflection_foreign_key.sub(/_id$/, '_type'))
+            klass_table_has_column?(subject_class, reflection_foreign_key.sub(/_id$/, '_type'))
           end
 
           def counter_cache_exists?
             return true unless @options[:counter_cache]
-            table_has_column?(reflection.klass.table_name, reflection.counter_cache_column.to_s)
+            klass_table_has_column?(reflection.klass, reflection.counter_cache_column.to_s)
           end
 
           def options_match?
@@ -80,8 +83,12 @@ module Remarkable
             reflection.primary_key_name.to_s
           end
 
-          def table_has_column?(table_name, column)
-            ::ActiveRecord::Base.connection.columns(table_name, 'Remarkable column retrieval').any?{|c| c.name == column }
+          def table_has_column?(klass, table_name, column)
+            klass.connection.columns(table_name, 'Remarkable column retrieval').any?{|c| c.name == column }
+          end
+
+          def klass_table_has_column?(klass, column)
+            table_has_column?(klass, klass.table_name, column)
           end
 
           # In through we don't check the foreign_key, because it's spread
@@ -103,6 +110,17 @@ module Remarkable
               subject_class.table_name
             else
               reflection.klass.table_name
+            end
+          end
+
+          # Returns the foreign key table class to use the proper connection
+          # when searching for the table and foreign key.
+          #
+          def foreign_key_table_class
+            if [:belongs_to, :has_and_belongs_to_many].include?(reflection.macro)
+              subject_class
+            else
+              reflection.klass
             end
           end
 

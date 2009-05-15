@@ -1,3 +1,5 @@
+* Association matchers now searches in the right database for tables [#73]
+
 * validate_length_of accepts :with_kind_of to enable it to work with associations [#69]
   In your Post specs now you can write:
 
