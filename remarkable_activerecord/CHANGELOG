@@ -1,3 +1,15 @@
+* Allow default subject attributes to be given [#74]
+  You can even mix with a fixture replacement tool and still use quick subjects:
+
+    describe Post
+      # Fixjour example
+      subject_attributes { valid_post_attributes }
+
+      describe :published => true do
+        should_validate_presence_of :published_at
+      end
+    end
+
 * Bug fix when a symbol is given has join table to habtm association [#75]
 
 * Association matchers now searches in the right database for tables [#73]

@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 RAILS_I18n = true
 
 class Post
-  attr_accessor :title, :published, :public
+  attr_accessor :published, :public, :deleted
  
   def initialize(attributes={})
     attributes.each do |key, value|
@@ -14,11 +14,39 @@ class Post
   def self.human_name(*args)
     "MyPost"
   end
-end unless defined?(Post)
+end
 
 describe Post do
   it "should use human name on description" do
     self.class.description.should == "MyPost"
+  end
+
+  describe "default attributes as a hash" do
+    subject_attributes :deleted => true
+
+    it "should set the subject with deleted equals to true" do
+      subject.deleted.should be_true
+    end
+
+    it "should not change the description" do
+      self.class.description.should == "MyPost default attributes as a hash"
+    end
+  end
+
+  describe "default attributes as a proc" do
+    subject_attributes { my_attributes }
+
+    it "should set the subject with deleted equals to true" do
+      subject.deleted.should be_true
+    end
+
+    it "should not change the description" do
+      self.class.description.should == "MyPost default attributes as a proc"
+    end
+
+    def my_attributes
+      { :deleted => true }
+    end
   end
 
   describe :published => true do
@@ -45,6 +73,16 @@ describe Post do
 
       it "should nest descriptions" do
         self.class.description.should == "MyPost when published is true and public is false"
+      end
+
+      describe "default attributes as a hash" do
+        subject_attributes :deleted => true
+
+        it "should merge describe attributes with subject attributes" do
+          subject.published.should be_true
+          subject.public.should be_false
+          subject.deleted.should be_true
+        end
       end
     end
   end
