@@ -275,6 +275,9 @@ describe 'association_matcher' do
         it { should define_and_validate(:join_table => 'my_table',
                                         :association_table => 'my_table').join_table('my_table') }
 
+        it { should define_and_validate(:join_table => :my_table,
+                                        :association_table => :my_table).join_table(:my_table) }
+
         it { should_not define_and_validate.join_table('projects_labels') }
 
         it { should_not define_and_validate(:join_table => 'my_table',

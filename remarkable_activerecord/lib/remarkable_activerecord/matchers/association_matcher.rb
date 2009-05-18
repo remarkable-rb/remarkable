@@ -37,7 +37,7 @@ module Remarkable
           #
           def join_table_exists?
             return true unless reflection.macro == :has_and_belongs_to_many
-            subject_class.connection.tables.include?(reflection.options[:join_table])
+            subject_class.connection.tables.include?(reflection.options[:join_table].to_s)
           end
 
           def foreign_key_exists?
