@@ -196,7 +196,7 @@ module Remarkable
       # database. In other words, you can't do this:
       #
       #   subject { Post.create!(@valid_attributes) }
-      #   should_validate_uniquness_of :title
+      #   should_validate_uniqueness_of :title
       #
       # But don't worry, if you eventually do that, a helpful error message
       # will be raised.
