@@ -49,7 +49,7 @@ describe 'have_index_matcher' do
     it { should have_index(:name) }
     it { should have_index(:email) }
     it { should have_index([:email, :name]) }
-    it { should have_indices(:name, :email) }
+    it { should have_index(:name, :email) }
 
     it { should have_index(:name).unique(false) }
     it { should have_index(:email).unique }
@@ -65,7 +65,7 @@ describe 'have_index_matcher' do
     should_have_index :name
     should_have_index :email
     should_have_index [:email, :name]
-    should_have_indices :name, :email
+    should_have_index :name, :email
 
     should_have_index :name, :unique => false
     should_have_index :email, :unique => true
@@ -76,5 +76,12 @@ describe 'have_index_matcher' do
     should_not_have_index :email, :unique => false
     should_not_have_index :watcher_id, :table_name => :users_watchers
   end
+
+  describe "aliases" do
+    should_have_indices :name
+    should_have_db_index :name
+    should_have_db_indices :name
+  end
+
 end
 
