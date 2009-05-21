@@ -32,6 +32,7 @@ def self.configure_gemspec!
     s.require_path = 'lib'
     s.files = EXTRA_RDOC_FILES + Dir.glob("{lib,locale}/**/*")
     s.test_files = Dir.glob("spec/**/*")
+    s.add_dependency('rspec', ">= #{RSPEC_VERSION}")
     yield s
   end
 
