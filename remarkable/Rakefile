@@ -11,9 +11,7 @@ require File.join(File.dirname(__FILE__), "..", "rake_helpers.rb")
 
 ########### Package && release
 
-configure_gemspec! do |s|
-  s.add_dependency('rspec', ">= #{RSPEC_VERSION}")
-end
+configure_gemspec!
 
 ########### Specs
 

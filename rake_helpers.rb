@@ -33,7 +33,7 @@ def self.configure_gemspec!
     s.files = EXTRA_RDOC_FILES + Dir.glob("{lib,locale}/**/*")
     s.test_files = Dir.glob("spec/**/*")
     s.add_dependency('rspec', ">= #{RSPEC_VERSION}")
-    yield s
+    yield s if block_given?
   end
 
   Rake::GemPackageTask.new($spec) do |pkg|
