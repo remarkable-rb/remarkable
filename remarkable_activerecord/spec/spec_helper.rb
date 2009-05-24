@@ -1,5 +1,5 @@
+# encoding: utf-8
 require 'rubygems'
-require 'ruby-debug'
 
 RAILS_VERSION = ENV['RAILS_VERSION'] || '2.3.2'
 

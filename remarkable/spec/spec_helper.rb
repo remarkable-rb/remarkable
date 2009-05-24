@@ -1,7 +1,6 @@
 $TESTING=true
 
 require 'rubygems'
-require 'ruby-debug'
 
 dir = File.dirname(__FILE__)
 require File.join(dir, '..', 'lib', 'remarkable')

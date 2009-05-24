@@ -1,3 +1,4 @@
+# encoding: utf-8
 PROJECT_SUMMARY     = "Remarkable: a framework for rspec matchers, with support to macros and I18n."
 PROJECT_DESCRIPTION = PROJECT_SUMMARY
 

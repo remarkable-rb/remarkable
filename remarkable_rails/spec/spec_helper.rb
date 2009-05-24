@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'ruby-debug'
 
 RAILS_ENV     = 'test'
 RAILS_VERSION = ENV['RAILS_VERSION'] || '2.3.2'

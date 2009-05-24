@@ -1,3 +1,4 @@
+# encoding: utf-8
 PROJECT_SUMMARY     = "Remarkable Rails: collection of matchers and macros with I18n for Rails"
 PROJECT_DESCRIPTION = PROJECT_SUMMARY
 

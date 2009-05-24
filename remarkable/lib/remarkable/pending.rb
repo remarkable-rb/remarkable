@@ -1,4 +1,5 @@
 module Remarkable
+
   module Pending
 
     # We cannot put the alias method in the module because it's a Ruby 1.8 bug
@@ -6,6 +7,8 @@ module Remarkable
     #
     def self.extended(base) #:nodoc:
       class << base
+        alias_method :example_without_pending, :example
+        alias_method :example, :example_with_pending
         alias :it :example
         alias :specify :example
       end
@@ -41,7 +44,7 @@ module Remarkable
       @_pending_group_execute = nil
     end
 
-    def example(description=nil, options={}, backtrace=nil, &implementation) #:nodoc:
+    def example_with_pending(description=nil, options={}, backtrace=nil, &implementation) #:nodoc:
       if block_given? && @_pending_group
         pending_caller      = caller.detect{ |c| c !~ /method_missing'/ }
         pending_description = @_pending_group_description
@@ -52,11 +55,12 @@ module Remarkable
           proc{ pending(pending_description) }
         end
 
-        super(description, options, backtrace || pending_caller, &pending_block)
+        example_without_pending(description, options, backtrace || pending_caller, &pending_block)
       else
-        super(description, options, backtrace || caller(0)[1], &implementation)
+        example_without_pending(description, options, backtrace || caller(0)[1], &implementation)
       end
     end
 
   end
+
 end
