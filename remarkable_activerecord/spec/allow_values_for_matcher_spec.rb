@@ -51,6 +51,11 @@ describe 'allow_values_for' do
 
     should_allow_values_for :title, 'X'
     should_not_allow_values_for :title, 'A'
+
+    describe 'deprecation' do
+      it { should validate_format_of(:title, 'X') }
+      should_not_validate_format_of :title, 'A'
+    end
   end
 end
 

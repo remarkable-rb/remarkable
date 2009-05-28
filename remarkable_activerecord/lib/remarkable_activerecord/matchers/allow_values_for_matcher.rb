@@ -87,7 +87,17 @@ module Remarkable
         options = args.extract_options!
         AllowValuesForMatcher.new(attribute, options.merge!(:in => args), &block).spec(self)
       end
-      alias :validate_format_of :allow_values_for
+
+      # Deprecated. Use allow_values_for instead.
+      #
+      def validate_format_of(*args)
+        if caller[0] =~ /\macros.rb/
+          warn "[DEPRECATION] should_validate_format_of is deprecated, use should_allow_values_for instead."
+        else
+          warn "[DEPRECATION] validate_format_of is deprecated, use allow_values_for instead. Called from #{caller[0]}."
+        end
+        allow_values_for(*args)
+      end
 
     end
   end

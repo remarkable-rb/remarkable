@@ -3,8 +3,9 @@
 Remarkable ActiveRecord is a collection of matchers to ActiveRecord. Why use
 Remarkable?
 
-* The only one with matchers for all ActiveRecord validations, with support to
-  all options (except :on and the option :with in validates_format_of);
+* Matchers for all ActiveRecord validations, with support to all options. The only
+  exceptions are validate_format_of (which should be invoked as allow_values_for)
+  and the :on option;
 
 * Matchers for all ActiveRecord associations. The only one which supports all
   these options:
