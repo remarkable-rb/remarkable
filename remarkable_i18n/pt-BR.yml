@@ -262,6 +262,8 @@ pt-BR:
           unique:
             positive: "com valores únicos"
             negative: "sem valores únicos"
+          table_name:
+            positive: "na tabela {{value}}"
 
       have_readonly_attributes:
         description: "tornar {{attributes}} apenas leitura"

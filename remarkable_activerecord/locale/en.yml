@@ -141,6 +141,8 @@ en:
           unique:
             positive: "with unique values"
             negative: "with non unique values"
+          table_name:
+            positive: "on table {{value}}"
 
       have_readonly_attributes:
         description: "make {{attributes}} read-only"

@@ -1,3 +1,5 @@
+* Add :table_name option to have_index (thanks to Lawrence Pit) [#79]
+
 * Allow default subject attributes to be given [#74]
   You can even mix with a fixture replacement tool and still use quick subjects:
 

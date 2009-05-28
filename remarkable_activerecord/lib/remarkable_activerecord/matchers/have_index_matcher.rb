@@ -4,6 +4,7 @@ module Remarkable
       class HaveIndexMatcher < Remarkable::ActiveRecord::Base #:nodoc:
         arguments :collection => :columns, :as => :column
 
+        optional :table_name
         optional :unique, :default => true
 
         collection_assertions :index_exists?, :is_unique?
@@ -25,11 +26,17 @@ module Remarkable
           end
 
           def indexes
-            @indexes ||= ::ActiveRecord::Base.connection.indexes(subject_class.table_name)
+            @indexes ||= ::ActiveRecord::Base.connection.indexes(current_table_name)
           end
 
           def interpolation_options
-            @subject ? { :table_name => subject_class.table_name } : {}
+            @subject ? { :table_name => current_table_name } : {}
+          end
+
+        private
+
+          def current_table_name
+            @options[:table_name] || subject_class.table_name
           end
 
       end
@@ -39,6 +46,7 @@ module Remarkable
       # == Options
       #
       # * <tt>unique</tt> - when supplied, tests if the index is unique or not
+      # * <tt>table_name</tt> - when supplied, tests if the index is defined for the given table
       #
       # == Examples
       #
