@@ -1,5 +1,7 @@
 # v3.1
 
+* Remarkable.include_matchers! require just one argument [#80]
+
 * Pending groups show proper backtrace and run by default in execute mode [#49]
 
 * Added support to blocks configuration. All Remarkable matcher and macros can
