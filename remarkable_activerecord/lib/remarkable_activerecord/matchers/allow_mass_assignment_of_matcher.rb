@@ -4,18 +4,43 @@ module Remarkable
       class AllowMassAssignmentOfMatcher < Remarkable::ActiveRecord::Base #:nodoc:
         arguments :collection => :attributes, :as => :attribute
 
+        assertion :allows?
         collection_assertions :is_protected?, :is_accessible?
 
         protected
 
+          # If no attribute is given, check if no attribute is being protected,
+          # otherwise it fails.
+          #
+          def allows?
+            !@attributes.empty? || protected_attributes.empty?
+          end
+
           def is_protected?
-            protected = subject_class.protected_attributes || []
-            protected.empty? || !protected.include?(@attribute.to_s)
+            protected_attributes.empty? || !protected_attributes.include?(@attribute.to_s)
           end
 
           def is_accessible?
-            accessible = subject_class.accessible_attributes || []
-            accessible.empty? || accessible.include?(@attribute.to_s)
+            accessible_attributes.empty? || accessible_attributes.include?(@attribute.to_s)
+          end
+
+          def interpolation_options
+            if @subject
+              array = protected_attributes.to_a
+              { :protected_attributes => array.empty? ? "[]" : array_to_sentence(array) }
+            else
+              {}
+            end
+          end
+
+        private
+
+          def accessible_attributes
+            @accessible_attributes ||= subject_class.accessible_attributes || []
+          end
+
+          def protected_attributes
+            @protected_attributes ||= subject_class.protected_attributes || []
           end
       end
 

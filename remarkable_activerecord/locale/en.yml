@@ -42,6 +42,7 @@ en:
       allow_mass_assignment_of:
         description: "allow mass assignment of {{attributes}}"
         expectations:
+          allows: "{{subject_name}} to allow mass assignment ({{subject_name}} is protecting {{protected_attributes}})"
           is_protected: "{{subject_name}} to allow mass assignment of {{attribute}} ({{subject_name}} is protecting {{attribute}})"
           is_accessible: "{{subject_name}} to allow mass assignment of {{attribute}} ({{subject_name}} has not made {{attribute}} accessible)"
 

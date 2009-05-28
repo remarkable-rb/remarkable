@@ -21,6 +21,13 @@ describe 'allow_mass_assignment_of' do
       @matcher.description.should == 'allow mass assignment of title and category'
     end
 
+    it 'should set allows? message' do
+      define_and_validate(:protected => true)
+      @matcher = allow_mass_assignment_of
+      @matcher.matches?(@model)
+      @matcher.failure_message.should == 'Expected Product to allow mass assignment (Product is protecting category and title)'
+    end
+
     it 'should set is_protected? message' do
       @matcher = define_and_validate(:protected => true)
       @matcher.matches?(@model)
@@ -41,6 +48,23 @@ describe 'allow_mass_assignment_of' do
 
     it { should_not define_and_validate(:protected => true) }
     it { should_not define_and_validate(:accessible => [:another]) }
+
+    describe 'with no argument' do
+      it 'should allow mass assignment if no attribute is accessible or protected' do
+        define_and_validate
+        should allow_mass_assignment_of
+      end
+
+      it 'should allow mass assignment if attributes are accessible' do
+        define_and_validate(:accessible => true)
+        should allow_mass_assignment_of
+      end
+
+      it 'should not allow mass assignment if attributes are protected' do
+        define_and_validate(:protected => true)
+        should_not allow_mass_assignment_of
+      end
+    end
   end
 
   describe 'macros' do

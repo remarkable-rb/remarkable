@@ -163,6 +163,7 @@ pt-BR:
       allow_mass_assignment_of:
         description: "permitir assinalamento em massa de {{attributes}}"
         expectations:
+          allows: "{{subject_name}} permitisse assinalamento em massa ({{subject_name}} está protegendo {{protected_attributes}})"
           is_protected: "{{subject_name}} permitisse o assinalamento em massa de {{attribute}} ({{subject_name}} está protegendo {{attribute}})"
           is_accessible: "{{subject_name}} permitisse o assinalamento em massa de {{attribute}} ({{subject_name}} não tornou {{attribute}} accessível)"
 
