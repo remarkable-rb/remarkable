@@ -39,4 +39,10 @@ describe Remarkable::Base do
     MatchersSandbox.new.should respond_to(:contain)
   end
 
+  it 'should raise an error if include matchers is called without target and rspec is not loaded' do
+    Remarkable.stub!(:rspec_defined?).and_return(false)
+    lambda {
+      Remarkable.include_matchers!(String)
+    }.should raise_error(ArgumentError, "You haven't supplied the target to include_matchers! and RSpec is not loaded, so we cannot infer one.")
+  end
 end

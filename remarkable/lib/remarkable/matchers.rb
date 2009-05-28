@@ -9,7 +9,15 @@ module Remarkable
   # If the module to be included responds to :after_include, it's called with the
   # target as argument.
   #
-  def self.include_matchers!(base, target)
+  def self.include_matchers!(base, target=nil)
+    if target.nil?
+      if rspec_defined?
+        target = Spec::Example::ExampleGroup
+      else
+        raise ArgumentError, "You haven't supplied the target to include_matchers! and RSpec is not loaded, so we cannot infer one."
+      end
+    end
+
     target.send :extend, Remarkable::Pending
     target.send :extend, Remarkable::Macros
 
@@ -23,5 +31,9 @@ module Remarkable
     if base.respond_to?(:after_include)
       base.after_include(target)
     end
+  end
+
+  def self.rspec_defined? #:nodoc:
+    defined?(Spec)
   end
 end
