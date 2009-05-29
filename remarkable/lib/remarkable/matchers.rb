@@ -18,8 +18,9 @@ module Remarkable
       end
     end
 
-    target.send :extend, Remarkable::Pending
-    target.send :extend, Remarkable::Macros
+    metaclass = (class << target; self; end)
+    target.send :extend, Remarkable::Pending unless metaclass.ancestors.include?(Remarkable::Pending)
+    target.send :extend, Remarkable::Macros  unless metaclass.ancestors.include?(Remarkable::Macros)
 
     if defined?(base::Matchers)
       target.send :include, base::Matchers

@@ -6,11 +6,13 @@ module Remarkable
     # http://coderrr.wordpress.com/2008/03/28/alias_methodmodule-bug-in-ruby-18/
     #
     def self.extended(base) #:nodoc:
-      class << base
-        alias_method :example_without_pending, :example
-        alias_method :example, :example_with_pending
-        alias :it :example
-        alias :specify :example
+      if base.respond_to?(:example)
+        class << base
+          alias_method :example_without_pending, :example
+          alias_method :example, :example_with_pending
+          alias :it :example
+          alias :specify :example
+        end
       end
     end
 
