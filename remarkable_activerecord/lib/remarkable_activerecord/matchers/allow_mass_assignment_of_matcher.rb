@@ -26,8 +26,7 @@ module Remarkable
 
           def interpolation_options
             if @subject
-              array = protected_attributes.to_a
-              { :protected_attributes => array.empty? ? "[]" : array_to_sentence(array) }
+              { :protected_attributes => array_to_sentence(protected_attributes.to_a, false, '[]') }
             else
               {}
             end

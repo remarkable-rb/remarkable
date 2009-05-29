@@ -46,7 +46,7 @@ describe 'filter_params' do
     it { should_not filter_params(:user) }
   end
 
-  describe 'not filtering parameter' do
+  describe 'not filtering any parameter' do
     before(:each) do 
       @controller = define_controller(:Comments).new
       self.class.subject { @controller }

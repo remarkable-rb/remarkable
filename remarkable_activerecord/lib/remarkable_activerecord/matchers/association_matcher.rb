@@ -125,7 +125,9 @@ module Remarkable
           end
 
           def interpolation_options
-            options = { :macro => Remarkable.t(@macro, :scope => matcher_i18n_scope, :default => @macro.to_s), :options => @options.inspect }
+            options = {}
+            options[:macro]   = Remarkable.t(@macro, :scope => matcher_i18n_scope, :default => @macro.to_s.gsub("_", ""))
+            options[:options] = @options.inspect
 
             if @subject && reflection
               options.merge!(

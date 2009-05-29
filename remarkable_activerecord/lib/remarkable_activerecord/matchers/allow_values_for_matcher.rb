@@ -53,7 +53,7 @@ module Remarkable
             options = if @in_range
               { :in => (@options[:in].first..@options[:in].last).inspect }
             elsif @options[:in].is_a?(Array)
-              { :in => array_to_sentence(@options[:in].map{|i| i.inspect}) }
+              { :in => array_to_sentence(@options[:in], true, '[]') }
             else
               { :in => @options[:in].inspect }
             end

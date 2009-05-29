@@ -80,7 +80,7 @@ module Remarkable
 
       # Converts an array to a sentence
       #
-      def array_to_sentence(array, inspect=false)
+      def array_to_sentence(array, inspect=false, empty_default='')
         words_connector     = Remarkable.t 'remarkable.core.helpers.words_connector'
         two_words_connector = Remarkable.t 'remarkable.core.helpers.two_words_connector'
         last_word_connector = Remarkable.t 'remarkable.core.helpers.last_word_connector'
@@ -89,7 +89,7 @@ module Remarkable
 
         case array.length
           when 0
-            ''
+            empty_default
           when 1
             array[0].to_s
           when 2
