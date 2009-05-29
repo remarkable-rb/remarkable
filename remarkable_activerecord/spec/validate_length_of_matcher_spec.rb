@@ -145,6 +145,31 @@ describe 'validate_length_of' do
       it { should_not define_and_validate(:is => 3).is(4) }
     end
 
+    describe "with token and separator options" do
+      describe "and words as tokens" do
+        before(:each) do
+          @matcher = define_and_validate(:within => 3..5, :tokenizer => lambda { |str| str.scan(/\w+/) })
+        end
+
+        it { should @matcher.within(3..5).token("word").separator(" ") }
+        it { should_not @matcher.within(2..5).token("word").separator(" ") }
+        it { should_not @matcher.within(4..5).token("word").separator(" ") }
+        it { should_not @matcher.within(3..4).token("word").separator(" ") }
+        it { should_not @matcher.within(3..6).token("word").separator(" ") }
+        it { should_not @matcher.within(3..5).token("word").separator("") }
+        it { should_not @matcher.within(3..5).token("word").separator(" a ") }
+      end
+
+      describe "and digits as tokens" do
+        before(:each) do
+          @matcher = define_and_validate(:within => 3..5, :tokenizer => lambda { |str| str.scan(/\d+/) })
+        end
+
+        it { should @matcher.within(3..5).token("1").separator(" ") }
+        it { should_not @matcher.within(3..5).token("a").separator("") }
+      end
+    end
+
     describe "with with kind of" do
       def define_and_validate(options)
         define_model :variant, :product_id => :integer

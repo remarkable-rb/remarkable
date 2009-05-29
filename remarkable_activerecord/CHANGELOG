@@ -1,5 +1,7 @@
+* Added :token and :separator to deal with :tokenizer in validates_length_of [#77]
+
 * Deprecated validate_format_of. It does not have the same API as the respective
-  ActiveRecord macro, raising questions frequentely about its usage. [#76]
+  ActiveRecord macro, raising questions frequentely about its usage [#76]
 
 * allow_mass_assignment_of when called without arguments checks if any mass
   assignment is possible [#80]

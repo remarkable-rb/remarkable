@@ -6,7 +6,7 @@ module Remarkable
 
         optional :within, :alias => :in
         optional :minimum, :maximum, :is
-        optional :with_kind_of
+        optional :token, :separator, :with_kind_of
         optional :allow_nil, :allow_blank, :default => true
         optional :message, :too_short, :too_long, :wrong_length
 
@@ -57,13 +57,11 @@ module Remarkable
           end
 
           def value_for_length(value)
-            repeatable = if @options[:with_kind_of]
-              [ @options[:with_kind_of].new ]
+            if @options[:with_kind_of]
+              [@options[:with_kind_of].new] * value
             else
-              "x"
+              ([@options.fetch(:token, 'x')] * value).join(@options.fetch(:separator, ''))
             end
-
-            repeatable * value
           end
 
           def interpolation_options
@@ -109,7 +107,17 @@ module Remarkable
       # being validated. For example, if your post accepts maximum 10 comments, you
       # can do:
       #
-      #   validate_length_of :comments, :maximum => 10, :with_kind_of => Comment
+      #   should_validate_length_of :comments, :maximum => 10, :with_kind_of => Comment
+      #
+      # Finally, it also accepts :token and :separator, to specify how the
+      # tokenizer should work. For example, if you are splitting the attribute
+      # per word:
+      #
+      #   validates_length_of :essay, :minimum => 100, :tokenizer => lambda {|str| str.scan(/\w+/) }
+      #
+      # You could do this:
+      #
+      #   should_validate_length_of :essay, :minimum => 100, :token => "word", :separator => " "
       #
       # == Gotcha
       #
