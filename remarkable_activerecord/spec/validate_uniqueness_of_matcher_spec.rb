@@ -136,7 +136,7 @@ describe 'validate_uniqueness_of' do
           User.new(:username => 'jose')
         end
       end
-      proc { @matcher.matches?(@model) }.should raise_error(ScriptError)
+      lambda { @matcher.matches?(@model) }.should raise_error(ScriptError)
 
       User.stub!(:find).and_return do |many, conditions|
         if many == :all
@@ -145,7 +145,7 @@ describe 'validate_uniqueness_of' do
           User.new(:username => 'jose')
         end
       end
-      proc { @matcher.matches?(@model) }.should_not raise_error(ScriptError)
+      lambda { @matcher.matches?(@model) }.should_not raise_error(ScriptError)
     end
 
     describe 'when null or blank values are not allowed' do
@@ -154,7 +154,6 @@ describe 'validate_uniqueness_of' do
           validates_uniqueness_of :username, options
         end
 
-        # Create a model
         User.create(:username => 'jose')
         validate_uniqueness_of(:username)
       end
@@ -163,7 +162,7 @@ describe 'validate_uniqueness_of' do
       it { should define_and_validate(:allow_nil => false).allow_nil(false) }
 
       it 'should raise an error if allow nil is true but we cannot save nil values in the database'do
-        proc { should define_and_validate.allow_nil }.should raise_error(ScriptError, /You declared that username accepts nil values in validate_uniqueness_of, but I cannot save nil values in the database, got/)
+        lambda { should define_and_validate.allow_nil }.should raise_error(ScriptError, /You declared that username accepts nil values in validate_uniqueness_of, but I cannot save nil values in the database, got/)
       end
     end
   end
