@@ -233,6 +233,8 @@ module Remarkable
         #
         def expects(*args, &block)
           options = args.extract_options!
+          options.assert_valid_keys(:on, :with, :returns, :times, :ordered)
+
           args.each do |arg|
             write_inheritable_array(:expects_chain, [ [ arg, options, block] ])
           end

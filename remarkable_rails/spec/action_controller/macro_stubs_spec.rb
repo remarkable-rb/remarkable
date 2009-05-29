@@ -126,6 +126,12 @@ describe 'MacroStubs' do
       @controller.send(:performed?).should be_true
     end
 
+    it 'should raise an error if an invalid key is supplied' do
+      lambda {
+        self.class.expects :find, :on => Task, :and_return => true
+      }.should raise_error(ArgumentError, "Unknown key(s): and_return")
+    end
+
     it 'should use parameters given in params on request' do
       self.should_receive(:current_id).once.and_return('37')
       run_action!

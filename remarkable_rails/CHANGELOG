@@ -1,3 +1,5 @@
+* assert_valid_keys on expects
+
 * mock_models now creates a second class method to be used on the index action [#71]
   In other words, mock_models :project will create:
 
