@@ -84,12 +84,12 @@ module Remarkable
     #
     # And it creates:
     #
-    #   def self.mock_project
+    #   def self.project_proc
     #     proc { mock_project }
     #   end
     #
     #   # To be used on index actions
-    #   def self.mock_projects
+    #   def self.projects_proc
     #     proc { [mock_project] }
     #   end
     #
@@ -104,8 +104,8 @@ module Remarkable
     #
     # For:
     #
-    #    expects :find, :on => Project, :with => '37', :returns => mock_project
-    #    should_assign_to :project, :with => mock_project
+    #    expects :find, :on => Project, :with => '37', :returns => project_proc
+    #    should_assign_to :project, :with => project_proc
     #
     # = Give me more!
     #
@@ -122,11 +122,11 @@ module Remarkable
     #     params :project_id => '42' #=> define params for all requests
     #
     #     # Those two expectations get inherited in all describe groups below
-    #     expects :find_by_title, :on => Project, :with => '42', :returns => mock_project
+    #     expects :find_by_title, :on => Project, :with => '42', :returns => project_proc
     #     expects :tasks, :and_return => Task
     #
     #     describe :get => :show, :id => '37' do
-    #       expects :find, :with => '37', :and_return => mock_task
+    #       expects :find, :with => '37', :and_return => task_proc
     #
     #       should_assign_to :project, :task
     #       should_render_template 'show'
@@ -140,7 +140,7 @@ module Remarkable
     # expectations with run_action!, run_expectations! and run_stubs!. Examples:
     #
     #   describe :get => :new do
-    #     expects :new, :on => Project, :returns => mock_project
+    #     expects :new, :on => Project, :returns => project_proc
     #
     #     it "should do something different" do
     #       run_action!
@@ -223,9 +223,9 @@ module Remarkable
         #
         # == Example
         #
-        #   expects :new, :on => Project, :returns => :mock_project, :times => 2
+        #   expects :new, :on => Project, :returns => :project_proc, :times => 2
         #
-        #   expects :new, :find, :on => Project, :returns => :mock_project
+        #   expects :new, :find, :on => Project, :returns => :project_proc
         #
         #   expects :human_attribute_name, :on => Project, :with => :title do |attr|
         #     attr.to_s.humanize
@@ -429,12 +429,12 @@ module Remarkable
         #
         # Will create one instance and two class mock methods for you:
         #
-        #   def self.mock_project
+        #   def self.project_proc
         #     proc { mock_project }
         #   end
         #
         #   # To be used on index actions
-        #   def self.mock_projects
+        #   def self.projects_procs
         #     proc { [ mock_project ] }
         #   end
         #
@@ -451,10 +451,17 @@ module Remarkable
 
           models.each do |model|
             model = model.to_s
-            self.class_eval <<-METHOD
-              #{"def self.mock_#{model}; proc { mock_#{model} }; end"               if options[:class_method]}
-              #{"def self.mock_#{model.pluralize}; proc { [ mock_#{model} ] }; end" if options[:class_method]}
+            if options[:class_method]
+              (class << self; self; end).class_eval <<-METHOD
+                def #{model}_proc; proc { mock_#{model} }; end
+                def #{model.pluralize}_proc; proc { [ mock_#{model} ] }; end
 
+                alias :mock_#{model} :#{model}_proc
+                alias :mock_#{model.pluralize} :#{model.pluralize}_proc
+              METHOD
+            end
+
+            self.class_eval <<-METHOD
               def mock_#{model}(stubs={})
                 @#{model} ||= mock_model(#{model.classify}, stubs)
               end

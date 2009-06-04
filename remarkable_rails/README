@@ -65,11 +65,11 @@ An equivalent in remarkable would be:
     mock_models :task
 
     describe :post => :create, :task => { :these => 'params' } do
-      expects :new,  :on => Task, :with => {'these' => 'params'}, :returns => mock_task
-      expects :save, :on => mock_task, :returns => true
+      expects :new,  :on => Task, :with => {'these' => 'params'}, :returns => task_proc
+      expects :save, :on => task_proc, :returns => true
 
-      should_assign_to :task, :with => mock_task
-      should_redirect_to { task_url(mock_task) }
+      should_assign_to :task, :with => task_proc
+      should_redirect_to { task_url(task_proc) }
     end
   end
 

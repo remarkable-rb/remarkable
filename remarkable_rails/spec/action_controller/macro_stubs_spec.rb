@@ -11,21 +11,29 @@ describe 'MacroStubs' do
 
   describe 'mock_models' do
     before(:each) do
-      self.class.metaclass.send(:undef_method, :mock_projects) if self.class.respond_to?(:mock_projects)
-      self.class.metaclass.send(:undef_method, :mock_project)  if self.class.respond_to?(:mock_project)
+      self.class.metaclass.send(:undef_method, :projects_proc) if self.class.respond_to?(:projects_proc)
+      self.class.metaclass.send(:undef_method, :project_proc)  if self.class.respond_to?(:project_proc)
       self.class.send(:undef_method, :mock_project)            if self.respond_to?(:mock_project)
     end
 
-    it 'should create a class singular mock method' do
+    it 'should alias model_proc to mock_model' do
       self.class.respond_to?(:mock_project).should be_false
+      self.class.respond_to?(:mock_projects).should be_false
       self.class.mock_models :project
       self.class.respond_to?(:mock_project).should be_true
+      self.class.respond_to?(:mock_projects).should be_true
+    end
+
+    it 'should create a class singular mock method' do
+      self.class.respond_to?(:project_proc).should be_false
+      self.class.mock_models :project
+      self.class.respond_to?(:project_proc).should be_true
     end
 
     it 'should create a class plural mock method' do
-      self.class.respond_to?(:mock_projects).should be_false
+      self.class.respond_to?(:projects_proc).should be_false
       self.class.mock_models :project
-      self.class.respond_to?(:mock_projects).should be_true
+      self.class.respond_to?(:projects_proc).should be_true
     end
 
     it 'should create an instance mock method' do
@@ -35,15 +43,15 @@ describe 'MacroStubs' do
     end
 
     it 'should create just an instance method when :class_method is false' do
-      self.class.respond_to?(:mock_project).should be_false
+      self.class.respond_to?(:project_proc).should be_false
       self.respond_to?(:mock_project).should be_false
       self.class.mock_models :project, :class_method => false
-      self.class.respond_to?(:mock_project).should be_false
+      self.class.respond_to?(:project_proc).should be_false
       self.respond_to?(:mock_project).should be_true
     end
 
     it 'should create procs which evals to a mock dynamically' do
-      proc = self.class.mock_task
+      proc = self.class.task_proc
       proc.should be_kind_of(Proc)
 
       @task.should be_nil
@@ -52,7 +60,7 @@ describe 'MacroStubs' do
     end
 
     it 'should create procs which evals to an array of mocks dynamically' do
-      proc = self.class.mock_tasks
+      proc = self.class.tasks_proc
       proc.should be_kind_of(Proc)
 
       @task.should be_nil
@@ -62,7 +70,7 @@ describe 'MacroStubs' do
   end
 
   describe 'failures' do
-    expects :find, :on => Task, :with => proc{ current_id }, :returns => mock_task
+    expects :find, :on => Task, :with => proc{ current_id }, :returns => task_proc
     expects :max, :min, :count, :on => Task, :ordered => true
 
     get :show, :id => 37
@@ -109,7 +117,7 @@ describe 'MacroStubs' do
   end
 
   describe 'when extending describe group behavior' do
-    expects :find, :on => Task, :with => proc{ current_id }, :returns => mock_task
+    expects :find, :on => Task, :with => proc{ current_id }, :returns => task_proc
     expects :count, :max, :min, :on => Task
 
     get :show, :id => 37
@@ -176,7 +184,7 @@ describe 'MacroStubs' do
     end
 
     describe Mime::XML do
-      expects :to_xml, :on => mock_task, :returns => 'XML'
+      expects :to_xml, :on => task_proc, :returns => 'XML'
 
       it 'should provide a description based on the mime given in describe' do
         self.class.description.should =~ /with xml$/
@@ -225,9 +233,9 @@ describe 'MacroStubs' do
     [:delete, :delete!].each do |method|
 
       describe method => :destroy, :id => '37' do
-        expects :find,    :on => Task, :with => '37', :returns => mock_task
-        expects :destroy, :on => mock_task
-        expects :title,   :on => mock_task, :with => false do |boolean|
+        expects :find,    :on => Task, :with => '37', :returns => task_proc
+        expects :destroy, :on => task_proc
+        expects :title,   :on => task_proc, :with => false do |boolean|
           if boolean
             'This should not appear'
           else
@@ -239,7 +247,7 @@ describe 'MacroStubs' do
         subject { controller }
 
         should_assign_to :task
-        should_assign_to :task, :with => mock_task
+        should_assign_to :task, :with => task_proc
         should_assign_to :task, :with_kind_of => Task
 
         should_set_the_flash
