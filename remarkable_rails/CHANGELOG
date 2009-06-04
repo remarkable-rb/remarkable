@@ -1,3 +1,6 @@
+* [DEPRECATION] By default all matchers perform expectations, use with_stubs => true
+  if you want otherwise.
+
 * [DEPRECATION] mock_models now creates model_proc instead of mock_model.
   Altough this won't fire any deprecation warning, all the documentation was changed.
 

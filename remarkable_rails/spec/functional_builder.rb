@@ -55,10 +55,9 @@ module FunctionalBuilder
 
   module ClassMethods
     def generate_macro_stubs_specs_for(matcher, *args)
-      stubs_args = args.dup
-
-      options = args.extract_options!
-      expectations_args = (args << options.merge(:with_expectations => true))
+      expectation_args = args.dup
+      options          = args.extract_options!
+      stub_args        = (args << options.merge(:with_stubs => true))
 
       describe 'macro stubs' do
         before(:each) do
@@ -70,21 +69,21 @@ module FunctionalBuilder
         expects :new, :on => String, :with => 'ola', :returns => 'ola'
         get :new
 
-        it 'should run stubs by default' do
-          String.should_receive(:stub!).with(:new).and_return(@mock=mock('chain'))
-          @mock.should_receive(:and_return).with('ola').and_return('ola')
-
-          send(matcher, *stubs_args).matches?(@controller)
-        end
-
-        it 'should run expectations' do
+        it 'should run expectations by default' do
           String.should_receive(:should_receive).with(:new).and_return(@mock=mock('chain'))
           @mock.should_receive(:with).with('ola').and_return(@mock)
           @mock.should_receive(:exactly).with(1).and_return(@mock)
           @mock.should_receive(:times).and_return(@mock)
           @mock.should_receive(:and_return).with('ola').and_return('ola')
 
-          send(matcher, *expectations_args).matches?(@controller)
+          send(matcher, *expectation_args).matches?(@controller)
+        end
+
+        it 'should run stubs' do
+          String.should_receive(:stub!).with(:new).and_return(@mock=mock('chain'))
+          @mock.should_receive(:and_return).with('ola').and_return('ola')
+
+          send(matcher, *stub_args).matches?(@controller)
         end
       end
 

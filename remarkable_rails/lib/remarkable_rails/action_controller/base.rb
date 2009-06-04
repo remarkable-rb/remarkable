@@ -22,7 +22,7 @@ module Remarkable
           elsif @options.key?(:with_expectations)
             @options[:with_expectations]
           else
-            false
+            true
           end
         end
 

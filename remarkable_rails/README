@@ -73,9 +73,9 @@ An equivalent in remarkable would be:
     end
   end
 
-It automatically performs the action before running each macro. In assign_to,
-it executes the expects as expectations (:should_receive), and in redirect_to
-it executes the expects as stubs (:stub!), just as above.
+It automatically performs the action before running each macro. It executes the
+expects as expectations (:should_receive), but you can supply :with_stubs => true
+if you want it to be executed with stubs.
 
 There are also params and mime methods:
 

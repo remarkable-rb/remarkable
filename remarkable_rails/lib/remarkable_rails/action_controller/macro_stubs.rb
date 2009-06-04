@@ -36,27 +36,16 @@ module Remarkable
     #     assigns(:project).should == mock_project
     #   end
     #
-    # On the other hand, should render template is doing something like this:
-    #
-    #   it 'should render template show' do
-    #     Project.stub!(:find).and_return(mock_project)
-    #     get :show, :id => '37'
-    #     response.should render_template('show')
-    #   end
-    #
-    # Now comes the first question: how each macro knows if they should perform
-    # expectations or stubs?
-    #
-    # By default, only should_assign_to macro performs expectations. You can change
+    # By default, all macros perform expectations. You can change
     # this behavior sending :with_stubs or :with_expectations as options:
     #
     #   should_assign_to       :project, :with_stubs => true
-    #   should_render_template 'show', :with_expectations => true
+    #   should_render_template 'show', :with_expectations => false
     #
     # This also works in the rspec way:
     #
-    #   it { should assign_to(:project).with_stubs            }
-    #   it { should render_template('show').with_expectations }
+    #   it { should assign_to(:project).with_stubs                   }
+    #   it { should render_template('show').with_expectations(false) }
     #
     # == Attention!
     #
