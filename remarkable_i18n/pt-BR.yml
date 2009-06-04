@@ -174,10 +174,11 @@ pt-BR:
         has_one: possuir um(a)
         description: "{{macro}} {{associations}}"
         expectations:
-          association_exists: "{{subject_name}} pudesse {{macro}} {{association}}, obtive nenhuma associação"
+          association_exists: "{{subject_name}} pudesse {{macro}} {{association}}, mas associação não existe"
           macro_matches: "{{subject_name}} pudesse {{macro}} {{association}}, obtive que {{subject_name}} deve {{actual_macro}} {{association}}"
           through_exists: "{{subject_name}} pudesse {{macro}} {{association}} através de {{through}}, obtive que \"through_association\" não existe"
           source_exists: "{{subject_name}} pudesse {{macro}} {{association}} através de {{through}}, obtive que \"source association\" não existe"
+          klass_exists: "{{subject_name}} records {{macro}} {{association}}, mas a classe da associação não existe"
           join_table_exists: "tabela de junção {{join_table}} existisse, mas não existe"
           foreign_key_exists: "chave estrangeira {{foreign_key}} existisse em {{foreign_key_table}}, mas não existe"
           polymorphic_exists: "{{subject_table}} tivesse {{polymorphic_column}} como coluna, mas não tem"

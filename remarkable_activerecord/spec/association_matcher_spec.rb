@@ -9,10 +9,12 @@ describe 'association_matcher' do
     def define_and_validate(options={})
       columns = options.delete(:association_columns) || { :projects_count => :integer }
       define_model :company, columns
+      define_model :super_company, columns
 
       columns = options.delete(:model_columns) || { :company_id => :integer, :company_type => :string }
       @model = define_model :project, columns do
         belongs_to :company, options
+        belongs_to :unknown
       end
 
       belong_to :company
@@ -47,7 +49,7 @@ describe 'association_matcher' do
         define_and_validate
         matcher = belong_to('whatever')
         matcher.matches?(@model)
-        matcher.failure_message.should == 'Expected Project records belong to whatever, got no association'
+        matcher.failure_message.should == 'Expected Project records belong to whatever, but the association does not exist'
       end
 
       it 'should set macro_matches? message' do
@@ -55,6 +57,13 @@ describe 'association_matcher' do
         matcher = have_one('company')
         matcher.matches?(@model)
         matcher.failure_message.should == 'Expected Project records have one company, got Project records belong to company'
+      end
+
+      it 'should set klass_exists? message' do
+        define_and_validate
+        matcher = belong_to('unknown')
+        matcher.matches?(@model)
+        matcher.failure_message.should == 'Expected Project records belong to unknown, but the association class does not exist'
       end
 
       it 'should set foreign_key_exists? message' do
@@ -93,6 +102,7 @@ describe 'association_matcher' do
         before(:each){ define_and_validate }
 
         it { should belong_to(:company) }
+        it { should_not belong_to(:unknown) }
         it { should_not belong_to(:project) }
         it { should_not have_one(:company) }
         it { should_not have_many(:company) }
@@ -158,6 +168,7 @@ describe 'association_matcher' do
         m.foreign_key = :company_id
       end
 
+      should_not_belong_to :unknown
       should_not_belong_to :project
       should_not_have_one  :company
       should_not_have_many :companies
@@ -174,6 +185,7 @@ describe 'association_matcher' do
     # Defines a model, create a validation and returns a raw matcher
     def define_and_validate(options={})
       define_model :label
+      define_model :super_label
 
       columns = options.delete(:association_columns) || [ :label_id, :project_id ]
       create_table(options.delete(:association_table) || :labels_projects) do |table|
@@ -209,7 +221,7 @@ describe 'association_matcher' do
         define_and_validate
         matcher = have_and_belong_to_many('whatever')
         matcher.matches?(@model)
-        matcher.failure_message.should == 'Expected Project records have and belong to many whatever, got no association'
+        matcher.failure_message.should == 'Expected Project records have and belong to many whatever, but the association does not exist'
       end
 
       it 'should set macro_matches? message' do
@@ -365,7 +377,7 @@ describe 'association_matcher' do
         define_and_validate
         matcher = have_many('whatever')
         matcher.matches?(@model)
-        matcher.failure_message.should == 'Expected Project records have many whatever, got no association'
+        matcher.failure_message.should == 'Expected Project records have many whatever, but the association does not exist'
       end
 
       it 'should set macro_matches? message' do
@@ -503,6 +515,7 @@ describe 'association_matcher' do
       @model = define_model :project, options.delete(:model_columns) || {} do
         has_many :project_managers unless options.delete(:skip_through)
         has_one  :manager, options
+        has_one  :unknown
       end
 
       have_one :manager
@@ -524,7 +537,14 @@ describe 'association_matcher' do
         define_and_validate
         matcher = have_one('whatever')
         matcher.matches?(@model)
-        matcher.failure_message.should == 'Expected Project records have one whatever, got no association'
+        matcher.failure_message.should == 'Expected Project records have one whatever, but the association does not exist'
+      end
+
+      it 'should set klass_exists? message' do
+        define_and_validate
+        matcher = have_one('unknown')
+        matcher.matches?(@model)
+        matcher.failure_message.should == 'Expected Project records have one unknown, but the association class does not exist'
       end
 
       it 'should set macro_matches? message' do
@@ -571,6 +591,7 @@ describe 'association_matcher' do
         before(:each){ define_and_validate }
 
         it { should have_one(:manager) }
+        it { should_not have_one(:unknown) }
         it { should_not belong_to(:manager) }
         it { should_not have_many(:managers) }
         it { should_not have_and_belong_to_many(:managers) }
@@ -635,6 +656,7 @@ describe 'association_matcher' do
         m.through = :project_managers
       end
 
+      should_not_have_one :unknown
       should_not_have_one :manager, :validate => false
       should_not_have_one :manager, :through => :another_thing
     end

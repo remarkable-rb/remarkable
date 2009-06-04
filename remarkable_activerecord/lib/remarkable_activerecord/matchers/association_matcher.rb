@@ -9,7 +9,7 @@ module Remarkable
         optionals :uniq, :readonly, :validate, :autosave, :polymorphic, :counter_cache, :default => true
 
         collection_assertions :association_exists?, :macro_matches?, :through_exists?, :source_exists?,
-                              :join_table_exists?, :foreign_key_exists?, :polymorphic_exists?,
+                              :klass_exists?, :join_table_exists?, :foreign_key_exists?, :polymorphic_exists?,
                               :counter_cache_exists?, :options_match?
 
         protected
@@ -30,6 +30,10 @@ module Remarkable
           def source_exists?
             return true unless @options.key?(:through)
             reflection.source_reflection rescue false
+          end
+
+          def klass_exists?
+            reflection.klass rescue nil
           end
 
           # has_and_belongs_to_many only works if the tables are in the same
@@ -74,9 +78,16 @@ module Remarkable
             @reflection ||= subject_class.reflect_on_association(@association.to_sym)
           end
 
-          # Rescue nil to avoid raising errors in invalid through associations
+          def subject_table_name
+            subject_class.table_name.to_s
+          end
+
           def reflection_class_name
             reflection.class_name.to_s rescue nil
+          end
+
+          def reflection_table_name
+            reflection.klass.table_name.to_s rescue nil
           end
 
           def reflection_foreign_key
@@ -107,9 +118,9 @@ module Remarkable
             elsif reflection.macro == :has_and_belongs_to_many
               reflection.options[:join_table]
             elsif reflection.macro == :belongs_to
-              subject_class.table_name
+              subject_table_name
             else
-              reflection.klass.table_name
+              reflection_table_name
             end
           end
 
@@ -132,14 +143,14 @@ module Remarkable
             if @subject && reflection
               options.merge!(
                 :actual_macro         => Remarkable.t(reflection.macro, :scope => matcher_i18n_scope, :default => reflection.macro.to_s),
-                :subject_table        => subject_class.table_name.inspect,
-                :reflection_table     => reflection.klass.table_name.inspect,
+                :subject_table        => subject_table_name.inspect,
+                :reflection_table     => reflection_table_name.inspect,
                 :foreign_key_table    => foreign_key_table.inspect,
                 :polymorphic_column   => reflection_foreign_key.sub(/_id$/, '_type').inspect,
                 :counter_cache_column => reflection.counter_cache_column.to_s.inspect,
                 :join_table           => reflection.options[:join_table].inspect,
                 :foreign_key          => reflection_foreign_key.inspect
-              ) rescue nil # rescue to allow specs to run properly
+              )
             end
 
             options
