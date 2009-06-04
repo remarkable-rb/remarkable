@@ -1,3 +1,3 @@
 module Remarkable
-  VERSION = '3.1.4' unless self.const_defined?('VERSION')
+  VERSION = '3.1.5' unless self.const_defined?(:VERSION)
 end
