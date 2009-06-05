@@ -32,7 +32,10 @@ module Remarkable
             reflection.source_reflection rescue false
           end
 
+          # Polymorphic associations does not have a klass.
+          #
           def klass_exists?
+            return true if @options[:polymorphic]
             reflection.klass rescue nil
           end
 

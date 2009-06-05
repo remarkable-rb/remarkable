@@ -15,6 +15,7 @@ describe 'association_matcher' do
       @model = define_model :project, columns do
         belongs_to :company, options
         belongs_to :unknown
+        belongs_to :accountable, :polymorphic => true
       end
 
       belong_to :company
@@ -143,6 +144,11 @@ describe 'association_matcher' do
 
         it { should_not define_and_validate(:counter_cache => :association_count).counter_cache(:association_count) }
         it { should_not define_and_validate(:association_columns => { :association_count => :integer }).counter_cache(:association_count) }
+      end
+
+      describe "with polymorphic option" do
+        before(:each){ define_and_validate(:model_columns => {:accountable_id => :integer, :accountable_type => :string}) }
+        it { should belong_to(:accountable).polymorphic }
       end
 
       create_optional_boolean_specs(:readonly, self)
