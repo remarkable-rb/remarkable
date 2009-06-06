@@ -24,13 +24,13 @@ describe 'MacroStubs' do
       self.class.respond_to?(:mock_projects).should be_true
     end
 
-    it 'should create a class singular mock method' do
+    it 'should create a class singular proc method' do
       self.class.respond_to?(:project_proc).should be_false
       self.class.mock_models :project
       self.class.respond_to?(:project_proc).should be_true
     end
 
-    it 'should create a class plural mock method' do
+    it 'should create a class plural proc method' do
       self.class.respond_to?(:projects_proc).should be_false
       self.class.mock_models :project
       self.class.respond_to?(:projects_proc).should be_true
@@ -50,7 +50,14 @@ describe 'MacroStubs' do
       self.respond_to?(:mock_project).should be_true
     end
 
-    it 'should create procs which evals to a mock dynamically' do
+    it 'should allow the mock class to be set' do
+      self.class.mock_model :project, :as => "::Admin::Project"
+      lambda{
+        mock_project
+      }.should raise_error(NameError, "uninitialized constant Admin")
+    end
+
+    it 'should create procs which evals to a mock' do
       proc = self.class.task_proc
       proc.should be_kind_of(Proc)
 
@@ -59,7 +66,7 @@ describe 'MacroStubs' do
       @task.should_not be_nil
     end
 
-    it 'should create procs which evals to an array of mocks dynamically' do
+    it 'should create procs which evals to an array of mocks' do
       proc = self.class.tasks_proc
       proc.should be_kind_of(Proc)
 

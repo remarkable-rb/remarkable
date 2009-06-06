@@ -1,3 +1,5 @@
+* Allow mock model class to be set using :as option.
+
 * [DEPRECATION] By default all matchers perform expectations, use with_stubs => true
   if you want otherwise.
 

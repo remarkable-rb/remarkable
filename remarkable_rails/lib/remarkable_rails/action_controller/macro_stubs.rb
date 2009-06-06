@@ -405,6 +405,12 @@ module Remarkable
         #
         # == Options
         #
+        # * <tt>:as</tt> -  Used to set the model . For example, if you have
+        #   Admin::Task model, you have to tell the name of the class to be
+        #   mocked:
+        #
+        #      mock_models :admin_task, :as => "Admin::Task"
+        #
         # * <tt>:class_method</tt> - When set to false, does not create the
         #   class method which returns a proc.
         #
@@ -440,6 +446,8 @@ module Remarkable
 
           models.each do |model|
             model = model.to_s
+            klass = options[:as] || model.classify
+
             if options[:class_method]
               (class << self; self; end).class_eval <<-METHOD
                 def #{model}_proc; proc { mock_#{model} }; end
@@ -452,11 +460,12 @@ module Remarkable
 
             self.class_eval <<-METHOD
               def mock_#{model}(stubs={})
-                @#{model} ||= mock_model(#{model.classify}, stubs)
+                @#{model} ||= mock_model(#{klass}, stubs)
               end
             METHOD
           end
         end
+        alias :mock_model :mock_models
 
       end
 
