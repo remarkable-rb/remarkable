@@ -45,6 +45,19 @@ module Remarkable
 
       # Ensures that the attribute can be set on mass update.
       #
+      # Beware that when used in the negative form, this matcher fails if any of
+      # the values fail. For example, let's assume we have a accessible and a
+      # protected attribute called :accessible and :protected. The following
+      # assertion WILL pass:
+      #
+      #   should_not_allow_mass_assignment_of :protected, :accessible
+      #
+      # If you want to assert that all values fail, you have to do:
+      #
+      #   %w(first_protected second_protected).each do |protected|
+      #     should_not_allow_mass_assignment_of protected
+      #   end
+      #
       # == Examples
       #
       #   should_allow_mass_assignment_of :email, :name

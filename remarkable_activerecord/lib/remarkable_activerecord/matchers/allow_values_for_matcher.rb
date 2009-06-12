@@ -65,8 +65,17 @@ module Remarkable
 
       # Ensures that the attribute can be set to the given values.
       #
-      # Note: this matcher accepts at once just one attribute to test.
-      # Note: this matcher is also aliased as "validate_format_of".
+      # Beware that when used in the negative form, this matcher fails if any of
+      # the values fail. For example, let's assume we have a valid and invalid
+      # value called "valid" and "invalid". The following assertion WILL pass:
+      #
+      #   should_not_allow_values_for :attribute, "valid", "invalid"
+      #
+      # If you want to assert that all values fail, you have to do:
+      #
+      #   %w(first_invalid second_invalid).each do |invalid|
+      #     should_not_allow_values_for invalid
+      #   end
       #
       # == Options
       #
@@ -78,10 +87,7 @@ module Remarkable
       # == Examples
       #
       #   should_allow_values_for :isbn, "isbn 1 2345 6789 0", "ISBN 1-2345-6789-0"
-      #   should_not_allow_values_for :isbn, "bad 1", "bad 2"
-      #
       #   it { should allow_values_for(:isbn, "isbn 1 2345 6789 0", "ISBN 1-2345-6789-0") }
-      #   it { should_not allow_values_for(:isbn, "bad 1", "bad 2") }
       #
       def allow_values_for(attribute, *args, &block)
         options = args.extract_options!
