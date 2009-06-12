@@ -1,6 +1,7 @@
 module Remarkable
   module ActiveRecord
     class Base < Remarkable::Base
+      I18N_COLLECTION = [ :attributes, :associations ]
 
       # Provides a way to send options to all ActiveRecord matchers.
       #
@@ -206,12 +207,14 @@ module Remarkable
             @spec.send(:described_class)
           end
 
-          if RAILS_I18N && described_class.respond_to?(:human_attribute_name) && self.class.matcher_arguments[:collection]
+          if i18n_collection? && described_class.respond_to?(:human_attribute_name)
             options = {}
 
             collection_name = self.class.matcher_arguments[:collection].to_sym
             if collection = instance_variable_get("@#{collection_name}")
-              collection.map!{|attr| described_class.human_attribute_name(attr.to_s, :locale => Remarkable.locale).downcase }
+              collection = collection.map do |attr|
+                described_class.human_attribute_name(attr.to_s, :locale => Remarkable.locale).downcase
+              end
               options[collection_name] = array_to_sentence(collection)
             end
 
@@ -225,6 +228,12 @@ module Remarkable
           else
             super
           end
+        end
+
+        # Returns true if the given collection should be translated.
+        #
+        def i18n_collection? #:nodoc:
+          RAILS_I18N && I18N_COLLECTION.include?(self.class.matcher_arguments[:collection])
         end
 
     end
