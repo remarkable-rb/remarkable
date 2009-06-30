@@ -40,6 +40,7 @@ describe 'route_matcher' do
 
     # failing case
     it { should_not route(:get, '/projects',    :controller => :projects, :action => :show) }
+    it { should_not route(:xyz, '/projects',    :controller => :projects, :action => :index) }
   end
 
   describe 'macros' do
@@ -58,6 +59,7 @@ describe 'route_matcher' do
 
     # failing case
     should_not_route :get, '/projects',    :controller => :projects, :action => :show
+    should_not_route :xyz, '/projects',    :controller => :projects, :action => :index
   end
 
   describe TasksController, :type => :routing do

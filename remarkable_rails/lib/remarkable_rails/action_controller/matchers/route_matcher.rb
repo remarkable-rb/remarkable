@@ -32,7 +32,10 @@ module Remarkable
             env = ::ActionController::Routing::Routes.extract_request_environment(controller.request) if controller
             env ||= {}
             env[:method] = @method.to_sym
-            params_from = ::ActionController::Routing::Routes.recognize_path(@populated_path, env)
+            params_from = begin
+              ::ActionController::Routing::Routes.recognize_path(@populated_path, env)
+            rescue
+            end
             return params_from == @options, :actual => params_from.inspect
           end
 
