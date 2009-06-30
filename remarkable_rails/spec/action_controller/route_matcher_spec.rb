@@ -72,4 +72,13 @@ describe 'route_matcher' do
     should_route :put,    '/projects/5/tasks/1',   :action => :update,  :id => 1, :project_id => 5
   end
 
+  describe 'using controller.request' do
+    it "should extract environment from controller request" do
+      @matcher = route(:get, '/projects', :controller => 'projects', :action => 'index')
+      ::ActionController::Routing::Routes.should_receive(:extract_request_environment).with(controller.request).and_return({:subdomain => "foo"})
+      ::ActionController::Routing::Routes.should_receive(:recognize_path).with("/projects", {:subdomain => "foo", :method => :get})
+      @matcher.matches?(@controller)
+    end
+  end
+
 end

@@ -28,7 +28,11 @@ module Remarkable
           end
 
           def generate_params?
-            params_from = ::ActionController::Routing::Routes.recognize_path(@populated_path, :method => @method.to_sym)
+            controller = @spec.send(:controller)
+            env = ::ActionController::Routing::Routes.extract_request_environment(controller.request) if controller
+            env ||= {}
+            env[:method] = @method.to_sym
+            params_from = ::ActionController::Routing::Routes.recognize_path(@populated_path, env)
             return params_from == @options, :actual => params_from.inspect
           end
 
