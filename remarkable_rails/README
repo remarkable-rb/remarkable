@@ -93,3 +93,24 @@ There are also params and mime methods:
   end
 
 And much more. Be sure to check macro stubs documentation.
+
+== Rails plugin developers
+
+Remarkable automatically loads files at the remarkable directory on your plugins
+and frozen gems if RAILS_ROOT is defined. The lookup happens like this:
+
+  RAILS_ROOT/spec/remarkable
+  RAILS_ROOT/vendor/gems/*/remarkable
+  RAILS_ROOT/vendor/plugins/*/remarkable
+
+Remarkable will load both ruby files (.rb) and Remarkable locale files (.yml).
+
+The only step remaining is to include the matchers, which Remarkable will not
+do automatically if the user is not using a Remarkable namespace. For example,
+if the developer includes his matchers to Remarkable::ActiveRecord::Matchers,
+the matchers will be automatically available in users spec. But if he creates
+a new namespace, like MyPlugin::Matchers, he has to tell Remarkable to include
+them in the proper example group:
+
+  Remarkable.include_matchers!(MyPlugin::Matchers, Spec::Rails::Example::ModelExampleGroup)
+
