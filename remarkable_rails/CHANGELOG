@@ -1,3 +1,5 @@
+* Allow should_route to use environment configuration [#88] (thanks to Lawrence Pit)
+
 * Allow mock model class to be set using :as option.
 
 * [DEPRECATION] By default all matchers perform expectations, use with_stubs => true

@@ -9,7 +9,6 @@ module Remarkable
 
         before_assert do
           @options[:controller] ||= controller_name
-
           @populated_path = @path.dup
 
           @options.each do |key, value|
@@ -20,6 +19,14 @@ module Remarkable
           ::ActionController::Routing::Routes.reload if ::ActionController::Routing::Routes.empty?
         end
 
+        def controller
+          @controller ||= @spec.controller if @spec.respond_to?(:controller)
+        end
+
+        def request
+          controller.request if controller
+        end
+
         private
 
           def map_to_path?
@@ -28,14 +35,11 @@ module Remarkable
           end
 
           def generate_params?
-            controller = @spec.send(:controller)
             env = ::ActionController::Routing::Routes.extract_request_environment(controller.request) if controller
+
             env ||= {}
             env[:method] = @method.to_sym
-            params_from = begin
-              ::ActionController::Routing::Routes.recognize_path(@populated_path, env)
-            rescue
-            end
+            params_from  = ::ActionController::Routing::Routes.recognize_path(@populated_path, env) rescue nil
             return params_from == @options, :actual => params_from.inspect
           end
 
@@ -47,20 +51,24 @@ module Remarkable
           # subject or the controller class in the RoutingExampleGroup.
           #
           def controller_name
-            spec_class = @spec.class unless @spec.class == Class
-
-            controller = if @subject && @subject.class.ancestors.include?(::ActionController::Base)
-              @subject.class
-            elsif spec_class.respond_to?(:controller_class)
-              spec_class.controller_class
-            elsif spec_class.respond_to?(:described_class)
-              spec_class.described_class
-            end
-
-            if controller && controller.ancestors.include?(::ActionController::Base)
-              controller.name.gsub(/Controller$/, '').tableize
+            if controller_class
+              controller_class.name.gsub(/Controller$/, '').tableize
             else
               raise ArgumentError, "I cannot guess the controller name in route. Please supply :controller as option"
+            end
+          end
+
+          def controller_class
+            @controller_class ||= begin
+              spec_class = @spec.class unless @spec.class == Class
+
+              attempts = []
+              attempts << controller.class if controller
+              attempts << @subject.class   if @subject
+              attempts << spec_class.controller_class if spec_class.respond_to?(:controller_class)
+              attempts << spec_class.described_class  if spec_class.respond_to?(:described_class)
+
+              attempts.find{ |controller| ::ActionController::Base >= controller }
             end
           end
 
