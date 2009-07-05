@@ -137,7 +137,7 @@ module Remarkable
             #
             example_group = super(*args) do
               write_inheritable_hash(:describe_subject_attributes, attributes)
-              subject { self.class.described_class.new(subject_attributes) }
+              set_described_subject!
               instance_eval(&block)
             end
           else
@@ -160,9 +160,16 @@ module Remarkable
         #
         def subject_attributes(options=nil, &block)
           write_inheritable_attribute(:default_subject_attributes, options || block)
-          subject { self.class.described_class.new(subject_attributes) }
+          set_described_subject!
         end
 
+        def set_described_subject!
+          subject {
+            record = self.class.described_class.new
+            record.send(:attributes=, subject_attributes, false)
+            record
+          }
+        end
       end
 
       # Returns a hash with the subject attributes declared using the

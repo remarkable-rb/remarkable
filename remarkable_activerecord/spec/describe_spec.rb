@@ -5,9 +5,9 @@ RAILS_I18n = true
 class Post
   attr_accessor :published, :public, :deleted
  
-  def initialize(attributes={})
+  def attributes=(attributes={}, guard=true)
     attributes.each do |key, value|
-      send(:"#{key}=", value)
+      send(:"#{key}=", value) unless guard
     end
   end
 

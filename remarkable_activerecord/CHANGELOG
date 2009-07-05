@@ -1,3 +1,5 @@
+* Ensure quick subject bypass protected attributes [#87]
+
 * Added :token and :separator to deal with :tokenizer in validates_length_of [#77]
 
 * Deprecated validate_format_of. It does not have the same API as the respective
