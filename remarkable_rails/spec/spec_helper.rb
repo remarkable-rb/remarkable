@@ -2,7 +2,6 @@ require 'rubygems'
 
 RAILS_ENV     = 'test'
 RAILS_VERSION = ENV['RAILS_VERSION'] || '2.3.2'
-RSPEC_VERSION = ENV['RSPEC_VERSION'] || Spec::VERSION::STRING
 
 # Load Rails
 gem 'activesupport', RAILS_VERSION
@@ -33,7 +32,11 @@ require File.join(RAILS_ROOT, 'tasks_controller')
 require File.join(dir, 'functional_builder')
 
 # Load spec-rails
-gem 'rspec-rails', RSPEC_VERSION
+if ENV['RSPEC_VERSION']
+  gem 'rspec-rails', ENV['RSPEC_VERSION']
+else
+  gem 'rspec-rails'
+end
 require 'spec/rails'
 
 require File.join(dir, '..', 'lib', 'remarkable_rails')

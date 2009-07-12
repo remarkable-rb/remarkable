@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe 'route_matcher' do
-  include FunctionalBuilder
+  controller_name :tasks
 
   describe 'messages' do
     before(:each) do
@@ -62,18 +62,6 @@ describe 'route_matcher' do
     should_not_route :xyz, '/projects',    :controller => :projects, :action => :index
   end
 
-  describe TasksController, :type => :routing do
-    controller_name 'tasks'
-
-    # Test the nested routes with implicit controller
-    should_route :get,    '/projects/5/tasks',     :action => :index,   :project_id => 5
-    should_route :post,   '/projects/5/tasks',     :action => :create,  :project_id => 5
-    should_route :get,    '/projects/5/tasks/1',   :action => :show,    :id => 1, :project_id => 5
-    should_route :delete, '/projects/5/tasks/1',   :action => :destroy, :id => 1, :project_id => 5
-    should_route :get,    '/projects/5/tasks/new', :action => :new,     :project_id => 5
-    should_route :put,    '/projects/5/tasks/1',   :action => :update,  :id => 1, :project_id => 5
-  end
-
   describe 'using controller.request' do
     it "should extract environment from controller request" do
       @matcher = route(:get, '/projects', :controller => 'projects', :action => 'index')
@@ -82,5 +70,14 @@ describe 'route_matcher' do
       @matcher.matches?(@controller)
     end
   end
+end
 
+# Test implicit controller
+describe TasksController, :type => :routing do
+  should_route :get,    '/projects/5/tasks',     :action => :index,   :project_id => 5
+  should_route :post,   '/projects/5/tasks',     :action => :create,  :project_id => 5
+  should_route :get,    '/projects/5/tasks/1',   :action => :show,    :id => 1, :project_id => 5
+  should_route :delete, '/projects/5/tasks/1',   :action => :destroy, :id => 1, :project_id => 5
+  should_route :get,    '/projects/5/tasks/new', :action => :new,     :project_id => 5
+  should_route :put,    '/projects/5/tasks/1',   :action => :update,  :id => 1, :project_id => 5
 end
