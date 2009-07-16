@@ -49,6 +49,9 @@ describe 'validate_inclusion_of' do
     it { should_not define_and_validate(:in => ['X', 'Y', 'Z']).in('X', 'Y') }
     it { should_not define_and_validate(:in => ['X', 'Y', 'Z']).in('A') }
 
+    it { should define_and_validate(:in => [true, false]).in(true, false) }
+    it { should_not define_and_validate(:in => [true, false]).in('A') }
+
     it { should define_and_validate(:in => 2..3).in(2..3) }
     it { should define_and_validate(:in => 2..20).in(2..20) }
     it { should_not define_and_validate(:in => 2..20).in(1..20) }

@@ -18,10 +18,9 @@ module Remarkable
           def invalid_values
             if @in_range
               [ @options[:in].first - 1, @options[:in].last + 1 ]
-            elsif @options[:in].empty?
-              []
             else
-              [ @options[:in].map(&:to_s).max.to_s.next ]
+              value = @options[:in].select{ |i| i.is_a?(String) }.max
+              value ? [ value.next ] : []
             end
           end
 
