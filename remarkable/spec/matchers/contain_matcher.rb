@@ -9,7 +9,7 @@ module Remarkable
         def matches?(subject)
           @subject = subject
 
-          assert_matcher_for(@values) do |value|
+          assert_collection(nil, @values) do |value|
             @value = value
             included?
           end

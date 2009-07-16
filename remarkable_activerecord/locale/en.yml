@@ -45,6 +45,10 @@ en:
           allows: "{{subject_name}} to allow mass assignment ({{subject_name}} is protecting {{protected_attributes}})"
           is_protected: "{{subject_name}} to allow mass assignment of {{attribute}} ({{subject_name}} is protecting {{attribute}})"
           is_accessible: "{{subject_name}} to allow mass assignment of {{attribute}} ({{subject_name}} has not made {{attribute}} accessible)"
+        negative_expectations:
+          allows: "{{subject_name}} to allow mass assignment ({{subject_name}} made {{accessible_attributes}} accessible)"
+          is_protected: "{{subject_name}} to allow mass assignment of {{attribute}} ({{subject_name}} is not protecting {{attribute}})"
+          is_accessible: "{{subject_name}} to allow mass assignment of {{attribute}} ({{subject_name}} has made {{attribute}} accessible)"
 
       association:
         belongs_to: belong to

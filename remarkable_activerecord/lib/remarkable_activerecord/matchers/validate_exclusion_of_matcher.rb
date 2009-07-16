@@ -4,6 +4,8 @@ module Remarkable
   module ActiveRecord
     module Matchers
       class ValidateExclusionOfMatcher < AllowValuesForMatcher #:nodoc:
+        # Don't allow it to behave in the negative way.
+        undef_method :does_not_match?
 
         default_options :message => :exclusion
 

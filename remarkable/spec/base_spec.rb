@@ -28,6 +28,11 @@ describe Remarkable::Base do
     matcher.instance_variable_get('@spec').class.ancestors.should include(Spec::Example::ExampleGroup)
   end
 
+  it 'should be positive' do
+    contain(1).should be_positive
+    contain(1).should_not be_negative
+  end
+
   it { should contain(1) }
   it { should_not contain(10) }
 

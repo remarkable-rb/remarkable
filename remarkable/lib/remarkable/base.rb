@@ -11,6 +11,14 @@ module Remarkable
       self
     end
 
+    def positive?
+      !negative?
+    end
+
+    def negative?
+      false
+    end
+
     protected
 
       # Returns the subject class unless it's a class object.
@@ -28,11 +36,20 @@ module Remarkable
 
       # Iterates over the collection given yielding the block and return false
       # if any of them also returns false.
-      def assert_matcher_for(collection) #:nodoc:
+      def assert_collection(key, collection, inspect=true) #:nodoc:
         collection.each do |item|
-          return false unless yield(item)
+          value = yield(item)
+
+          if positive? == !value
+            if key
+              output = inspect ? item.inspect : item
+              return negative?, key => output
+            else
+              return negative?
+            end
+          end
         end
-        true
+        positive?
       end
 
       # Asserts that the given collection contains item x. If x is a regular

@@ -1,3 +1,6 @@
+* Allow allow_values_for and allow_mass_assignment_of matchers to be executed in
+  the negative form by including Remarkable::Negative module [#85]
+
 * Ensure quick subject bypass protected attributes [#87]
 
 * Added :token and :separator to deal with :tokenizer in validates_length_of [#77]

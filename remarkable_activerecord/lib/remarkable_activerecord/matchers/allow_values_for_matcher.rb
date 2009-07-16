@@ -2,6 +2,7 @@ module Remarkable
   module ActiveRecord
     module Matchers
       class AllowValuesForMatcher < Remarkable::ActiveRecord::Base #:nodoc:
+        include Remarkable::Negative
         arguments :collection => :attributes, :as => :attribute
 
         optional :message
@@ -28,17 +29,15 @@ module Remarkable
         protected
 
           def is_valid?
-            valid_values.each do |value|
-              return false, :value => value.inspect unless good?(value)
+            assert_collection :value, valid_values do |value|
+              good?(value)
             end
-            true
           end
 
           def is_invalid?
-            invalid_values.each do |value|
-              return false, :value => value.inspect unless bad?(value)
+            assert_collection :value, invalid_values do |value|
+              bad?(value)
             end
-            true
           end
 
           def valid_values

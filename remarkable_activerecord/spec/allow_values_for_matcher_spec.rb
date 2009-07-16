@@ -57,5 +57,15 @@ describe 'allow_values_for' do
       should_not_validate_format_of :title, 'A'
     end
   end
+
+  describe 'failures' do
+    it "should fail if any of the values are valid on invalid cases" do
+      define_and_validate(:with => /X|Y|Z/)
+
+      lambda {
+        should_not allow_values_for :title, 'A', 'X', 'B'
+      }.should raise_error(Spec::Expectations::ExpectationNotMetError, /Did not expect Product to be valid/)
+    end
+  end
 end
 

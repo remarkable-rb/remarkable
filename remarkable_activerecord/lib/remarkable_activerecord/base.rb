@@ -25,14 +25,12 @@ module Remarkable
         # and an @options key where the message to search for is.
         #
         def assert_bad_or_good_if_key(key, value, message_key=:message) #:nodoc:
-          return true unless @options.key?(key)
+          return positive? unless @options.key?(key)
 
           if @options[key]
-            return true if bad?(value, message_key)
-            return false, :not => not_word
+            return bad?(value, message_key), :not => not_word
           else
-            return true if good?(value, message_key)
-            return false, :not => ''
+            return good?(value, message_key), :not => ''
           end
         end
 
@@ -43,14 +41,12 @@ module Remarkable
         # and an @options key where the message to search for is.
         #
         def assert_good_or_bad_if_key(key, value, message_key=:message) #:nodoc:
-          return true unless @options.key?(key)
+          return positive? unless @options.key?(key)
 
           if @options[key]
-            return true if good?(value, message_key)
-            return false, :not => ''
+            return good?(value, message_key), :not => ''
           else
-            return true if bad?(value, message_key)
-            return false, :not => not_word
+            return bad?(value, message_key), :not => not_word
           end
         end
 

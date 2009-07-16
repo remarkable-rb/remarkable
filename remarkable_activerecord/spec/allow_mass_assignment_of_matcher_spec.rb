@@ -75,7 +75,24 @@ describe 'allow_mass_assignment_of' do
     should_allow_mass_assignment_of :title, :category
 
     should_not_allow_mass_assignment_of :another
-    should_not_allow_mass_assignment_of :title, :another
+  end
+
+  describe 'failures' do
+    it "should fail if not all attributes are accessible on should not" do
+      define_and_validate(:accessible => true)
+
+      lambda {
+        should_not allow_mass_assignment_of :title, :another
+      }.should raise_error(Spec::Expectations::ExpectationNotMetError, /Product has made title accessible/)
+    end
+
+    it "should fail if accessible when protecting" do
+      define_and_validate(:accessible => true)
+
+      lambda {
+        should_not allow_mass_assignment_of
+      }.should raise_error(Spec::Expectations::ExpectationNotMetError, /Product made category and title accessible/)
+    end
   end
 end
 

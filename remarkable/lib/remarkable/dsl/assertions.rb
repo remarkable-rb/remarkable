@@ -282,11 +282,13 @@ module Remarkable
 
         run_before_assert_callbacks
 
-        send_methods_and_generate_message(self.class.matcher_single_assertions) &&
-        assert_matcher_for(instance_variable_get("@#{self.class.matcher_arguments[:collection]}") || []) do |value|
-          instance_variable_set("@#{self.class.matcher_arguments[:as]}", value)
-          send_methods_and_generate_message(self.class.matcher_collection_assertions)
+        assertions = self.class.matcher_single_assertions
+        unless assertions.empty?
+          value = send_methods_and_generate_message(assertions)
+          return negative? if positive? == !value
         end
+
+        matches_collection_assertions?
       end
 
       protected
@@ -368,19 +370,41 @@ module Remarkable
           methods.each do |method|
             bool, hash = send(method)
 
-            unless bool
+            if positive? == !bool
               parent_scope = matcher_i18n_scope.split('.')
               matcher_name = parent_scope.pop
-              lookup       = :"expectations.#{method.to_s.gsub(/(\?|\!)$/, '')}"
+              method_name  = method.to_s.gsub(/(\?|\!)$/, '')
+
+              lookup = []
+              lookup << :"#{matcher_name}.negative_expectations.#{method_name}" if negative?
+              lookup << :"#{matcher_name}.expectations.#{method_name}"
+              lookup << :"negative_expectations.#{method_name}" if negative?
+              lookup << :"expectations.#{method_name}"
 
               hash = { :scope => parent_scope, :default => lookup }.merge(hash || {})
-              @expectation ||= Remarkable.t "#{matcher_name}.#{lookup}", default_i18n_options.merge(hash)
+              @expectation ||= Remarkable.t lookup.shift, default_i18n_options.merge(hash)
 
-              return false
+              return negative?
             end
           end
 
-          return true
+          return positive?
+        end
+
+        def matches_single_assertions? #:nodoc:
+          assertions = self.class.matcher_single_assertions
+          send_methods_and_generate_message(assertions)
+        end
+
+        def matches_collection_assertions? #:nodoc:
+          arguments  = self.class.matcher_arguments
+          assertions = self.class.matcher_collection_assertions
+          collection = instance_variable_get("@#{self.class.matcher_arguments[:collection]}") || []
+
+          assert_collection(nil, collection) do |value|
+            instance_variable_set("@#{arguments[:as]}", value)
+            send_methods_and_generate_message(assertions)
+          end
         end
 
 
