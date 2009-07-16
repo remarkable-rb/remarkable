@@ -64,18 +64,6 @@ module Remarkable
 
       # Ensures that the attribute can be set to the given values.
       #
-      # Beware that when used in the negative form, this matcher fails if any of
-      # the values fail. For example, let's assume we have a valid and invalid
-      # value called "valid" and "invalid". The following assertion WILL pass:
-      #
-      #   should_not_allow_values_for :attribute, "valid", "invalid"
-      #
-      # If you want to assert that all values fail, you have to do:
-      #
-      #   %w(first_invalid second_invalid).each do |invalid|
-      #     should_not_allow_values_for invalid
-      #   end
-      #
       # == Options
       #
       # * <tt>:allow_nil</tt> - when supplied, validates if it allows nil or not.
