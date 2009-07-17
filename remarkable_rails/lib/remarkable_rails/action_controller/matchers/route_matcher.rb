@@ -7,6 +7,15 @@ module Remarkable
 
         assertions :map_to_path?, :generate_params?
 
+        # Allow route(:get, :action => "show", :id => 1).to("/posts/1") construction.
+        #
+        after_initialize do
+          if @path.is_a?(Hash)
+            @options.merge!(@path)
+            @path = nil
+          end
+        end
+
         before_assert do
           @options[:controller] ||= controller_name
           @populated_path = @path.dup
@@ -19,12 +28,17 @@ module Remarkable
           ::ActionController::Routing::Routes.reload if ::ActionController::Routing::Routes.empty?
         end
 
-        def controller
-          @controller ||= @spec.controller if @spec.respond_to?(:controller)
+        def to(value)
+          @path = value
+          self
         end
 
         def request
           controller.request if controller
+        end
+
+        def controller
+          @controller ||= @spec.controller if @spec.respond_to?(:controller)
         end
 
         private
@@ -99,6 +113,9 @@ module Remarkable
       #   # nested routes
       #   should_route :get,    '/users/5/posts', :controller => :posts, :action => :index,   :user_id => 5
       #   should_route :post,   '/users/5/posts', :controller => :posts, :action => :create,  :user_id => 5
+      #
+      #   # it example
+      #   it { should route(:get, :action => :index).to('/users/5/posts') }
       #
       def route(*params, &block)
         RouteMatcher.new(*params, &block).spec(self)

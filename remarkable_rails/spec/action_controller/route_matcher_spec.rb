@@ -29,18 +29,22 @@ describe 'route_matcher' do
     it { should route(:delete, '/projects/1',   :controller => :projects, :action => :destroy, :id => 1) }
     it { should route(:get,    '/projects/new', :controller => :projects, :action => :new) }
 
+    it { should route(:get,    :controller => :projects, :action => :index).to('/projects') }
+    it { should route(:delete, :controller => :projects, :action => :destroy, :id => 1).to('/projects/1') }
+    it { should route(:get,    :controller => :projects, :action => :new).to('/projects/new') }
+
     # explicitly specify :controller
-    it { should route(:post,   '/projects',     :controller => :projects, :action => :create) }
+    it { should route(:post, '/projects',  :controller => :projects, :action => :create) }
 
     # non-string parameter
-    it { should route(:get,    '/projects/1',   :controller => :projects, :action => :show, :id => 1) }
+    it { should route(:get, '/projects/1', :controller => :projects, :action => :show, :id => 1) }
 
     # string-parameter
-    it { should route(:put,    '/projects/1',   :controller => :projects, :action => :update, :id => "1") }
+    it { should route(:put, '/projects/1', :controller => :projects, :action => :update, :id => "1") }
 
     # failing case
-    it { should_not route(:get, '/projects',    :controller => :projects, :action => :show) }
-    it { should_not route(:xyz, '/projects',    :controller => :projects, :action => :index) }
+    it { should_not route(:get, '/projects', :controller => :projects, :action => :show) }
+    it { should_not route(:xyz, '/projects', :controller => :projects, :action => :index) }
   end
 
   describe 'macros' do

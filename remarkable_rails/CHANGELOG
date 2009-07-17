@@ -1,3 +1,5 @@
+* Allow should route(:get, :action => :show, :id => 1).to("/projects/1") syntax.
+
 * Plugin files are automatically loaded [#86]
 
 * Allow should_route to use environment configuration [#88] (thanks to Lawrence Pit)
