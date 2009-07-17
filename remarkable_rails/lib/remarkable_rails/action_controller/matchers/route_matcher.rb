@@ -4,7 +4,6 @@ module Remarkable
       # Do not inherit from ActionController::Base since it don't need all macro stubs behavior.
       class RouteMatcher < Remarkable::Base #:nodoc:
         arguments :method, :path
-
         assertions :map_to_path?, :generate_params?
 
         # Allow route(:get, :action => "show", :id => 1).to("/posts/1") construction.
@@ -33,14 +32,6 @@ module Remarkable
           self
         end
 
-        def request
-          controller.request if controller
-        end
-
-        def controller
-          @controller ||= @spec.controller if @spec.respond_to?(:controller)
-        end
-
         private
 
           def map_to_path?
@@ -49,12 +40,22 @@ module Remarkable
           end
 
           def generate_params?
-            env = ::ActionController::Routing::Routes.extract_request_environment(controller.request) if controller
+            env = ::ActionController::Routing::Routes.extract_request_environment(request) if request
 
             env ||= {}
             env[:method] = @method.to_sym
             params_from  = ::ActionController::Routing::Routes.recognize_path(@populated_path, env) rescue nil
             return params_from == @options, :actual => params_from.inspect
+          end
+
+          def controller
+            @controller ||= if @subject.is_a?(::ActionController::Base)
+              @subject
+            elsif @spec.respond_to?(:controller)
+              @spec.controller
+            else
+              raise "Could not find a controller for route specs."
+            end
           end
 
           # First tries to get the controller name from the subject, then from
@@ -77,19 +78,22 @@ module Remarkable
               spec_class = @spec.class unless @spec.class == Class
 
               attempts = []
-              attempts << controller.class if controller
-              attempts << @subject.class   if @subject
+              attempts << controller.class            if controller
               attempts << spec_class.controller_class if spec_class.respond_to?(:controller_class)
               attempts << spec_class.described_class  if spec_class.respond_to?(:described_class)
 
-              attempts.find{ |controller| ::ActionController::Base >= controller }
+              # Check for not blank names to address an odd rspec/rails behavior.
+              attempts.find { |klass| ::ActionController::Base >= klass && !klass.name.blank? }
             end
+          end
+
+          def request
+            controller.request
           end
 
           def interpolation_options
             { :options => @options.inspect, :method => @method.to_s.upcase, :path => @path.inspect }
           end
-
       end
 
       # Assert route generation AND route recognition.

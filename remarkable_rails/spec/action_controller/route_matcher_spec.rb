@@ -1,7 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe 'route_matcher' do
-  controller_name :tasks
+describe ApplicationController, 'routing', :type => :routing do
+
+  def controller
+    @controller ||= ApplicationController.new
+  end
 
   describe 'messages' do
     before(:each) do
@@ -17,9 +20,9 @@ describe 'route_matcher' do
       @matcher.failure_message.should match(/Expected to map/)
     end
 
-    it 'should set map_to_path? message' do
+    it 'should set generate_params? message' do
       @matcher.stub!(:map_to_path?).and_return(true)
-      @matcher.matches?(nil)
+      @matcher.matches?(controller)
       @matcher.failure_message.should match(/Expected to generate params/)
     end
   end
@@ -68,10 +71,9 @@ describe 'route_matcher' do
 
   describe 'using controller.request' do
     it "should extract environment from controller request" do
-      @matcher = route(:get, '/projects', :controller => 'projects', :action => 'index')
-      ::ActionController::Routing::Routes.should_receive(:extract_request_environment).with(controller.request).and_return({:subdomain => "foo"})
-      ::ActionController::Routing::Routes.should_receive(:recognize_path).with("/projects", {:subdomain => "foo", :method => :get})
-      @matcher.matches?(@controller)
+      ActionController::Routing::Routes.should_receive(:extract_request_environment).with(controller.request).and_return({:subdomain => "foo"})
+      ActionController::Routing::Routes.should_receive(:recognize_path).with("/projects", {:subdomain => "foo", :method => :get})
+      route(:get, '/projects', :controller => 'projects', :action => 'index').matches?(controller)
     end
   end
 end
@@ -84,4 +86,9 @@ describe TasksController, :type => :routing do
   should_route :delete, '/projects/5/tasks/1',   :action => :destroy, :id => 1, :project_id => 5
   should_route :get,    '/projects/5/tasks/new', :action => :new,     :project_id => 5
   should_route :put,    '/projects/5/tasks/1',   :action => :update,  :id => 1, :project_id => 5
+
+  it "should use another controller name if it's given" do
+    self.should_receive(:controller).and_return(ApplicationController.new)
+    route(:get, '/').send(:controller_name).should == 'applications'
+  end
 end
