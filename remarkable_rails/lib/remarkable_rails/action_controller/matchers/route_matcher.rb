@@ -6,7 +6,7 @@ module Remarkable
         arguments :method, :path
         assertions :map_to_path?, :generate_params?
 
-        # Allow route(:get, :action => "show", :id => 1).to("/posts/1") construction.
+        # Small hack to allow should route().to/from syntax.
         #
         after_initialize do
           if @path.is_a?(Hash)
@@ -29,6 +29,11 @@ module Remarkable
 
         def to(value)
           @path = value
+          self
+        end
+
+        def from(value)
+          @options.merge!(value)
           self
         end
 

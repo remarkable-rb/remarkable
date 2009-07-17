@@ -1,4 +1,5 @@
-* Allow should route(:get, :action => :show, :id => 1).to("/projects/1") syntax.
+* Allow should route(:get, :action => :show, :id => 1).to("/projects/1") and
+  should route(:get, "/projects/1").from(:action => :show, :id => 1) syntax.
 
 * Plugin files are automatically loaded [#86]
 

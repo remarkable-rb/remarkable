@@ -32,9 +32,15 @@ describe ApplicationController, 'routing', :type => :routing do
     it { should route(:delete, '/projects/1',   :controller => :projects, :action => :destroy, :id => 1) }
     it { should route(:get,    '/projects/new', :controller => :projects, :action => :new) }
 
+    # to syntax
     it { should route(:get,    :controller => :projects, :action => :index).to('/projects') }
     it { should route(:delete, :controller => :projects, :action => :destroy, :id => 1).to('/projects/1') }
     it { should route(:get,    :controller => :projects, :action => :new).to('/projects/new') }
+
+    # from syntax
+    it { should route(:get,    '/projects').from(:controller => :projects, :action => :index) }
+    it { should route(:delete, '/projects/1').from(:controller => :projects, :action => :destroy, :id => 1) }
+    it { should route(:get,    '/projects/new').from(:controller => :projects, :action => :new) }
 
     # explicitly specify :controller
     it { should route(:post, '/projects',  :controller => :projects, :action => :create) }
