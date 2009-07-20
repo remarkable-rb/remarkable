@@ -28,12 +28,12 @@ module Remarkable
         end
 
         def to(value)
-          @path = value
+          @options.merge!(value)
           self
         end
 
         def from(value)
-          @options.merge!(value)
+          @path = value
           self
         end
 

@@ -33,14 +33,14 @@ describe ApplicationController, 'routing', :type => :routing do
     it { should route(:get,    '/projects/new', :controller => :projects, :action => :new) }
 
     # to syntax
-    it { should route(:get,    :controller => :projects, :action => :index).to('/projects') }
-    it { should route(:delete, :controller => :projects, :action => :destroy, :id => 1).to('/projects/1') }
-    it { should route(:get,    :controller => :projects, :action => :new).to('/projects/new') }
+    it { should route(:get,    '/projects').to(:controller => :projects, :action => :index) }
+    it { should route(:delete, '/projects/1').to(:controller => :projects, :action => :destroy, :id => 1) }
+    it { should route(:get,    '/projects/new').to(:controller => :projects, :action => :new) }
 
     # from syntax
-    it { should route(:get,    '/projects').from(:controller => :projects, :action => :index) }
-    it { should route(:delete, '/projects/1').from(:controller => :projects, :action => :destroy, :id => 1) }
-    it { should route(:get,    '/projects/new').from(:controller => :projects, :action => :new) }
+    it { should route(:get,    :controller => :projects, :action => :index).from('/projects') }
+    it { should route(:delete, :controller => :projects, :action => :destroy, :id => 1).from('/projects/1') }
+    it { should route(:get,    :controller => :projects, :action => :new).from('/projects/new') }
 
     # explicitly specify :controller
     it { should route(:post, '/projects',  :controller => :projects, :action => :create) }
