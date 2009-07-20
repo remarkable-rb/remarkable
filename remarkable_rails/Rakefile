@@ -14,8 +14,8 @@ require File.join(File.dirname(__FILE__), "..", "rake_helpers.rb")
 
 configure_gemspec! do |s|
   s.add_dependency('rspec-rails', ">= #{RSPEC_VERSION}")
-  s.add_dependency('remarkable', ">= #{GEM_VERSION}")
-  s.add_dependency('remarkable_activerecord', ">= #{GEM_VERSION}")
+  s.add_dependency('remarkable', "~> #{GEM_VERSION}")
+  s.add_dependency('remarkable_activerecord', "~> #{GEM_VERSION}")
 end
 
 ########### Specs
