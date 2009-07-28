@@ -18,6 +18,17 @@ module Remarkable
 
       protected
 
+        # Overwrite subject_name to provide I18n.
+        #
+        def subject_name
+          nil unless @subject
+          if subject_class.respond_to?(:human_name)
+            subject_class.human_name(:locale => Remarkable.locale)
+          else
+            subject_class.name
+          end
+        end
+
         # Checks for the given key in @options, if it exists and it's true,
         # tests that the value is bad, otherwise tests that the value is good.
         #

@@ -27,11 +27,10 @@ module Remarkable
         @subject.is_a?(Class) ? @subject : @subject.class
       end
 
-      # Returns the subject name based on its class. If the class respond to
-      # human_name (which is usually localized) returns it.
+      # Returns the subject name based on its class.
       def subject_name
         nil unless @subject
-        subject_class.respond_to?(:human_name) ? subject_class.human_name : subject_class.name
+        subject_class.name
       end
 
       # Iterates over the collection given yielding the block and return false
