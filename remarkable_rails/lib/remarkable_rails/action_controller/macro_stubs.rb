@@ -560,6 +560,8 @@ module Remarkable
         def evaluate_value(duck) #:nodoc:
           if duck.is_a?(Proc)
             self.instance_eval(&duck)
+          elsif duck.is_a?(Array)
+            duck.map{|child_duck| evaluate_value(child_duck) }
           else
             duck
           end

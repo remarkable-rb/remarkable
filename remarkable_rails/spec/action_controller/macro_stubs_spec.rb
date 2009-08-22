@@ -122,6 +122,32 @@ describe 'MacroStubs' do
       teardown_mocks_for_rspec
     end
   end
+  
+  describe 'with array in options' do
+    expects :find, :on => Task, :with => [proc{ current_id }, 1], :returns => [proc{ current_id }, 2]
+    
+    it 'should evaluate all procs in :with option' do
+      run_expectations!
+      
+      lambda {
+        Task.find(1)
+      }.should raise_error(Spec::Mocks::MockExpectationError, /expected :find with \("37"\, 1\) but received it with \(1\)/)
+      
+      lambda {
+        Task.find("37", 1)
+      }.should_not raise_error
+    end
+    
+    it 'should evaluate all procs in :returns option' do
+      run_expectations!
+      
+      Task.find("37", 1).should eql(["37", 2])
+    end
+    
+    after(:each) do
+      teardown_mocks_for_rspec
+    end
+  end
 
   describe 'when extending describe group behavior' do
     expects :find, :on => Task, :with => proc{ current_id }, :returns => task_proc
