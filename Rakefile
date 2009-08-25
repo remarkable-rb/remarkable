@@ -47,6 +47,11 @@ unique_tasks    :clobber_package
 recursive_tasks :clobber_rdoc, :gem, :gemspec, :install, :package, :pre_commit,
                 :rdoc, :repackage, :rerdoc, :spec, :uninstall
 
+desc "Default Task"
+task :default do
+  Rake::Task[:spec].execute
+end
+
 desc "Publish release files to RubyForge"
 task :release => :package do
   require 'rubyforge'

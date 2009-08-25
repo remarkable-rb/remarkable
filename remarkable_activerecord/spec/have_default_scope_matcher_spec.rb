@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-if RAILS_VERSION == '2.3.2'
+if RAILS_VERSION == '2.3.3'
   describe 'have_default_scope' do
     include ModelBuilder
 
