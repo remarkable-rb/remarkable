@@ -18,7 +18,7 @@ end
 
 ########### Specs
 
-RAILS_VERSIONS = ['2.1.2', '2.2.2', '2.3.2']
+RAILS_VERSIONS = ['2.1.2', '2.2.2', '2.3.2', '2.3.3']
 
 desc "Run the specs under spec with supported Rails versions"
 task :pre_commit do
