@@ -18,14 +18,14 @@ module Remarkable
             protected_attributes.empty?
           end
 
-          def is_protected?
-            return positive? if protected_attributes.empty?
-            !protected_attributes.include?(@attribute.to_s)
-          end
-
           def is_accessible?
             return positive? if accessible_attributes.empty?
             accessible_attributes.include?(@attribute.to_s)
+          end
+
+          def is_protected?
+            return accessible_attributes.empty? || positive? if protected_attributes.empty?
+            !protected_attributes.include?(@attribute.to_s)
           end
 
           def interpolation_options
