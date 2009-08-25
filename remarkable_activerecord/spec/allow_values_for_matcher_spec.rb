@@ -38,9 +38,9 @@ describe 'allow_values_for' do
 
   describe 'matchers' do
     it { should define_and_validate(:with => /X|Y|Z/).in('X', 'Y', 'Z') }
-    it { should_not define_and_validate(:with => /X|Y|Z/).in('A') }
 
-    it { should define_and_validate(:with => /X|Y|Z/, :message => 'valid').in('X', 'Y', 'Z').message('valid') }
+    it { should_not define_and_validate(:with => /X|Y|Z/).in('A') }
+    it { should_not define_and_validate(:with => /X|Y|Z/, :message => 'invalid').in('A') }
 
     create_optional_boolean_specs(:allow_nil, self, :with => /X|Y|Z/)
     create_optional_boolean_specs(:allow_blank, self, :with => /X|Y|Z/)
@@ -51,11 +51,6 @@ describe 'allow_values_for' do
 
     should_allow_values_for :title, 'X'
     should_not_allow_values_for :title, 'A'
-
-    describe 'deprecation' do
-      it { should validate_format_of(:title, 'X') }
-      should_not_validate_format_of :title, 'A'
-    end
   end
 
   describe 'failures' do

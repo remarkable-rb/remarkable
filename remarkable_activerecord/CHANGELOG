@@ -1,3 +1,5 @@
+* allow_values_for checks for any message unless otherwise given [#90]
+
 * Allow booleans to be given to validate_inclusion_of [#89]
 
 * Allow allow_values_for and allow_mass_assignment_of matchers to be executed in

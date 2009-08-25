@@ -11,7 +11,7 @@ module Remarkable
 
         collection_assertions :is_valid?, :is_invalid?, :allow_nil?, :allow_blank?
 
-        default_options :message => :invalid
+        default_options :message => /.*/
 
         before_assert do
           first_value = @options[:in].is_a?(Array) ? @options[:in].first : @options[:in]
@@ -62,14 +62,16 @@ module Remarkable
 
       end
 
-      # Ensures that the attribute can be set to the given values.
+      # Ensures that the attribute can be set to the given values. It checks
+      # for any message in the given attribute unless a :message is explicitely
+      # given.
       #
       # == Options
       #
       # * <tt>:allow_nil</tt> - when supplied, validates if it allows nil or not.
       # * <tt>:allow_blank</tt> - when supplied, validates if it allows blank or not.
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
-      #   Regexp, string or symbol.  Default = <tt>I18n.translate('activerecord.errors.messages.invalid')</tt>
+      #   Regexp, string or symbol.  Default = <tt>/.*/</tt>
       #
       # == Examples
       #
@@ -79,17 +81,6 @@ module Remarkable
       def allow_values_for(attribute, *args, &block)
         options = args.extract_options!
         AllowValuesForMatcher.new(attribute, options.merge!(:in => args), &block).spec(self)
-      end
-
-      # Deprecated. Use allow_values_for instead.
-      #
-      def validate_format_of(*args)
-        if caller[0] =~ /\macros.rb/
-          warn "[DEPRECATION] should_validate_format_of is deprecated, use should_allow_values_for instead."
-        else
-          warn "[DEPRECATION] validate_format_of is deprecated, use allow_values_for instead. Called from #{caller[0]}."
-        end
-        allow_values_for(*args)
       end
 
     end
