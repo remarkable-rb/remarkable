@@ -64,7 +64,7 @@ module Remarkable
         # Default allow_nil? validation. It accepts the message_key which is
         # the key which contain the message in @options.
         #
-        # It also gets an allow_nil message on remarkable.active_record.allow_nil
+        # It also gets an allow_nil message on remarkable.data_mapper.allow_nil
         # to be used as default.
         #
         def allow_nil?(message_key=:message) #:nodoc:
@@ -74,7 +74,7 @@ module Remarkable
         # Default allow_blank? validation. It accepts the message_key which is
         # the key which contain the message in @options.
         #
-        # It also gets an allow_blank message on remarkable.active_record.allow_blank
+        # It also gets an allow_blank message on remarkable.data_mapper.allow_blank
         # to be used as default.
         #
         def allow_blank?(message_key=:message) #:nodoc:
@@ -93,7 +93,7 @@ module Remarkable
           assert_bad_value(@subject, @attribute, value, @options[message_sym])
         end
 
-        # Asserts that an Active Record model validates with the passed
+        # Asserts that a DataMapper model validates with the passed
         # <tt>value</tt> by making sure the <tt>error_message_to_avoid</tt> is not
         # contained within the list of errors for that attribute.
         #
@@ -119,7 +119,7 @@ module Remarkable
           assert_does_not_contain(model.errors.on(attribute), error_message_to_avoid)
         end
 
-        # Asserts that an Active Record model invalidates the passed
+        # Asserts that a DataMapper model invalidates the passed
         # <tt>value</tt> by making sure the <tt>error_message_to_expect</tt> is
         # contained within the list of errors for that attribute.
         #
@@ -173,7 +173,7 @@ module Remarkable
         #   macros would start to pass when they shouldn't.
         #
         #   Using the underlying mechanism inside DataMapper makes us free from
-        #   all thos errors.
+        #   all those errors.
         #
         # We replace {{count}} interpolation for 12345 which later is replaced
         # by a regexp which contains \d+.
