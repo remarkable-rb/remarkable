@@ -69,7 +69,7 @@ An equivalent in remarkable would be:
       expects :save, :on => task_proc, :returns => true
 
       should_assign_to :task, :with => task_proc
-      should_redirect_to { task_url(task_proc) }
+      should_redirect_to { task_url(mock_task) }
     end
   end
 
