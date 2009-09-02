@@ -112,7 +112,7 @@ module Remarkable
               nil
             end
 
-            case column_type.type
+            case column_type.class
               when :int, :integer, :float, :decimal
                 new_value_for_stringfiable_scope(scope)
               when :datetime, :timestamp, :time
