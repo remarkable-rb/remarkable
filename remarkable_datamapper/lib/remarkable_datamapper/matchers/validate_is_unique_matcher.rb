@@ -39,11 +39,7 @@ module Remarkable
               
               message << " which is different from the subject record (the object being validated is the same as the one in the database)"
               conditions << {::DataMapper::Query::Operator.new(subject_class.key.first.name, :not) => @subject.send(key)}
-              pp conditions
             end
-            
-            require 'pp'
-            #pp conditions
             
             return true if @existing = subject_class.first(conditions)
             raise ScriptError, "could not find a #{subject_class} record in the database" + message

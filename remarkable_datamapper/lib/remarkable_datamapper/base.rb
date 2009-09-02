@@ -181,8 +181,6 @@ module Remarkable
         def error_message_from_model(model, attribute, message) #:nodoc:
           if message.is_a? Symbol
             # TODO: No Internationalization yet.
-            # TODO: remove debug line
-            pp attribute
             message = ::DataMapper::Validate::ValidationErrors.default_error_message(message, attribute, '12345')
             
             if message =~ /12345/
