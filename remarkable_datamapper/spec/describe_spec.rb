@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-RAILS_I18N = false  # specs won't run unless true
+I18N = true  # specs won't run unless false
 
 class Post
   attr_accessor :published, :public, :deleted
@@ -72,6 +72,7 @@ describe Post do
       end
 
       it "should nest descriptions" do
+        #self.class.describe_subject_attributes.should == "blah"
         self.class.description.should == "MyPost when published is true and public is false"
       end
 

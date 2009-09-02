@@ -22,6 +22,11 @@ require 'dm-core'
 gem 'dm-validations', DM_VERSION
 require 'dm-validations'
 
+gem 'svenfuchs-i18n'
+require 'i18n'
+
+require 'pp'  # DEBUG ONLY
+
 ENV['SQLITE3_SPEC_URI'] ||= 'sqlite3::memory:'
 ENV['ADAPTER'] = 'sqlite3'
 

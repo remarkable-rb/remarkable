@@ -180,7 +180,7 @@ module Remarkable
         #
         def error_message_from_model(model, attribute, message) #:nodoc:
           if message.is_a? Symbol
-            message = if RAILS_I18N # Rails >= 2.2
+            message = if I18N # Rails >= 2.2
               model.errors.generate_message(attribute, message, :count => '12345')
             else # Rails <= 2.1
               ::DataMapper::Errors.default_error_messages[message] % '12345'
@@ -240,7 +240,7 @@ module Remarkable
         # Returns true if the given collection should be translated.
         #
         def i18n_collection? #:nodoc:
-          RAILS_I18N && I18N_COLLECTION.include?(self.class.matcher_arguments[:collection])
+          I18N && I18N_COLLECTION.include?(self.class.matcher_arguments[:collection])
         end
 
     end
