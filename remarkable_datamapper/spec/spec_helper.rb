@@ -16,8 +16,8 @@ require 'data_objects'
 gem 'do_sqlite3', DM_VERSION
 require 'do_sqlite3'
 
-gem 'rails_datamapper', DM_VERSION
-require 'rails_datamapper'
+gem 'dm-core', DM_VERSION
+require 'dm-core'
 
 gem 'dm-validations', DM_VERSION
 require 'dm-validations'

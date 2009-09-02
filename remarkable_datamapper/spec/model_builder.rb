@@ -44,7 +44,8 @@ module ModelBuilder
   def define_constant(class_name, base, &block)
     class_name = class_name.to_s.camelize
 
-    klass = Class.new(base)
+    klass = Class.new
+    klass.include base
     Object.const_set(class_name, klass)
 
     klass.class_eval(&block) if block_given?
@@ -56,7 +57,7 @@ module ModelBuilder
   end
 
   def define_model_class(class_name, &block)
-    define_constant(class_name, ActiveRecord::Base, &block)
+    define_constant(class_name, DataMapper::Resource, &block)
   end
 
   def define_model(name, columns = {}, &block)

@@ -67,8 +67,8 @@ module Remarkable
         # It also gets an allow_nil message on remarkable.data_mapper.allow_nil
         # to be used as default.
         #
-        def allow_nil?(message_key=:message) #:nodoc:
-          assert_good_or_bad_if_key(:allow_nil, nil, message_key)
+        def nullable?(message_key=:message) #:nodoc:
+          assert_good_or_bad_if_key(:nullable, nil, message_key)
         end
 
         # Default allow_blank? validation. It accepts the message_key which is
