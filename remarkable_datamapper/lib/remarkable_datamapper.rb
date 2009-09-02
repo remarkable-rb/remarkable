@@ -9,7 +9,7 @@ unless Object.const_defined?('Remarkable')
   end
 end
 
-# Load Remarkable ActiveRecord files
+# Load Remarkable DataMapper files
 dir = File.dirname(__FILE__)
 require File.join(dir, 'remarkable_datamapper', 'base')
 require File.join(dir, 'remarkable_datamapper', 'describe')
