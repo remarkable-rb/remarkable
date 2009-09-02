@@ -130,7 +130,6 @@ module Remarkable
                                       :key => translated_key.downcase, :value => value.inspect)
             end
 
-            pp pieces
             description << pieces.join(connector)
             args.unshift(description)
 

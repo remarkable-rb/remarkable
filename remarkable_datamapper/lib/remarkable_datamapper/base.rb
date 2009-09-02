@@ -180,12 +180,11 @@ module Remarkable
         #
         def error_message_from_model(model, attribute, message) #:nodoc:
           if message.is_a? Symbol
-            message = if I18N # Rails >= 2.2
-              model.errors.generate_message(attribute, message, :count => '12345')
-            else # Rails <= 2.1
-              ::DataMapper::Errors.default_error_messages[message] % '12345'
-            end
-
+            # TODO: No Internationalization yet.
+            # TODO: remove debug line
+            pp attribute
+            message = ::DataMapper::Validate::ValidationErrors.default_error_message(message, attribute, '12345')
+            
             if message =~ /12345/
               message = Regexp.escape(message)
               message.gsub!('12345', '\d+')
@@ -240,7 +239,7 @@ module Remarkable
         # Returns true if the given collection should be translated.
         #
         def i18n_collection? #:nodoc:
-          I18N && I18N_COLLECTION.include?(self.class.matcher_arguments[:collection])
+          RAILS_I18N && I18N_COLLECTION.include?(self.class.matcher_arguments[:collection])
         end
 
     end

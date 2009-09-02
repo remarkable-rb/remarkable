@@ -1,15 +1,15 @@
 module Remarkable
   module DataMapper
     module Matchers
-      class ValidatesIsUniqueMatcher < Remarkable::DataMapper::Base #:nodoc:
+      class ValidateIsUniqueMatcher < Remarkable::DataMapper::Base #:nodoc:
         arguments :collection => :attributes, :as => :attribute
 
         optional :message
         optional :scope, :splat => true
-        optional :case_sensitive, :allow_nil, :allow_blank, :default => true
+        optional :nullable, :default => true
 
-        collection_assertions :find_first_object?, :responds_to_scope?, :is_unique?, :case_sensitive?,
-                              :valid_with_new_scope?, :allow_nil?, :allow_blank?
+        collection_assertions :find_first_object?, :responds_to_scope?, :is_unique?,
+                              :valid_with_new_scope?, :nullable?
 
         default_options :message => :taken
 
@@ -28,24 +28,24 @@ module Remarkable
           # If any of these attempts fail, an error is raised.
           #
           def find_first_object?
-            conditions, message = if @options[:allow_nil]
-              [ ["#{@attribute} IS NOT NULL"], " with #{@attribute} not nil" ]
-            elsif @options[:allow_blank]
-              [ ["#{@attribute} != ''"], " with #{@attribute} not blank" ]
-            else
-              [ [], "" ]
+            conditions, message = [[], ""]
+            if @options[:nullable]
+              conditions << {::DataMapper::Query::Operator.new(@attribute, :not) => nil}
+              message << " with #{@attribute} not nil"
             end
-
-            unless @subject.new_record?
-              primary_key = subject_class.primary_key
-
-              message    << " which is different from the subject record (the object being validated is the same as the one in the database)"
-              conditions << "#{subject_class.primary_key} != '#{@subject.send(primary_key)}'"
+            
+            unless @subject.new?
+              key = subject_class.key
+              
+              message << " which is different from the subject record (the object being validated is the same as the one in the database)"
+              conditions << {::DataMapper::Query::Operator.new(subject_class.key.first.name, :not) => @subject.send(key)}
+              pp conditions
             end
-
-            options = conditions.empty? ? {} : { :conditions => conditions.join(' AND ') }
-
-            return true if @existing = subject_class.find(:first, options)
+            
+            require 'pp'
+            #pp conditions
+            
+            return true if @existing = subject_class.first(conditions)
             raise ScriptError, "could not find a #{subject_class} record in the database" + message
           end
 
@@ -68,19 +68,6 @@ module Remarkable
           def is_unique?
             @value = @existing.send(@attribute)
             return bad?(@value)
-          end
-
-          # If :case_sensitive is given and it's false, we swap the case of the
-          # value used in :is_unique? and see if the test object remains valid.
-          #
-          # If :case_sensitive is given and it's true, we swap the case of the
-          # value used in is_unique? and see if the test object is not valid.
-          #
-          # This validation will only occur if the test object is a String.
-          # 
-          def case_sensitive?
-            return true unless @value.is_a?(String)
-            assert_good_or_bad_if_key(:case_sensitive, @value.swapcase)
           end
 
           # Now test that the object is valid when changing the scoped attribute.
@@ -173,7 +160,7 @@ module Remarkable
             conditions = { scope => values, @attribute => @value }
 
             # Get values from the database, get the scope attribute and map them to string.
-            db_values = subject_class.find(:all, :conditions => conditions, :select => scope)
+            db_values = subject_class.all(:conditions => conditions, :fields => [scope])
             db_values.map!{ |r| r.send(scope).to_s }
 
             if value_to_return = (values - db_values).first
@@ -204,7 +191,6 @@ module Remarkable
       # == Options
       #
       # * <tt>:scope</tt> - field(s) to scope the uniqueness to.
-      # * <tt>:case_sensitive</tt> - the matcher look for an exact match.
       # * <tt>:allow_nil</tt> - when supplied, validates if it allows nil or not.
       # * <tt>:allow_blank</tt> - when supplied, validates if it allows blank or not.
       # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
@@ -213,20 +199,19 @@ module Remarkable
       # == Examples
       #
       #   it { should validate_uniqueness_of(:keyword, :username) }
-      #   it { should validate_uniqueness_of(:email, :scope => :name, :case_sensitive => false) }
+      #   it { should validate_uniqueness_of(:email, :scope => :name) }
       #   it { should validate_uniqueness_of(:address, :scope => [:first_name, :last_name]) }
       #
       #   should_validate_uniqueness_of :keyword, :username
-      #   should_validate_uniqueness_of :email, :scope => :name, :case_sensitive => false
+      #   should_validate_uniqueness_of :email, :scope => :name
       #   should_validate_uniqueness_of :address, :scope => [:first_name, :last_name]
       #
       #   should_validate_uniqueness_of :email do |m|
       #     m.scope = name
-      #     m.case_sensitive = false
       #   end
       #
-      def validates_is_unique(*attributes, &block)
-        ValidateUniquenessOfMatcher.new(*attributes, &block).spec(self)
+      def validate_is_unique(*attributes, &block)
+        ValidateIsUniqueMatcher.new(*attributes, &block).spec(self)
       end
     end
   end

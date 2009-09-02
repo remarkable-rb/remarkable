@@ -1,7 +1,7 @@
 # This is based on Shoulda model builder for Test::Unit.
 #
 
-# TODO: !!! These functions are 
+# TODO: !!! These functions are not all updated yet
 module ModelBuilder
   def self.included(base)
     return unless base.name =~ /^Spec/
@@ -14,29 +14,30 @@ module ModelBuilder
           end
         end
 
-        DataMapper.auto_migrate!
-        #if @created_tables
-        #  @created_tables.each do |table_name|
-        #    ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{table_name}")
-        #  end
-        #end
+        if @created_tables
+          @created_tables.each do |table_name|
+            DataMapper::Repository.adapters[:default].execute("DROP TABLE IF EXISTS #{table_name}")
+          end
+        end
       end
     end
 
     base.extend ClassMethods
   end
 
-  def create_table(table_name, &block)
-    connection = ActiveRecord::Base.connection
+  def create_table(model)
+    adapter = DataMapper::Repository.adapters[:default]
+    table_name = model.to_s.tableize
+    command = "DROP TABLE IF EXISTS #{table_name}"
 
     begin
-      connection.execute("DROP TABLE IF EXISTS #{table_name}")
-      connection.create_table(table_name, &block)
+      adapter.execute(command)
+      adapter.create_model_storage(model)
       @created_tables ||= []
       @created_tables << table_name
-      connection
+      adapter
     rescue Exception => e
-      connection.execute("DROP TABLE IF EXISTS #{table_name}")
+      adapter.execute(command)
       raise e
     end
   end
@@ -45,8 +46,8 @@ module ModelBuilder
     class_name = class_name.to_s.camelize
 
     klass = Class.new
-    klass.include base
-    Object.const_set(class_name, klass)
+    klass.send :include, base
+    Object.const_set(class_name, klass) #unless klass
 
     klass.class_eval(&block) if block_given?
 
@@ -63,17 +64,17 @@ module ModelBuilder
   def define_model(name, columns = {}, &block)
     class_name = name.to_s.pluralize.classify
     table_name = class_name.tableize
-
-    table = columns.delete(:table) || lambda {|table|
-      columns.each do |name, type|
-        table.column name, *type
-      end
-    }
-
-    create_table(table_name, &table)
-
     klass    = define_model_class(class_name, &block)
+    pp columns # TODO: REMOVE debug line
+    columns.each do |name, type|
+      options = {}
+      type, options = type if type.class == Array
+      klass.property(name, type, options)
+    end
+    
     instance = klass.new
+
+    create_table(klass)
 
     self.class.subject { instance } if self.class.respond_to?(:subject)
     instance
