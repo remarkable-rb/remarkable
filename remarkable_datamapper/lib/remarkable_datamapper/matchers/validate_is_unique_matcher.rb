@@ -19,7 +19,7 @@ module Remarkable
 
         private
 
-          # Tries to find an object in the database. If allow_nil and/or allow_blank
+          # Tries to find an object in the database. If nullable and/or allow_blank
           # is given, we must find a record which is not nil or not blank.
           #
           # We should also ensure that the object retrieved from the database
@@ -84,34 +84,17 @@ module Remarkable
           # Change the existing object attribute to nil to run allow nil
           # validations. If we find any problem while updating the @existing
           # record, it's because we can't save nil values in the database. So it
-          # passes when :allow_nil is false, but should raise an error when
-          # :allow_nil is true
+          # passes when :nullable is false, but should raise an error when
+          # :nullable is true
           #
-          def allow_nil?
-            return true unless @options.key?(:allow_nil)
+          def nullable?
+            return true unless @options.key?(:nullable)
 
             begin
               @existing.update_attribute(@attribute, nil)
-            rescue ::DataMapper::StatementInvalid => e
-              raise ScriptError, "You declared that #{@attribute} accepts nil values in validate_uniqueness_of, " <<
-                                 "but I cannot save nil values in the database, got: #{e.message}" if @options[:allow_nil]
-              return true
-            end
-
-            super
-          end
-
-          # Change the existing object attribute to blank to run allow blank
-          # validation. It uses the same logic as :allow_nil.
-          #
-          def allow_blank?
-            return true unless @options.key?(:allow_blank)
-
-            begin
-              @existing.update_attribute(@attribute, '')
-            rescue ::DataMapper::StatementInvalid => e
-              raise ScriptError, "You declared that #{@attribute} accepts blank values in validate_uniqueness_of, " <<
-                                 "but I cannot save blank values in the database, got: #{e.message}" if @options[:allow_blank]
+            rescue StandardError => e #::DataMapper::StatementInvalid => e
+              raise ScriptError, "You declared that #{@attribute} accepts nil values in validates_is_unique, " <<
+                                 "but I cannot save nil values in the database, got: #{e.message}" if @options[:unique]
               return true
             end
 
