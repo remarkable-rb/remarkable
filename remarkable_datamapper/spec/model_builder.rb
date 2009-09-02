@@ -65,7 +65,6 @@ module ModelBuilder
     class_name = name.to_s.pluralize.classify
     table_name = class_name.tableize
     klass    = define_model_class(class_name, &block)
-    pp columns # TODO: REMOVE debug line
     columns.each do |name, type|
       options = {}
       type, options = type if type.class == Array
@@ -81,8 +80,8 @@ module ModelBuilder
   end
 
   module ClassMethods
-    # This is a macro to run validations of boolean optionals such as :allow_nil
-    # and :allow_blank. This macro tests all scenarios. The specs must have a
+    # This is a macro to run validations of boolean optionals such as :nullable
+    # and :scope. This macro tests all scenarios. The specs must have a
     # define_and_validate method defined.
     #
     def create_optional_boolean_specs(optional, base, options={})
