@@ -5,11 +5,11 @@ module Remarkable
 
       # Provides a way to send options to all DataMapper matchers.
       #
-      #   validates_presence_of(:name).with_options(:allow_nil => false)
+      #   validates_presence_of(:name).with_options(:nullable => false)
       #
       # Is equivalent to:
       #
-      #   validates_presence_of(:name, :allow_nil => false)
+      #   validates_presence_of(:name, :nullable => false)
       #
       def with_options(opts={})
         @options.merge!(opts)
@@ -61,10 +61,10 @@ module Remarkable
           end
         end
 
-        # Default allow_nil? validation. It accepts the message_key which is
+        # Default nullable? validation. It accepts the message_key which is
         # the key which contain the message in @options.
         #
-        # It also gets an allow_nil message on remarkable.data_mapper.allow_nil
+        # It also gets an nullable message on remarkable.data_mapper.nullable
         # to be used as default.
         #
         def nullable?(message_key=:message) #:nodoc:
