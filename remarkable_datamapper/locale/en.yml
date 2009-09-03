@@ -259,7 +259,5 @@ en:
         optionals:
           scope:
             positive: "scoped to {{sentence}}"
-          case_sensitive:
-            positive: "case sensitive"
-            negative: "case insensitive"
-
+          nullable:
+            positive: "allowing nil values"
