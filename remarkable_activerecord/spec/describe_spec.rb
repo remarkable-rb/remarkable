@@ -1,7 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-RAILS_I18N = true
-
 class Post
   attr_accessor :published, :public, :deleted
  

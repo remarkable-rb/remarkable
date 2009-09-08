@@ -1,10 +1,10 @@
 # encoding: utf-8
 require 'rubygems'
 
-RAILS_VERSION = ENV['RAILS_VERSION'] || '2.3.3'
 DM_VERSION = '0.10.0'
 
-gem 'activesupport', RAILS_VERSION
+# TODO Remove ActiveSupport dependence
+gem 'activesupport', '2.3.4'
 require 'active_support'
 
 gem 'addressable'
@@ -22,10 +22,9 @@ require 'dm-core'
 gem 'dm-validations', DM_VERSION
 require 'dm-validations'
 
-gem 'svenfuchs-i18n'
+# Require i18n by hand
+gem 'i18n'
 require 'i18n'
-
-require 'pp'  # DEBUG ONLY
 
 ENV['SQLITE3_SPEC_URI'] ||= 'sqlite3::memory:'
 ENV['ADAPTER'] = 'sqlite3'

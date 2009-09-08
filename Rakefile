@@ -9,7 +9,7 @@ include FileUtils
 REMARKABLE_GEMS = [
   :remarkable,
   :remarkable_activerecord,
-  :remarkable_datamapper,
+  # :remarkable_datamapper,
   :remarkable_rails
 ]
 

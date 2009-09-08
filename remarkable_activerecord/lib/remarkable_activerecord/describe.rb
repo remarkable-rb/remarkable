@@ -108,7 +108,6 @@ module Remarkable
         def describe(*args, &block)
           if described_class && args.first.is_a?(Hash)
             attributes = args.shift
-
             connector = Remarkable.t "remarkable.active_record.describe.connector", :default => " and "
 
             description = if self.describe_subject_attributes.blank?
@@ -130,7 +129,7 @@ module Remarkable
                                       :key => translated_key.downcase, :value => value.inspect)
             end
 
-            description << pieces.join(connector)
+            description += pieces.join(connector)
             args.unshift(description)
 
             # Creates an example group, set the subject and eval the given block.
