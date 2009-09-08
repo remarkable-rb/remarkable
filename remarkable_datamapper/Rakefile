@@ -3,8 +3,8 @@ PROJECT_SUMMARY     = "Remarkable DataMapper: collection of matchers and macros 
 PROJECT_DESCRIPTION = PROJECT_SUMMARY
 
 GEM_NAME   = "remarkable_datamapper"
-GEM_AUTHOR = [ "Carlos Brando", "José Valim", "Diego Carrion", "Blake Gentry" ]
-GEM_EMAIL  = [ "eduardobrando@gmail.com", "jose.valim@gmail.com", "dc.rec1@gmail.com", "blakesgentry@gmail.com" ]
+GEM_AUTHOR = [ "Blake Gentry", "José Valim" ]
+GEM_EMAIL  = [ "blakesgentry@gmail.com", "jose.valim@gmail.com" ]
 
 EXTRA_RDOC_FILES = ["README", "LICENSE", "CHANGELOG"]
 
@@ -18,13 +18,8 @@ end
 
 ########### Specs
 
-RAILS_VERSIONS = ['2.1.2', '2.2.2', '2.3.2', '2.3.3']
-
-desc "Run the specs under spec with supported Rails versions"
+desc "Run the specs under spec"
 task :pre_commit do
-  RAILS_VERSIONS.each do |version|
-    ENV['RAILS_VERSION'] = version
-    puts "\n=> #{GEM_NAME}: rake spec RAILS_VERSION=#{version}"
-    Rake::Task[:spec].execute
-  end
+  puts "\n=> #{GEM_NAME}: rake spec"
+  Rake::Task[:spec].execute
 end
