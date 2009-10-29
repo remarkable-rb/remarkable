@@ -87,7 +87,7 @@ describe 'MacroStubs' do
 
       lambda {
         run_action!(true)
-      }.should raise_error(Spec::Mocks::MockExpectationError, /expected :find with \("42"\) but received it with \("37"\)/)
+      }.should raise_error(Spec::Mocks::MockExpectationError, /received :find with unexpected arguments\n  expected: \("42"\)\n       got: \("37"\)/)
     end
 
     it 'should fail if expectations are received out of order' do
@@ -102,7 +102,7 @@ describe 'MacroStubs' do
 
       lambda {
         Task.find([1,2,3])
-      }.should raise_error(Spec::Mocks::MockExpectationError, /expected :find with \(1\, 2\, 3\) but received it with \(\[1\, 2\, 3\]\)/)
+      }.should raise_error(Spec::Mocks::MockExpectationError, /received :find with unexpected arguments\n  expected: \(1\, 2\, 3\)\n       got: \(\[1\, 2\, 3\]\)/)
 
       lambda {
         Task.find(1, 2, 3)
@@ -131,8 +131,8 @@ describe 'MacroStubs' do
       
       lambda {
         Task.find(1)
-      }.should raise_error(Spec::Mocks::MockExpectationError, /expected :find with \("37"\, 1\) but received it with \(1\)/)
-      
+      }.should raise_error(Spec::Mocks::MockExpectationError, /received :find with unexpected arguments\n  expected: \("37", 1\)\n       got: \(1\)/)
+            
       lambda {
         Task.find("37", 1)
       }.should_not raise_error
