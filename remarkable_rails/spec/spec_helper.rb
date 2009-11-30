@@ -1,7 +1,7 @@
 require 'rubygems'
 
 RAILS_ENV     = 'test'
-RAILS_VERSION = ENV['RAILS_VERSION'] || '2.3.4'
+RAILS_VERSION = ENV['RAILS_VERSION'] || '2.3.5'
 
 # Load Rails
 gem 'activesupport', RAILS_VERSION
@@ -43,4 +43,3 @@ require File.join(dir, '..', 'lib', 'remarkable_rails')
 
 # Register folders to example groups
 Spec::Example::ExampleGroupFactory.register(:action_controller, Spec::Rails::Example::ControllerExampleGroup)
-

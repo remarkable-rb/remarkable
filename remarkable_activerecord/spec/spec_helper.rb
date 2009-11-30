@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'rubygems'
 
-RAILS_VERSION = ENV['RAILS_VERSION'] || '2.3.4'
+RAILS_VERSION = ENV['RAILS_VERSION'] || '2.3.5'
 
 gem 'activesupport', RAILS_VERSION
 require 'active_support'

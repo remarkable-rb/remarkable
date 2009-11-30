@@ -28,8 +28,12 @@ module Remarkable
             return true unless @options.key?(:allow_destroy)
 
             @subject.instance_eval <<-ALLOW_DESTROY
-              def assign_nested_attributes_for_#{reflection_type}_association(association, attrs, allow)
-                return allow
+              def assign_nested_attributes_for_#{reflection_type}_association(association, *args)
+                if self.respond_to?(:nested_attributes_options)
+                  self.nested_attributes_options[association.to_sym][:allow_destroy]
+                else
+                  args.last
+                end
               end
             ALLOW_DESTROY
 
@@ -73,7 +77,11 @@ module Remarkable
           end
 
           def reject_if_proc
-            subject_class.reject_new_nested_attributes_procs[@association.to_sym]
+            if subject_class.respond_to?(:nested_attributes_options)
+              subject_class.nested_attributes_options[@association.to_sym][:reject_if]
+            else
+              subject_class.reject_new_nested_attributes_procs[@association.to_sym]
+            end
           end
 
       end
