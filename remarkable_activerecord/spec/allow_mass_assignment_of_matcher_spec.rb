@@ -8,6 +8,7 @@ describe 'allow_mass_assignment_of' do
       attr_protected  :title, :category     if options[:protected]
 
       attr_accessible :title, :category     if options[:accessible] == true
+      attr_accessible                       if options[:accessible] == false
       attr_accessible *options[:accessible] if options[:accessible].is_a?(Array)
     end
 
@@ -64,6 +65,13 @@ describe 'allow_mass_assignment_of' do
         define_and_validate(:protected => true)
         should_not allow_mass_assignment_of
       end
+      
+      it 'should not allow mass assignment if all attributes are protected by default' do
+        define_and_validate(:accessible => false)
+        should allow_mass_assignment_of
+        should_not allow_mass_assignment_of :title
+        should_not allow_mass_assignment_of :category
+      end
     end
   end
 
@@ -78,7 +86,7 @@ describe 'allow_mass_assignment_of' do
   end
 
   describe 'failures' do
-    it "should fail if some attribute is accessible when it shuold be protected" do
+    it "should fail if some attribute is accessible when it should be protected" do
       define_and_validate(:accessible => true)
 
       lambda {

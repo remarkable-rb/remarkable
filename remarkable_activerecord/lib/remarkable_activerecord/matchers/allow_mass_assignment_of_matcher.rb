@@ -15,25 +15,25 @@ module Remarkable
           #
           def allows?
             return positive? unless @attributes.empty?
-            protected_attributes.empty?
+            protected_attributes.nil? || protected_attributes.empty?
           end
 
           def is_accessible?
-            return positive? if accessible_attributes.empty?
+            return positive? if accessible_attributes.nil?
             accessible_attributes.include?(@attribute.to_s)
           end
 
           def is_protected?
-            return accessible_attributes.empty? || positive? if protected_attributes.empty?
+            return accessible_attributes.nil? || positive? if protected_attributes.nil?
             !protected_attributes.include?(@attribute.to_s)
           end
 
           def interpolation_options
             if @subject
               if positive?
-                { :protected_attributes => array_to_sentence(protected_attributes.to_a, false, '[]') }
+                { :protected_attributes => array_to_sentence((protected_attributes || []).to_a, false, '[]') }
               else
-                { :accessible_attributes => array_to_sentence(accessible_attributes.to_a, false, '[]') }
+                { :accessible_attributes => array_to_sentence((accessible_attributes || []).to_a, false, '[]') }
               end
             else
               {}
@@ -43,11 +43,11 @@ module Remarkable
         private
 
           def accessible_attributes
-            @accessible_attributes ||= subject_class.accessible_attributes || []
+            @accessible_attributes = subject_class.accessible_attributes
           end
 
           def protected_attributes
-            @protected_attributes ||= subject_class.protected_attributes || []
+            @protected_attributes = subject_class.protected_attributes
           end
       end
 
