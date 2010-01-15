@@ -31,7 +31,7 @@ def self.configure_gemspec!
     s.email = GEM_EMAIL
     s.homepage = PROJECT_URL
     s.require_path = 'lib'
-    s.files = EXTRA_RDOC_FILES + Dir.glob("{lib,locale}/**/*")
+    s.files = EXTRA_RDOC_FILES + Dir.glob("{lib,locale}/**/*") + Dir.glob("*.gemspec")
     s.add_dependency('rspec', ">= #{RSPEC_VERSION}")
     yield s if block_given?
   end
