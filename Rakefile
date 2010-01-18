@@ -54,29 +54,12 @@ task :default do
 end
 
 desc "Publish release files to RubyForge"
-task :release => :package do
-  require 'rubyforge'
-
-  r = RubyForge.new
-  r.configure
-
-  puts "Logging in..."
-  r.login
-
+task :release => [:gemspec, :package] do
   REMARKABLE_GEMS.each do |gem|
-    packages = %w(gem tgz zip).collect{ |ext| File.join(PACKAGE_DIR, "#{gem}-#{GEM_VERSION}.#{ext}") }
+    path    = File.join(PACKAGE_DIR, "#{gem}-#{GEM_VERSION}.gem")
+    command = "gem push #{path}"
 
-    begin
-      puts "Adding #{gem} #{GEM_VERSION}..."
-      r.add_release RUBY_FORGE_PROJECT, gem.to_s, GEM_VERSION, *packages
-      packages.each{|p| r.add_file(RUBY_FORGE_PROJECT, gem.to_s, GEM_VERSION, p) }
-    rescue Exception => e
-      if e.message =~ /You have already released this version/
-        puts "You already released #{gem}-#{GEM_VERSION}. Continuing..."
-        puts
-      else
-        raise e
-      end
-    end
+    puts command
+    system command
   end
 end
