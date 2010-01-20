@@ -184,6 +184,11 @@ module Remarkable
         base.class_inheritable_reader :expects_chain, :default_action, :default_mime,
                                       :default_verb, :default_params, :default_xhr,
                                       :before_all_block
+        base.class_eval do
+          class << self
+            alias_method :context, :describe
+          end
+        end
       end
 
       module ClassMethods
@@ -400,7 +405,7 @@ module Remarkable
             instance_eval(&block)
           end
         end
-
+        
         # Creates mock methods automatically.
         #
         # == Options

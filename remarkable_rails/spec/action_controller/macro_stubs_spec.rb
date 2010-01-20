@@ -216,25 +216,27 @@ describe 'MacroStubs' do
       @controller.send(:performed?).should_not be_true
     end
 
-    describe Mime::XML do
-      expects :to_xml, :on => task_proc, :returns => 'XML'
+    [:describe, :context].each do |method|
+      send method, Mime::XML do
+        expects :to_xml, :on => task_proc, :returns => 'XML'
 
-      it 'should provide a description based on the mime given in describe' do
-        self.class.description.should =~ /with xml$/
+        it "should provide a description based on the mime given in #{method}" do
+          self.class.description.should =~ /with xml$/
+        end
+
+        it 'should run action based on inherited declarations' do
+          @controller.send(:performed?).should_not be_true
+
+          run_action!
+
+          @controller.action_name.should == 'show'
+          @controller.request.method.should == :get
+          @controller.send(:performed?).should be_true
+          @controller.response.body.should == 'XML'
+          @request.parameters[:special_task_id].should == '42'
+        end
       end
-
-      it 'should run action based on inherited declarations' do
-        @controller.send(:performed?).should_not be_true
-
-        run_action!
-
-        @controller.action_name.should == 'show'
-        @controller.request.method.should == :get
-        @controller.send(:performed?).should be_true
-        @controller.response.body.should == 'XML'
-        @request.parameters[:special_task_id].should == '42'
-      end
-    end
+    end 
 
     describe 'and running actions in a before(:all) filter' do
       get :show, :id => 37

@@ -16,3 +16,4 @@ lib/remarkable-more.rb
 ./gems
 *.diff
 memory
+*.tmproj
