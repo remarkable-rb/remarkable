@@ -54,10 +54,18 @@ module Remarkable
           end
 
           def collection?
-            if reflection = subject_class.reflect_on_association(@attribute)
+            if reflection = find_reflection
               [:has_many, :has_and_belongs_to_many].include?(reflection.macro)
             else
               false
+            end
+          end
+
+        private
+
+          def find_reflection
+            if subject_class.respond_to?(:reflect_on_association)
+              subject_class.reflect_on_association(@attribute)
             end
           end
 
