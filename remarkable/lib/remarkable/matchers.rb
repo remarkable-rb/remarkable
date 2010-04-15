@@ -12,14 +12,13 @@ module Remarkable
   def self.include_matchers!(base, target=nil)
     if target.nil?
       if rspec_defined?
-        target = Spec::Example::ExampleGroup
+        target = Rspec::Matchers
       else
-        raise ArgumentError, "You haven't supplied the target to include_matchers! and RSpec is not loaded, so we cannot infer one."
+        raise ArgumentError, "You haven't supplied the target to include_matchers! and RRspec is not loaded, so we cannot infer one."
       end
     end
 
     metaclass = (class << target; self; end)
-    target.send :extend, Remarkable::Pending unless metaclass.ancestors.include?(Remarkable::Pending)
     target.send :extend, Remarkable::Macros  unless metaclass.ancestors.include?(Remarkable::Macros)
 
     if defined?(base::Matchers)
@@ -35,6 +34,6 @@ module Remarkable
   end
 
   def self.rspec_defined? #:nodoc:
-    defined?(Spec)
+    defined?(Rspec)
   end
 end

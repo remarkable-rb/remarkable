@@ -8,11 +8,11 @@ require File.join(dir, 'remarkable', 'messages')
 
 require File.join(dir, 'remarkable', 'base')
 require File.join(dir, 'remarkable', 'macros')
-require File.join(dir, 'remarkable', 'pending')
+#require File.join(dir, 'remarkable', 'pending')
 require File.join(dir, 'remarkable', 'negative')
 require File.join(dir, 'remarkable', 'core_ext', 'array')
 
-if defined?(Spec)
+if defined?(Rspec)
   require File.join(dir, 'remarkable', 'rspec')
 end
 

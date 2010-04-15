@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe Remarkable::Pending do
+describe Remarkable, 'pending examples' do
 
   it "should create pending groups" do
     spec = self

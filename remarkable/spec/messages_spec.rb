@@ -6,7 +6,7 @@ describe Remarkable::Messages do
 
   describe 'without I18n' do
     before(:each) do
-      @matcher = Remarkable::Specs::Matchers::ContainMatcher.new(1, 2, 3)
+      @matcher = Remarkable::Rspecs::Matchers::ContainMatcher.new(1, 2, 3)
     end
 
     it 'should provide a description' do
@@ -34,7 +34,7 @@ describe Remarkable::Messages do
     end
 
     before(:each) do
-      @matcher = Remarkable::Specs::Matchers::CollectionContainMatcher.new(1, 2, 3)
+      @matcher = Remarkable::Rspecs::Matchers::CollectionContainMatcher.new(1, 2, 3)
     end
 
     it 'should provide a default i18n scope' do

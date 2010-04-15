@@ -64,13 +64,25 @@ end
 ########### Common specs
 
 gem 'rspec'
-require 'spec/rake/spectask'
-
-desc "Run the specs under spec"
-Spec::Rake::SpecTask.new do |t|
-  t.spec_opts = ['--options', "spec/spec.opts"]
-  t.spec_files = FileList['spec/**/*_spec.rb']
+begin
+  # Rspec2
+  gem 'rspec-expectations'
+  require 'rspec/core/rake_task'
+  desc "Run the specs under spec"
+  Rspec::Core::RakeTask.new do |t|
+    #t.spec_opts = ['--options', "spec/spec.opts"]
+    #t.spec_files = FileList['spec/**/*_spec.rb']
+  end
+rescue
+  # Rspec1
+  require 'spec/rake/spectask'
+  desc "Run the specs under spec"
+  Spec::Rake::SpecTask.new do |t|
+    t.spec_opts = ['--options', "spec/spec.opts"]
+    t.spec_files = FileList['spec/**/*_spec.rb']
+  end
 end
+
 
 ########## Common rdoc
 

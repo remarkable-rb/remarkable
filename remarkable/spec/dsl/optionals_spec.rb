@@ -6,7 +6,7 @@ describe Remarkable::DSL::Optionals do
   describe "without config blocks" do
 
     before(:each) do
-      @matcher = Remarkable::Specs::Matchers::BeAPersonMatcher.new
+      @matcher = Remarkable::Rspecs::Matchers::BeAPersonMatcher.new
     end
 
     describe "as optionals" do
@@ -84,7 +84,7 @@ describe Remarkable::DSL::Optionals do
   describe "with config blocks" do
 
     def builder(*args, &block)
-      Remarkable::Specs::Matchers::BeAPersonMatcher.new(*args, &block)
+      Remarkable::Rspecs::Matchers::BeAPersonMatcher.new(*args, &block)
     end
 
     describe "as optionals" do
@@ -195,7 +195,7 @@ describe Remarkable::DSL::Optionals do
 
   describe "description" do
     it "should provide a description with optionals" do
-      matcher = Remarkable::Specs::Matchers::SingleContainMatcher.new(1)
+      matcher = Remarkable::Rspecs::Matchers::SingleContainMatcher.new(1)
       matcher.description.should == 'contain 1 not checking for blank'
 
       matcher.allow_blank(10)
@@ -212,19 +212,19 @@ describe Remarkable::DSL::Optionals do
     end
 
     it "should provide a sentence interpolation option to optionals" do
-      matcher = Remarkable::Specs::Matchers::SingleContainMatcher.new(1)
+      matcher = Remarkable::Rspecs::Matchers::SingleContainMatcher.new(1)
       matcher.values(1, 2, 3)
       matcher.description.should == 'contain 1 not checking for blank and values equal to 1, 2, and 3'
     end
 
     it "should inspect values in sentence interpolation options" do
-      matcher = Remarkable::Specs::Matchers::SingleContainMatcher.new(1)
+      matcher = Remarkable::Rspecs::Matchers::SingleContainMatcher.new(1)
       matcher.values(:a, :b, :c)
       matcher.description.should == 'contain 1 not checking for blank and values equal to :a, :b, and :c'
     end
 
     it "should provide a description with optionals through namespace lookup" do
-      matcher = Remarkable::Specs::Matchers::CollectionContainMatcher.new(1)
+      matcher = Remarkable::Rspecs::Matchers::CollectionContainMatcher.new(1)
       matcher.description.should == 'contain 1'
 
       matcher.allow_nil(true)

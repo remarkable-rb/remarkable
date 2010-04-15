@@ -1,5 +1,5 @@
 module Remarkable
-  module Specs
+  module Rspecs
     module Matchers
       class ContainMatcher < Remarkable::Base
         def initialize(*values)

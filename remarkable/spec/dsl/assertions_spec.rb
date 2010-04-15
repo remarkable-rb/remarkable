@@ -4,7 +4,7 @@ describe Remarkable::DSL::Assertions do
   subject { [1, 2, 3] }
 
   before(:each) do
-    @matcher = Remarkable::Specs::Matchers::CollectionContainMatcher.new(1, 2, 3)
+    @matcher = Remarkable::Rspecs::Matchers::CollectionContainMatcher.new(1, 2, 3)
   end
 
   it 'should provide default structure for assertions' do
@@ -37,17 +37,17 @@ describe Remarkable::DSL::Assertions do
   end
 
   it 'should provide an interface for default_options hook' do
-    matcher = Remarkable::Specs::Matchers::CollectionContainMatcher.new(1, :args => true)
+    matcher = Remarkable::Rspecs::Matchers::CollectionContainMatcher.new(1, :args => true)
     matcher.instance_variable_get('@options').should == { :working => true, :args => true }
   end
 
   it 'should provide an interface for after_initialize hook' do
-    matcher = Remarkable::Specs::Matchers::CollectionContainMatcher.new(1)
+    matcher = Remarkable::Rspecs::Matchers::CollectionContainMatcher.new(1)
     matcher.instance_variable_get('@after_initialize').should be_true
   end
 
   it 'should provide an interface for before_assert hook' do
-    matcher = Remarkable::Specs::Matchers::CollectionContainMatcher.new(1)
+    matcher = Remarkable::Rspecs::Matchers::CollectionContainMatcher.new(1)
     [1, 2, 3].should matcher
     matcher.instance_variable_get('@before_assert').should be_true
   end
