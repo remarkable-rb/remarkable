@@ -13,6 +13,7 @@ coverage
 bundle
 lib/remarkable-more.rb
 *.DS_Store
+.*sw?
 ./gems
 *.diff
 memory
