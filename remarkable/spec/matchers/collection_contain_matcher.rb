@@ -1,5 +1,5 @@
 module Remarkable
-  module Rspecs
+  module Rspec
     module Matchers
       class CollectionContainMatcher < Remarkable::Base
         arguments :collection => :values, :as => :value

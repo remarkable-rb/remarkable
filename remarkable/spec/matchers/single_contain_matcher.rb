@@ -1,5 +1,5 @@
 module Remarkable
-  module Rspecs
+  module Rspec
     module Matchers
       class SingleContainMatcher < Remarkable::Base
         arguments :value, :block => :iterator

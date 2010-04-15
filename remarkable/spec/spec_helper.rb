@@ -10,7 +10,7 @@ Dir[File.join(dir, 'matchers', '*.rb')].each do |file|
   require file
 end
 
-Remarkable.include_matchers!(Remarkable::Rspecs, Rspec::Core::ExampleGroup)
+Remarkable.include_matchers!(Remarkable::Rspec, Rspec::Core::ExampleGroup)
 
 Remarkable.add_locale File.join(dir, 'locale', 'en.yml')
 Remarkable.add_locale File.join(dir, 'locale', 'pt-BR.yml')
