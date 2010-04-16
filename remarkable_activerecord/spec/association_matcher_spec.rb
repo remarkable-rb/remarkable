@@ -194,7 +194,7 @@ describe 'association_matcher' do
       define_model :super_label
 
       columns = options.delete(:association_columns) || [ :label_id, :project_id ]
-      create_table(options.delete(:association_table) || :labels_projects) do |table|
+      create_table(options.delete(:association_table) || :labels_projects, :primary_key => false) do |table|
         columns.each { |name| table.column(name, :integer) }
       end
 
