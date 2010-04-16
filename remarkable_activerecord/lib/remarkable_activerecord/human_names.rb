@@ -7,8 +7,8 @@ if defined?(Rspec)
         #
         def self.build_description_with_i18n(*args)
           args.inject("") do |description, arg|
-            arg = if arg.respond_to?(:human_name)
-              arg.human_name(:locale => Remarkable.locale)
+            arg = if arg.respond_to?(:model_name)
+              arg.model_name.human(:locale => Remarkable.locale)
             else
               arg.to_s
             end

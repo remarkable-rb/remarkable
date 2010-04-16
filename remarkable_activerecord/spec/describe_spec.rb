@@ -9,13 +9,13 @@ class Post
     end
   end
 
-  def self.human_name(*args)
-    "MyPost"
-  end
 end
 
 describe Post do
   it "should use human name on description" do
+    model_name = mock(:model_name)
+    model_name.should_receive(:human).and_return('MyPost')
+    Post.should_receive(:model_name).and_return(model_name)
     self.class.description.should == "MyPost"
   end
 

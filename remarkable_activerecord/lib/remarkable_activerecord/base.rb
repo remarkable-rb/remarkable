@@ -22,8 +22,8 @@ module Remarkable
         #
         def subject_name
           nil unless @subject
-          if subject_class.respond_to?(:human_name)
-            subject_class.human_name(:locale => Remarkable.locale)
+          if subject_class.respond_to?(:model_name)
+            subject_class.model_name.human(:locale => Remarkable.locale)
           else
             subject_class.name
           end
