@@ -5,10 +5,10 @@ describe 'have_scope' do
 
   before(:each) do
     @model = define_model :product, :title => :string, :category => :string do
-      named_scope :recent, :order => 'created_at DESC'
-      named_scope :latest, lambda {|c| {:limit => c}}
-      named_scope :since, lambda {|t| {:conditions => ['created_at > ?', t]}}
-      named_scope :between, lambda { |a, b| { :conditions => [ 'created_at > ? and created_at < ?', a, b ] } }
+      scope :recent, :order => 'created_at DESC'
+      scope :latest, lambda {|c| {:limit => c}}
+      scope :since, lambda {|t| {:conditions => ['created_at > ?', t]}}
+      scope :between, lambda { |a, b| { :conditions => [ 'created_at > ? and created_at < ?', a, b ] } }
 
       def self.beginning(c)
         scoped(:offset => c)

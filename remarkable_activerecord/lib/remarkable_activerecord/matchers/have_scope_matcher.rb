@@ -52,7 +52,7 @@ module Remarkable
       #
       # Passes for
       #
-      #   named_scope :visible, :conditions => {:visible => true}
+      #   scope :visible, :conditions => {:visible => true}
       #
       # Or for
       #
@@ -67,7 +67,7 @@ module Remarkable
       #
       # Passes for
       #
-      #   named_scope :recent, lambda {|c| {:limit => c}}
+      #   scope :recent, lambda {|c| {:limit => c}}
       #
       # Or for
       #
@@ -78,7 +78,6 @@ module Remarkable
       def have_scope(*args, &block)
         HaveScopeMatcher.new(*args, &block).spec(self)
       end
-      alias :have_named_scope :have_scope
 
     end
   end
