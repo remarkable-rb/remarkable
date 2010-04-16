@@ -38,7 +38,7 @@ describe Remarkable::Messages do
     end
 
     it 'should provide a default i18n scope' do
-      @matcher.send(:matcher_i18n_scope).should == 'remarkable.specs.collection_contain'
+      @matcher.send(:matcher_i18n_scope).should == 'remarkable.rspec.collection_contain'
     end
 
     it 'should provide a translated description' do
