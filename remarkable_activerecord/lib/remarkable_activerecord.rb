@@ -27,4 +27,4 @@ end
 # The responsable for this is RemarkableRails. If you are using ActiveRecord
 # without Rails, put the line below in your spec_helper to include ActiveRecord
 # matchers into rspec globally.
-# Remarkable.include_matchers!(Remarkable::ActiveRecord, Spec::Example::ExampleGroup)
+# Remarkable.include_matchers!(Remarkable::ActiveRecord, Rspec::Example::ExampleGroup)

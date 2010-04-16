@@ -2,7 +2,7 @@
 #
 module ModelBuilder
   def self.included(base)
-    return unless base.name =~ /^Spec/
+    return unless base.name =~ /^Rspec/
 
     base.class_eval do
       after(:each) do

@@ -61,13 +61,13 @@ describe 'allow_values_for' do
     it "should fail if any of the values are valid on invalid cases" do
       lambda {
         should_not allow_values_for :title, 'A', 'X', 'B'
-      }.should raise_error(Spec::Expectations::ExpectationNotMetError, /Did not expect Product to be valid/)
+      }.should raise_error(Rspec::Expectations::ExpectationNotMetError, /Did not expect Product to be valid/)
     end
 
     it "should also fail if all values are valid" do
       lambda {
         should_not allow_values_for :title, 'X', 'Y', 'Z'
-      }.should raise_error(Spec::Expectations::ExpectationNotMetError, /Did not expect Product to be valid/)
+      }.should raise_error(Rspec::Expectations::ExpectationNotMetError, /Did not expect Product to be valid/)
     end
 
     it "should not fail if all values are invalid" do

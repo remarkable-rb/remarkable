@@ -24,4 +24,4 @@ require File.join(dir, 'model_builder')
 require File.join(dir, '..', 'lib', 'remarkable_activerecord')
 
 # Include matchers
-Remarkable.include_matchers!(Remarkable::ActiveRecord, Spec::Example::ExampleGroup)
+Remarkable.include_matchers!(Remarkable::ActiveRecord, Rspec::Example::ExampleGroup)
