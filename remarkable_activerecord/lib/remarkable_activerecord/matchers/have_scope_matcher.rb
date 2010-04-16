@@ -19,7 +19,7 @@ module Remarkable
               subject_class.send(@scope_name)
             end
 
-            @scope_object.class == ::ActiveRecord::NamedScope::Scope
+            @scope_object.class == ::ActiveRecord::Relation
           end
 
           def options_match?
