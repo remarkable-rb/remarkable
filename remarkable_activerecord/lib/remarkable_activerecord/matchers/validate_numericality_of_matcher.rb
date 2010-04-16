@@ -160,7 +160,7 @@ module Remarkable
       # * <tt>:greater_than</tt> - when supplied, checks if attributes are only valid when greater than given value
       # * <tt>:less_than_or_equal_to</tt> - when supplied, checks if attributes are only valid when less than or equal to given value
       # * <tt>:greater_than_or_equal_to</tt> - when supplied, checks if attributes are only valid when greater than or equal to given value
-      # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      # * <tt>:message</tt> - value the test expects to find in <tt>errors[:attribute]</tt>.
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.not_a_number')</tt>
       #
       # == Examples

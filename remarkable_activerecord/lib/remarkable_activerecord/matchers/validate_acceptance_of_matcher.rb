@@ -30,7 +30,7 @@ module Remarkable
       #
       # * <tt>:accept</tt> - the expected value to be accepted.
       # * <tt>:allow_nil</tt> - when supplied, validates if it allows nil or not.
-      # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      # * <tt>:message</tt> - value the test expects to find in <tt>errors[:attribute]</tt>.
       #   Regexp, string or symbol.  Default = <tt>I18n.translate('activerecord.errors.messages.accepted')</tt>
       #
       # == Examples

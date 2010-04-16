@@ -41,8 +41,8 @@ module Remarkable
 
             # In Rails 2.1.2, the error on association returns a symbol (:invalid)
             # instead of the message, so we check this case here.
-            @subject.errors.on(@association) == @options[:message] ||
-            assert_contains(@subject.errors.on(@association), error_message_to_expect)
+            @subject.errors[@association] == @options[:message] ||
+            assert_contains(@subject.errors[@association], error_message_to_expect)
           end
       end
 
@@ -80,7 +80,7 @@ module Remarkable
       #
       # * <tt>:builder</tt> - a proc to build the association
       #
-      # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      # * <tt>:message</tt> - value the test expects to find in <tt>errors[:attribute]</tt>.
       #   Regexp, string or symbol.  Default = <tt>I18n.translate('activerecord.errors.messages.invalid')</tt>
       #
       # == Examples

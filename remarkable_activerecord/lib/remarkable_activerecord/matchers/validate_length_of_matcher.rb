@@ -93,13 +93,13 @@ module Remarkable
       # * <tt>:in</tt> - A synonym(or alias) for :within.
       # * <tt>:allow_nil</tt> - when supplied, validates if it allows nil or not.
       # * <tt>:allow_blank</tt> - when supplied, validates if it allows blank or not.
-      # * <tt>:too_short</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt> when attribute is too short.
+      # * <tt>:too_short</tt> - value the test expects to find in <tt>errors[:attribute]</tt> when attribute is too short.
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.too_short') % range.first</tt>
-      # * <tt>:too_long</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt> when attribute is too long.
+      # * <tt>:too_long</tt> - value the test expects to find in <tt>errors[:attribute]</tt> when attribute is too long.
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.too_long') % range.last</tt>
-      # * <tt>:wrong_length</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt> when attribute is the wrong length.
+      # * <tt>:wrong_length</tt> - value the test expects to find in <tt>errors[:attribute]</tt> when attribute is the wrong length.
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.wrong_length') % range.last</tt>
-      # * <tt>:message</tt> - value the test expects to find in <tt>errors.on(:attribute)</tt>.
+      # * <tt>:message</tt> - value the test expects to find in <tt>errors[:attribute]</tt>.
       #   Regexp, string or symbol. Default = <tt>I18n.translate('activerecord.errors.messages.wrong_length') % value</tt>
       #
       # It also accepts an extra option called :with_kind_of. If you are validating

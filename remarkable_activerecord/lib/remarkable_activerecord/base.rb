@@ -116,7 +116,7 @@ module Remarkable
           return true if model.valid?
 
           error_message_to_avoid = error_message_from_model(model, attribute, error_message_to_avoid)
-          assert_does_not_contain(model.errors.on(attribute), error_message_to_avoid)
+          assert_does_not_contain(model.errors[attribute], error_message_to_avoid)
         end
 
         # Asserts that an Active Record model invalidates the passed
@@ -139,10 +139,10 @@ module Remarkable
         def assert_bad_value(model, attribute, value, error_message_to_expect=:invalid) #:nodoc:
           model.send("#{attribute}=", value)
 
-          return false if model.valid? || model.errors.on(attribute).blank?
+          return false if model.valid? || model.errors[attribute].blank?
 
           error_message_to_expect = error_message_from_model(model, attribute, error_message_to_expect)
-          assert_contains(model.errors.on(attribute), error_message_to_expect)
+          assert_contains(model.errors[attribute], error_message_to_expect)
         end
 
         # Return the error message to be checked. If the message is not a Symbol
