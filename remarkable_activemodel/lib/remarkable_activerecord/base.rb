@@ -1,9 +1,9 @@
 module Remarkable
-  module ActiveRecord
+  module ActiveModel
     class Base < Remarkable::Base
       I18N_COLLECTION = [ :attributes, :associations ]
 
-      # Provides a way to send options to all ActiveRecord matchers.
+      # Provides a way to send options to all ActiveModel matchers.
       #
       #   validates_presence_of(:name).with_options(:allow_nil => false)
       #
@@ -150,7 +150,7 @@ module Remarkable
         #
         # But the nice thing is that when the message is a Symbol we get the error
         # messsage from within the model, using already existent structure inside
-        # ActiveRecord.
+        # ActiveModel.
         #
         # This allows a couple things from the user side:
         #
@@ -172,7 +172,7 @@ module Remarkable
         #   fallback when creating error messages. If the user changed the message,
         #   macros would start to pass when they shouldn't.
         #
-        #   Using the underlying mechanism inside ActiveRecord makes us free from
+        #   Using the underlying mechanism inside ActiveModel makes us free from
         #   all thos errors.
         #
         # We replace {{count}} interpolation for 12345 which later is replaced
@@ -181,13 +181,13 @@ module Remarkable
         def error_message_from_model(model, attribute, message) #:nodoc:
           if message.is_a? Symbol
             message = if RAILS_I18N # Rails >= 2.2
-              if ::ActiveRecord.const_defined?(:Error)
-                ::ActiveRecord::Error.new(model, attribute, message, :count => '12345').to_s
+              if ::ActiveModel.const_defined?(:Error)
+                ::ActiveModel::Error.new(model, attribute, message, :count => '12345').to_s
               else
                 model.errors.generate_message(attribute, message, :count => '12345')
               end
             else # Rails <= 2.1
-              ::ActiveRecord::Errors.default_error_messages[message] % '12345'
+              ::ActiveModel::Errors.default_error_messages[message] % '12345'
             end
 
             if message =~ /12345/

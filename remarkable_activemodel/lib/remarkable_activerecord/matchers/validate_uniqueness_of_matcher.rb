@@ -1,7 +1,7 @@
 module Remarkable
-  module ActiveRecord
+  module ActiveModel
     module Matchers
-      class ValidateUniquenessOfMatcher < Remarkable::ActiveRecord::Base #:nodoc:
+      class ValidateUniquenessOfMatcher < Remarkable::ActiveModel::Base #:nodoc:
         arguments :collection => :attributes, :as => :attribute
 
         optional :message
@@ -109,7 +109,7 @@ module Remarkable
 
             begin
               @existing.update_attribute(@attribute, nil)
-            rescue ::ActiveRecord::StatementInvalid => e
+            rescue ::ActiveModel::StatementInvalid => e
               raise ScriptError, "You declared that #{@attribute} accepts nil values in validate_uniqueness_of, " <<
                                  "but I cannot save nil values in the database, got: #{e.message}" if @options[:allow_nil]
               return true
@@ -126,7 +126,7 @@ module Remarkable
 
             begin
               @existing.update_attribute(@attribute, '')
-            rescue ::ActiveRecord::StatementInvalid => e
+            rescue ::ActiveModel::StatementInvalid => e
               raise ScriptError, "You declared that #{@attribute} accepts blank values in validate_uniqueness_of, " <<
                                  "but I cannot save blank values in the database, got: #{e.message}" if @options[:allow_blank]
               return true

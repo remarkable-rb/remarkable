@@ -189,7 +189,7 @@ describe 'validate_length_of' do
       it "should raise association type mismatch if with_kind_of does not match" do
         lambda {
           should_not define_and_validate(:within => 3..6).within(3..6).with_kind_of(Product)
-        }.should raise_error(ActiveRecord::AssociationTypeMismatch)
+        }.should raise_error(ActiveModel::AssociationTypeMismatch)
       end
     end
 

@@ -1,7 +1,7 @@
 module Remarkable
-  module ActiveRecord
+  module ActiveModel
     module Matchers
-      class AllowMassAssignmentOfMatcher < Remarkable::ActiveRecord::Base #:nodoc:
+      class AllowMassAssignmentOfMatcher < Remarkable::ActiveModel::Base #:nodoc:
         include Remarkable::Negative
         arguments :collection => :attributes, :as => :attribute
 

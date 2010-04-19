@@ -12,7 +12,7 @@ module ModelBuilder
 
         if @created_tables
           @created_tables.each do |table_name|
-            ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{table_name}")
+            ActiveModel::Base.connection.execute("DROP TABLE IF EXISTS #{table_name}")
           end
         end
       end
@@ -22,7 +22,7 @@ module ModelBuilder
   end
 
   def create_table(table_name, &block)
-    connection = ActiveRecord::Base.connection
+    connection = ActiveModel::Base.connection
 
     begin
       connection.execute("DROP TABLE IF EXISTS #{table_name}")
@@ -51,7 +51,7 @@ module ModelBuilder
   end
 
   def define_model_class(class_name, &block)
-    define_constant(class_name, ActiveRecord::Base, &block)
+    define_constant(class_name, ActiveModel::Base, &block)
   end
 
   def define_model(name, columns = {}, &block)

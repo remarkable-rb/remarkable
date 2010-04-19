@@ -1,5 +1,5 @@
 module Remarkable
-  module ActiveRecord
+  module ActiveModel
 
     def self.after_include(target) #:nodoc:
       target.class_inheritable_reader :describe_subject_attributes, :default_subject_attributes

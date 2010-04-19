@@ -158,7 +158,7 @@ en:
       have_scope:
         description: "have to scope itself to {{options}} when {{scope_name}} is called"
         expectations:
-          is_scope: "{{scope_name}} when called on {{subject_name}} return an instance of ActiveRecord::NamedScope::Scope"
+          is_scope: "{{scope_name}} when called on {{subject_name}} return an instance of ActiveModel::NamedScope::Scope"
           options_match: "{{scope_name}} when called on {{subject_name}} scope to {{options}}, got {{actual}}"
         optionals:
           with:

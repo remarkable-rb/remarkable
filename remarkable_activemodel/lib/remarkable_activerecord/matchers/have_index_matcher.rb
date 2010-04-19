@@ -1,7 +1,7 @@
 module Remarkable
-  module ActiveRecord
+  module ActiveModel
     module Matchers
-      class HaveIndexMatcher < Remarkable::ActiveRecord::Base #:nodoc:
+      class HaveIndexMatcher < Remarkable::ActiveModel::Base #:nodoc:
         arguments :collection => :columns, :as => :column
 
         optional :table_name
@@ -26,7 +26,7 @@ module Remarkable
           end
 
           def indexes
-            @indexes ||= ::ActiveRecord::Base.connection.indexes(current_table_name)
+            @indexes ||= ::ActiveModel::Base.connection.indexes(current_table_name)
           end
 
           def interpolation_options

@@ -1,10 +1,10 @@
 module Remarkable
-  module ActiveRecord
-    # Holds ActiveRecord matchers.
+  module ActiveModel
+    # Holds ActiveModel matchers.
     #
     # == Validations matchers
     #
-    # Remarkable supports all ActiveRecord validations, and the only options
+    # Remarkable supports all ActiveModel validations, and the only options
     # not supported in those matchers is the :on options. So whenever you have
     # to test that a validation runs on update, you have to do reproduce the
     # state in your tests:
@@ -23,7 +23,7 @@ module Remarkable
     # Another behavior in validations is the :message option. Whenever you change
     # the message in your model, it must be given in your tests too:
     #
-    #   class Post < ActiveRecord::Base
+    #   class Post < ActiveModel::Base
     #     validates_presence_of :title, :message => 'must be filled'
     #   end
     #
@@ -36,7 +36,7 @@ module Remarkable
     # specify the message in your tests, because it's retrieved properly.
     #
     module Matchers
-      class ValidatePresenceOfMatcher < Remarkable::ActiveRecord::Base #:nodoc:
+      class ValidatePresenceOfMatcher < Remarkable::ActiveModel::Base #:nodoc:
         arguments :collection => :attributes, :as => :attribute
         optional  :message
 

@@ -1,7 +1,7 @@
 module Remarkable
-  module ActiveRecord
+  module ActiveModel
     module Matchers
-      class HaveDefaultScopeMatcher < Remarkable::ActiveRecord::Base #:nodoc:
+      class HaveDefaultScopeMatcher < Remarkable::ActiveModel::Base #:nodoc:
         arguments
         assertions :options_match?
 

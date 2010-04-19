@@ -1,7 +1,7 @@
 module Remarkable
-  module ActiveRecord
+  module ActiveModel
     module Matchers
-      class HaveScopeMatcher < Remarkable::ActiveRecord::Base #:nodoc:
+      class HaveScopeMatcher < Remarkable::ActiveModel::Base #:nodoc:
         arguments :scope_name
         assertions :is_scope?, :options_match?
 
@@ -20,7 +20,7 @@ module Remarkable
               subject_class.send(@scope_name)
             end
 
-            @scope_object.class == ::ActiveRecord::Relation && @scope_object.arel 
+            @scope_object.class == ::ActiveModel::Relation && @scope_object.arel 
           end
 
           def options_match?
@@ -77,7 +77,7 @@ module Remarkable
       #   end
       #
       #
-      # You can test lambdas or methods that return ActiveRecord#scoped calls by fixing
+      # You can test lambdas or methods that return ActiveModel#scoped calls by fixing
       # a defined parameter.
       #
       #   it { should have_scope(:recent, :with => 5) }

@@ -1,7 +1,7 @@
 module Remarkable
-  module ActiveRecord
+  module ActiveModel
     module Matchers
-      class ValidateConfirmationOfMatcher < Remarkable::ActiveRecord::Base #:nodoc:
+      class ValidateConfirmationOfMatcher < Remarkable::ActiveModel::Base #:nodoc:
         arguments :collection => :attributes, :as => :attribute
 
         optional :message

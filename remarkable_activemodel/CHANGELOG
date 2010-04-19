@@ -10,7 +10,7 @@
 * Added :token and :separator to deal with :tokenizer in validates_length_of [#77]
 
 * Deprecated validate_format_of. It does not have the same API as the respective
-  ActiveRecord macro, raising questions frequentely about its usage [#76]
+  ActiveModel macro, raising questions frequentely about its usage [#76]
 
 * allow_mass_assignment_of when called without arguments checks if any mass
   assignment is possible [#80]
@@ -115,7 +115,7 @@ column exists or not.
 matchers. They don't lead to a good TDD since you should test they behavior
 and not wether they exist or not.
 
-[COMPATIBILITY] ActiveRecord matches does not pick the instance variable from
+[COMPATIBILITY] ActiveModel matches does not pick the instance variable from
 the spec environment. So we should target only rspec versions that supports
 subjects (>= 1.1.12).
 

@@ -1,7 +1,7 @@
 module Remarkable
-  module ActiveRecord
+  module ActiveModel
     module Matchers
-      class AcceptNestedAttributesForMatcher < Remarkable::ActiveRecord::Base #:nodoc:
+      class AcceptNestedAttributesForMatcher < Remarkable::ActiveModel::Base #:nodoc:
         arguments :collection => :associations, :as => :association
 
         collection_assertions :association_exists?, :is_autosave?, :responds_to_attributes?,
@@ -102,7 +102,7 @@ module Remarkable
       # :accept and :reject takes objects that are verified against the proc. So
       # having a model:
       #
-      #   class Projects < ActiveRecord::Base
+      #   class Projects < ActiveModel::Base
       #     has_many :tasks
       #     accepts_nested_attributes_for :tasks, :reject_if => proc { |a| a[:title].blank? }
       #   end

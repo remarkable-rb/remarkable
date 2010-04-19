@@ -1,7 +1,7 @@
 module Remarkable
-  module ActiveRecord
+  module ActiveModel
     module Matchers
-      class ValidateNumericalityOfMatcher < Remarkable::ActiveRecord::Base #:nodoc:
+      class ValidateNumericalityOfMatcher < Remarkable::ActiveModel::Base #:nodoc:
         arguments :collection => :attributes, :as => :attribute
 
         optional :equal_to, :greater_than_or_equal_to, :greater_than,
@@ -54,7 +54,7 @@ module Remarkable
             assert_bad_or_good_if_key(:only_integer, valid_value_for_test.to_f, default_message_for(:not_a_number))
           end
 
-          # In ActiveRecord, when we supply :even, does not matter the value, it
+          # In ActiveModel, when we supply :even, does not matter the value, it
           # considers that should even values should be accepted.
           #
           def only_even?
@@ -62,7 +62,7 @@ module Remarkable
             bad?(even_valid_value_for_test + 1, default_message_for(:even))
           end
 
-          # In ActiveRecord, when we supply :odd, does not matter the value, it
+          # In ActiveModel, when we supply :odd, does not matter the value, it
           # considers that should odd values should be accepted.
           #
           def only_odd?

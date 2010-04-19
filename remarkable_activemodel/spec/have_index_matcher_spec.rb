@@ -14,10 +14,10 @@ describe 'have_index_matcher' do
       t.integer :watcher_id
     end
 
-    ActiveRecord::Base.connection.add_index :users, :name
-    ActiveRecord::Base.connection.add_index :users, :email, :unique => true
-    ActiveRecord::Base.connection.add_index :users, [:email, :name], :unique => true
-    ActiveRecord::Base.connection.add_index :users_watchers, :user_id
+    ActiveModel::Base.connection.add_index :users, :name
+    ActiveModel::Base.connection.add_index :users, :email, :unique => true
+    ActiveModel::Base.connection.add_index :users, [:email, :name], :unique => true
+    ActiveModel::Base.connection.add_index :users_watchers, :user_id
   end
 
   describe 'messages' do

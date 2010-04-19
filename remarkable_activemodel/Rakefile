@@ -1,5 +1,5 @@
 # encoding: utf-8
-PROJECT_SUMMARY     = "Remarkable ActiveRecord: collection of matchers and macros with I18n for ActiveRecord"
+PROJECT_SUMMARY     = "Remarkable ActiveModel: collection of matchers and macros with I18n for ActiveModel"
 PROJECT_DESCRIPTION = PROJECT_SUMMARY
 
 GEM_NAME   = "remarkable_activerecord"

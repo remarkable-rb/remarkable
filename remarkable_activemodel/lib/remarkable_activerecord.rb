@@ -9,7 +9,7 @@ unless Object.const_defined?('Remarkable')
   end
 end
 
-# Load Remarkable ActiveRecord files
+# Load Remarkable ActiveModel files
 dir = File.dirname(__FILE__)
 require File.join(dir, 'remarkable_activerecord', 'base')
 require File.join(dir, 'remarkable_activerecord', 'describe')
@@ -23,8 +23,8 @@ Dir[File.join(dir, 'remarkable_activerecord', 'matchers', '*.rb')].each do |file
   require file
 end
 
-# By default, ActiveRecord matchers are not included in any example group.
-# The responsable for this is RemarkableRails. If you are using ActiveRecord
-# without Rails, put the line below in your spec_helper to include ActiveRecord
+# By default, ActiveModel matchers are not included in any example group.
+# The responsable for this is RemarkableRails. If you are using ActiveModel
+# without Rails, put the line below in your spec_helper to include ActiveModel
 # matchers into rspec globally.
-# Remarkable.include_matchers!(Remarkable::ActiveRecord, Rspec::Example::ExampleGroup)
+# Remarkable.include_matchers!(Remarkable::ActiveModel, Rspec::Example::ExampleGroup)

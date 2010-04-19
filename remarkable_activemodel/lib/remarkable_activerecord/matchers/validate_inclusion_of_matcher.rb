@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__), 'allow_values_for_matcher')
 
 module Remarkable
-  module ActiveRecord
+  module ActiveModel
     module Matchers
       class ValidateInclusionOfMatcher < AllowValuesForMatcher #:nodoc:
         # Don't allow it to behave in the negative way.

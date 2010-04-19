@@ -33,7 +33,7 @@ describe 'have_scope' do
     it 'should set is_scope? message' do
       matcher = have_scope(:null)
       matcher.matches?(@model)
-      matcher.failure_message.should == 'Expected :null when called on Product return an instance of ActiveRecord::NamedScope::Scope'
+      matcher.failure_message.should == 'Expected :null when called on Product return an instance of ActiveModel::NamedScope::Scope'
     end
 
     it 'should set options_match? message' do

@@ -1,7 +1,7 @@
 module Remarkable
-  module ActiveRecord
+  module ActiveModel
     module Matchers
-      class ValidateLengthOfMatcher < Remarkable::ActiveRecord::Base #:nodoc:
+      class ValidateLengthOfMatcher < Remarkable::ActiveModel::Base #:nodoc:
         arguments :collection => :attributes, :as => :attribute
 
         optional :within, :alias => :in

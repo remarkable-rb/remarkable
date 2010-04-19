@@ -1,13 +1,13 @@
-= Remarkable ActiveRecord
+= Remarkable ActiveModel
 
-Remarkable ActiveRecord is a collection of matchers to ActiveRecord. Why use
+Remarkable ActiveModel is a collection of matchers to ActiveModel. Why use
 Remarkable?
 
-* Matchers for all ActiveRecord validations, with support to all options. The only
+* Matchers for all ActiveModel validations, with support to all options. The only
   exceptions are validate_format_of (which should be invoked as allow_values_for)
   and the :on option;
 
-* Matchers for all ActiveRecord associations. The only one which supports all
+* Matchers for all ActiveModel associations. The only one which supports all
   these options:
 
     :through, :source, :source_type, :class_name, :foreign_key, :dependent,
@@ -22,7 +22,7 @@ Remarkable?
   :foreign_key or :counter_cache is given, it checks if the given column exists;
 
 * Tests and more tests. We have a huge tests suite ready to run and tested in
-  ActiveRecord 2.1.2, 2.2.2 and 2.3.2;
+  ActiveModel 2.1.2, 2.2.2 and 2.3.2;
 
 * Great documentation;
 
@@ -69,7 +69,7 @@ And then:
 
 == Using it outside Rails
 
-If you want to use Remarkable ActiveRecord outside Rails, you have to remember
+If you want to use Remarkable ActiveModel outside Rails, you have to remember
 a few things:
 
   1. Internationalization is powered by the I18n gem. If you are using it with Rails,
@@ -79,9 +79,9 @@ a few things:
         sudo gem install svenfuchs-i18n
 
   2. Include the matchers. Remarkable Rails gem is the responsable to add
-     ActiveRecord matchers to rspec. If you are not using it, you have to do:
+     ActiveModel matchers to rspec. If you are not using it, you have to do:
 
-        Remarkable.include_matchers!(Remarkable::ActiveRecord, Spec::Example::ExampleGroup)
+        Remarkable.include_matchers!(Remarkable::ActiveModel, Spec::Example::ExampleGroup)
 
-     This will make ActiveRecord matchers available in all rspec example groups.
+     This will make ActiveModel matchers available in all rspec example groups.
 
