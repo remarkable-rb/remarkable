@@ -24,7 +24,7 @@ Dir[File.join(dir, 'remarkable_activerecord', 'matchers', '*.rb')].each do |file
 end
 
 # By default, ActiveModel matchers are not included in any example group.
-# The responsable for this is RemarkableRails. If you are using ActiveModel
+# The responsibility for this is RemarkableRails. If you are using ActiveModel
 # without Rails, put the line below in your spec_helper to include ActiveModel
 # matchers into rspec globally.
 # Remarkable.include_matchers!(Remarkable::ActiveModel, Rspec::Example::ExampleGroup)
