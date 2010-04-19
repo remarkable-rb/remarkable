@@ -6,8 +6,9 @@ module Remarkable
         assertions :is_scope?, :options_match?
 
         optionals :with, :splat => true
-        optionals :conditions, :include, :joins, :limit, :offset, :order, :select,
-                  :readonly, :group, :having, :from, :lock
+        
+        # Chained scopes taken from: http://m.onkey.org/2010/1/22/active-record-query-interface
+        optionals :where, :having, :select, :group, :order, :limit, :offset, :joins, :includes, :lock, :readonly, :from
 
         protected
 
@@ -19,23 +20,32 @@ module Remarkable
               subject_class.send(@scope_name)
             end
 
-            @scope_object.class == ::ActiveRecord::Relation
+            @scope_object.class == ::ActiveRecord::Relation && @scope_object.arel 
           end
 
           def options_match?
-            @options.empty? || @scope_object.proxy_options == @options.except(:with)
+            @options.empty? || @scope_object.arel == arel(subject_class, @options.except(:with))
           end
 
           def interpolation_options
-            { :options => @options.except(:with).inspect,
-              :actual  => (@scope_object ? @scope_object.proxy_options.inspect : '{}')
+            { 
+              :options => (subject_class.respond_to?(:scoped) ? arel(subject_class, @options.except(:with)).to_sql : '{}'),
+              :actual  => (@scope_object ? @scope_object.arel.to_sql : '{}')
             }
+          end
+
+        private
+          def arel(model, scopes = nil)
+            return model.scoped unless scopes
+            scopes.inject(model.scoped) do |chain, (cond, option)|
+              chain.send(cond, option)
+            end.arel
           end
 
       end
 
-      # Ensures that the model has a method named scope that returns a NamedScope
-      # object with the supplied proxy options.
+      # Ensures that the model has a named scope that returns an Relation object capable
+      # of building into relational algebra. 
       #
       # == Options
       #
@@ -44,6 +54,8 @@ module Remarkable
       # All options that the named scope would pass on to find: :conditions,
       # :include, :joins, :limit, :offset, :order, :select, :readonly, :group,
       # :having, :from, :lock.
+      #
+      # Matching is done by constructing the Arel objects and testing for equality.
       #
       # == Examples
       # 
@@ -56,11 +68,17 @@ module Remarkable
       #
       # Or for
       #
+      #   scope :visible, lambda { { :conditions => true } }
+      #
+      # Or for
+      #
       #   def self.visible
       #     scoped(:conditions => {:visible => true})
       #   end
       #
-      # You can test lambdas or methods that return ActiveRecord#scoped calls:
+      #
+      # You can test lambdas or methods that return ActiveRecord#scoped calls by fixing
+      # a defined parameter.
       #
       #   it { should have_scope(:recent, :with => 5) }
       #   it { should have_scope(:recent, :with => 1) }

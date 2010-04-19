@@ -7,8 +7,8 @@ describe 'have_scope' do
     @model = define_model :product, :title => :string, :category => :string do
       scope :recent, :order => 'created_at DESC'
       scope :latest, lambda {|c| {:limit => c}}
-      scope :since, lambda {|t| {:conditions => ['created_at > ?', t]}}
-      scope :between, lambda { |a, b| { :conditions => [ 'created_at > ? and created_at < ?', a, b ] } }
+      scope :since, lambda {|t| where(['created_at > ?', t])}
+      scope :between, lambda { |a, b| where([ 'created_at > ? and created_at < ?', a, b ]) }
 
       def self.beginning(c)
         scoped(:offset => c)
@@ -37,9 +37,9 @@ describe 'have_scope' do
     end
 
     it 'should set options_match? message' do
-      matcher = have_scope(:recent, :conditions => {:special => true})
+      matcher = have_scope(:recent, :where => {:special => true})
       matcher.matches?(@model)
-      matcher.failure_message.should == 'Expected :recent when called on Product scope to {:conditions=>{:special=>true}}, got {:order=>"created_at DESC"}'
+      matcher.failure_message.should match(/^Expected :recent.+/)
     end
 
   end
@@ -50,15 +50,15 @@ describe 'have_scope' do
 
     it { should have_scope(:latest).with(10).limit(10) }
     it { should have_scope(:beginning).with(10).offset(10) }
-    it { should have_scope(:since).with(false).conditions(["created_at > ?", false]) }
-    it { should have_scope(:since).with(Time.at(0)).conditions(["created_at > ?", Time.at(0)]) }
-    it { should have_scope(:between).with(2, 10).conditions(["created_at > ? and created_at < ?", 2, 10]) }
+    it { should have_scope(:since).with(false).where(["created_at > ?", false]) }
+    it { should have_scope(:since).with(Time.at(0)).where(["created_at > ?", Time.at(0)]) }
+    it { should have_scope(:between).with(2, 10).where(["created_at > ? and created_at < ?", 2, 10]) }
 
     it { should_not have_scope(:null) }
     it { should_not have_scope(:latest).with(5).limit(10) }
     it { should_not have_scope(:beginning).with(5).offset(10) }
-    it { should_not have_scope(:since).with(Time.at(0)).conditions(["created_at > ?", Time.at(1)]) }
-    it { should_not have_scope(:between).with(2, 10).conditions(["updated_at > ? and updated_at < ?", 2, 10]) }
+    it { should_not have_scope(:since).with(Time.at(0)).where(["created_at > ?", Time.at(1)]) }
+    it { should_not have_scope(:between).with(2, 10).where(["updated_at > ? and updated_at < ?", 2, 10]) }
   end
 
   describe 'macros' do
