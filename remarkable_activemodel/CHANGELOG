@@ -1,0 +1,147 @@
+* allow_values_for checks for any message unless otherwise given [#90]
+
+* Allow booleans to be given to validate_inclusion_of [#89]
+
+* Allow allow_values_for and allow_mass_assignment_of matchers to be executed in
+  the negative form by including Remarkable::Negative module [#85]
+
+* Ensure quick subject bypass protected attributes [#87]
+
+* Added :token and :separator to deal with :tokenizer in validates_length_of [#77]
+
+* Deprecated validate_format_of. It does not have the same API as the respective
+  ActiveRecord macro, raising questions frequentely about its usage [#76]
+
+* allow_mass_assignment_of when called without arguments checks if any mass
+  assignment is possible [#80]
+
+* Add :table_name option to have_index (thanks to Lawrence Pit) [#79]
+
+* Allow default subject attributes to be given [#74]
+  You can even mix with a fixture replacement tool and still use quick subjects:
+
+    describe Post
+      # Fixjour example
+      subject_attributes { valid_post_attributes }
+
+      describe :published => true do
+        should_validate_presence_of :published_at
+      end
+    end
+
+* Bug fix when a symbol is given has join table to habtm association [#75]
+
+* Association matchers now searches in the right database for tables [#73]
+
+* validate_length_of accepts :with_kind_of to enable it to work with associations [#69]
+  In your Post specs now you can write:
+
+    should_validate_length_of :comments, :maximum => 10, :with_kind_of => Comment
+
+# v3.1
+
+* Allow validate_presence_of to work with associations [#63]
+
+* Allow validate_uniqueness_of to work when scopes are not stringfiable values.
+  You can now give timestamps, datetime, date and boolean as scopes [#60]
+
+* Allow subjects to be overwriten quickly (quick subjects):
+
+    describe Post
+      should_validate_presente_of :title
+ 
+      describe :published => true do
+        should_validate_presence_of :published_at
+      end
+    end
+ 
+  Is the same as:
+
+    describe Post
+      should_validate_presente_of :title
+ 
+      describe "when published is true" do
+        subject { Post.new(:published => true) }
+        should_validate_presence_of :published_at
+      end
+    end
+
+  And the string can be also localized using I18n [#57]
+
+[COMPATIBILITY] validate_associated no longer accepts a block to confgure the
+builder:
+
+    should_validate_associated(:tasks){ |p| p.tasks.build(:captcha => 'i_am_a_robot') }
+
+The right way to do this is by giving an option called builder and a proc:
+
+    should_validate_associated :tasks, :builder => proc{ |p| p.tasks.build(:captcha => 'i_am_a_robot') }
+
+* validate_uniqueness_of and accept_nested_attributes_for now use the new
+  interpolation option {{sentence}} [#58]
+
+* Added accept_nested_attributes_for matcher [#39]
+
+* Added have_default_scope matcher [#38]
+
+* Allow :conditions, :include, :joins, :limit, :offset, :order, :select, :readonly,
+  :group, :having, :from, :lock as quick accessors to have_scope matcher
+
+* Allow all kind of objects to be sent to have_scope (including datetimes, arrays,
+  booleans and nil) (thanks to Szymon Nowak and Nolan Eakins) [#53]
+
+* Added support to sql options in association_matcher: select, conditions, include,
+  group, having, order, limit and offset, plus finder_sql and counter_sql. [#48]
+
+* :source and :source_type are now supported by association matcher [#47]
+
+* validate_inclusion_of became smarter since it now tests invalid values too [#36]
+
+* Fixed three bugs in validate_uniqueness_of matcher [#42] [#40] [#37]
+
+# v3.0
+
+* Added more options to associations matcher. Previously it was handling just
+:dependent and :through options. Now it deals with:
+
+  :through, :class_name, :foreign_key, :dependent, :join_table, :uniq,
+  :readonly, :validate, :autosave, :counter_cache, :polymorphic
+
+And they are much smarter! In :join_table and :through cases, they also test if
+the table exists or not. :counter_cache and :foreign_key also checks if the
+column exists or not.
+
+[COMPATIBILITY] Removed callback, have_instance_method and have_class_method
+matchers. They don't lead to a good TDD since you should test they behavior
+and not wether they exist or not.
+
+[COMPATIBILITY] ActiveRecord matches does not pick the instance variable from
+the spec environment. So we should target only rspec versions that supports
+subjects (>= 1.1.12).
+
+Previously, when we are doing this:
+
+   describe Product
+     before(:each){ @product = Product.new(:tangible => true) }
+     should_validate_presence_of :size
+   end
+
+It was validating the @product instance variable. However this might be not
+clear. The right way to do that (with subjects) is:
+
+   describe Product
+     subject{ Product.new(:tangible => true) }
+     should_validate_presence_of :size
+   end
+
+Is also valid to remember that previous versions of Remarkable were overriding
+subject definitions on rspec. This was also fixed.
+
+# v2.x
+
+* Added associations, allow_mass_assignment, allow_values_for, have_column,
+have_index, have_scope, have_readonly_attributes, validate_acceptance_of,
+validate_associated, validate_confirmation_of, validate_exclusion_of,
+validate_inclusion_of, validate_length_of, validate_numericality_of,
+validate_presence_of and validate_uniqueness_of matchers.
+

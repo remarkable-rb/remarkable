@@ -1,0 +1,30 @@
+# encoding: utf-8
+PROJECT_SUMMARY     = "Remarkable ActiveRecord: collection of matchers and macros with I18n for ActiveRecord"
+PROJECT_DESCRIPTION = PROJECT_SUMMARY
+
+GEM_NAME   = "remarkable_activerecord"
+GEM_AUTHOR = [ "Carlos Brando", "José Valim", "Diego Carrion" ]
+GEM_EMAIL  = [ "eduardobrando@gmail.com", "jose.valim@gmail.com", "dc.rec1@gmail.com" ]
+
+EXTRA_RDOC_FILES = ["README", "LICENSE", "CHANGELOG"]
+
+require File.join(File.dirname(__FILE__), "..", "rake_helpers.rb")
+
+########### Package && release
+
+configure_gemspec! do |s|
+  s.add_dependency('remarkable', "~> #{GEM_VERSION}")
+end
+
+########### Specs
+
+RAILS_VERSIONS = ['3.0.0']
+
+desc "Run the specs under spec with supported Rails versions"
+task :pre_commit do
+  RAILS_VERSIONS.each do |version|
+    ENV['RAILS_VERSION'] = version
+    puts "\n=> #{GEM_NAME}: rake spec RAILS_VERSION=#{version}"
+    Rake::Task[:spec].execute
+  end
+end
