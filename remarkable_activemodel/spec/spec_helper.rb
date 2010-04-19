@@ -9,7 +9,7 @@ gem 'activesupport', RAILS_VERSION
 require 'active_support'
 
 gem 'activerecord', RAILS_VERSION
-require 'active_record'
+require 'active_model'
 
 # Configure ActiveModel connection
 ActiveModel::Base.establish_connection(

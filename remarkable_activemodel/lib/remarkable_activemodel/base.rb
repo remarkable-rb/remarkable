@@ -64,7 +64,7 @@ module Remarkable
         # Default allow_nil? validation. It accepts the message_key which is
         # the key which contain the message in @options.
         #
-        # It also gets an allow_nil message on remarkable.active_record.allow_nil
+        # It also gets an allow_nil message on remarkable.active_model.allow_nil
         # to be used as default.
         #
         def allow_nil?(message_key=:message) #:nodoc:
@@ -74,7 +74,7 @@ module Remarkable
         # Default allow_blank? validation. It accepts the message_key which is
         # the key which contain the message in @options.
         #
-        # It also gets an allow_blank message on remarkable.active_record.allow_blank
+        # It also gets an allow_blank message on remarkable.active_model.allow_blank
         # to be used as default.
         #
         def allow_blank?(message_key=:message) #:nodoc:

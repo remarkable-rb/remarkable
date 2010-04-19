@@ -1,6 +1,6 @@
 en:
   remarkable:
-    active_record:
+    active_model:
       describe:
         each: "{{key}} is {{value}}"
         prepend: "when "

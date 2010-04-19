@@ -31,7 +31,7 @@ module Remarkable
     #
     #   locale:
     #     remarkable:
-    #       active_record:
+    #       active_model:
     #         describe:
     #           each: "{{key}} is {{value}}"
     #           prepend: "when "
@@ -96,7 +96,7 @@ module Remarkable
         #
         #   locale:
         #     remarkable:
-        #       active_record:
+        #       active_model:
         #         describe:
         #           each: "{{key}} is {{value}}"
         #           prepend: "when "
@@ -108,10 +108,10 @@ module Remarkable
         def describe(*args, &block)
           if described_class && args.first.is_a?(Hash)
             attributes = args.shift
-            connector = Remarkable.t "remarkable.active_record.describe.connector", :default => " and "
+            connector = Remarkable.t "remarkable.active_model.describe.connector", :default => " and "
 
             description = if self.describe_subject_attributes.blank?
-              Remarkable.t("remarkable.active_record.describe.prepend", :default => "when ")
+              Remarkable.t("remarkable.active_model.describe.prepend", :default => "when ")
             else
               connector.lstrip
             end
@@ -124,7 +124,7 @@ module Remarkable
                 key.to_s.humanize
               end
 
-              pieces << Remarkable.t("remarkable.active_record.describe.each",
+              pieces << Remarkable.t("remarkable.active_model.describe.each",
                                       :default => "{{key}} is {{value}}",
                                       :key => translated_key.downcase, :value => value.inspect)
             end
