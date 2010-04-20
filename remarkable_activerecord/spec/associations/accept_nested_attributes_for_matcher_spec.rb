@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 if RAILS_VERSION >= '2.3.3'
   describe 'accept_nested_attributes_for' do

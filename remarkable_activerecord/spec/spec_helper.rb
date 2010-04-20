@@ -17,12 +17,15 @@ ActiveRecord::Base.establish_connection(
   :database => ':memory:'
 )
 
+# Requires supporting files with custom matchers and macros, etc,
+# in ./support/ and its subdirectories.
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
+
 # Load Remarkable core on place to avoid gem to be loaded
 dir = File.dirname(__FILE__)
 require File.join(dir, '..', '..', 'remarkable', 'lib', 'remarkable')
 
 # Load Remarkable ActiveRecord
-require File.join(dir, 'model_builder')
 require File.join(dir, '..', 'lib', 'remarkable_activerecord')
 
 # Include matchers
