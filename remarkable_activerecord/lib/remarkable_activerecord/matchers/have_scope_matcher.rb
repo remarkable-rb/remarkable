@@ -51,29 +51,28 @@ module Remarkable
       #
       # * <tt>with</tt> - Options to be sent to the named scope
       #
-      # All options that the named scope would pass on to find: :conditions,
-      # :include, :joins, :limit, :offset, :order, :select, :readonly, :group,
-      # :having, :from, :lock.
+      # All options that the named scope would scope with Arel: 
+      # :where, :having, :select, :group, :order, :limit, :offset, :joins, :includes, :lock, :readonly, :from
       #
       # Matching is done by constructing the Arel objects and testing for equality.
       #
       # == Examples
       # 
-      #   it { should have_scope(:visible, :conditions => {:visible => true}) }
-      #   it { should have_scope(:visible).conditions(:visible => true) }
+      #   it { should have_scope(:visible, :where => {:visible => true}) }
+      #   it { should have_scope(:visible).where(:visible => true) }
       #
       # Passes for
       #
-      #   scope :visible, :conditions => {:visible => true}
+      #   scope :visible, where(:visible => true)
       #
       # Or for
       #
-      #   scope :visible, lambda { { :conditions => true } }
+      #   scope :visible, lambda { where(:visible => true) }
       #
       # Or for
       #
       #   def self.visible
-      #     scoped(:conditions => {:visible => true})
+      #     where(:visible => true)
       #   end
       #
       #
@@ -85,12 +84,12 @@ module Remarkable
       #
       # Passes for
       #
-      #   scope :recent, lambda {|c| {:limit => c}}
+      #   scope :recent, lambda {|c| limit(c)}
       #
       # Or for
       #
       #   def self.recent(c)
-      #     scoped(:limit => c)
+      #     limit(c)
       #   end
       #
       def have_scope(*args, &block)
