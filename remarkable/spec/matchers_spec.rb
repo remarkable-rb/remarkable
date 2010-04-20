@@ -40,7 +40,7 @@ describe Remarkable::Matchers do
     klass = Class.new
     meta = (class << klass; self; end)
 
-    meta.should_receive(:ancestors).twice.and_return([Remarkable::Macros])
+    meta.should_receive(:ancestors).once.and_return([Remarkable::Macros])
     klass.should_not_receive(:extend).with(Remarkable::Macros)
 
     Remarkable.include_matchers!(Module.new, klass)
