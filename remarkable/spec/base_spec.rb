@@ -25,7 +25,7 @@ describe Remarkable::Base do
   it 'should store spec instance binding' do
     matcher = contain(1)
     should matcher
-    matcher.instance_variable_get('@spec').class.ancestors.should include(Rspec::Core::ExampleGroup)
+    matcher.instance_variable_get('@spec').class.ancestors.should include(self.class)
   end
 
   it 'should be positive' do
