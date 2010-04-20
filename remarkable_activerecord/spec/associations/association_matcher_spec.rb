@@ -244,7 +244,7 @@ describe 'association_matcher' do
       end
 
       it 'should set foreign_key_exists? message' do
-        matcher = define_and_validate(:association_columns => [])
+        matcher = define_and_validate(:association_columns => [:label_id])
         matcher.matches?(@model)
         matcher.failure_message.should == 'Expected foreign key "project_id" to exist on "labels_projects", but does not'
       end
