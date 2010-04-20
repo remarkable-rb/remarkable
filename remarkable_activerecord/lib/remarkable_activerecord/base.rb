@@ -179,16 +179,8 @@ module Remarkable
         # by a regexp which contains \d+.
         #
         def error_message_from_model(model, attribute, message) #:nodoc:
-          if message.is_a? Symbol
-            message = if RAILS_I18N # Rails >= 2.2
-              if ::ActiveRecord.const_defined?(:Error)
-                ::ActiveRecord::Error.new(model, attribute, message, :count => '12345').to_s
-              else
-                model.errors.generate_message(attribute, message, :count => '12345')
-              end
-            else # Rails <= 2.1
-              ::ActiveRecord::Errors.default_error_messages[message] % '12345'
-            end
+          if message.is_a?(Symbol)
+            message = model.errors.generate_message(attribute, message, :count => '12345') 
 
             if message =~ /12345/
               message = Regexp.escape(message)
