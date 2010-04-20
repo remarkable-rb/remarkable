@@ -21,12 +21,12 @@ module ModelBuilder
     base.extend ClassMethods
   end
 
-  def create_table(table_name, &block)
+  def create_table(table_name, opts = {}, &block)
     connection = ActiveRecord::Base.connection
 
     begin
       connection.execute("DROP TABLE IF EXISTS #{table_name}")
-      connection.create_table(table_name, &block)
+      connection.create_table(table_name, opts, &block)
       @created_tables ||= []
       @created_tables << table_name
       connection
@@ -40,6 +40,7 @@ module ModelBuilder
     class_name = class_name.to_s.camelize
 
     klass = Class.new(base)
+    Object.send(:remove_const, class_name) if Object.const_defined?(class_name)
     Object.const_set(class_name, klass)
 
     klass.class_eval(&block) if block_given?
