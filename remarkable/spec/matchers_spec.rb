@@ -29,6 +29,24 @@ describe Remarkable::Matchers do
     (class << Remarkable::Matchers; self; end).ancestors.should include(Foo::Matchers)
   end
 
+  it 'should call :after_include callback if defined' do
+    klass = Class.new
+
+    module Foo
+      module Matchers
+      end
+
+      def self.after_include(target)
+        raise "Called after_include"
+      end
+    end
+
+    lambda {
+      Remarkable.include_matchers!(Foo, klass)
+    }.should raise_error "Called after_include"
+
+  end
+
   it 'should raise an error if include matchers is called without target and rspec is not loaded' do
     Remarkable.stub!(:rspec_defined?).and_return(false)
     lambda {
