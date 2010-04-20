@@ -14,7 +14,7 @@ module Remarkable
       if rspec_defined?
         target = Rspec::Matchers
       else
-        raise ArgumentError, "You haven't supplied the target to include_matchers! and RRspec is not loaded, so we cannot infer one."
+        raise ArgumentError, "You haven't supplied the target to include_matchers! and Rspec is not loaded, so we cannot infer one."
       end
     end
 
