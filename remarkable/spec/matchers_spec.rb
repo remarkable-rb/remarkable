@@ -33,7 +33,7 @@ describe Remarkable::Matchers do
     Remarkable.stub!(:rspec_defined?).and_return(false)
     lambda {
       Remarkable.include_matchers!(String)
-    }.should raise_error(ArgumentError, "You haven't supplied the target to include_matchers! and RRspec is not loaded, so we cannot infer one.")
+    }.should raise_error(ArgumentError, "You haven't supplied the target to include_matchers! and Rspec is not loaded, so we cannot infer one.")
   end
 
   it 'should not include modules twice' do
