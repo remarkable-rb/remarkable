@@ -11,15 +11,15 @@ end
 
 # Load Remarkable ActiveModel files
 dir = File.dirname(__FILE__)
-require File.join(dir, 'remarkable_activerecord', 'base')
-require File.join(dir, 'remarkable_activerecord', 'describe')
-require File.join(dir, 'remarkable_activerecord', 'human_names')
+require File.join(dir, 'remarkable_activemodel', 'base')
+require File.join(dir, 'remarkable_activemodel', 'describe')
+require File.join(dir, 'remarkable_activemodel', 'human_names')
 
 # Add locale
 Remarkable.add_locale File.join(dir, '..', 'locale', 'en.yml')
 
 # Add matchers
-Dir[File.join(dir, 'remarkable_activerecord', 'matchers', '*.rb')].each do |file|
+Dir[File.join(dir, 'remarkable_activemodel', 'matchers', '*.rb')].each do |file|
   require file
 end
 

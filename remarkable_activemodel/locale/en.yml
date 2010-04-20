@@ -16,153 +16,10 @@ en:
           positive: "allowing blank values"
           negative: "not allowing blank values"
 
-      accept_nested_attributes_for:
-        description: "accept nested attributes for {{associations}}"
-        expectations:
-          association_exists: "{{subject_name}} to have association {{association}}, but does not"
-          is_autosave: "{{subject_name}} to have association {{association}} with autosave true, got false"
-          responds_to_attributes: "{{subject_name}} to respond to :{{association}}_attributes=, but does not"
-          allows_destroy: "{{subject_name}} with allow destroy equals to {{allow_destroy}}, got {{actual}}"
-          accepts: "{{subject_name}} to accept attributes {{attributes}} for {{association}}, but does not"
-          rejects: "{{subject_name}} to reject attributes {{attributes}} for {{association}}, but does not"
-        optionals:
-          allow_destroy:
-            positive: "allowing destroy"
-            negative: "not allowing destroy"
-          accept:
-            positive: "accepting {{sentence}}"
-          reject:
-            positive: "rejecting {{sentence}}"
-
       allow_values_for:
         description: "allow {{in}} as values for {{attributes}}"
         expectations:
           is_valid: "{{subject_name}} to be valid when {{attribute}} is set to {{value}}"
-
-      allow_mass_assignment_of:
-        description: "allow mass assignment of {{attributes}}"
-        expectations:
-          allows: "{{subject_name}} to allow mass assignment ({{subject_name}} is protecting {{protected_attributes}})"
-          is_protected: "{{subject_name}} to allow mass assignment of {{attribute}} ({{subject_name}} is protecting {{attribute}})"
-          is_accessible: "{{subject_name}} to allow mass assignment of {{attribute}} ({{subject_name}} has not made {{attribute}} accessible)"
-        negative_expectations:
-          allows: "{{subject_name}} to allow mass assignment ({{subject_name}} made {{accessible_attributes}} accessible)"
-          is_protected: "{{subject_name}} to allow mass assignment of {{attribute}} ({{subject_name}} is not protecting {{attribute}})"
-          is_accessible: "{{subject_name}} to allow mass assignment of {{attribute}} ({{subject_name}} has made {{attribute}} accessible)"
-
-      association:
-        belongs_to: belong to
-        has_many: have many
-        has_and_belongs_to_many: have and belong to many
-        has_one: have one
-        description: "{{macro}} {{associations}}"
-        expectations:
-          association_exists: "{{subject_name}} records {{macro}} {{association}}, but the association does not exist"
-          macro_matches: "{{subject_name}} records {{macro}} {{association}}, got {{subject_name}} records {{actual_macro}} {{association}}"
-          through_exists: "{{subject_name}} records {{macro}} {{association}} through {{through}}, through association does not exist"
-          source_exists: "{{subject_name}} records {{macro}} {{association}} through {{through}}, source association does not exist"
-          klass_exists: "{{subject_name}} records {{macro}} {{association}}, but the association class does not exist"
-          join_table_exists: "join table {{join_table}} to exist, but does not"
-          foreign_key_exists: "foreign key {{foreign_key}} to exist on {{foreign_key_table}}, but does not"
-          polymorphic_exists: "{{subject_table}} to have {{polymorphic_column}} as column, but does not"
-          counter_cache_exists: "{{reflection_table}} to have {{counter_cache_column}} as column, but does not"
-          options_match: "{{subject_name}} records {{macro}} {{association}} with options {{options}}, got {{actual}}"
-        optionals:
-          through:
-            positive: "through {{value}}"
-          source:
-            positive: "with source {{inspect}}"
-          source_type:
-            positive: "with source type {{inspect}}"
-          class_name:
-            positive: "with class name {{inspect}}"
-          foreign_key:
-            positive: "with foreign key {{inspect}}"
-          dependent:
-            positive: "with dependent {{inspect}}"
-          join_table:
-            positive: "with join table {{inspect}}"
-          uniq:
-            positive: "with unique records"
-            negative: "without unique records"
-          readonly:
-            positive: "with readonly records"
-            negative: "without readonly records"
-          validate:
-            positive: "validating associated records"
-            negative: "not validating associated records"
-          autosave:
-            positive: "autosaving associated records"
-            negative: "not autosaving associated records"
-          as:
-            positive: "through the polymorphic interface {{inspect}}"
-          counter_cache:
-            positive: "with counter cache {{inspect}}"
-            negative: "without counter cache"
-          select:
-            positive: "selecting {{inspect}}"
-          conditions:
-            positive: "with conditions {{inspect}}"
-          include:
-            positive: "including {{inspect}}"
-          group:
-            positive: "grouping by {{inspect}}"
-          having:
-            positive: "having {{inspect}}"
-          order:
-            positive: "with order {{inspect}}"
-          limit:
-            positive: "with limit {{inspect}}"
-          offset:
-            positive: "with offset {{inspect}}"
-
-      have_column:
-        description: "have column(s) named {{columns}}"
-        expectations:
-          column_exists: "{{subject_name}} to have column named {{column}}"
-          options_match: "{{subject_name}} to have column {{column}} with options {{options}}, got {{actual}}"
-        optionals:
-          type:
-            positive: "with type {{inspect}}"
-          null:
-            positive: "allowing null values"
-            negative: "not allowing null values"
-          default:
-            positive: "with default value {{inspect}}"
-            negative: "with default value {{inspect}}"
-          limit:
-            positive: "with limit {{inspect}}"
-
-      have_default_scope:
-        description: "have a default scope with {{options}}"
-        expectations:
-          options_match: "default scope with {{options}}, got {{actual}}"
-
-      have_index:
-        description: "have index for column(s) {{columns}}"
-        expectations:
-          index_exists: "index {{column}} to exist on table {{table_name}}"
-          is_unique: "index on {{column}} with unique equals to {{unique}}, got {{actual}}"
-        optionals:
-          unique:
-            positive: "with unique values"
-            negative: "with non unique values"
-          table_name:
-            positive: "on table {{value}}"
-
-      have_readonly_attributes:
-        description: "make {{attributes}} read-only"
-        expectations:
-          is_readonly: "{{subject_name}} to make {{attribute}} read-only, got {{actual}}"
-
-      have_scope:
-        description: "have to scope itself to {{options}} when {{scope_name}} is called"
-        expectations:
-          is_scope: "{{scope_name}} when called on {{subject_name}} return an instance of ActiveModel::NamedScope::Scope"
-          options_match: "{{scope_name}} when called on {{subject_name}} scope to {{options}}, got {{actual}}"
-        optionals:
-          with:
-            positive: "with {{inspect}} as argument"
 
       validate_acceptance_of:
         description: "require {{attributes}} to be accepted"
@@ -172,11 +29,6 @@ en:
         optionals:
           accept:
             positive: "with value {{inspect}}"
-
-      validate_associated:
-        description: "require associated {{associations}} to be valid"
-        expectations:
-          is_valid: "{{subject_name}} to be invalid when {{association}} is invalid"
 
       validate_confirmation_of:
         description: "require {{attributes}} to be confirmed"
