@@ -21,20 +21,9 @@ module ModelBuilder
     base.extend ClassMethods
   end
 
-  def create_table(table_name, &block)
-    connection = ActiveModel::Base.connection
-
-    begin
-      connection.execute("DROP TABLE IF EXISTS #{table_name}")
-      connection.create_table(table_name, &block)
-      @created_tables ||= []
-      @created_tables << table_name
-      connection
-    rescue Exception => e
-      connection.execute("DROP TABLE IF EXISTS #{table_name}")
-      raise e
-    end
+  class Base
   end
+
 
   def define_constant(class_name, base, &block)
     class_name = class_name.to_s.camelize
@@ -51,22 +40,20 @@ module ModelBuilder
   end
 
   def define_model_class(class_name, &block)
-    define_constant(class_name, ActiveModel::Base, &block)
+    define_constant(class_name, ModelBuilder::Base, &block)
   end
 
   def define_model(name, columns = {}, &block)
     class_name = name.to_s.pluralize.classify
-    table_name = class_name.tableize
 
-    table = columns.delete(:table) || lambda {|table|
-      columns.each do |name, type|
-        table.column name, *type
-      end
-    }
+    klass  = define_model_class(class_name) do
+      include ActiveModel::Validations
+    end
+    columns.each do |column, type|
+      klass.send(:attr_accessor, column)
+    end
 
-    create_table(table_name, &table)
-
-    klass    = define_model_class(class_name, &block)
+    klass.class_eval(&block) if block
     instance = klass.new
 
     self.class.subject { instance } if self.class.respond_to?(:subject)
