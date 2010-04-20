@@ -4,6 +4,7 @@ module Remarkable
     def self.after_include(target) #:nodoc:
       target.class_inheritable_reader :describe_subject_attributes, :default_subject_attributes
       target.send :include, Describe
+      target.send :extend, Describe::ClassMethods
     end
 
     # Overwrites describe to provide quick way to configure your subject:
@@ -64,10 +65,6 @@ module Remarkable
     #   end
     #
     module Describe
-
-      def self.included(base) #:nodoc:
-        base.extend ClassMethods
-      end
 
       module ClassMethods
 
@@ -139,8 +136,9 @@ module Remarkable
               set_described_subject!
               instance_eval(&block)
             end
+            Remarkable::ActiveRecord.after_include(example_group)
           else
-            super(*args, &block)
+            Remarkable::ActiveRecord.after_include(super(*args, &block))
           end
         end
 
