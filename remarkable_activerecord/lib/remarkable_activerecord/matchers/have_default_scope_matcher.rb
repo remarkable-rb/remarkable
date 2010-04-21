@@ -5,8 +5,7 @@ module Remarkable
         arguments
         assertions :options_match?
 
-        optionals :conditions, :include, :joins, :limit, :offset, :order, :select,
-                  :readonly, :group, :having, :from, :lock
+        optionals :where, :having, :select, :group, :order, :limit, :offset, :joins, :includes, :lock, :readonly, :from
 
         protected
 

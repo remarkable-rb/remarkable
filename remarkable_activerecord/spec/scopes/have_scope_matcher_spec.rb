@@ -67,19 +67,19 @@ describe 'have_scope' do
 
     should_have_scope :latest,    :with => 10, :limit => 10
     should_have_scope :beginning, :with => 10, :offset => 10
-    should_have_scope :since,     :with => false, :conditions => ["created_at > ?", false]
-    should_have_scope :since,     :with => Time.at(0), :conditions => ["created_at > ?", Time.at(0)]
-    should_have_scope :between,   :with => [ 2, 10 ],  :conditions => [ "created_at > ? and created_at < ?", 2, 10 ]
+    should_have_scope :since,     :with => false, :where => ["created_at > ?", false]
+    should_have_scope :since,     :with => Time.at(0), :where => ["created_at > ?", Time.at(0)]
+    should_have_scope :between,   :with => [ 2, 10 ],  :where => [ "created_at > ? and created_at < ?", 2, 10 ]
 
     should_have_scope :between do |m|
       m.with(2, 10)
-      m.conditions([ "created_at > ? and created_at < ?", 2, 10 ])
+      m.where([ "created_at > ? and created_at < ?", 2, 10 ])
     end
 
     should_not_have_scope :null
     should_not_have_scope :latest,    :with => 5, :limit => 10
     should_not_have_scope :beginning, :with => 5, :offset => 10
-    should_not_have_scope :since,     :with => Time.at(0), :conditions => ["created_at > ?", Time.at(1)]
-    should_not_have_scope :between,   :with => [ 2, 10 ],  :conditions => [ "updated_at > ? and updated_at < ?", 2, 10 ]
+    should_not_have_scope :since,     :with => Time.at(0), :where => ["created_at > ?", Time.at(1)]
+    should_not_have_scope :between,   :with => [ 2, 10 ],  :where => [ "updated_at > ? and updated_at < ?", 2, 10 ]
   end
 end
