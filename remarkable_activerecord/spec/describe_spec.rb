@@ -12,6 +12,16 @@ class Post
 end
 
 describe Post do
+  it "should set the subject class" do
+    self.described_class.should eql(subject.class)
+  end
+
+  describe "when using nested examples" do
+    it "should set the subject class" do
+      self.described_class.should eql(subject.class)
+    end
+  end
+
   it "should use human name on description" do
     model_name = mock(:model_name)
     model_name.should_receive(:human).and_return('MyPost')
