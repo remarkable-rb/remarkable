@@ -136,9 +136,8 @@ module Remarkable
               set_described_subject!
               instance_eval(&block)
             end
-            Remarkable::ActiveRecord.after_include(example_group)
           else
-            Remarkable::ActiveRecord.after_include(super(*args, &block))
+            super(*args, &block)
           end
         end
 
@@ -162,7 +161,7 @@ module Remarkable
 
         def set_described_subject!
           subject {
-            record = self.class.described_class.new
+            record = self.described_class.new
             record.send(:attributes=, subject_attributes, false)
             record
           }
