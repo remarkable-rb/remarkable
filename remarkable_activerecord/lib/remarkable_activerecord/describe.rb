@@ -105,28 +105,10 @@ module Remarkable
         def describe(*args, &block)
           if described_class && args.first.is_a?(Hash)
             attributes = args.shift
-            connector = Remarkable.t "remarkable.active_record.describe.connector", :default => " and "
 
-            description = if self.describe_subject_attributes.blank?
-              Remarkable.t("remarkable.active_record.describe.prepend", :default => "when ")
-            else
-              connector.lstrip
-            end
+            prepend_with = prepend_subject_description unless self.describe_subject_attributes.blank?
+            description = subject_attributes_description(klass, attributes, prepend_with)
 
-            pieces = []
-            attributes.each do |key, value|
-              translated_key = if described_class.respond_to?(:human_attribute_name)
-                described_class.human_attribute_name(key.to_s, :locale => Remarkable.locale)
-              else
-                key.to_s.humanize
-              end
-
-              pieces << Remarkable.t("remarkable.active_record.describe.each",
-                                      :default => "{{key}} is {{value}}",
-                                      :key => translated_key.downcase, :value => value.inspect)
-            end
-
-            description += pieces.join(connector)
             args.unshift(description)
 
             # Creates an example group, set the subject and eval the given block.
@@ -166,6 +148,41 @@ module Remarkable
             record
           }
         end
+
+        private
+
+        # Generates a human-readble, translated description
+        def subject_attributes_description(target, attributes, prepend = nil)
+          connector = subject_description_connector
+          prepend ||= connector
+          (prepend + humanize_subject_attributes.join(connector)).gsub(/^\s+/, '')
+        end
+
+        # Gets the translated connector
+        def subject_description_connector
+          Remarkable.t("remarkable.active_record.describe.connector", :default => " and ")
+        end
+
+        # Gets the translated prepend
+        def prepend_subject_description
+          Remarkable.t("remarkable.active_record.describe.prepend", :default => "when ")
+        end
+
+        # Generates an arry of humanized attribute names and translates them
+        def humanize_subject_attributes(target, attributes)
+          attributes.inject([]) do |pieces, (key, value)|
+            translated_key = if target.respond_to?(:human_attribute_name)
+              target.human_attribute_name(key.to_s, :locale => Remarkable.locale)
+            else
+              key.to_s.humanize
+            end
+
+            pieces << Remarkable.t("remarkable.active_record.describe.each",
+                                    :default => "{{key}} is {{value}}",
+                                    :key => translated_key.downcase, :value => value.inspect)
+          end
+        end
+
       end
 
       # Returns a hash with the subject attributes declared using the

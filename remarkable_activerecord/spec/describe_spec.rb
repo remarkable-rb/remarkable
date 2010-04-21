@@ -11,11 +11,23 @@ class Post
 
 end
 
+describe Remarkable::ActiveRecord do
+  describe "#humanize_subject_attributes" do
+    it "should generate a list of human attribute names" do
+      self.class.send(:humanize_subject_attributes, Post, {:published => true}).should include('published is true')
+    end
+    it "should humanize attribute names" do
+      Post.should_receive(:human_attribute_name).and_return('my_published')
+      self.class.send(:humanize_subject_attributes, Post, {:published => true}).should include('my_published is true')
+    end
+  end
+end
+
 describe Post do
   before(:each) do
-    model_name = mock(:model_name)
-    model_name.stub!(:human).and_return('MyPost')
-    self.described_class.stub!(:model_name).and_return(model_name)
+    #model_name = mock(:model_name)
+    #model_name.stub!(:human).and_return('MyPost')
+    #self.described_class.stub!(:model_name).and_return(model_name)
   end
 
   it "should set the subject class" do
@@ -47,16 +59,17 @@ describe Post do
   describe "default attributes as a proc" do
     subject_attributes { my_attributes }
 
+    def my_attributes
+      { :deleted => true }
+    end
+
     it "should set the subject with deleted equals to true" do
+      subject_attributes.should eql(my_attributes)
       subject.deleted.should be_true
     end
 
     it "should not change the description" do
       self.class.description.should == "default attributes as a proc"
-    end
-
-    def my_attributes
-      { :deleted => true }
     end
   end
 
@@ -90,6 +103,8 @@ describe Post do
         subject_attributes :deleted => true
 
         it "should merge describe attributes with subject attributes" do
+          subject_attributes.should include(:deleted)
+
           subject.published.should be_true
           subject.public.should be_false
           subject.deleted.should be_true
