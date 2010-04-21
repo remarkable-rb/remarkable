@@ -12,6 +12,12 @@ class Post
 end
 
 describe Post do
+  before(:each) do
+    model_name = mock(:model_name)
+    model_name.stub!(:human).and_return('MyPost')
+    self.described_class.stub!(:model_name).and_return(model_name)
+  end
+
   it "should set the subject class" do
     self.described_class.should eql(subject.class)
   end
@@ -23,9 +29,6 @@ describe Post do
   end
 
   it "should use human name on description" do
-    model_name = mock(:model_name)
-    model_name.should_receive(:human).and_return('MyPost')
-    Post.should_receive(:model_name).and_return(model_name)
     self.class.description.should == "MyPost"
   end
 
@@ -37,7 +40,7 @@ describe Post do
     end
 
     it "should not change the description" do
-      self.class.description.should == "MyPost default attributes as a hash"
+      self.class.description.should == "default attributes as a hash"
     end
   end
 
@@ -49,7 +52,7 @@ describe Post do
     end
 
     it "should not change the description" do
-      self.class.description.should == "MyPost default attributes as a proc"
+      self.class.description.should == "default attributes as a proc"
     end
 
     def my_attributes
