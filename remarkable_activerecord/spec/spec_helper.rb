@@ -24,9 +24,11 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 # Load Remarkable core on place to avoid gem to be loaded
 dir = File.dirname(__FILE__)
 require File.join(dir, '..', '..', 'remarkable', 'lib', 'remarkable')
-
+require File.join(dir, '..', '..', 'remarkable_activemodel', 'lib', 'remarkable_activemodel')
+#
 # Load Remarkable ActiveRecord
 require File.join(dir, '..', 'lib', 'remarkable_activerecord')
 
 # Include matchers
+Remarkable.include_matchers!(Remarkable::ActiveModel, Rspec::Core::ExampleGroup)
 Remarkable.include_matchers!(Remarkable::ActiveRecord, Rspec::Core::ExampleGroup)
