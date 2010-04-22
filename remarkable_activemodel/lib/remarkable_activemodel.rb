@@ -12,8 +12,6 @@ end
 # Load Remarkable ActiveModel files
 dir = File.dirname(__FILE__)
 require File.join(dir, 'remarkable_activemodel', 'base')
-require File.join(dir, 'remarkable_activemodel', 'describe')
-require File.join(dir, 'remarkable_activemodel', 'human_names')
 
 # Add locale
 Remarkable.add_locale File.join(dir, '..', 'locale', 'en.yml')
