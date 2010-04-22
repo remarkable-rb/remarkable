@@ -11,11 +11,19 @@ constituted of three pieces:
 
 * Remarkable: the framework with helpers, DSL, I18n and rspec features;
 
+* Remarkable ActiveModel: a collection of matchers for ActiveModel compliant models. It 
+  currently supports all ActiveModel validations. Future plan include testing for
+  ActiveModel API compliance and ActiveModel serialization.
+
 * Remarkable ActiveRecord: a collection of matchers for ActiveRecord. It
   supports all ActiveRecord validations, associations and some extra matchers.
 
 * Remarkable Rails: a collection of matchers for ActionController. It also
   includes MacroStubs, which is a clean DSL for stubbing your controller methods.
+
+  NOTE: Remarkable Rails is currently not available for version 4.0.0.alpha1
+  We are thinking of breaking this up into Remarkable Rack, and Remarkable ActionController
+  gems, along the lines of splitting off ActiveModel macros.
 
 In each folder above, you can find a README more detailed description of each piece.
 
@@ -30,11 +38,11 @@ In each folder above, you can find a README more detailed description of each pi
     :through, :source, :source_type, :class_name, :foreign_key, :dependent,
     :join_table, :uniq, :readonly, :validate, :autosave, :counter_cache, :polymorphic
 
-  Plus SQL options:
+  Plus Arel scopes:
 
-    :select, :conditions, :include, :group, :having, :order, :limit, :offset
+    :select, :where, :include, :group, :having, :order, :limit, :offset
 
-  Besides in Remarkable 3.0 matchers became much smarter. Whenever :join_table
+  Besides in Remarkable 4.0 matchers became much smarter. Whenever :join_table
   or :through is given as option, it checks if the given table exists. Whenever
   :foreign_key or :counter_cache is given, it checks if the given column exists;
 
@@ -64,7 +72,7 @@ In each folder above, you can find a README more detailed description of each pi
          # Or: m.greater_than = 18
        end
 
-Remarkable Rails requires rspec >= 1.2.0 and rspec-rails >= 1.2.0.
+Remarkable Rails requires rspec >= 2.0.0 and rspec-rails >= 2.0.0.
 
 == Install on Rails
 
@@ -77,24 +85,25 @@ This will install remarkable, remarkable_activerecord and remarkable_rails gems.
 Inside Rails you need to require just this gem. If you are using ActiveRecord,
 it will automatically require the remarkable_activerecord gem.
 
-== Rails 2.3
+== Rails 3
 
-In Rails 2.3, in order to rspec load properly, you have to use this configuration
-on your config/environments/test.rb
+In Rails 3, in order to rspec load properly, you have to use this configuration
+on your Gemfile
 
-  config.gem "rspec",            :lib => false
-  config.gem "rspec-rails",      :lib => false
-  config.gem "remarkable_rails", :lib => false
+  gem "rspec"
+  gem "rspec-rails"
+  gem "remarkable_rails"
 
 And then require remarkable inside your spec_helper.rb, after "spec/rails":
 
-  require 'spec/rails'
+  require 'rspec/rails'
   require 'remarkable_rails'
 
 This is the safest way to avoid conflicts.
 
-Users who are upgrading to Remarkable 3.0, should not find any problem if their
-tests are running without deprecation warnings.
+Please note, due to the massive refactoring in Rails 3 and Rspec 2, we are not supporting
+backwards compatibility with Rails 2 or Rspec 1. You will need to use the Remarkable 3.x series
+if you are still using Rails 2.
 
 == Developers
 
@@ -124,7 +133,7 @@ Remarkable Rails:
 == More information
 
 Google group: http://groups.google.com/group/remarkable-core
-Bug tracking: http://github.com/carlosbrando/remarkable/issues
+Bug tracking: http://github.com/remarkable/remarkable/issues
 
 == LICENSE
 

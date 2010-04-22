@@ -18,3 +18,4 @@ lib/remarkable-more.rb
 *.diff
 memory
 *.tmproj
+*gemspec

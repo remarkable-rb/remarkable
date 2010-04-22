@@ -2,9 +2,9 @@
 PROJECT_SUMMARY     = "Remarkable ActiveModel: collection of matchers and macros with I18n for ActiveModel"
 PROJECT_DESCRIPTION = PROJECT_SUMMARY
 
-GEM_NAME   = "remarkable_activerecord"
-GEM_AUTHOR = [ "Carlos Brando", "José Valim", "Diego Carrion" ]
-GEM_EMAIL  = [ "eduardobrando@gmail.com", "jose.valim@gmail.com", "dc.rec1@gmail.com" ]
+GEM_NAME   = "remarkable_activemodel"
+GEM_AUTHOR = [ "Ho-Sheng Hsiao", "Carlos Brando", "José Valim", "Diego Carrion" ]
+GEM_EMAIL  = [ "hosh@sparkfly.com", "eduardobrando@gmail.com", "jose.valim@gmail.com", "dc.rec1@gmail.com" ]
 
 EXTRA_RDOC_FILES = ["README", "LICENSE", "CHANGELOG"]
 

@@ -39,27 +39,6 @@ And it will show in your specs output:
 
   "Example disabled: require name to be set"
 
-== Pending macros
-
-In Rspec you can mark some examples as pending:
-
-  it "should have one manager" do
-    pending("create managers resource")
-  end
-
-  it "should validate associated manager" do
-    pending("create managers resource")
-  end
-
-To allow this to work with macros, we created the pending group:
-
-  pending "create managers resource" do
-    should_have_one :manager
-    should_validate_associated :manager
-  end
-
-This outputs the same as above.
-
 == I18n
 
 All matchers come with I18n support. You can find an example locale file under
@@ -85,9 +64,9 @@ Create a new matcher is easy. Let's create validate_inclusion_of matcher for
 ActiveRecord as an example. A first matcher version would be:
 
 module Remarkable
-  module ActiveRecord
+  module ActiveModel
     module Matchers
-      class ValidateInclusionOfMatcher < Remarkable::ActiveRecord::Base
+      class ValidateInclusionOfMatcher < Remarkable::ActiveModel::Base
         arguments :attribute
         assertion :is_valid?
 
@@ -131,7 +110,7 @@ As you noticed, the matcher doesn't have any message on it. You add them on I18n
 file. A file for this example would be:
 
   remarkable:
-    active_record:
+    active_model:
       validate_inclusion_of:
         description: "validate inclusion of {{attribute}}"
         expectations:

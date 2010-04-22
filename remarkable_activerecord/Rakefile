@@ -3,8 +3,8 @@ PROJECT_SUMMARY     = "Remarkable ActiveRecord: collection of matchers and macro
 PROJECT_DESCRIPTION = PROJECT_SUMMARY
 
 GEM_NAME   = "remarkable_activerecord"
-GEM_AUTHOR = [ "Carlos Brando", "José Valim", "Diego Carrion" ]
-GEM_EMAIL  = [ "eduardobrando@gmail.com", "jose.valim@gmail.com", "dc.rec1@gmail.com" ]
+GEM_AUTHOR = [ "Ho-Sheng Hsiao", "Carlos Brando", "José Valim", "Diego Carrion" ]
+GEM_EMAIL  = [ "hosh@sparkfly.com", "eduardobrando@gmail.com", "jose.valim@gmail.com", "dc.rec1@gmail.com" ]
 
 EXTRA_RDOC_FILES = ["README", "LICENSE", "CHANGELOG"]
 
@@ -14,6 +14,7 @@ require File.join(File.dirname(__FILE__), "..", "rake_helpers.rb")
 
 configure_gemspec! do |s|
   s.add_dependency('remarkable', "~> #{GEM_VERSION}")
+  s.add_dependency('remarkable_activemodel', "~> #{GEM_VERSION}")
 end
 
 ########### Specs

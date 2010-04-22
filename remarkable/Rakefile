@@ -1,10 +1,10 @@
 # encoding: utf-8
-PROJECT_SUMMARY     = "Remarkable: a framework for rspec matchers, with support to macros and I18n."
+PROJECT_SUMMARY     = "Remarkable: a framework for rspec matchers and macros, with support for I18n."
 PROJECT_DESCRIPTION = PROJECT_SUMMARY
 
 GEM_NAME   = "remarkable"
-GEM_AUTHOR = [ "Carlos Brando", "José Valim" ]
-GEM_EMAIL  = [ "eduardobrando@gmail.com", "jose.valim@gmail.com" ]
+GEM_AUTHOR = [ "Ho-Sheng Hsiao", "Carlos Brando", "José Valim" ]
+GEM_EMAIL  = [ "hosh@sparkfly.com", "eduardobrando@gmail.com", "jose.valim@gmail.com" ]
 
 EXTRA_RDOC_FILES = ["README", "LICENSE", "CHANGELOG"]
 

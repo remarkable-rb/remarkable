@@ -15,72 +15,44 @@ GEM_VERSION        = Remarkable::VERSION
 PACKAGE_DIR        = File.join(File.dirname(__FILE__), 'pkg')
 RELEASE_NAME       = "REL #{GEM_VERSION}"
 
-RSPEC_VERSION      = '1.2.0'
+RSPEC_VERSION      = '2.0.0.alpha7'
 
 def self.configure_gemspec!
-  $spec = Gem::Specification.new do |s|
-    s.rubyforge_project = RUBY_FORGE_PROJECT
-    s.name = GEM_NAME
-    s.version = GEM_VERSION
-    s.platform = Gem::Platform::RUBY
-    s.has_rdoc = true
-    s.extra_rdoc_files = EXTRA_RDOC_FILES
-    s.summary = PROJECT_SUMMARY
-    s.description = PROJECT_DESCRIPTION
-    s.authors = GEM_AUTHOR
-    s.email = GEM_EMAIL
-    s.homepage = PROJECT_URL
-    s.require_path = 'lib'
-    s.files = EXTRA_RDOC_FILES + Dir.glob("{lib,locale}/**/*") + Dir.glob("*.gemspec")
-    s.add_dependency('rspec', ">= #{RSPEC_VERSION}")
-    yield s if block_given?
-  end
-
-  Rake::GemPackageTask.new($spec) do |pkg|
-    pkg.package_dir = PACKAGE_DIR
-    pkg.gem_spec    = $spec
-    pkg.need_zip    = true
-    pkg.need_tar    = true
-  end
-end
-
-desc "Create a gemspec file"
-task :gemspec do
-  File.open("#{GEM_NAME}.gemspec", "w") do |file|
-    file.puts $spec.to_ruby
+  begin
+    require 'jeweler'
+    Jeweler::Tasks.new do |gemspec|
+      gemspec.rubyforge_project = RUBY_FORGE_PROJECT
+      gemspec.name = GEM_NAME
+      gemspec.version = GEM_VERSION
+      gemspec.platform = Gem::Platform::RUBY
+      gemspec.has_rdoc = true
+      gemspec.extra_rdoc_files = EXTRA_RDOC_FILES
+      gemspec.summary = PROJECT_SUMMARY
+      gemspec.description = PROJECT_DESCRIPTION
+      gemspec.authors = GEM_AUTHOR
+      gemspec.email = GEM_EMAIL
+      gemspec.homepage = PROJECT_URL
+      gemspec.require_path = 'lib'
+      gemspec.files = EXTRA_RDOC_FILES + Dir.glob("{lib,locale}/**/*") + Dir.glob("*.gemspec")
+      gemspec.add_dependency('rspec', ">= #{RSPEC_VERSION}")
+    yield gemspec if block_given?
+    end
+    Jeweler::GemcutterTasks.new
+  rescue LoadError
+    puts "Jeweler not available. Install it with: gem install jeweler"
   end
 end
 
-desc "Build the gem and install it"
-task :install => :gem do
-  system("sudo gem install #{PACKAGE_DIR}/#{GEM_NAME}-#{GEM_VERSION}.gem --local --ignore-dependencies --no-ri --no-rdoc")
-end
-
-desc "Uninstall the gem"
-task :uninstall do
-  system("sudo gem uninstall #{GEM_NAME} --version #{GEM_VERSION}")
-end
 
 ########### Common specs
 
-gem 'rspec'
-begin
-  # Rspec2
-  gem 'rspec-expectations'
-  require 'rspec/core/rake_task'
-  desc "Run the specs under spec"
-  Rspec::Core::RakeTask.new do |t|
-    #t.spec_opts = ['--options', "spec/spec.opts"]
-    #t.spec_files = FileList['spec/**/*_spec.rb']
-  end
-rescue
-  # Rspec1
-  require 'spec/rake/spectask'
-  desc "Run the specs under spec"
-  Spec::Rake::SpecTask.new do |t|
-    t.spec_opts = ['--options', "spec/spec.opts"]
-    t.spec_files = FileList['spec/**/*_spec.rb']
-  end
+gem 'rspec', ">= #{RSPEC_VERSION}"
+# Rspec2
+gem 'rspec-expectations'
+require 'rspec/core/rake_task'
+desc "Run the specs under spec"
+Rspec::Core::RakeTask.new do |t|
+  # Stub
 end
 
 

@@ -10,8 +10,8 @@ REMARKABLE_GEMS = [
   :remarkable,
   :remarkable_activemodel,
   :remarkable_activerecord,
-  # :remarkable_datamapper,
-  :remarkable_rails
+  #:remarkable_datamapper,
+  #:remarkable_rails
 ]
 
 REMARKABLE_GEMS_PATHS = REMARKABLE_GEMS.map{|g| File.join(current_dir, g.to_s)}
@@ -47,7 +47,7 @@ end
 
 unique_tasks    :clobber_package
 recursive_tasks :clobber_rdoc, :gem, :gemspec, :install, :package, :pre_commit,
-                :rdoc, :repackage, :rerdoc, :spec, :uninstall
+                :rdoc, :repackage, :rerdoc, :spec, :uninstall, :build
 
 desc "Default Task"
 task :default do

@@ -13,9 +13,9 @@ Remarkable?
     :through, :source, :source_type, :class_name, :foreign_key, :dependent,
     :join_table, :uniq, :readonly, :validate, :autosave, :counter_cache, :polymorphic
 
-  Plus SQL options:
+  Plus Arel scopes:
 
-    :select, :conditions, :include, :group, :having, :order, :limit, :offset
+    :select, :where, :include, :group, :having, :order, :limit, :offset
 
   Besides in Remarkable 3.0 matchers became much smarter. Whenever :join_table
   or :through is given as option, it checks if the given table exists. Whenever
@@ -81,7 +81,7 @@ a few things:
   2. Include the matchers. Remarkable Rails gem is the responsable to add
      ActiveRecord matchers to rspec. If you are not using it, you have to do:
 
-        Remarkable.include_matchers!(Remarkable::ActiveRecord, Spec::Example::ExampleGroup)
+        Remarkable.include_matchers!(Remarkable::ActiveRecord, Rspec::Core::ExampleGroup)
 
      This will make ActiveRecord matchers available in all rspec example groups.
 
