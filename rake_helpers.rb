@@ -66,3 +66,9 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
   rdoc.options << '--line-numbers' << '--inline-source'
 end
+
+def load_project_path(project)
+  project_path = File.join(File.dirname(__FILE__), project, 'lib')
+  return nil if $LOAD_PATH.include?(File.expand_path(project_path))
+  $LOAD_PATH.unshift(File.expand_path(project_path))
+end

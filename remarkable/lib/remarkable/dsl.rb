@@ -1,7 +1,6 @@
-dir = File.dirname(__FILE__)
-require File.join(dir, 'dsl', 'assertions')
-require File.join(dir, 'dsl', 'optionals')
-require File.join(dir, 'dsl', 'callbacks')
+require 'remarkable/dsl/assertions'
+require 'remarkable/dsl/optionals'
+require 'remarkable/dsl/callbacks'
 
 module Remarkable
   # The DSL module is responsable for all Remarkable convenience methods.

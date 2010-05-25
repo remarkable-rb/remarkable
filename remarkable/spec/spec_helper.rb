@@ -3,14 +3,17 @@ $TESTING=true
 require 'rubygems'
 require 'rspec'
 
-dir = File.dirname(__FILE__)
-require File.join(dir, '..', 'lib', 'remarkable')
+require File.expand_path('path_helpers', File.join(File.dirname(__FILE__), '/../../'))
+load_project_path :remarkable
 
-Dir[File.join(dir, 'matchers', '*.rb')].each do |file|
-  require file
-end
+require 'remarkable'
 
+# Requires supporting files with custom matchers and macros, etc,
+# # in ./support/ and its subdirectories.
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
+
+# Load custom matchers
 Remarkable.include_matchers!(Remarkable::Rspec, Rspec::Core::ExampleGroup)
 
-Remarkable.add_locale File.join(dir, 'locale', 'en.yml')
-Remarkable.add_locale File.join(dir, 'locale', 'pt-BR.yml')
+# Load custom locales
+Dir["#{File.dirname(__FILE__)}/support/locale/*yml"].each {|f| Remarkable.add_locale(f) }
