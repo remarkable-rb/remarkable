@@ -6,7 +6,7 @@ require 'rspec'
 require File.expand_path('path_helpers', File.join(File.dirname(__FILE__), '/../../'))
 load_project_path :remarkable
 
-require 'remarkable'
+require 'remarkable/core'
 
 # Requires supporting files with custom matchers and macros, etc,
 # # in ./support/ and its subdirectories.

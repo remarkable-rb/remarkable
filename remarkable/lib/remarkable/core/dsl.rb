@@ -1,6 +1,6 @@
-require 'remarkable/dsl/assertions'
-require 'remarkable/dsl/optionals'
-require 'remarkable/dsl/callbacks'
+require 'remarkable/core/dsl/assertions'
+require 'remarkable/core/dsl/optionals'
+require 'remarkable/core/dsl/callbacks'
 
 module Remarkable
   # The DSL module is responsable for all Remarkable convenience methods.

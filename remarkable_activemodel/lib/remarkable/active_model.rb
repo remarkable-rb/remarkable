@@ -1,5 +1,5 @@
 # Load Remarkable
-require 'remarkable'
+require 'remarkable/core'
 require 'remarkable/active_model/base'
 
 # Add default locale
