@@ -92,12 +92,24 @@ on your Gemfile
 
   gem "rspec"
   gem "rspec-rails"
-  gem "remarkable_rails"
+  gem "remarkable_activerecord"
 
-And then require remarkable inside your spec_helper.rb, after "spec/rails":
+NOTE: remarkable_rails is currently not supported. 
+
+Add the require after the rspec/rails line in your spec_helpers.rb. Although Rspec2 convention
+encourages you to use spec/support/, if you have Remarkable matchers in there, you will want
+to load that after you load Remarkable
 
   require 'rspec/rails'
-  require 'remarkable_rails'
+  require 'remarkable/active_record'
+
+Alternatively, if you are using an ActiveModel-compliant gem, such as the newer Mongo and
+CouchDB gems, you can use:
+
+  require 'remarkable/active_model'
+
+and have access to all ActiveModel matchers. Note that loading remarkable/active_record will
+automatically load remarkable/active_model
 
 This is the safest way to avoid conflicts.
 

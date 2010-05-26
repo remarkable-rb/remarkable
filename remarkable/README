@@ -4,6 +4,28 @@ This is the core package of Remarkable. It provides a DSL for creating matchers
 with I18n support, decouples messages from matchers logic, add rspec extra features,
 create macros automatically and allow those macros to be configurable wth blocks.
 
+== Installation
+
+  sudo gem install remarkable --pre
+
+Add this to your Gemfile:
+
+  group :test do
+     gem 'remarkable', '>=4.0.0.alpha2'
+  end
+
+Drop this into your spec/spec_helper.rb or spec/support/remarkable.rb file:
+
+  require 'remarkable/core'
+
+To include custom matchers:
+
+  Remarkable.include_matchers!(MyApp::MyCustomMatchers)
+
+If you use Shoulda-style syntax, you will need to target Rspec::Core::ExampleGroup
+
+  Remarkable.include_matchers!(MyApp::MyCustomMatchers, Rspec::Core::ExampleGroup)
+
 == Macros
 
 Each matcher in Remarkable is also available as a macro. So this matcher:
@@ -44,7 +66,7 @@ And it will show in your specs output:
 All matchers come with I18n support. You can find an example locale file under
 the locale folder of each project.
 
-To change the locale, you have first to add your locale file:
+To change the locale, you have first to add your locale file in spec/support/remarkable.rb:
 
   Remarkable.add_locale 'path/to/my_locale.yml'
 
@@ -53,10 +75,9 @@ And then:
   Remarkable.locale = :my_locale
 
 Internationalization is powered by the I18n gem. If you are using it with Rails,
-it will use the built in gem, otherwise you will have to install the gem by hand:
+it will use the gem, otherwise you will have to install the gem by hand:
 
-  gem sources -a http://gems.github.com
-  sudo gem install svenfuchs-i18n
+  gem install i18n
 
 == Creating you own matcher
 

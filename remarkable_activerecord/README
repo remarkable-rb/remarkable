@@ -28,6 +28,22 @@ Remarkable?
 
 * I18n.
 
+== Installation
+
+  sudo gem install remarkable_activerecord --pre
+
+Add this to your Gemfile:
+
+  group :test do
+     gem 'remarkable_activerecord', '>=4.0.0.alpha2'
+  end
+
+Drop this into your spec/spec_helper.rb or spec/support/remarkable.rb file:
+
+  require 'remarkable/active_record'
+
+This will also automatically load remarkable/active_model and add those matchers as well.
+
 == Examples
 
 All Remarkable macros can be accessed in two different ways. For those who prefer the Shoulda style, let’s look at some model tests:
@@ -59,7 +75,7 @@ For those who likes more the Rspec way can simply do:
 All matchers come with I18n support. If you want to translate your matchers,
 grab make a copy of locale/en.yml and start to translate it.
 
-Then add your new locale file to Remarkable:
+Then add your new locale file to Remarkable in spec/support/remarkable.rb:
 
   Remarkable.add_locale 'path/to/my_locale.yml'
 

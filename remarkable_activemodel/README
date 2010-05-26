@@ -25,6 +25,19 @@ Upcoming features:
   This allows you to test for compliance if you are using special serialization
   methods, or require the use of Presenters in your application.
 
+== Installation
+
+  sudo gem install remarkable_activemodel --pre
+
+Add this to your Gemfile:
+
+  group :test do
+     gem 'remarkable_activemodel', '>=4.0.0.alpha2'
+  end
+
+Drop this into your spec/spec_helper.rb or spec/support/remarkable.rb file:
+
+  require 'remarkable/active_model'
 
 == Examples
 
