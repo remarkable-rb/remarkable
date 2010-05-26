@@ -1,6 +1,6 @@
 # encoding: utf-8
 current_dir = File.dirname(__FILE__)
-require File.join(current_dir, "remarkable/lib/remarkable/version.rb")
+require File.join(current_dir, "remarkable/lib/remarkable/core/version.rb")
 
 require "rubygems"
 require "fileutils"
