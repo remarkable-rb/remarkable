@@ -1,22 +1,14 @@
 # Load Remarkable
-unless Object.const_defined?('Remarkable')
-  begin
-    require 'remarkable'
-  rescue LoadError
-    require 'rubygems'
-    gem 'remarkable'
-    require 'remarkable'
-  end
-end
+require 'remarkable/active_model'
+require 'remarkable/active_record/base'
 
-# Load Remarkable ActiveRecord files
+# Add default locale
 dir = File.dirname(__FILE__)
-require File.join(dir, 'active_record', 'base')
-
-# Add locale
-Remarkable.add_locale File.join(dir, '..', '..', 'locale', 'en.yml')
+Dir["#{dir}/../../locale/*yml"].each {|f| Remarkable.add_locale(f) }
 
 # Add matchers
 Dir[File.join(dir, 'active_record', 'matchers', '*.rb')].each do |file|
   require file
 end
+
+Remarkable.include_matchers!(Remarkable::ActiveRecord, Rspec::Core::ExampleGroup)

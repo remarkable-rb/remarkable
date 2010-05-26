@@ -1,6 +1,5 @@
 # encoding: utf-8
 require 'rubygems'
-
 require 'rspec'
 
 RAILS_VERSION = ENV['RAILS_VERSION'] || '3.0.0.beta3'
@@ -11,6 +10,11 @@ require 'active_support'
 gem 'activerecord', RAILS_VERSION
 require 'active_record'
 
+require File.expand_path('path_helpers', File.join(File.dirname(__FILE__), '/../../'))
+load_project_path :remarkable, :remarkable_activemodel, :remarkable_activerecord
+
+require 'remarkable/active_record'
+
 # Configure ActiveRecord connection
 ActiveRecord::Base.establish_connection(
   :adapter  => 'sqlite3',
@@ -20,15 +24,3 @@ ActiveRecord::Base.establish_connection(
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
-
-# Load Remarkable core on place to avoid gem to be loaded
-dir = File.dirname(__FILE__)
-require File.join(dir, '..', '..', 'remarkable', 'lib', 'remarkable')
-require File.join(dir, '..', '..', 'remarkable_activemodel', 'lib', 'remarkable', 'active_model')
-#
-# Load Remarkable ActiveRecord
-require File.join(dir, '..', 'lib', 'remarkable', 'active_record')
-
-# Include matchers
-Remarkable.include_matchers!(Remarkable::ActiveModel, Rspec::Core::ExampleGroup)
-Remarkable.include_matchers!(Remarkable::ActiveRecord, Rspec::Core::ExampleGroup)
