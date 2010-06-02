@@ -154,7 +154,7 @@ module Remarkable
         #
         # This allows a couple things from the user side:
         #
-        #   1. Rspecify symbols in their tests:
+        #   1. RSpecify symbols in their tests:
         #
         #     should_allow_values_for(:shirt_size, 'S', 'M', 'L', :message => :inclusion)
         #

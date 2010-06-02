@@ -11,4 +11,4 @@ Dir[File.join(dir, 'active_model', 'matchers', '*.rb')].each do |file|
   require file
 end
 
-Remarkable.include_matchers!(Remarkable::ActiveModel, Rspec::Core::ExampleGroup)
+Remarkable.include_matchers!(Remarkable::ActiveModel, RSpec::Core::ExampleGroup)

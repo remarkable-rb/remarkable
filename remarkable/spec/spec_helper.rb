@@ -13,7 +13,7 @@ require 'remarkable/core'
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
 # Load custom matchers
-Remarkable.include_matchers!(Remarkable::Rspec, Rspec::Core::ExampleGroup)
+Remarkable.include_matchers!(Remarkable::RSpec, RSpec::Core::ExampleGroup)
 
 # Load custom locales
 Dir["#{File.dirname(__FILE__)}/support/locale/*yml"].each {|f| Remarkable.add_locale(f) }

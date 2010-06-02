@@ -96,7 +96,7 @@ on your Gemfile
 
 NOTE: remarkable_rails is currently not supported. 
 
-Add the require after the rspec/rails line in your spec_helpers.rb. Although Rspec2 convention
+Add the require after the rspec/rails line in your spec_helpers.rb. Although RSpec2 convention
 encourages you to use spec/support/, if you have Remarkable matchers in there, you will want
 to load that after you load Remarkable
 
@@ -113,8 +113,8 @@ automatically load remarkable/active_model
 
 This is the safest way to avoid conflicts.
 
-Please note, due to the massive refactoring in Rails 3 and Rspec 2, we are not supporting
-backwards compatibility with Rails 2 or Rspec 1. You will need to use the Remarkable 3.x series
+Please note, due to the massive refactoring in Rails 3 and RSpec 2, we are not supporting
+backwards compatibility with Rails 2 or RSpec 1. You will need to use the Remarkable 3.x series
 if you are still using Rails 2.
 
 == Developers

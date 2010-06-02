@@ -1,4 +1,4 @@
-module Rspec #:nodoc:
+module RSpec #:nodoc:
   module Matchers #:nodoc:
     # Overwrites to provide I18n on should and should_not.
     #

@@ -13,7 +13,7 @@ pt-BR:
         two_words_connector: ' e '
         last_word_connector: ' e '
 
-    rspec:
+    r_spec:
       collection_contain:
         description: "conter os valores fornecidos"
         expectations:

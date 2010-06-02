@@ -91,7 +91,7 @@ describe 'allow_mass_assignment_of' do
 
       lambda {
         should_not allow_mass_assignment_of :title, :another
-      }.should raise_error(Rspec::Expectations::ExpectationNotMetError, /Product has made title accessible/)
+      }.should raise_error(RSpec::Expectations::ExpectationNotMetError, /Product has made title accessible/)
     end
 
     it "should fail if attributes are accessible when none should" do
@@ -99,7 +99,7 @@ describe 'allow_mass_assignment_of' do
 
       lambda {
         should_not allow_mass_assignment_of
-      }.should raise_error(Rspec::Expectations::ExpectationNotMetError, /Product made category and title accessible/)
+      }.should raise_error(RSpec::Expectations::ExpectationNotMetError, /Product made category and title accessible/)
     end
 
     it "should fail if nothing was declared but expected to be protected" do
@@ -107,7 +107,7 @@ describe 'allow_mass_assignment_of' do
 
       lambda {
         should_not allow_mass_assignment_of(:title)
-      }.should raise_error(Rspec::Expectations::ExpectationNotMetError, /Did not expect Product to allow mass assignment of title/)
+      }.should raise_error(RSpec::Expectations::ExpectationNotMetError, /Did not expect Product to allow mass assignment of title/)
     end
   end
 end

@@ -12,9 +12,9 @@ module Remarkable
   def self.include_matchers!(base, target=nil)
     if target.nil?
       if rspec_defined?
-        target = Rspec::Matchers
+        target = RSpec::Matchers
       else
-        raise ArgumentError, "You haven't supplied the target to include_matchers! and Rspec is not loaded, so we cannot infer one."
+        raise ArgumentError, "You haven't supplied the target to include_matchers! and RSpec is not loaded, so we cannot infer one."
       end
     end
 
@@ -34,6 +34,6 @@ module Remarkable
   end
 
   def self.rspec_defined? #:nodoc:
-    defined?(Rspec)
+    defined?(RSpec)
   end
 end

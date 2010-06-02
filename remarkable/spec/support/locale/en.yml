@@ -1,6 +1,6 @@
 en:
   remarkable:
-    rspec:
+    r_spec:
       optionals:
         allow_nil:
           positive: "allowing nil"

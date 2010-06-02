@@ -1,5 +1,5 @@
 module Remarkable
-  module Rspec
+  module RSpec
     module Matchers
       class BeAPersonMatcher < Remarkable::Base
         arguments

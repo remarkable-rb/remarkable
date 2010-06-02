@@ -58,7 +58,7 @@ All Remarkable macros can be accessed in two different ways. For those who prefe
     should_validate_uniqueness_of :title, :allow_blank => true
   end
 
-For those who likes more the Rspec way can simply do:
+For those who likes more the RSpec way can simply do:
 
   describe Post do
     it { should belong_to(:user) }
@@ -97,7 +97,7 @@ a few things:
   2. Include the matchers. Remarkable Rails gem is the responsable to add
      ActiveRecord matchers to rspec. If you are not using it, you have to do:
 
-        Remarkable.include_matchers!(Remarkable::ActiveRecord, Rspec::Core::ExampleGroup)
+        Remarkable.include_matchers!(Remarkable::ActiveRecord, RSpec::Core::ExampleGroup)
 
      This will make ActiveRecord matchers available in all rspec example groups.
 

@@ -22,9 +22,9 @@ To include custom matchers:
 
   Remarkable.include_matchers!(MyApp::MyCustomMatchers)
 
-If you use Shoulda-style syntax, you will need to target Rspec::Core::ExampleGroup
+If you use Shoulda-style syntax, you will need to target RSpec::Core::ExampleGroup
 
-  Remarkable.include_matchers!(MyApp::MyCustomMatchers, Rspec::Core::ExampleGroup)
+  Remarkable.include_matchers!(MyApp::MyCustomMatchers, RSpec::Core::ExampleGroup)
 
 == Macros
 

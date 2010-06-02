@@ -15,7 +15,7 @@ GEM_VERSION        = Remarkable::VERSION
 PACKAGE_DIR        = File.join(File.dirname(__FILE__), 'pkg')
 RELEASE_NAME       = "REL #{GEM_VERSION}"
 
-RSPEC_VERSION      = '2.0.0.alpha8'
+RSPEC_VERSION      = '2.0.0.alpha9'
 
 def self.configure_gemspec!
   begin
@@ -47,11 +47,11 @@ end
 ########### Common specs
 
 gem 'rspec', ">= #{RSPEC_VERSION}"
-# Rspec2
+# RSpec2
 gem 'rspec-expectations'
 require 'rspec/core/rake_task'
 desc "Run the specs under spec"
-Rspec::Core::RakeTask.new do |t|
+RSpec::Core::RakeTask.new do |t|
   # Stub
 end
 
