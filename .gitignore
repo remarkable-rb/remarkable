@@ -19,3 +19,4 @@ lib/remarkable-more.rb
 memory
 *.tmproj
 *gemspec
+.bundle
