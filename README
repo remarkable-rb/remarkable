@@ -117,6 +117,12 @@ Please note, due to the massive refactoring in Rails 3 and RSpec 2, we are not s
 backwards compatibility with Rails 2 or RSpec 1. You will need to use the Remarkable 3.x series
 if you are still using Rails 2.
 
+== How to setup your machine to contribute with remarkable?
+
+gem install bundler
+bundle install
+rake # red, green, refactor
+
 == Developers
 
 If you are developing matchers, for example hpricot matchers, you need to install
