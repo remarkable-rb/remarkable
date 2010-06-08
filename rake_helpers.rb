@@ -15,7 +15,7 @@ GEM_VERSION        = Remarkable::VERSION
 PACKAGE_DIR        = File.join(File.dirname(__FILE__), 'pkg')
 RELEASE_NAME       = "REL #{GEM_VERSION}"
 
-RSPEC_VERSION      = '2.0.0.alpha9'
+RSPEC_VERSION      = '2.0.0.alpha11'
 
 def self.configure_gemspec!
   begin
