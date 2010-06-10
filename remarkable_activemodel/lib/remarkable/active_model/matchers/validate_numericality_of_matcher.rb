@@ -51,7 +51,7 @@ module Remarkable
           end
 
           def only_integer?
-            assert_bad_or_good_if_key(:only_integer, valid_value_for_test.to_f, default_message_for(:not_a_number))
+            assert_bad_or_good_if_key(:only_integer, valid_value_for_test.to_f, default_message_for(:not_an_integer))
           end
 
           # In ActiveModel, when we supply :even, does not matter the value, it

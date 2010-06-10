@@ -9,12 +9,6 @@ module ModelBuilder
             Object.send(:remove_const, class_name)
           end
         end
-
-        if @created_tables
-          @created_tables.each do |table_name|
-            ActiveModel::Base.connection.execute("DROP TABLE IF EXISTS #{table_name}")
-          end
-        end
       end
     end
 
