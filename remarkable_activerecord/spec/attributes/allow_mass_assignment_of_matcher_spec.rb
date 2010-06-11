@@ -26,7 +26,7 @@ describe 'allow_mass_assignment_of' do
       define_and_validate(:protected => true)
       @matcher = allow_mass_assignment_of
       @matcher.matches?(@model)
-      @matcher.failure_message.should == 'Expected Product to allow mass assignment (Product is protecting category and title)'
+      @matcher.failure_message.should == 'Expected Product to allow mass assignment (Product is protecting title and category)'
     end
 
     it 'should set is_protected? message' do
@@ -99,7 +99,7 @@ describe 'allow_mass_assignment_of' do
 
       lambda {
         should_not allow_mass_assignment_of
-      }.should raise_error(RSpec::Expectations::ExpectationNotMetError, /Product made category and title accessible/)
+      }.should raise_error(RSpec::Expectations::ExpectationNotMetError, /Product made title and category accessible/)
     end
 
     it "should fail if nothing was declared but expected to be protected" do

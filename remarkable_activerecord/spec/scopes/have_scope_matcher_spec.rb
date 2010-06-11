@@ -4,7 +4,7 @@ describe 'have_scope' do
   include ModelBuilder
 
   before(:each) do
-    @model = define_model :product, :title => :string, :category => :string do
+    @model = define_model :product, :title => :string, :category => :string, :special => :boolean do
       scope :recent, :order => 'created_at DESC'
       scope :latest, lambda {|c| {:limit => c}}
       scope :since, lambda {|t| where(['created_at > ?', t])}
