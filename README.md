@@ -1,8 +1,6 @@
 # Remarkable #
 
-You can read this file nicely formatted at the Rubyforge project page:
-
-  http://remarkable.rubyforge.org/
+http://remarkable.rubyforge.org/
 
 ## Description ##
 
@@ -137,21 +135,23 @@ options. :)
 
 ## Browse the documentation ##
 
-Remarkable:
-  http://remarkable.rubyforge.org/core/
+* Remarkable: 
+  * http://remarkable.rubyforge.org/core/
 
-Remarkable ActiveRecord:
-  http://remarkable.rubyforge.org/activerecord/
-  http://remarkable.rubyforge.org/activerecord/classes/Remarkable/ActiveRecord/Matchers.html
+* Remarkable ActiveRecord:
+  * http://remarkable.rubyforge.org/activerecord/
+  * http://remarkable.rubyforge.org/activerecord/classes/Remarkable/ActiveRecord/Matchers.html
 
-Remarkable Rails:
-  http://remarkable.rubyforge.org/rails/
-  http://remarkable.rubyforge.org/rails/classes/Remarkable/ActionController/Matchers.html
+* Remarkable Rails:
+  * http://remarkable.rubyforge.org/rails/
+  *  http://remarkable.rubyforge.org/rails/classes/Remarkable/ActionController/Matchers.html
 
 ## More information ##
 
-Google group: http://groups.google.com/group/remarkable-core
-Bug tracking: http://github.com/remarkable/remarkable/issues
+* Google group: 
+  * http://groups.google.com/group/remarkable-core
+* Bug tracking: 
+  * http://github.com/remarkable/remarkable/issues
 
 ## Contributors ##
 
