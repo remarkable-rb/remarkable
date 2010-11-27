@@ -1,6 +1,6 @@
 # Remarkable #
 
-http://remarkable.rubyforge.org/
+[Project Website](http://remarkable.rubyforge.org/)
 
 ## Description ##
 
@@ -135,27 +135,21 @@ options. :)
 
 ## Browse the documentation ##
 
-* Remarkable: 
-  * http://remarkable.rubyforge.org/core/
+* [Remarkable](http://remarkable.rubyforge.org/core/)
+* [Remarkable ActiveRecord](http://remarkable.rubyforge.org/activerecord/)
+* [Remarkable ActiveRecord Matchers](http://remarkable.rubyforge.org/activerecord/classes/Remarkable/ActiveRecord/Matchers.html)
 
-* Remarkable ActiveRecord:
-  * http://remarkable.rubyforge.org/activerecord/
-  * http://remarkable.rubyforge.org/activerecord/classes/Remarkable/ActiveRecord/Matchers.html
-
-* Remarkable Rails:
-  * http://remarkable.rubyforge.org/rails/
-  *  http://remarkable.rubyforge.org/rails/classes/Remarkable/ActionController/Matchers.html
+* [Remarkable Rails](http://remarkable.rubyforge.org/rails/)
+* [Remarkable Rails Matchers](http://remarkable.rubyforge.org/rails/classes/Remarkable/ActionController/Matchers.html)
 
 ## More information ##
 
-* Google group: 
-  * http://groups.google.com/group/remarkable-core
-* Bug tracking: 
-  * http://github.com/remarkable/remarkable/issues
+* [Google group](http://groups.google.com/group/remarkable-core)
+* [Bug tracking](http://github.com/remarkable/remarkable/issues)
 
 ## Contributors ##
 
-http://github.com/remarkable/remarkable/contributors
+Check this link: http://github.com/remarkable/remarkable/contributors
 
 ## LICENSE ##
 
