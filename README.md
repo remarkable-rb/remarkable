@@ -138,7 +138,6 @@ options. :)
 * [Remarkable](http://remarkable.rubyforge.org/core/)
 * [Remarkable ActiveRecord](http://remarkable.rubyforge.org/activerecord/)
 * [Remarkable ActiveRecord Matchers](http://remarkable.rubyforge.org/activerecord/classes/Remarkable/ActiveRecord/Matchers.html)
-
 * [Remarkable Rails](http://remarkable.rubyforge.org/rails/)
 * [Remarkable Rails Matchers](http://remarkable.rubyforge.org/rails/classes/Remarkable/ActionController/Matchers.html)
 
