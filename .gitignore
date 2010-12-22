@@ -20,3 +20,4 @@ memory
 *.tmproj
 *gemspec
 .bundle
+Gemfile.lock
