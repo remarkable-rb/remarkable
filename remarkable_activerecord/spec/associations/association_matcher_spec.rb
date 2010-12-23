@@ -153,7 +153,7 @@ describe 'association_matcher' do
 
       create_optional_boolean_specs(:readonly, self)
       create_optional_boolean_specs(:validate, self)
-      create_optional_boolean_specs(:autosave, self) if RAILS_VERSION =~ /^2.3/
+      create_optional_boolean_specs(:autosave, self)
       create_optional_boolean_specs(:polymorphic, self)
       create_optional_boolean_specs(:counter_cache, self)
     end
@@ -309,7 +309,7 @@ describe 'association_matcher' do
       create_optional_boolean_specs(:uniq, self)
       create_optional_boolean_specs(:readonly, self)
       create_optional_boolean_specs(:validate, self)
-      create_optional_boolean_specs(:autosave, self) if RAILS_VERSION =~ /^2.3/
+      create_optional_boolean_specs(:autosave, self)
     end
 
     describe 'macros' do
@@ -481,7 +481,7 @@ describe 'association_matcher' do
       create_optional_boolean_specs(:uniq, self)
       create_optional_boolean_specs(:readonly, self)
       create_optional_boolean_specs(:validate, self)
-      create_optional_boolean_specs(:autosave, self) if RAILS_VERSION =~ /^2.3/
+      create_optional_boolean_specs(:autosave, self)
     end
 
     describe 'macros' do
@@ -647,7 +647,7 @@ describe 'association_matcher' do
       end
 
       create_optional_boolean_specs(:validate, self)
-      create_optional_boolean_specs(:autosave, self) if RAILS_VERSION =~ /^2.3/
+      create_optional_boolean_specs(:autosave, self)
     end
 
     describe 'macros' do

@@ -29,12 +29,9 @@ describe 'render_template' do
       @matcher.negative_failure_message.should == 'Did not expect template "edit" to be rendered, got no render'
     end
 
-    # Is not possible to check extensions on Rails 2.1
-    unless RAILS_VERSION =~ /^2.1/
-      it 'should set template_matches? message' do
-        @matcher.matches?(@controller)
-        @matcher.failure_message.should == 'Expected template "edit" to be rendered, got "examples/new.html.erb"'
-      end
+    it 'should set template_matches? message' do
+      @matcher.matches?(@controller)
+      @matcher.failure_message.should == 'Expected template "edit" to be rendered, got "examples/new.html.erb"'
     end
 
     it 'should set layout_matches? message' do
@@ -95,15 +92,12 @@ describe 'render_template' do
           it { @subject.should render_template('examples/example.xml') }
           it { @subject.should render_template('examples/example.xml.builder') }
 
-          # Is not possible to check extensions on Rails 2.1
-          unless RAILS_VERSION =~ /^2.1/
-            it { @subject.should_not render_template('example.html') }
-            it { @subject.should_not render_template('example.html.erb') }
-            it { @subject.should_not render_template('example.html.builder') }
-            it { @subject.should_not render_template('examples/example.html') }
-            it { @subject.should_not render_template('examples/example.html') }
-            it { @subject.should_not render_template('examples/example.html.erb') }
-          end
+          it { @subject.should_not render_template('example.html') }
+          it { @subject.should_not render_template('example.html.erb') }
+          it { @subject.should_not render_template('example.html.builder') }
+          it { @subject.should_not render_template('examples/example.html') }
+          it { @subject.should_not render_template('examples/example.html') }
+          it { @subject.should_not render_template('examples/example.html.erb') }
         end
 
         describe 'rendering a partial' do
@@ -193,15 +187,12 @@ describe 'render_template' do
       should_render_template 'examples/example.xml'
       should_render_template 'examples/example.xml.builder'
 
-      # Is not possible to check extensions on Rails 2.1
-      unless RAILS_VERSION =~ /^2.1/
-        should_not_render_template 'example.html'
-        should_not_render_template 'example.html.erb'
-        should_not_render_template 'example.html.builder'
-        should_not_render_template 'examples/example.html'
-        should_not_render_template 'examples/example.html'
-        should_not_render_template 'examples/example.html.erb'
-      end
+      should_not_render_template 'example.html'
+      should_not_render_template 'example.html.erb'
+      should_not_render_template 'example.html.builder'
+      should_not_render_template 'examples/example.html'
+      should_not_render_template 'examples/example.html'
+      should_not_render_template 'examples/example.html.erb'
     end
 
     describe 'rendering a partial' do

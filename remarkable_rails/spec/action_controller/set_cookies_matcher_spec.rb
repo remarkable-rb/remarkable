@@ -30,32 +30,17 @@ describe 'set_cookies' do
       @matcher.failure_message.should == 'Expected cookie user to be set, got {}'
     end
 
-    if RAILS_VERSION =~ /^2.(1|2)/
-      it 'should set contains_value? message' do
-        build_response { cookies[:user] = 10 }
-        @matcher = set_cookies.to(1)
-        @matcher.matches?(@controller)
-        @matcher.failure_message.should == 'Expected any cookie to be set to [1], got {:user=>[10]}'
-      end
+    it 'should set contains_value? message' do
+      build_response { cookies[:user] = 10 }
+      @matcher = set_cookies.to(1)
+      @matcher.matches?(@controller)
+      @matcher.failure_message.should == 'Expected any cookie to be set to "1", got {:user=>"10"}'
+    end
 
-      it 'should set is_equal_value? message' do
-        build_response { cookies[:user] = 2 }
-        @matcher.matches?(@controller)
-        @matcher.failure_message.should == 'Expected cookie user to be set to [1], got {:user=>[2]}'
-      end
-    else
-      it 'should set contains_value? message' do
-        build_response { cookies[:user] = 10 }
-        @matcher = set_cookies.to(1)
-        @matcher.matches?(@controller)
-        @matcher.failure_message.should == 'Expected any cookie to be set to "1", got {:user=>"10"}'
-      end
-
-      it 'should set is_equal_value? message' do
-        build_response { cookies[:user] = 2 }
-        @matcher.matches?(@controller)
-        @matcher.failure_message.should == 'Expected cookie user to be set to "1", got {:user=>"2"}'
-      end
+    it 'should set is_equal_value? message' do
+      build_response { cookies[:user] = 2 }
+      @matcher.matches?(@controller)
+      @matcher.failure_message.should == 'Expected cookie user to be set to "1", got {:user=>"2"}'
     end
   end
 

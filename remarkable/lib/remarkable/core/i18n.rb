@@ -60,13 +60,7 @@ end
 RAILS_I18N = Object.const_defined?(:I18n) unless Object.const_defined?(:RAILS_I18N) # Rails >= 2.2
 
 unless RAILS_I18N
-  begin
-    require 'i18n'
-  rescue LoadError
-    require 'rubygems'
-    gem 'i18n'
-    require 'i18n'
-  end
+  require 'i18n'
 
   # Set default locale
   ::I18n.default_locale = :en
