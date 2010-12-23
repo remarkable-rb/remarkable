@@ -2,7 +2,6 @@
 current_dir = File.dirname(__FILE__)
 require File.join(current_dir, "remarkable/lib/remarkable/core/version.rb")
 
-require "rubygems"
 require "fileutils"
 include FileUtils
 

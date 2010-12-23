@@ -1,6 +1,5 @@
 $TESTING=true
 
-require 'rubygems'
 require 'rspec'
 
 require File.expand_path('path_helpers', File.join(File.dirname(__FILE__), '/../../'))
