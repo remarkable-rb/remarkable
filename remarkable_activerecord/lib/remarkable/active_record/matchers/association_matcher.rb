@@ -94,7 +94,7 @@ module Remarkable
           end
 
           def reflection_foreign_key
-            reflection.primary_key_name.to_s
+            (reflection.respond_to?(:foreign_key) ? reflection.foreign_key : reflection.primary_key_name).to_s
           end
 
           def table_has_column?(klass, table_name, column)
@@ -214,7 +214,7 @@ module Remarkable
       end
 
       # Ensures that the has_many relationship exists. Will also test that the
-      # associated table has the required columns. It works by default with 
+      # associated table has the required columns. It works by default with
       # polymorphic association (:as does not have to be supplied).
       #
       # == Options
@@ -250,7 +250,7 @@ module Remarkable
       end
 
       # Ensures that the has_many relationship exists. Will also test that the
-      # associated table has the required columns. It works by default with 
+      # associated table has the required columns. It works by default with
       # polymorphic association (:as does not have to be supplied).
       #
       # == Options
