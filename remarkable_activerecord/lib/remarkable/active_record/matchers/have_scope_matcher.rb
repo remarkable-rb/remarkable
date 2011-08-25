@@ -22,9 +22,9 @@ module Remarkable
 
             @scope_object.class == ::ActiveRecord::Relation && @scope_object.arel 
           end
-
+          
           def options_match?
-            @options.empty? || @scope_object.arel == arel(subject_class, @options.except(:with))
+            @options.empty? || @scope_object.arel.to_sql == arel(subject_class, @options.except(:with)).to_sql
           end
 
           def interpolation_options
