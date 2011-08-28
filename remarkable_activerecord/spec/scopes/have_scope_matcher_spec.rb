@@ -3,10 +3,10 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe 'have_scope' do
   include ModelBuilder
 
-  before(:each) do
-    @model = define_model :product, :title => :string, :category => :string, :special => :boolean do
+  let(:model) do  
+    define_model :product, :title => :string, :category => :string, :special => :boolean do
       scope :recent, :order => 'created_at DESC'
-      scope :latest, lambda {|c| {:limit => c}}
+      scope :latest, lambda {|c| limit(c)}
       scope :since, lambda {|t| where(['created_at > ?', t])}
       scope :between, lambda { |a, b| where([ 'created_at > ? and created_at < ?', a, b ]) }
 
@@ -32,19 +32,21 @@ describe 'have_scope' do
 
     it 'should set is_scope? message' do
       matcher = have_scope(:null)
-      matcher.matches?(@model)
+      matcher.matches?(model)
       matcher.failure_message.should == 'Expected :null when called on Product return an instance of ActiveRecord::NamedScope::Scope'
     end
 
     it 'should set options_match? message' do
       matcher = have_scope(:recent, :where => {:special => true})
-      matcher.matches?(@model)
+      matcher.matches?(model)
       matcher.failure_message.should match(/^Expected :recent.+/)
     end
 
   end
 
   describe 'matchers' do
+    subject { model }
+
     it { should have_scope(:recent) }
     it { should have_scope(:recent, :order => 'created_at DESC') }
 
@@ -62,6 +64,8 @@ describe 'have_scope' do
   end
 
   describe 'macros' do
+    subject { model }
+
     should_have_scope :recent
     should_have_scope :recent, :order => 'created_at DESC'
 

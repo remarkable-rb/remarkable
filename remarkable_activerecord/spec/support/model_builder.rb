@@ -1,24 +1,21 @@
 # This is based on Shoulda model builder for Test::Unit.
 #
 module ModelBuilder
-  def self.included(base)
-    base.class_eval do
-      after(:each) do
-        if @defined_constants
-          @defined_constants.each do |class_name| 
-            unload_class(class_name)
-          end
+  extend ActiveSupport::Concern
+  included do
+    after(:each) do
+      if @defined_constants
+        @defined_constants.each do |class_name| 
+          unload_class(class_name)
         end
+      end
 
-        if @created_tables
-          @created_tables.each do |table_name|
-            ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{table_name}")
-          end
+      if @created_tables
+        @created_tables.each do |table_name|
+          ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{table_name}")
         end
       end
     end
-
-    base.extend ClassMethods
   end
 
   def create_table(table_name, opts = {}, &block)
