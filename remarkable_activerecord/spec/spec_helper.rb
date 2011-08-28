@@ -1,14 +1,9 @@
 # encoding: utf-8
 require 'rubygems'
 require 'rspec'
-
-RAILS_VERSION = ENV['RAILS_VERSION'] || '3.0.0.beta4'
-
-gem 'activesupport', RAILS_VERSION
 require 'active_support'
-
-gem 'activerecord', RAILS_VERSION
 require 'active_record'
+require 'ap'
 
 require File.expand_path('path_helpers', File.join(File.dirname(__FILE__), '/../../'))
 load_project_path :remarkable, :remarkable_activemodel, :remarkable_activerecord
@@ -20,6 +15,13 @@ ActiveRecord::Base.establish_connection(
   :adapter  => 'sqlite3',
   :database => ':memory:'
 )
+
+RSpec.configure do |config|
+  config.mock_with :rspec
+  config.filter_run :focus => true
+  config.filter_run_excluding :external => true
+  config.run_all_when_everything_filtered = true 
+end
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.

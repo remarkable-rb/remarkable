@@ -6,7 +6,7 @@ module ModelBuilder
       after(:each) do
         if @defined_constants
           @defined_constants.each do |class_name| 
-            Object.send(:remove_const, class_name)
+            unload_class(class_name)
           end
         end
 
@@ -36,11 +36,16 @@ module ModelBuilder
     end
   end
 
+  def unload_class(class_name)
+    Object.send(:remove_const, class_name) if Object.const_defined?(class_name)
+  end
+
   def define_constant(class_name, base, &block)
     class_name = class_name.to_s.camelize
 
+    unload_class(class_name)
+
     klass = Class.new(base)
-    Object.send(:remove_const, class_name) if Object.const_defined?(class_name)
     Object.const_set(class_name, klass)
 
     klass.class_eval(&block) if block_given?
@@ -53,10 +58,10 @@ module ModelBuilder
 
   def define_model_class(class_name, &block)
     define_constant(class_name, ActiveRecord::Base, &block)
-  end
+  end 
 
   def define_model(name, columns = {}, &block)
-    class_name = name.to_s.pluralize.classify
+    class_name = name.to_s.singularize.classify
     table_name = class_name.tableize
 
     table = columns.delete(:table) || lambda {|table|
