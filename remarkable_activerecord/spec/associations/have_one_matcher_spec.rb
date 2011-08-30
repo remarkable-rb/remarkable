@@ -7,14 +7,14 @@ describe 'association_matcher' do
 
     # Defines a model, create a validation and returns a raw matcher
     def define_and_validate(options={})
-      columns = options.delete(:association_columns) || { :manager_id => :integer, :project_id => :integer, :boss_id => :integer }
+      columns = options.delete(:association_columns) || { :manager_id => :integer, :project_id => :integer, :director_id => :integer }
       define_model :manager, columns
-      define_model :boss,    columns
+      define_model :director,    columns
 
       define_model :project_manager, columns do
         belongs_to :manager
         belongs_to :project
-        belongs_to :boss
+        belongs_to :director
       end unless options.delete(:skip_source)
 
       @model = define_model :project, options.delete(:model_columns) || {} do
@@ -84,10 +84,10 @@ describe 'association_matcher' do
       end
 
       it 'should set options_matches? message when source is given' do
-        matcher = define_and_validate(:through => :project_managers, :source => :boss)
+        matcher = define_and_validate(:through => :project_managers, :source => :director)
         matcher.through(:project_managers).source(:manager).matches?(@model)
         matcher.failure_message.should match(/:source=>"manager"/)
-        matcher.failure_message.should match(/:source=>"boss"/)
+        matcher.failure_message.should match(/:source=>"director"/)
       end
     end
 
@@ -141,8 +141,8 @@ describe 'association_matcher' do
       end
 
       describe 'with source option' do
-        it { should define_and_validate(:through => :project_managers, :source => :boss).source(:boss) }
-        it { should_not define_and_validate(:through => :project_managers, :source => :boss).source(:manager) }
+        it { should define_and_validate(:through => :project_managers, :source => :director).source(:director) }
+        it { should_not define_and_validate(:through => :project_managers, :source => :director).source(:manager) }
       end
 
       create_optional_boolean_specs(:validate, self)
