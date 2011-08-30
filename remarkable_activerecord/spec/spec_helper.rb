@@ -3,12 +3,16 @@ require 'rubygems'
 require 'rspec'
 require 'active_support'
 require 'active_record'
-require 'ap'
 
 require File.expand_path('path_helpers', File.join(File.dirname(__FILE__), '/../../'))
 load_project_path :remarkable, :remarkable_activemodel, :remarkable_activerecord
 
 require 'remarkable/active_record'
+
+# USAGE:
+#   model.something.to_watch.tap(&WATCH)
+require 'ap'
+WATCH = lambda { |x| ap x }
 
 # Configure ActiveRecord connection
 ActiveRecord::Base.establish_connection(
