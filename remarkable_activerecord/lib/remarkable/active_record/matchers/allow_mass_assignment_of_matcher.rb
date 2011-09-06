@@ -43,11 +43,19 @@ module Remarkable
         private
 
           def accessible_attributes
-            @accessible_attributes = subject_class.accessible_attributes
+            @accessible_attributes ||= unless subject_class.accessible_attributes.empty?
+              subject_class.accessible_attributes
+            else
+              subject_class.column_names - subject_class.protected_attributes.to_a
+            end
           end
 
           def protected_attributes
-            @protected_attributes = subject_class.protected_attributes
+            @protected_attributes ||= if subject_class.accessible_attributes.empty?
+              subject_class.protected_attributes
+            else
+              subject_class.column_names - subject_class.accessible_attributes.to_a
+            end
           end
       end
 
