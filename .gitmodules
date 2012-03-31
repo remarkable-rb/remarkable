@@ -1,0 +1,18 @@
+[submodule "remarkable"]
+	path = remarkable
+	url = git://github.com/remarkable/remarkable-core.git
+[submodule "remarkable_activemodel"]
+	path = remarkable_activemodel
+	url = git://github.com/remarkable/remarkable-activemodel.git
+[submodule "remarkable_activerecord"]
+	path = remarkable_activerecord
+	url = git://github.com/remarkable/remarkable-activerecord.git
+[submodule "remarkable_datamapper"]
+	path = remarkable_datamapper
+	url = git://github.com/remarkable/remarkable-datamapper.git
+[submodule "remarkable_i18n"]
+	path = remarkable_i18n
+	url = git://github.com/remarkable/remarkable-i18n.git
+[submodule "remarkable_rails"]
+	path = remarkable_rails
+	url = git://github.com/remarkable/remarkable-rails.git
