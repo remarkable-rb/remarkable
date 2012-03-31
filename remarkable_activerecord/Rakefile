@@ -19,13 +19,8 @@ end
 
 ########### Specs
 
-RAILS_VERSIONS = ['3.0.0']
-
 desc "Run the specs under spec with supported Rails versions"
 task :pre_commit do
-  RAILS_VERSIONS.each do |version|
-    ENV['RAILS_VERSION'] = version
-    puts "\n=> #{GEM_NAME}: rake spec RAILS_VERSION=#{version}"
-    Rake::Task[:spec].execute
-  end
+  puts "\n=> #{GEM_NAME}: rake spec"
+  Rake::Task[:spec].execute
 end

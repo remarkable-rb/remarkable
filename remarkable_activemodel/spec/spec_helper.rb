@@ -1,13 +1,7 @@
 # encoding: utf-8
 require 'rubygems'
 require 'rspec'
-
-RAILS_VERSION = ENV['RAILS_VERSION'] || '3.0.0.beta4'
-
-gem 'activesupport', RAILS_VERSION
 require 'active_support/all'
-
-gem 'activemodel', RAILS_VERSION
 require 'active_model'
 
 require File.expand_path('path_helpers', File.join(File.dirname(__FILE__), '/../../'))

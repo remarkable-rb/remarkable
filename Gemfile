@@ -11,9 +11,10 @@ group :development do
 end
 
 group :test do
-  gem 'rspec', '>=2.0'
-  gem 'rspec-core', '>=2.0'
-  gem 'rspec-expectations', '>=2.0'
-  gem 'rspec-mocks', '>=2.0'
-  gem 'rspec-rails', '>=2.0'
+  gem 'rspec', '2.6.0'
+  gem 'rspec-core', '2.6.0'
+  gem 'rspec-expectations', '2.6.0'
+  gem 'rspec-mocks', '2.6.0'
+  gem 'rspec-rails', '2.6.0'
+  gem 'awesome_print'
 end
